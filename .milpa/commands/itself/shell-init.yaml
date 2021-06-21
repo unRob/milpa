@@ -1,0 +1,3 @@
+summary: Initializes shells
+description: |
+  Add this to your POSIX shell compliant profile: eval "$(milpa itself shell-init)"
