@@ -35,36 +35,42 @@ function load_milpa_util () {
   done
 }
 
-load_milpa_util log sub-commands
+load_milpa_util log
 function _fail () {
   _log error "$*"
   exit 2
 }
 
 if [[ "$#" -eq 0 ]]; then
-  cat <<-NO_COMMAND
-usage: $0 [SUB-COMMAND...]
-
-Available sub-commands are:
-
-$(_sub_commands_descriptions)
-NO_COMMAND
-  _fail "No sub-command provided"
+  _log error "$("$MILPA_ROOT/src/milpa-helper" "$@")"
+  exit 127
 fi
 
+newEnv="$("$MILPA_ROOT/src/milpa-helper" "$@")" || {
+  exitCode=$?
+  case "$exitCode" in
+  42)
+    # 42 help requested
+    echo "$newEnv"
+    exit
+    ;;
+  4*)
+    # 40 bad arguments
+    # 44 command not found
+    _log error "$newEnv"
+    exit $exitCode
+  ;;
+  *)
+    exit $exitCode
+  ;;
+  esac
+}
 
-cmd="$(_sub_commands_find "${@}" 2>/dev/null)" || _fail "unknown command <${command_file:-${*}}>"
-IFS=$'\n' read -d -r command_name command_file command_package argv_len <<<"$cmd"
-export MILPA_COMMAND_NAME="$command_name"
-export MILPA_COMMAND_PACKAGE="$command_package"
+# load parsed arguments and MILPA_ environment variables
+eval "$newEnv"
 
-shift $argv_len
-echo "${@}"
-exit
-
-if [[ -n "${VERBOSE}" ]]; then
-  export VERBOSE=1
-  _log debug "running <$command_name from> <$command_file> with arguments <${*}>"
+if [[ "${MILPA_VERBOSE}" == "1" ]]; then
+  _log debug "running <$MILPA_COMMAND_NAME from> <$MILPA_COMMAND_PATH> with arguments <${*}>"
 fi
 
 if [[ -f "$MILPA_COMMAND_PACKAGE/.milpa/util/before-run.sh" ]]; then
@@ -74,12 +80,10 @@ if [[ -f "$MILPA_COMMAND_PACKAGE/.milpa/util/before-run.sh" ]]; then
   set +o allexport
 fi
 
-if [[ -x "$command_file" ]]; then
-  exec "$command_file" "$*"
-elif [[ "$command_file" == *.sh ]]; then
-  # shellcheck disable=1090
-  source "$command_file"
-else
-  _log warning "Unsure how to run $command_name. Found $command_file, but it is neither a .sh file nor executable"
-  _fail "Unable to continue running sub-command."
-fi
+case "$MILPA_COMMAND_KIND" in
+  exec) exec "$MILPA_COMMAND_PATH" "$@" ;;
+  source)
+    # shellcheck disable=1090
+    source "$MILPA_COMMAND_PATH";;
+  *) _log warning "Unsure how to run $MILPA_COMMAND_NAME. Found $MILPA_COMMAND_PATH, but it is neither a .sh file nor executable" && _fail "Unable to continue running sub-command."
+esac

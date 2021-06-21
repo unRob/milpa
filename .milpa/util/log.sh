@@ -30,12 +30,12 @@ function _print_message () {
   level=$1
   shift
   date=""
-  if [[ -n "$VERBOSE" ]]; then
+  if [[ -n "$MILPA_VERBOSE" ]]; then
     date=" $(date -u +"%FT%H:%M:%S")"
   fi
   command_name=${MILPA_COMMAND_NAME:-milpa}
 
-  [[ "$level" == "debug" ]] && [[ -z "${VERBOSE+x}" ]] && return
+  [[ "$level" == "debug" ]] && [[ -z "${MILPA_VERBOSE+x}" ]] && return
   >&2 echo "${_C_GRAY}[${level}:${command_name// /:}${date}]${_RESET} $*"
 }
 

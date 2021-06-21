@@ -1,0 +1,20 @@
+summary: Create a milpa command
+description: |
+  Creates a local milpa command named $NAME.
+arguments:
+  - name: name
+    description: the name you'd like for your command
+    required: true
+    variadic: true
+options:
+  open:
+    type: boolean
+    description: Open the script file in your current $EDITOR after creation
+  executable:
+    type: boolean
+    description: Create an empty, executable command. Useful when you'd like using something other than bash.
+  config-format:
+    type: string
+    description: The configuration format to use to describe this command
+    set: { values: [yaml] }
+    default: yaml
