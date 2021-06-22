@@ -1,0 +1,3 @@
+summary: Generates shell completion scripts
+description: |
+  Generates a shell completion script for the current $SHELL

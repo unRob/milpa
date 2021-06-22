@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
 	"gopkg.in/yaml.v2"
@@ -74,7 +75,7 @@ type CommandMeta struct {
 func New(path string, spec string, pkg string, kind string) (*Command, error) {
 	contents, err := ioutil.ReadFile(spec)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, fmt.Sprintf("error reading %s", spec))
 	}
 
 	commandPath := strings.SplitN(path, fmt.Sprintf("%s/.milpa/commands/", pkg), 2)[1]
@@ -86,7 +87,7 @@ func New(path string, spec string, pkg string, kind string) (*Command, error) {
 		Name:    commandName,
 		Kind:    kind,
 	})
-	return cmd, err
+	return cmd, errors.Wrap(err, fmt.Sprintf("error parsing %s", spec))
 }
 
 func parseCommand(yamlBytes []byte, meta CommandMeta) (*Command, error) {
@@ -108,8 +109,10 @@ func (cmd *Command) FullName() string {
 	return strings.Join(cmd.Meta.Name, " ")
 }
 
-func (cmd *Command) ParseArgs(args []string) ([]string, error) {
-	logrus.Debugf("Parsing args: %s", args)
+func (cmd *Command) CreateFlagSet() error {
+	if cmd.runtimeFlags != nil {
+		return nil
+	}
 	fs := pflag.NewFlagSet(strings.Join(cmd.Meta.Name, " "), pflag.ContinueOnError)
 	fs.SortFlags = false
 	fs.Usage = func() {}
@@ -129,12 +132,22 @@ func (cmd *Command) ParseArgs(args []string) ([]string, error) {
 			}
 			fs.String(name, def, opt.Description)
 		default:
-			return nil, fmt.Errorf("unknown option type: %s", opt.Type)
+			return fmt.Errorf("unknown option type: %s", opt.Type)
 		}
 	}
 
 	cmd.runtimeFlags = fs
-	err := fs.Parse(args)
+	return nil
+}
+
+func (cmd *Command) ParseArgs(args []string) ([]string, error) {
+	logrus.Debugf("Parsing args: %s", args)
+
+	err := cmd.CreateFlagSet()
+	if err != nil {
+		return nil, err
+	}
+	err = cmd.runtimeFlags.Parse(args)
 
 	if err != nil {
 		return nil, err
