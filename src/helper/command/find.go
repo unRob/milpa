@@ -11,22 +11,29 @@ import (
 )
 
 var MILPA_PATH []string = strings.Split(os.Getenv("MILPA_PATH"), ":")
+var rootFlagset *pflag.FlagSet
+
+func RootFlagset() *pflag.FlagSet {
+	if rootFlagset == nil {
+		rootFlagset = pflag.NewFlagSet("helper", pflag.ContinueOnError)
+		rootFlagset.BoolP("verbose", "v", false, "Log verbose output to stderr")
+		rootFlagset.BoolP("help", "h", false, "Display help for a command")
+		rootFlagset.Usage = func() {}
+		rootFlagset.SortFlags = false
+	}
+
+	return rootFlagset
+}
 
 func Find(args []string) (*Command, []string, error) {
 	var finalError error
-	flag := pflag.NewFlagSet("helper", pflag.ContinueOnError)
-	flag.BoolP("verbose", "v", false, "Log verbose output to stderr")
-	flag.BoolP("help", "h", false, "Display help for a command")
-	flag.Usage = func() {}
-	flag.SortFlags = false
+	fs := RootFlagset()
+	err := fs.Parse(args)
 
-	err := flag.Parse(args)
-
-	subcommand := args[1:]
+	subcommand := args[0:]
 	logrus.Debugf("original args %s", subcommand)
 
-	if ok, err := flag.GetBool("verbose"); err == nil && ok {
-		logrus.SetLevel(logrus.DebugLevel)
+	if ok, err := fs.GetBool("verbose"); err == nil && ok {
 		logrus.Debug("Verbose output enabled")
 		for idx, arg := range subcommand {
 			if arg == "--verbose" || arg == "-v" {
@@ -42,7 +49,7 @@ func Find(args []string) (*Command, []string, error) {
 		}
 	}
 
-	if ok, err := flag.GetBool("help"); err == nil && ok {
+	if ok, err := fs.GetBool("help"); err == nil && ok {
 		finalError = pflag.ErrHelp
 		logrus.Debug(finalError)
 		for idx, v := range subcommand {
@@ -56,7 +63,7 @@ func Find(args []string) (*Command, []string, error) {
 		return nil, args, NotFound{Msg: "No command provided"}
 	}
 
-	logrus.Debugf("found args %s", subcommand)
+	logrus.Debugf("Arguments provided: %s", subcommand)
 
 	for _, pkg := range MILPA_PATH {
 		for i := range subcommand {
@@ -90,12 +97,13 @@ func Find(args []string) (*Command, []string, error) {
 							Msg:   fmt.Sprintf("found command group for <%s>, but no sub-command named <%s>", strings.Join(query, " "), subcommand[len(subcommand)-i]),
 							Group: query,
 						}
+
 					}
 					return nil, args, msg
 				}
 
 				if statInfo.Mode()&0100 == 0 {
-					return nil, args, fmt.Errorf("found %s but it's not executable", commandPath)
+					return nil, args, NotExecutable{fmt.Sprintf("found %s but it's not executable", commandPath)}
 				}
 				kind = "exec"
 			}
@@ -114,7 +122,77 @@ func Find(args []string) (*Command, []string, error) {
 	return nil, args, NotFound{Msg: fmt.Sprintf("No command found named %s", subcommand[0])}
 }
 
-func FindSubCommands(query []string) map[string]string {
+type findResult struct {
+	Path string
+	Info os.FileInfo
+}
+
+type findFilterfunc func(match string, info os.FileInfo) bool
+
+func findScripts(query []string, filter findFilterfunc) (results []*findResult) {
+	logrus.Debugf("looking for scripts in %s", MILPA_PATH)
+	for _, path := range MILPA_PATH {
+		queryBase := fmt.Sprintf("%s/.milpa/commands/%s", path, strings.Join(query, "/"))
+		matches, err := filepath.Glob(fmt.Sprintf("%s/*", queryBase))
+
+		if err == nil {
+			logrus.Debugf("found %d potential matches in %s", len(matches), path)
+			for _, match := range matches {
+				if !(strings.HasSuffix(match, ".sh") || filepath.Ext(match) == "") {
+					logrus.Debugf("ignoring %s", match)
+					continue
+				}
+
+				fileInfo, err := os.Stat(match)
+				if err != nil {
+					logrus.Debugf("Failed to stat %s: %v", match, err)
+					continue
+				}
+
+				if filter(match, fileInfo) {
+					results = append(results, &findResult{match, fileInfo})
+				}
+			}
+		}
+	}
+
+	return
+}
+
+func FindAllSubCommands() (cmds []*Command, err error) {
+	files := findScripts([]string{"**"}, func(_ string, info os.FileInfo) bool {
+		return !info.IsDir()
+	})
+
+	for _, file := range files {
+		pc := strings.SplitN(file.Path, "/.milpa/commands/", 2)
+		pkg := pc[0]
+		kind := ""
+		spec := ""
+
+		if strings.HasSuffix(file.Path, ".sh") {
+			kind = "source"
+			spec = fmt.Sprintf("%s/.milpa/commands/%s.yaml", pkg, strings.Replace(pc[1], ".sh", "", 1))
+		} else {
+			kind = "exec"
+			spec = fmt.Sprintf("%s.yaml", file.Path)
+		}
+
+		var cmd *Command
+		cmd, err = New(file.Path, spec, pkg, kind)
+		if err != nil {
+			return
+		}
+
+		cmds = append(cmds, cmd)
+	}
+
+	return
+}
+
+func FindSubCommandDescriptions(query []string) map[string]string {
+	logrus.Debugf("looking for valid subcommands for %s", query)
+
 	results := map[string]string{}
 	for _, path := range MILPA_PATH {
 		queryBase := fmt.Sprintf("%s/.milpa/commands/%s", path, strings.Join(query, "/"))

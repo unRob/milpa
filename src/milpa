@@ -1,12 +1,21 @@
 #!/usr/bin/env bash
-MILPA_PATH="$MILPA_ROOT${MILPA_PATH+:}$MILPA_PATH"
+# MILPA_PATH contains all known milpa repositories
+# Repositories are folders that contain a .milpa directory within
+# set to MILPA_ROOT if empty, otherwise prepend $MILPA_ROOT:
+MILPA_PATH="${MILPA_PATH+$MILPA_ROOT:}${MILPA_PATH:-$MILPA_ROOT}"
+# if the current working dir contains a .milpa folder, add that to the path as well
 _pwd="$(pwd)"
 [[ -d ".milpa" ]] && [[ ! "$MILPA_PATH" =~ :?$_pwd:? ]] && MILPA_PATH="$MILPA_PATH:$_pwd"
 export MILPA_PATH
+# create an array from this path
 IFS=: read -ra MILPA_PATH_ARR <<<"$MILPA_PATH"
 export MILPA_PATH_ARR
+# bash is fine and all, but we need a little helper to run argument parsing for us
+export MILPA_HELPER="${MILPA_HELPER:-$MILPA_ROOT/src/milpa-helper}"
 
 function load_milpa_util () {
+  # shell scripts can call load_milpa_util to load utils within the $MILPA_PATH
+  # TODO: maybe bump $MILPA_COMMAND_PACKAGE up in the path?
   local env_name
   for util_name in "$@"; do
     env_name="_MILPA_UTIL_${util_name//-/_}"
@@ -23,7 +32,7 @@ function load_milpa_util () {
         source "$util_path"
         set +o allexport
         export "${env_name?}=1"
-        continue
+        break
       fi
     done
 
@@ -42,11 +51,17 @@ function _fail () {
 }
 
 if [[ "$#" -eq 0 ]]; then
-  _log error "$("$MILPA_ROOT/src/milpa-helper" "$@")"
+  _log error "$("$MILPA_HELPER" "find" "$@")"
   exit 127
 fi
 
-newEnv="$("$MILPA_ROOT/src/milpa-helper" "$@")" || {
+if [[ "$1" == "__complete" ]]; then
+  shift
+  exec "$MILPA_HELPER" "__complete" "$@"
+fi
+
+# see man sysexits || grep "#define EX" /usr/include/sysexits.h
+newEnv="$("$MILPA_HELPER" "find" "$@")" || {
   exitCode=$?
   case "$exitCode" in
   42)
@@ -54,12 +69,15 @@ newEnv="$("$MILPA_ROOT/src/milpa-helper" "$@")" || {
     echo "$newEnv"
     exit
     ;;
-  4*)
-    # 40 bad arguments
-    # 44 command not found
+  64|12[67])
+    # 64 bad arguments
+    # EX_USAGE The command was used incorrectly, e.g., with the wrong number of arguments, a bad flag, a bad syntax in a parameter, or whatever.
+    # https://tldp.org/LDP/abs/html/exitcodes.html
+    # 126 command invoked cannot execute
+    # 127 command not found
     _log error "$newEnv"
     exit $exitCode
-  ;;
+    ;;
   *)
     exit $exitCode
   ;;
@@ -71,12 +89,13 @@ eval "$newEnv"
 
 if [[ "${MILPA_VERBOSE}" == "1" ]]; then
   _log debug "running <$MILPA_COMMAND_NAME from> <$MILPA_COMMAND_PATH> with arguments <${*}>"
+  _log debug "milpa environment:"$'\n'"$(env | grep ^MILPA | sort)"
 fi
 
-if [[ -f "$MILPA_COMMAND_PACKAGE/.milpa/util/before-run.sh" ]]; then
+if [[ -f "$MILPA_COMMAND_PACKAGE/.milpa/hooks/before-run.sh" ]]; then
   set -o allexport
   # shellcheck disable=1091
-  source "$MILPA_COMMAND_PACKAGE/.milpa/util/before-run.sh"
+  source "$MILPA_COMMAND_PACKAGE/.milpa/hooks/before-run.sh"
   set +o allexport
 fi
 

@@ -12,20 +12,18 @@ import (
 func (cmd *Command) ToEval(args []string) (string, error) {
 	envVars := []string{
 		fmt.Sprintf("export MILPA_COMMAND_NAME=%s", shellescape.Quote(cmd.FullName())),
-		fmt.Sprintf("export MILPA_COMMAND_PATH=%s", shellescape.Quote(cmd.Meta.Path)),
 		fmt.Sprintf("export MILPA_COMMAND_KIND=%s", shellescape.Quote(cmd.Meta.Kind)),
 		fmt.Sprintf("export MILPA_COMMAND_PACKAGE=%s", shellescape.Quote(cmd.Meta.Package)),
+		fmt.Sprintf("export MILPA_COMMAND_PATH=%s", shellescape.Quote(cmd.Meta.Path)),
 	}
 
 	cmd.runtimeFlags.VisitAll(func(f *pflag.Flag) {
 		envName := fmt.Sprintf("MILPA_OPT_%s", strings.ToUpper(strings.ReplaceAll(f.Name, "-", "_")))
 
 		value := f.Value.String()
-		logrus.Debugf("flag %s is: %s", f.Name, value)
 		switch f.Value.Type() {
 		case "bool":
 			if val, err := cmd.runtimeFlags.GetBool(f.Name); err == nil && !val {
-				logrus.Debugf("flag %s is: %s", f.Name, val)
 				value = ""
 			} else {
 				value = "true"

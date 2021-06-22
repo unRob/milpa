@@ -14,7 +14,7 @@ This repo has just been planted, and everything here is extremely experimental.
 - [x] Sub-commands based on file system trees
 - [x] Help command
 - [x] Config-based script meta-data
-- [ ] Auto-complete
+- [x] Auto-complete
 
 ## Example
 

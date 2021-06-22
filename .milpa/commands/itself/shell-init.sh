@@ -25,12 +25,15 @@ function xsh_prepend (){
   esac
 }
 
-IFS=':' read -r -a args <<< "${MILPA_PATH//:/.milpa:}/.milpa"
-args+=( -name "_env" -o -name "_env.sh" )
+IFS=':' read -r -a args <<< "${MILPA_PATH//:/\/.milpa/hooks:}/.milpa/hooks"
+_log debug "looking for env files in ${args[*]}"
+args+=( -name "shell-init" -o -name "shell-init.sh" )
 find "${args[@]}" 2>/dev/null | while read -r env_file; do
   if [[ -x "$env_file" ]]; then
+    _log debug "executing $env_file"
     "$env_file"
   else
+    _log debug "sourcing $env_file"
     # shellcheck disable=1090
     source "$env_file"
   fi
