@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/pflag"
 )
 
-func (cmd *Command) ToEval(args []string) (string, error) {
+func (cmd *Command) ToEval(args []string, flags *pflag.FlagSet) (string, error) {
 	envVars := []string{
 		fmt.Sprintf("export MILPA_COMMAND_NAME=%s", shellescape.Quote(cmd.FullName())),
 		fmt.Sprintf("export MILPA_COMMAND_KIND=%s", shellescape.Quote(cmd.Meta.Kind)),
@@ -17,13 +17,13 @@ func (cmd *Command) ToEval(args []string) (string, error) {
 		fmt.Sprintf("export MILPA_COMMAND_PATH=%s", shellescape.Quote(cmd.Meta.Path)),
 	}
 
-	cmd.runtimeFlags.VisitAll(func(f *pflag.Flag) {
+	flags.VisitAll(func(f *pflag.Flag) {
 		envName := fmt.Sprintf("MILPA_OPT_%s", strings.ToUpper(strings.ReplaceAll(f.Name, "-", "_")))
 
 		value := f.Value.String()
 		switch f.Value.Type() {
 		case "bool":
-			if val, err := cmd.runtimeFlags.GetBool(f.Name); err == nil && !val {
+			if val, err := flags.GetBool(f.Name); err == nil && !val {
 				value = ""
 			} else {
 				value = "true"

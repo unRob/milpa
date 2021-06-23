@@ -18,3 +18,6 @@ options:
     description: The configuration format to use to describe this command
     set: { values: [yaml] }
     default: yaml
+  repo:
+    type: string
+    description: a path to the milpa repo to create this command in. By default, the nearest .milpa directory from `pwd` and up.

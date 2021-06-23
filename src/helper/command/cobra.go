@@ -2,6 +2,7 @@ package command
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/sirupsen/logrus"
@@ -10,22 +11,67 @@ import (
 
 func (cmd *Command) ToCobra() (*cobra.Command, error) {
 	cc := &cobra.Command{
-		Use:   cmd.Meta.Name[len(cmd.Meta.Name)-1],
-		Short: cmd.Summary,
-		Long:  cmd.Description,
-		Run: func(cc *cobra.Command, args []string) {
-			cmd.ToEval(args)
+		Use:               cmd.Meta.Name[len(cmd.Meta.Name)-1],
+		Short:             cmd.Summary,
+		Long:              cmd.Description,
+		DisableAutoGenTag: true,
+		SilenceUsage:      true,
+		Args: func(cc *cobra.Command, args []string) error {
+			for idx, arg := range cmd.Arguments {
+				argumentProvided := idx < len(args)
+				if arg.Required && !argumentProvided {
+					return BadArguments{fmt.Sprintf("Missing argument for %s", arg.Name)}
+				}
+
+				if !argumentProvided {
+					continue
+				}
+				current := args[idx]
+
+				if arg.Set != nil {
+					values, err := arg.Set.Resolve()
+					if err != nil {
+						return err
+					}
+					found := false
+					for _, value := range values {
+						if value == current {
+							found = true
+							break
+						}
+					}
+
+					if !found {
+						return BadArguments{fmt.Sprintf("%s is not a valid value for argument <%s>. Valid options are: %s", current, arg.Name, strings.Join(values, ", "))}
+					}
+				}
+			}
+
+			return nil
+		},
+		RunE: func(cc *cobra.Command, args []string) error {
+			flags := cc.Flags()
+			env, err := cmd.ToEval(args, flags)
+			if err != nil {
+				return err
+			}
+			fmt.Println(env)
+			return nil
 		},
 	}
+
+	cc.SetFlagErrorFunc(func(c *cobra.Command, e error) error {
+		return BadArguments{e.Error()}
+	})
 
 	expectedArgLen := len(cmd.Arguments)
 	if expectedArgLen > 0 {
 		cc.ValidArgsFunction = func(cc *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			argsCompleted := len(args)
-			// last := cmd.Arguments[expectedArgLen-1]
+
 			values := []string{}
 			directive := cobra.ShellCompDirectiveDefault
-			logrus.Infof("argsCompleted: %d, expected: %d", argsCompleted, expectedArgLen)
+			// logrus.Infof("argsCompleted: %d, expected: %d", argsCompleted, expectedArgLen)
 			if argsCompleted < expectedArgLen {
 				// el usuario pide completar un arg que aun esperamos
 				arg := cmd.Arguments[argsCompleted]
@@ -54,11 +100,11 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 	if err != nil {
 		return cc, err
 	}
-	// cmd.runtimeFlags.
+
 	cc.Flags().AddFlagSet(cmd.runtimeFlags)
 
 	cc.Flags().BoolP("verbose", "v", false, "Log verbose output to stderr")
-	cc.Flags().BoolP("help", "h", false, "Display help for a command")
+	cc.Flags().BoolP("help", "h", false, "Display help")
 
 	return cc, nil
 }
@@ -66,45 +112,76 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 func RootCommand(commands []*Command) (*cobra.Command, error) {
 	root := &cobra.Command{Use: "milpa"}
 	root.Flags().AddFlagSet(RootFlagset())
-	//root.()
+
+	root.AddCommand(&cobra.Command{
+		Use:               "__generate_completions [bash|zsh|fish]",
+		Short:             "Outputs a shell-specific script for autocompletions. See milpa help itself shell install-autocomplete",
+		Hidden:            true,
+		DisableAutoGenTag: true,
+		SilenceUsage:      true,
+		Args:              cobra.MinimumNArgs(1),
+		RunE: func(_ *cobra.Command, args []string) (err error) {
+			switch args[0] {
+			case "bash":
+				err = root.GenBashCompletion(os.Stdout)
+			case "zsh":
+				err = root.GenZshCompletion(os.Stdout)
+			case "fish":
+				err = root.GenFishCompletion(os.Stdout, true)
+			}
+			return
+		},
+	})
 
 	for _, cmd := range commands {
 		leaf, err := cmd.ToCobra()
 		if err != nil {
 			return nil, err
 		}
-		// fmt.Printf("adding command %s\n", cmd.Meta.Name)
 
 		container := root
 		for idx, cp := range cmd.Meta.Name {
 			if idx == len(cmd.Meta.Name)-1 {
-				// fmt.Printf("setting command %s on %s\n", cmd.Meta.Name, container.Name())
 				container.AddCommand(leaf)
-				// names := []string{}
-				// for _, n := range container.Commands() {
-				// 	names = append(names, n.Name())
-				// }
-				// fmt.Printf("subcommands for %s: %v\n", container.Name(), names)
 				break
 			}
 
 			query := []string{cp}
-			// fmt.Printf("searching for container %s in %s\n", query, container.Name())
 			if cc, _, err := root.Find(query); err == nil && cc != container {
 				container = cc
-				// fmt.Printf("found existing container for %s, %v\n", query, cc.Name())
 			} else {
 				cc := &cobra.Command{
-					Use:   cp,
-					Short: fmt.Sprintf("%s sub-commands", strings.Join(query, " ")),
-					Args:  cobra.MinimumNArgs(1),
-					// Run:   func(cc *cobra.Command, args []string) {},
+					Use:               cp,
+					Short:             fmt.Sprintf("%s sub-commands", strings.Join(query, " ")),
+					DisableAutoGenTag: true,
+					SilenceUsage:      true,
+					Args: func(cmd *cobra.Command, args []string) error {
+						if len(args) == 0 {
+							return NotFound{"No subcommand provided", []string{}}
+						}
+						if err := cobra.OnlyValidArgs(cmd, args); err != nil {
+							return err
+						}
+						return nil
+					},
+					RunE: func(cc *cobra.Command, args []string) error {
+						if len(args) > 0 {
+							fmt.Printf("Error: Unknown subcommand %s\n", args[len(args)-1])
+						} else {
+							fmt.Println("Error: No subcommand provided")
+						}
+						err := cc.Help()
+						if err != nil {
+							logrus.Error(err)
+							return err
+						}
+
+						return NotFound{"No subcommand provided", []string{}}
+					},
 				}
-				// fmt.Printf("creating container for %s in %s\n", cp, container.Name())
 				container.AddCommand(cc)
 				container = cc
 			}
-			// os.Exit(0)
 		}
 	}
 
