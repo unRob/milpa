@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/bmatcuk/doublestar"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
 )
@@ -68,7 +69,7 @@ func Find(args []string) (*Command, []string, error) {
 	for _, pkg := range MILPA_PATH {
 		for i := range subcommand {
 			if i == len(subcommand) {
-				logrus.Debug("done with args, %d")
+				logrus.Debugf("done with args, %d", i)
 				break
 			}
 			query := subcommand[0 : len(subcommand)-i]
@@ -133,7 +134,7 @@ func findScripts(query []string, filter findFilterfunc) (results []*findResult) 
 	logrus.Debugf("looking for scripts in %s", MILPA_PATH)
 	for _, path := range MILPA_PATH {
 		queryBase := fmt.Sprintf("%s/.milpa/commands/%s", path, strings.Join(query, "/"))
-		matches, err := filepath.Glob(fmt.Sprintf("%s/*", queryBase))
+		matches, err := doublestar.Glob(fmt.Sprintf("%s/*{.sh,}", queryBase))
 
 		if err == nil {
 			logrus.Debugf("found %d potential matches in %s", len(matches), path)
@@ -145,7 +146,7 @@ func findScripts(query []string, filter findFilterfunc) (results []*findResult) 
 
 				fileInfo, err := os.Stat(match)
 				if err != nil {
-					logrus.Debugf("Failed to stat %s: %v", match, err)
+					logrus.Debugf("ignoring %s, failed to stat: %v", match, err)
 					continue
 				}
 

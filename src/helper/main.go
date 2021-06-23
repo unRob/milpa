@@ -1,114 +1,14 @@
 package main
 
 import (
-	"errors"
-	"fmt"
 	"os"
 	"strings"
 
 	cmds "github.com/unrob/milpa/command"
 
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/pflag"
+	"github.com/spf13/cobra"
 )
-
-func handleError(err error, cmd *cmds.Command, stage string) {
-	if err == nil {
-		return
-	}
-	var printHelp = false
-	var printError = true
-	var exitCode int = 1
-
-	logrus.Debugf("handling error during %s", stage)
-
-	switch v := err.(type) {
-	case cmds.BadArguments:
-		exitCode = 64
-		printHelp = true
-	case cmds.NotExecutable:
-		exitCode = 126
-		logrus.Debugf("not executable: %w", v)
-	case cmds.NotFound:
-		exitCode = 127
-		logrus.Debugf("not found: %w", v)
-		options := []string{}
-		for option, description := range cmds.FindSubCommandDescriptions(v.Group) {
-			options = append(options, fmt.Sprintf("  %s - %s", option, description))
-		}
-		err = fmt.Errorf("%w. Available sub-commands are: \n%s", err, strings.Join(options, "\n"))
-	default:
-		if errors.Is(err, pflag.ErrHelp) {
-			printHelp = true
-			printError = false
-			exitCode = 42
-		}
-	}
-
-	if printHelp {
-		help, err := cmd.Help("markdown")
-		if err != nil {
-			logrus.Fatal(err)
-		}
-		fmt.Println(string(help))
-	}
-
-	if printError {
-		logrus.Error(err)
-	}
-	os.Exit(exitCode)
-}
-
-func findCommand() {
-	cmd, remainingArgs, err := cmds.Find(os.Args)
-	handleError(err, cmd, "finding command")
-
-	finalArgs, err := cmd.ParseArgs(remainingArgs)
-	handleError(err, cmd, "parsing arguments")
-
-	str, err := cmd.ToEval(finalArgs)
-	handleError(err, cmd, "printing environment")
-	fmt.Println(str)
-	if logrus.GetLevel() == logrus.DebugLevel {
-		fmt.Println("export MILPA_VERBOSE=1")
-	}
-}
-
-func generateCompletionCommand() {
-	cmd, err := cmds.RootCommand([]*cmds.Command{})
-	if err != nil {
-		logrus.Fatal(err)
-	}
-	switch os.Args[0] {
-	case "bash":
-		cmd.Root().GenBashCompletion(os.Stdout)
-	case "zsh":
-		cmd.Root().GenZshCompletion(os.Stdout)
-	case "fish":
-		cmd.Root().GenFishCompletion(os.Stdout, true)
-	case "powershell":
-		cmd.Root().GenPowerShellCompletionWithDesc(os.Stdout)
-	}
-}
-
-func autocompleteCommand() {
-	subcommands, err := cmds.FindAllSubCommands()
-	if err != nil {
-		logrus.Fatal(err)
-	}
-
-	root, err := cmds.RootCommand(subcommands)
-	if err != nil {
-		logrus.Debugf("failed to get cobra command for %s", os.Args)
-	}
-
-	args := []string{"milpa", "__complete"}
-	if len(os.Args) == 0 {
-		os.Args = []string{""}
-	}
-	os.Args = append(args, os.Args...)
-	root.Execute()
-}
 
 func main() {
 	if os.Getenv("MILPA_DEBUG") != "" {
@@ -120,23 +20,70 @@ func main() {
 		DisableTimestamp:       true,
 	})
 
-	cmd := ""
-	if len(os.Args) < 2 {
-		logrus.Fatal("Available helper commands: autocomplete, find")
+	subcommands, err := cmds.FindAllSubCommands()
+	if err != nil {
+		logrus.Fatal(err)
 	}
 
-	cmd = os.Args[1]
-	os.Args = os.Args[2:]
-
-	switch cmd {
-	case "find":
-		findCommand()
-	case "__complete":
-		autocompleteCommand()
-	case "completion":
-		generateCompletionCommand()
-	default:
-		logrus.Errorf("Unknown helper command: %s", cmd)
+	root, err := cmds.RootCommand(subcommands)
+	root.SilenceUsage = true
+	if err != nil {
+		logrus.Debugf("failed to get cobra command for %s", os.Args)
 	}
 
+	helpFunc := root.HelpFunc()
+	args := []string{}
+	initialArgs := []string{"milpa"}
+	helpRequested := false
+
+	root.SetHelpFunc(func(cmd *cobra.Command, _ []string) {
+		exitCode := 42
+		if !helpRequested && cmd.HasAvailableSubCommands() {
+			exitCode = 127
+		}
+		helpFunc(cmd, args)
+		os.Exit(exitCode)
+	})
+
+	if len(os.Args) > 1 && os.Args[1] != "__complete" {
+		for _, arg := range os.Args[1:] {
+			if arg == "--help" || arg == "-h" {
+				initialArgs = append(initialArgs, "help")
+			} else {
+				args = append(args, arg)
+			}
+		}
+	} else {
+		args = os.Args[1:]
+	}
+
+	os.Args = append(initialArgs, args...)
+	// logrus.Info(os.Args)
+	if len(os.Args) >= 2 && os.Args[1] == "help" {
+		helpRequested = true
+	}
+
+	err = root.Execute()
+	if err != nil {
+		// see man sysexits || grep "#define EX" /usr/include/sysexits.h
+		switch err.(type) {
+		case cmds.BadArguments:
+			// 64 bad arguments
+			// EX_USAGE The command was used incorrectly, e.g., with the wrong number of arguments, a bad flag, a bad syntax in a parameter, or whatever.
+			os.Exit(64)
+		case cmds.NotFound:
+			// 127 command not found
+			// https://tldp.org/LDP/abs/html/exitcodes.html
+			os.Exit(127)
+		default:
+			if strings.HasPrefix(err.Error(), "unknown command") {
+				os.Exit(127)
+			} else if strings.HasPrefix(err.Error(), "unknown flag") || strings.HasPrefix(err.Error(), "unknown shorthand flag") {
+				os.Exit(64)
+			}
+		}
+
+		logrus.Errorf("Unknown error: %s", err)
+		os.Exit(2)
+	}
 }

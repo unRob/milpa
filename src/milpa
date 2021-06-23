@@ -13,6 +13,8 @@ export MILPA_PATH_ARR
 # bash is fine and all, but we need a little helper to run argument parsing for us
 export MILPA_HELPER="${MILPA_HELPER:-$MILPA_ROOT/src/milpa-helper}"
 
+[[ $1 == "__complete" ]] && exec "$MILPA_HELPER" "$@"
+
 function load_milpa_util () {
   # shell scripts can call load_milpa_util to load utils within the $MILPA_PATH
   # TODO: maybe bump $MILPA_COMMAND_PACKAGE up in the path?
@@ -50,42 +52,38 @@ function _fail () {
   exit 2
 }
 
-if [[ "$#" -eq 0 ]]; then
-  _log error "$("$MILPA_HELPER" "find" "$@")"
-  exit 127
-fi
+mhout=$(mktemp -t "mhout.XXX")
+mherr=$(mktemp -t "mherr.XXX")
+trap 'rm -rf $mhout $mherr' ERR EXIT TERM
 
-if [[ "$1" == "__complete" ]]; then
-  shift
-  exec "$MILPA_HELPER" "__complete" "$@"
-fi
-
-# see man sysexits || grep "#define EX" /usr/include/sysexits.h
-newEnv="$("$MILPA_HELPER" "find" "$@")" || {
+"$MILPA_HELPER" "$@" >"$mhout" 2>"$mherr" || {
   exitCode=$?
-  case "$exitCode" in
-  42)
-    # 42 help requested
-    echo "$newEnv"
+
+  if [[ "$exitCode" == 42 ]]; then
+    # help requested
+    cat "$mhout"
+    rm -rf "$mhout" "$mherr"
     exit
-    ;;
-  64|12[67])
-    # 64 bad arguments
-    # EX_USAGE The command was used incorrectly, e.g., with the wrong number of arguments, a bad flag, a bad syntax in a parameter, or whatever.
-    # https://tldp.org/LDP/abs/html/exitcodes.html
-    # 126 command invoked cannot execute
-    # 127 command not found
-    _log error "$newEnv"
-    exit $exitCode
-    ;;
-  *)
-    exit $exitCode
-  ;;
-  esac
+  fi
+
+  error_message=""
+  while read -r line; do
+    if [[ "$line" = "Error: "* ]]; then
+      error_message+="${line/Error: /}"
+      continue
+    fi
+    >&2 echo "$line"
+  done < <(cat "$mherr" "$mhout")
+  rm -rf "$mhout" "$mherr"
+
+
+  [[ "$error_message" != "" ]] && _log error "$error_message"
+  exit $exitCode
 }
 
 # load parsed arguments and MILPA_ environment variables
-eval "$newEnv"
+eval "$(cat "$mhout")"
+rm -rf "$mhout" "$mherr"
 
 if [[ "${MILPA_VERBOSE}" == "1" ]]; then
   _log debug "running <$MILPA_COMMAND_NAME from> <$MILPA_COMMAND_PATH> with arguments <${*}>"

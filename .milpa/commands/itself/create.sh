@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
-package_path="$(pwd)"
-while [[ ! -d "$package_path/.milpa" ]]; do
-  package_path=$(dirname "$package_path")
-done
+if [[ "$MILPA_OPT_REPO" == "" ]]; then
+  repo_path="$(pwd)"
+  while [[ ! -d "$repo_path/.milpa" ]]; do
+    repo_path=$(dirname "$repo_path")
+  done
+else
+  repo_path="$MILPA_OPT_REPO"
+fi
 
-milpa="$package_path/.milpa"
+milpa="$repo_path/.milpa"
 
-IFS="/"  path="$milpa/$(echo "${MILPA_ARG_NAME[*]}")"
+IFS="/"  path="$milpa/commands/$(echo "${MILPA_ARG_NAME[*]}")"
 mkdir -p "$(dirname "$path")"
 
 if [[ "${MILPA_OPT_EXECUTABLE}" ]]; then
@@ -24,6 +28,8 @@ description: |
 # arguments:
 #   - name: something
 #     description: passes something to your script
+#     set:
+#       from: { subcommand: another command }
 # options:
 #   explode:
 #     type: boolean
