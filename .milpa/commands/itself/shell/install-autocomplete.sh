@@ -22,11 +22,19 @@ echo "autoload -U compinit; compinit" >> ~/.zshrc
 and reloading your shell
 EOF
     # shellcheck disable=2016
-    zsh -i -c '
-dst="${${fpath[@]:#$HOME/*}[1]}"
-set -ex
-"$MILPA_HELPER" __generate_completions zsh > "${dst}/_milpa"
-set +x' && _log warning "Please restart your shell"
+    dst=$(zsh -i -c 'printf "%s" "${${fpath[@]:#$HOME/*}[1]}"') || _fail "Unable to locate an fpath to install completions to"
+    if [[ -w "$dst" ]]; then
+      set -ex
+      "$MILPA_HELPER" __generate_completions zsh > "${dst}/_milpa"
+      set +ex
+    else
+      _log warning "$dst does not look writeable for $USER, using sudo"
+      set -ex
+      "$MILPA_HELPER" __generate_completions zsh | sudo tee "${dst}/_milpa" >/dev/null
+      set +ex
+    fi
+
+    _log warning "Please restart your shell"
     ;;
   *fish)
     set -ex

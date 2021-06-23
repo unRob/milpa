@@ -154,6 +154,8 @@ func findScripts(query []string, filter findFilterfunc) (results []*findResult) 
 					results = append(results, &findResult{match, fileInfo})
 				}
 			}
+		} else {
+			logrus.Debugf("errored while globbing")
 		}
 	}
 
@@ -164,6 +166,8 @@ func FindAllSubCommands() (cmds []*Command, err error) {
 	files := findScripts([]string{"**"}, func(_ string, info os.FileInfo) bool {
 		return !info.IsDir()
 	})
+
+	logrus.Debugf("Found %d files", len(files))
 
 	for _, file := range files {
 		pc := strings.SplitN(file.Path, "/.milpa/commands/", 2)
@@ -182,8 +186,10 @@ func FindAllSubCommands() (cmds []*Command, err error) {
 		var cmd *Command
 		cmd, err = New(file.Path, spec, pkg, kind)
 		if err != nil {
+			logrus.Debugf("Could not initialize command %s", file.Path)
 			return
 		}
+		logrus.Debugf("Initialized %s", cmd.FullName())
 
 		cmds = append(cmds, cmd)
 	}

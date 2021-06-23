@@ -26,9 +26,9 @@ func main() {
 	}
 
 	root, err := cmds.RootCommand(subcommands)
-	root.SilenceUsage = true
+	// root.SilenceUsage = true
 	if err != nil {
-		logrus.Debugf("failed to get cobra command for %s", os.Args)
+		logrus.Errorf("failed to get cobra command for %s: %v", os.Args, err)
 	}
 
 	helpFunc := root.HelpFunc()

@@ -30,7 +30,7 @@ function _print_message () {
   level=$1
   shift
   date=""
-  if [[ -n "$MILPA_VERBOSE" ]]; then
+  if [[ "$MILPA_VERBOSE" == 1 ]]; then
     date=" $(date -u +"%FT%H:%M:%S")"
   fi
   command_name=${MILPA_COMMAND_NAME:-milpa}
