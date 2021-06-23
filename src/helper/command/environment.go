@@ -46,7 +46,11 @@ func (cmd *Command) ToEval(args []string, flags *pflag.FlagSet) (string, error) 
 				return "", fmt.Errorf("missing argument: %s", arg.Name)
 			}
 			logrus.Debugf("Skipping arg parsing for %s", arg.Name)
-			envVars = append(envVars, fmt.Sprintf("export %s=%s", envName, ""))
+			value := ""
+			if arg.Default != "" {
+				value = arg.Default
+			}
+			envVars = append(envVars, fmt.Sprintf("export %s=%s", envName, value))
 			continue
 		}
 

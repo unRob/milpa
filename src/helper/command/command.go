@@ -3,6 +3,7 @@ package command
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"os/exec"
 	"strings"
 
@@ -16,20 +17,27 @@ type CommandSetArgument struct {
 	From struct {
 		SubCommand string `yaml:"subcommand" json:"subcommand"`
 	} `yaml:"from" json:"from"`
-	Values []string
+	Values         []string
+	computedValues *[]string
 }
 
 func (csa *CommandSetArgument) Resolve() ([]string, error) {
 	values := []string{}
 	if csa.From.SubCommand != "" {
-		cmd := exec.Command("/Users/rob/Dev/nidito/milpa/src/milpa", strings.Split(csa.From.SubCommand, " ")...)
-		out, err := cmd.Output()
-		if err != nil {
-			logrus.Error(cmd.CombinedOutput())
-			return values, err
-		}
+		if csa.computedValues == nil {
+			logrus.Debugf("executing sub command %s", csa.From.SubCommand)
+			milpa := fmt.Sprintf("%s/src/milpa", os.Getenv("MILPA_ROOT"))
+			cmd := exec.Command(milpa, strings.Split(csa.From.SubCommand, " ")...)
+			out, err := cmd.Output()
+			if err != nil {
+				logrus.Error(err)
+				return values, err
+			}
 
-		values = strings.Split(strings.TrimSuffix(string(out), "\n"), "\n")
+			val := strings.Split(strings.TrimSuffix(string(out), "\n"), "\n")
+			csa.computedValues = &val
+		}
+		values = *csa.computedValues
 	} else if len(csa.Values) > 0 {
 		return csa.Values, nil
 	}
@@ -40,6 +48,7 @@ func (csa *CommandSetArgument) Resolve() ([]string, error) {
 type CommandArgument struct {
 	Name        string              `yaml:"name" json:"name"`
 	Description string              `yaml:"description" json:"description"`
+	Default     string              `yaml:"default" json:"default"`
 	Set         *CommandSetArgument `yaml:"set" json:"set,omitempty"`
 	Variadic    bool                `yaml:"variadic" json:"variadic"`
 	Required    bool                `yaml:"required" json:"required"`
@@ -118,6 +127,10 @@ func (cmd *Command) CreateFlagSet() error {
 	fs.Usage = func() {}
 
 	for name, opt := range cmd.Options {
+		if opt.Type == "" {
+			opt.Type = "string"
+		}
+
 		switch opt.Type {
 		case "boolean":
 			def := false

@@ -10,6 +10,7 @@ import (
 )
 
 func (cmd *Command) ToCobra() (*cobra.Command, error) {
+	logrus.Debugf("Cobraizing %s", cmd.FullName())
 	cc := &cobra.Command{
 		Use:               cmd.Meta.Name[len(cmd.Meta.Name)-1],
 		Short:             cmd.Summary,
@@ -142,14 +143,17 @@ func RootCommand(commands []*Command) (*cobra.Command, error) {
 		container := root
 		for idx, cp := range cmd.Meta.Name {
 			if idx == len(cmd.Meta.Name)-1 {
+				logrus.Debugf("adding command %s to %s", leaf.Name(), container.Name())
 				container.AddCommand(leaf)
 				break
 			}
 
 			query := []string{cp}
-			if cc, _, err := root.Find(query); err == nil && cc != container {
+			if cc, _, err := container.Find(query); err == nil && cc != container {
+				logrus.Debugf("found %s in %s", query, cc.Name())
 				container = cc
 			} else {
+				logrus.Debugf("creating %s in %s", query, container.Name())
 				cc := &cobra.Command{
 					Use:               cp,
 					Short:             fmt.Sprintf("%s sub-commands", strings.Join(query, " ")),

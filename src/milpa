@@ -82,13 +82,14 @@ trap 'rm -rf $mhout $mherr' ERR EXIT TERM
 }
 
 # load parsed arguments and MILPA_ environment variables
-eval "$(cat "$mhout")"
-rm -rf "$mhout" "$mherr"
+eval "$(cat "$mhout")" || _fail "Failed setting command environment"
 
-if [[ "${MILPA_VERBOSE}" == "1" ]]; then
-  _log debug "running <$MILPA_COMMAND_NAME from> <$MILPA_COMMAND_PATH> with arguments <${*}>"
-  _log debug "milpa environment:"$'\n'"$(env | grep ^MILPA | sort)"
-fi
+[[ "${MILPA_VERBOSE:-$MILPA_OPT_VERBOSE}" == "true" ]] && export MILPA_VERBOSE="true"
+[[ "$MILPA_DEBUG" == 1 ]] && _log debug "milpa-helper output: $(cat "$mherr")"
+_log debug "running <$MILPA_COMMAND_NAME from> <$MILPA_COMMAND_PATH> with arguments <${*}>"
+_log debug "milpa environment:"$'\n'"$(env | grep ^MILPA | sort)"
+
+rm -rf "$mhout" "$mherr"
 
 if [[ -f "$MILPA_COMMAND_PACKAGE/.milpa/hooks/before-run.sh" ]]; then
   set -o allexport
