@@ -62,7 +62,7 @@ function _print_message () {
 }
 
 function _log () {
-  if [[ "$MILPA_SILENT" == "1" ]]; then
+  if [[ "$MILPA_SILENT" == "true" ]]; then
     return
   fi
   local prefix format level;
