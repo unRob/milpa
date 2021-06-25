@@ -1,19 +1,37 @@
 #!/usr/bin/env bash
+# Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx.>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# MILPA ROOT points to this installation of the milpa kernel
+# lol, kernel. La gente bilingue seguro entiende el chiste.
+export MILPA_ROOT=${MILPA_ROOT:-/usr/local/var/milpa}
 # MILPA_PATH contains all known milpa repositories
 # Repositories are folders that contain a .milpa directory within
 # set to MILPA_ROOT if empty, otherwise prepend $MILPA_ROOT:
 MILPA_PATH="${MILPA_PATH+$MILPA_ROOT:}${MILPA_PATH:-$MILPA_ROOT}"
 # if the current working dir contains a .milpa folder, add that to the path as well
-_pwd="$(pwd)"
-[[ -d ".milpa" ]] && [[ ! "$MILPA_PATH" =~ :?$_pwd:? ]] && MILPA_PATH="$MILPA_PATH:$_pwd"
+_pwd="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+[[ -d "$_pwd/.milpa" ]] && [[ ! "$MILPA_PATH" =~ :?$_pwd:? ]] && MILPA_PATH="$MILPA_PATH:$_pwd"
 export MILPA_PATH
-# create an array from this path
+# bash is fine and all, but we need a little helper to run parsing for us
+export MILPA_COMPA="${MILPA_COMPA:-compa}"
+
+# bail early if we're autocompleting
+[[ $1 == "__complete" ]] && exec "$MILPA_COMPA" "$@"
+
+# create an array from this MILPA_PATH
 IFS=: read -ra MILPA_PATH_ARR <<<"$MILPA_PATH"
 export MILPA_PATH_ARR
-# bash is fine and all, but we need a little helper to run argument parsing for us
-export MILPA_HELPER="${MILPA_HELPER:-$MILPA_ROOT/src/milpa-helper}"
-
-[[ $1 == "__complete" ]] && exec "$MILPA_HELPER" "$@"
 
 function load_milpa_util () {
   # shell scripts can call load_milpa_util to load utils within the $MILPA_PATH
@@ -52,17 +70,17 @@ function _fail () {
   exit 2
 }
 
-mhout=$(mktemp -t "mhout.XXX")
-mherr=$(mktemp -t "mherr.XXX")
-trap 'rm -rf $mhout $mherr' ERR EXIT TERM
+compaOut=$(mktemp -t "compaOut.XXX")
+compaErr=$(mktemp -t "compaErr.XXX")
+trap 'rm -rf $compaOut $compaErr' ERR EXIT TERM
 
-"$MILPA_HELPER" "$@" >"$mhout" 2>"$mherr" || {
+"$MILPA_COMPA" "$@" >"$compaOut" 2>"$compaErr" || {
   exitCode=$?
 
   if [[ "$exitCode" == 42 ]]; then
     # help requested
-    cat "$mhout"
-    rm -rf "$mhout" "$mherr"
+    cat "$compaOut"
+    rm -rf "$compaOut" "$compaErr"
     exit
   fi
 
@@ -73,8 +91,8 @@ trap 'rm -rf $mhout $mherr' ERR EXIT TERM
       continue
     fi
     >&2 echo "$line"
-  done < <(cat "$mherr" "$mhout")
-  rm -rf "$mhout" "$mherr"
+  done < <(cat "$compaErr" "$compaOut")
+  rm -rf "$compaOut" "$compaErr"
 
 
   [[ "$error_message" != "" ]] && _log error "$error_message"
@@ -82,26 +100,29 @@ trap 'rm -rf $mhout $mherr' ERR EXIT TERM
 }
 
 # load parsed arguments and MILPA_ environment variables
-eval "$(cat "$mhout")" || _fail "Failed setting command environment"
+eval "$(cat "$compaOut")" || _fail "Failed setting command environment"
 
 [[ "${MILPA_VERBOSE:-$MILPA_OPT_VERBOSE}" == "true" ]] && export MILPA_VERBOSE="true"
-[[ "$MILPA_DEBUG" == 1 ]] && _log debug "milpa-helper output: $(cat "$mherr")"
+[[ "$MILPA_DEBUG" == 1 ]] && _log debug "milpa-helper output: $(cat "$compaErr")"
 _log debug "running <$MILPA_COMMAND_NAME from> <$MILPA_COMMAND_PATH> with arguments <${*}>"
 _log debug "milpa environment:"$'\n'"$(env | grep ^MILPA | sort)"
 
-rm -rf "$mhout" "$mherr"
+rm -rf "$compaOut" "$compaErr"
 
 if [[ -f "$MILPA_COMMAND_PACKAGE/.milpa/hooks/before-run.sh" ]]; then
   set -o allexport
-  # shellcheck disable=1091
+  # shellcheck disable=1091 source=/dev/null
   source "$MILPA_COMMAND_PACKAGE/.milpa/hooks/before-run.sh"
   set +o allexport
 fi
 
 case "$MILPA_COMMAND_KIND" in
-  exec) exec "$MILPA_COMMAND_PATH" "$@" ;;
+  exec)
+    exec "$MILPA_COMMAND_PATH" "$@" ;;
   source)
     # shellcheck disable=1090
     source "$MILPA_COMMAND_PATH";;
-  *) _log warning "Unsure how to run $MILPA_COMMAND_NAME. Found $MILPA_COMMAND_PATH, but it is neither a .sh file nor executable" && _fail "Unable to continue running sub-command."
+  *)
+    _log warning "Unsure how to run $MILPA_COMMAND_NAME. Found $MILPA_COMMAND_PATH, but it is neither a .sh file nor executable"
+    _fail "Unable to continue running sub-command."
 esac
