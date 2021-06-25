@@ -6,6 +6,7 @@ require (
 	github.com/alessio/shellescape v1.4.1
 	github.com/bmatcuk/doublestar v1.3.4
 	github.com/cpuguy83/go-md2man v1.0.10
+	github.com/fatih/color v1.12.0 // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.1.3

@@ -1,15 +1,37 @@
 #!/usr/bin/env bash
+# Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 if [[ -x ${TERM+x} ]]; then
   # otherwise, tput is gonna have trouble fetching formatting codes
   export TERM="xterm-color"
 fi
 
-_FMT_INVERTED=$(tput rev)
-_FMT_BOLD="$(tput bold)"
-_FMT_RESET="$(tput sgr0)"
-_FMT_ERROR="$(tput setaf 1)"
-_FMT_WARNING="$(tput setaf 3)"
-_FMT_GRAY="$(tput setaf 7)"
+if [[ -t 1 ]] && [[ -z ${NO_COLOR+x} ]]; then
+  _FMT_INVERTED=$(tput rev)
+  _FMT_BOLD="$(tput bold)"
+  _FMT_RESET="$(tput sgr0)"
+  _FMT_ERROR="$(tput setaf 1)"
+  _FMT_WARNING="$(tput setaf 3)"
+  _FMT_GRAY="$(tput setaf 7)"
+else
+  _FMT_INVERTED=""
+  _FMT_BOLD=""
+  _FMT_RESET=""
+  _FMT_ERROR=""
+  _FMT_WARNING=""
+  _FMT_GRAY=""
+fi
 
 
 function _fmt() {
@@ -22,7 +44,7 @@ function _fmt() {
     *) _fail "unknown formatting directive: $1" ;;
   esac
   shift
-  echo -e "${code}$*${_RESET}"
+  echo -e "${code}$*${_FMT_RESET}"
 }
 
 function _print_message () {
@@ -36,10 +58,13 @@ function _print_message () {
   command_name=${MILPA_COMMAND_NAME:-milpa}
 
   [[ "$level" == "debug" ]] && [[ -z "${MILPA_VERBOSE+x}" ]] && return
-  >&2 echo "${_C_GRAY}[${level}:${command_name// /:}${date}]${_RESET} $*"
+  >&2 echo "${_C_GRAY}[${level}:${command_name// /:}${date}]${_FMT_RESET} $*"
 }
 
 function _log () {
+  if [[ "$MILPA_SILENT" == "1" ]]; then
+    return
+  fi
   local prefix format level;
   level="info"
   case $1 in

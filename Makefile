@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,28 +11,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-_CURRENT_SHELL=$(basename "$SHELL")
-function xsh_export (){
-  case "$_CURRENT_SHELL" in
-    fish)
-      echo "set -x $1 $2"
-      ;;
-    *sh)
-      echo "export $1=\"$2\""
-      ;;
-  esac
-}
+setup:
+	git config core.hooksPath $(shell git rev-parse --show-toplevel)/bin/hooks
+ifneq ($(ASDF_DIR), "")
+	echo asdf install
+endif
 
-function xsh_prepend (){
-  path_var="${2:-PATH}"
-  case "$_CURRENT_SHELL" in
-    fish)
-      # set PATH some/new/path $PATH
-      echo "set $path_var $1 \$$path_var"
-      ;;
-    *sh)
-      # export PATH="some/new/path:$PATH"
-      echo "export $path_var=\"$1:\$$path_var\""
-      ;;
-  esac
-}
+lint:
+	golangci-lint run
+	shellcheck milpa .milpa/**/*.sh
+
+compa: compa.go go.mod go.sum internal/*
+	go build -ldflags "-s -w -X main.version=${MILPA_VERSION}" -o compa
+

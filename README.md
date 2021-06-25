@@ -2,9 +2,9 @@
 
 _milpa_ is an agricultural method that combines multiple crops in close proximity. `milpa` is a Bash script and tool to care for one's own garden of scripts.
 
-You and your team write scripts and a little spec for each command. Use bash, or any other command, and `milpa` provides autocompletions, sub-commands and argument parsing+validation for you to focus on your scripts.
+You and your team write scripts and a little spec for each command. Use bash, or any other command, and `milpa` provides autocompletions, sub-commands and argument parsing+validation for you to focus on your scripts. For those in the know, it makes following these [Command Line Interface Guidelines](https://clig.dev/) easier.
 
-This repo has just been planted, and everything here is extremely experimental.
+> This repo has just been planted, and everything here is extremely experimental.
 
 ## Usage
 
@@ -32,9 +32,11 @@ Let's say you have this in your repo:
     onboard.yaml
 ```
 
-Then, `milpa` would allow you to run `milpa cloud-provider login` and `milpa onboard`, as well as `milpa db connect api --environment production --verbose`, or even `milpa help db list` and so on and so forth.
+Then, `milpa` would allow you to run `milpa cloud-provider login` and `milpa onboard`, as well as `milpa db connect api --environment production --verbose`, or even `milpa help db list` and so on and so forth. You choose how to organize your **Scripts** under `.milpa/commands`, and `milpa` figures out the rest.
 
-You choose how to organize your **Scripts** under `.milpa/commands`, and `milpa` figures out the rest.
+### Where `milpa` looks for scripts
+
+By default, `milpa` will look at the current git repo's root, or if git is not available, in your current working directory. Additional repositories can be added as colon (`:`) delimited paths to the folders containing a `/.milpa` folder within. For example, a `MILPA_PATH=$HOME/code/my-repo:$HOME/.local/milpa` would add the `$HOME/code/my-repo` and `$HOME/.local/milpa` folders to the command search path. Commands with the same name will override any commands previously found in the `MILPA_PATH`.
 
 ### Scripts
 
@@ -53,8 +55,8 @@ Command specs can be written in YAML (for now, but perhaps hcl, json, toml could
 
 ```yaml
 # example spec
-summary: Creates a github release
-description: |
+summary: Creates a github release # this shows up during autocomplete and command listings
+description: | # here, you add a longer description of how your command does its magic
   This command shows you a changelog and waits for approval before generating and pushing a new tag, creating a github release, and opening the browser at the new release.
 
   ## Schemes
@@ -106,14 +108,24 @@ options:
     default: false
 ```
 
-## Features
+## Milpa has commands itself
 
-- [x] Argument + flag parsing and validation
-- [x] Sub-commands based on file system trees
-- [x] Help command
-- [x] Config-based script meta-data
-- [x] Auto-complete
+```sh
+# install autocomplete scripts for your $SHELL
+milpa itself shell install-autocomplete
+# add this to your shell profile to source environment variables used by your commands
+milpa itself shell init
+# create new milpa commands on the local repo
+milpa itself create
+```
 
 ## Example
 
 See [unRob/nidito](https://github.com/unRob/nidito/tree/master/.milpa).
+
+## Internals
+
+Milpa is built with:
+
+- [bash](https://www.gnu.org/software/bash/)
+- [spf13/cobra](https://cobra.dev)
