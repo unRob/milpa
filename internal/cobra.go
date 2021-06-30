@@ -18,7 +18,6 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
@@ -43,6 +42,16 @@ func RootFlagset() *pflag.FlagSet {
 	return rootFlagset
 }
 
+func (cmd *Command) Run(cc *cobra.Command, args []string) error {
+	flags := cc.Flags()
+	env, err := cmd.ToEval(args, flags)
+	if err != nil {
+		return err
+	}
+	fmt.Println(env)
+	return nil
+}
+
 func (cmd *Command) ToCobra() (*cobra.Command, error) {
 	localName := cmd.Meta.Name[len(cmd.Meta.Name)-1]
 	useSpec := []string{localName, "[flags]"}
@@ -58,55 +67,15 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 		DisableAutoGenTag: true,
 		SilenceUsage:      true,
 		SilenceErrors:     true,
-		Args: func(cc *cobra.Command, args []string) error {
-			for idx, arg := range cmd.Arguments {
-				argumentProvided := idx < len(args)
-				if arg.Required && !argumentProvided {
-					return BadArguments{fmt.Sprintf("Missing argument for %s", arg.Name)}
-				}
-
-				if !argumentProvided {
-					continue
-				}
-				current := args[idx]
-
-				if arg.Validates() {
-					values, err := arg.Resolve()
-					if err != nil {
-						return err
-					}
-					found := false
-					for _, value := range values {
-						if value == current {
-							found = true
-							break
-						}
-					}
-
-					if !found {
-						return BadArguments{fmt.Sprintf("%s is not a valid value for argument <%s>. Valid options are: %s", current, arg.Name, strings.Join(values, ", "))}
-					}
-				}
-			}
-
-			return nil
-		},
-		RunE: func(cc *cobra.Command, args []string) error {
-			flags := cc.Flags()
-			env, err := cmd.ToEval(args, flags)
-			if err != nil {
-				return err
-			}
-			fmt.Println(env)
-			return nil
-		},
+		Args:              cmd.Arguments.Validate,
+		RunE:              cmd.Run,
 	}
 
 	cc.SetFlagErrorFunc(func(c *cobra.Command, e error) error {
 		return BadArguments{e.Error()}
 	})
 
-	cc.ValidArgsFunction = cmd.Arguments.ToValidationFunction()
+	cc.ValidArgsFunction = cmd.Arguments.CompletionFunction()
 
 	err := cmd.CreateFlagSet()
 	if err != nil {
@@ -117,29 +86,9 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 
 	for name, opt := range cmd.Options {
 		if opt.Validates() {
-			oCopy := opt
-			cc.RegisterFlagCompletionFunc(name, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-				logrus.Infof("registering complete function for %s", name)
-				values, err := oCopy.Resolve()
-				if err != nil {
-					return values, cobra.ShellCompDirectiveError
-				}
-
-				if toComplete != "" {
-					logrus.Infof("returning filtered results for %s", name)
-					filtered := []string{}
-					for _, value := range values {
-						if strings.HasPrefix(value, toComplete) {
-							filtered = append(filtered, value)
-						}
-					}
-					values = filtered
-				} else {
-					logrus.Infof("returning all results for %s, %v", name, values)
-				}
-
-				return values, cobra.ShellCompDirectiveDefault
-			})
+			if err := cc.RegisterFlagCompletionFunc(name, opt.ValidationFunction); err != nil {
+				return cc, err
+			}
 		}
 	}
 

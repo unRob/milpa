@@ -23,10 +23,6 @@ import (
 
 var customNames map[string]string = map[string]string{"no-color": "NO_COLOR", "silent": "MILPA_SILENT", "verbose": "MILPA_VERBOSE"}
 
-func setEnvForOpts(env *[]string, flags *pflag.FlagSet) {
-
-}
-
 func (cmd *Command) ToEval(args []string, flags *pflag.FlagSet) (string, error) {
 	output := []string{
 		fmt.Sprintf("export MILPA_COMMAND_NAME=%s", shellescape.Quote(cmd.FullName())),

@@ -81,7 +81,41 @@ func (args *Arguments) ToEnv(dst *[]string, actual []string) error {
 	return nil
 }
 
-func (args *Arguments) ToValidationFunction() func(cc *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+func (args *Arguments) Validate(cc *cobra.Command, supplied []string) error {
+	for idx, arg := range *args {
+		argumentProvided := idx < len(supplied)
+		if arg.Required && !argumentProvided {
+			return BadArguments{fmt.Sprintf("Missing argument for %s", arg.Name)}
+		}
+
+		if !argumentProvided {
+			continue
+		}
+		current := supplied[idx]
+
+		if arg.Validates() {
+			values, err := arg.Resolve()
+			if err != nil {
+				return err
+			}
+			found := false
+			for _, value := range values {
+				if value == current {
+					found = true
+					break
+				}
+			}
+
+			if !found {
+				return BadArguments{fmt.Sprintf("%s is not a valid value for argument <%s>. Valid options are: %s", current, arg.Name, strings.Join(values, ", "))}
+			}
+		}
+	}
+
+	return nil
+}
+
+func (args *Arguments) CompletionFunction() func(cc *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 	self := *args
 	expectedArgLen := len(self)
 	if expectedArgLen > 0 {
@@ -212,6 +246,24 @@ func (opt *Option) Resolve() ([]string, error) {
 	}
 
 	return values, nil
+}
+
+func (opt *Option) ValidationFunction(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	values, err := opt.Resolve()
+	if err != nil {
+		return values, cobra.ShellCompDirectiveError
+	}
+
+	if toComplete != "" {
+		filtered := []string{}
+		for _, value := range values {
+			if strings.HasPrefix(value, toComplete) {
+				filtered = append(filtered, value)
+			}
+		}
+		values = filtered
+	}
+	return values, cobra.ShellCompDirectiveDefault
 }
 
 type Options map[string]*Option

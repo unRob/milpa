@@ -104,7 +104,7 @@ func doctorForCommands(commands []*Command) *cobra.Command {
 			}
 
 			if failedOverall {
-				return fmt.Errorf("Your milpa could use some help, check out errors above")
+				return fmt.Errorf("your milpa could use some help, check out errors above")
 			}
 
 			return
