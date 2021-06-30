@@ -92,7 +92,7 @@ func FindAllSubCommands(returnOnError bool) (cmds []*Command, err error) {
 
 	for path, data := range files {
 		var cmd *Command
-		cmd, err = New(path, data.Repo)
+		cmd, err = New(path, data.Repo, !returnOnError)
 		if err != nil {
 			logrus.Warnf("Could not initialize command %s, run `milpa itself doctor` to find out more", path)
 			if returnOnError {

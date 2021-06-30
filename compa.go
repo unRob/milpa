@@ -72,8 +72,15 @@ func main() {
 		DisableTimestamp:       true,
 	})
 
-	subcommands, err := internal.FindAllSubCommands(os.Args[1] != "__doctor")
-	if err != nil {
+	isDoctor := false
+	if len(os.Args) >= 2 {
+		isDoctor = os.Args[1] == "__doctor" || (len(os.Args) > 2 && (os.Args[1] == "itself" && os.Args[2] == "doctor"))
+	}
+
+	logrus.Debugf("doctor mode enabled: %v", isDoctor)
+
+	subcommands, err := internal.FindAllSubCommands(!isDoctor)
+	if err != nil && !isDoctor {
 		logrus.Fatal(err)
 	}
 
@@ -98,17 +105,7 @@ func main() {
 		os.Exit(exitCode)
 	})
 
-	if len(os.Args) > 1 && os.Args[1] != "__complete" {
-		for _, arg := range os.Args[1:] {
-			if arg == "--help" || arg == "-h" {
-				initialArgs = append(initialArgs, "help")
-			} else {
-				args = append(args, arg)
-			}
-		}
-	} else {
-		args = os.Args[1:]
-	}
+	args = os.Args[1:]
 
 	os.Args = append(initialArgs, args...) //nolint:gocritic
 

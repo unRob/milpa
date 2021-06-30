@@ -50,7 +50,7 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 		useSpec = append(useSpec, arg.ToDesc())
 	}
 
-	logrus.Debugf("Cobraizing %s", strings.Join(useSpec, " "))
+	// logrus.Debugf("Cobraizing %s", strings.Join(useSpec, " "))
 	cc := &cobra.Command{
 		Use:               strings.Join(useSpec, " "),
 		Short:             cmd.Summary,
@@ -114,6 +114,35 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 	}
 
 	cc.Flags().AddFlagSet(cmd.runtimeFlags)
+
+	for name, opt := range cmd.Options {
+		if opt.Validates() {
+			oCopy := opt
+			cc.RegisterFlagCompletionFunc(name, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+				logrus.Infof("registering complete function for %s", name)
+				values, err := oCopy.Resolve()
+				if err != nil {
+					return values, cobra.ShellCompDirectiveError
+				}
+
+				if toComplete != "" {
+					logrus.Infof("returning filtered results for %s", name)
+					filtered := []string{}
+					for _, value := range values {
+						if strings.HasPrefix(value, toComplete) {
+							filtered = append(filtered, value)
+						}
+					}
+					values = filtered
+				} else {
+					logrus.Infof("returning all results for %s, %v", name, values)
+				}
+
+				return values, cobra.ShellCompDirectiveDefault
+			})
+		}
+	}
+
 	return cc, nil
 }
 
@@ -142,17 +171,17 @@ Milpa, is an agricultural method that combines multiple crops in close proximity
 		container := root
 		for idx, cp := range cmd.Meta.Name {
 			if idx == len(cmd.Meta.Name)-1 {
-				logrus.Debugf("adding command %s to %s", leaf.Name(), container.Name())
+				// logrus.Debugf("adding command %s to %s", leaf.Name(), container.Name())
 				container.AddCommand(leaf)
 				break
 			}
 
 			query := []string{cp}
 			if cc, _, err := container.Find(query); err == nil && cc != container {
-				logrus.Debugf("found %s in %s", query, cc.Name())
+				// logrus.Debugf("found %s in %s", query, cc.Name())
 				container = cc
 			} else {
-				logrus.Debugf("creating %s in %s", query, container.Name())
+				// logrus.Debugf("creating %s in %s", query, container.Name())
 				cc := &cobra.Command{
 					Use:                        cp,
 					Short:                      fmt.Sprintf("%s subcommands", strings.Join(query, " ")),
