@@ -36,19 +36,21 @@ else
   echo "#!/usr/bin/env bash" >> "$path"
 fi
 
-cat > "$path.${MILPA_OPT_CONFIG_FORMAT}" <<YAML
+cat > "${path#.sh}.${MILPA_OPT_CONFIG_FORMAT}" <<YAML
 summary: Does a thing
 description: |
   Longer description of how it does the thing
 # arguments:
 #   - name: something
 #     description: passes something to your script
-#     set:
-#       from: { subcommand: another command }
+#     values-subcommand: another command
 # options:
 #   explode:
-#     type: boolean
+#     type: bool
 #     description: something else
+#   stringOpt:
+#     description: what stringOpt does
+#     values: [eitherA orB orC]
 YAML
 
 _log complete "$(_fmt bold "${MILPA_ARG_NAME[*]}") created"

@@ -17,6 +17,7 @@ import (
 	"io/ioutil"
 	"strings"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/spf13/pflag"
 	"gopkg.in/yaml.v2"
 )
@@ -24,12 +25,13 @@ import (
 const cmdPath = ".milpa/commands"
 
 type Command struct {
-	Meta         Meta              `json:"_meta"`
-	Summary      string            `yaml:"summary"`
-	Description  string            `yaml:"description"`
-	Arguments    Arguments         `yaml:"arguments"`
-	Options      map[string]Option `yaml:"options"`
+	Meta         Meta
+	Summary      string            `yaml:"summary" validate:"required"`
+	Description  string            `yaml:"description" validate:"required"`
+	Arguments    Arguments         `yaml:"arguments" validate:"dive"`
+	Options      map[string]Option `yaml:"options" validate:"dive"`
 	runtimeFlags *pflag.FlagSet
+	issues       []string
 }
 
 type Meta struct {
@@ -60,6 +62,7 @@ func New(path string, repo string) (cmd *Command, err error) {
 	cmd.Meta = metaForPath(path, repo)
 	cmd.Arguments = []Argument{}
 	cmd.Options = map[string]Option{}
+	cmd.issues = []string{}
 
 	spec := strings.TrimSuffix(path, ".sh") + ".yaml"
 	var contents []byte
@@ -71,6 +74,26 @@ func New(path string, repo string) (cmd *Command, err error) {
 		err = ConfigError{
 			Err:    err,
 			Config: spec,
+		}
+		cmd.issues = append(cmd.issues, err.Error())
+	}
+
+	return
+}
+
+func (cmd *Command) Validate() (report map[string]bool) {
+	report = map[string]bool{}
+
+	for _, issue := range cmd.issues {
+		report[issue] = false
+	}
+
+	validate := validator.New()
+	err := validate.Struct(cmd)
+	if err != nil {
+		verrs := err.(validator.ValidationErrors)
+		for _, issue := range verrs {
+			report[fmt.Sprint(issue)] = false
 		}
 	}
 
@@ -105,7 +128,8 @@ func (cmd *Command) CreateFlagSet() error {
 			}
 			fs.String(name, def, opt.Description)
 		default:
-			return fmt.Errorf("unknown option type: <%s> for option: <%s>", opt.Type, name)
+			continue
+			// return fmt.Errorf("unknown option type: <%s> for option: <%s>", opt.Type, name)
 		}
 	}
 

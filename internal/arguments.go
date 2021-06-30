@@ -117,13 +117,13 @@ func (args *Arguments) ToValidationFunction() func(cc *cobra.Command, args []str
 }
 
 type Argument struct {
-	Name             string   `yaml:"name"`
-	Description      string   `yaml:"description"`
-	Default          string   `yaml:"default"`
+	Name             string   `yaml:"name" validate:"required"`
+	Description      string   `yaml:"description" validate:"required"`
+	Default          string   `yaml:"default" validate:"excluded_with=Required"`
 	Variadic         bool     `yaml:"variadic"`
-	Required         bool     `yaml:"required"`
-	ValuesSubCommand string   `yaml:"values-subcommand"`
-	Values           []string `yaml:"values"`
+	Required         bool     `yaml:"required" validate:"excluded_with=Default"`
+	ValuesSubCommand string   `yaml:"values-subcommand" validate:"excluded_with=Values"`
+	Values           []string `yaml:"values" validate:"excluded_with=ValuesSubCommand"`
 	computedValues   *[]string
 }
 
@@ -173,12 +173,12 @@ type ValueType string
 const (
 	ValueTypeDefault ValueType = ""
 	ValueTypeString  ValueType = "string"
-	ValueTypeBoolean ValueType = "boolean"
+	ValueTypeBoolean ValueType = "bool"
 )
 
 type Option struct {
 	ShortName   string      `yaml:"short-name"`
-	Type        ValueType   `yaml:"type"`
-	Description string      `yaml:"description"`
+	Type        ValueType   `yaml:"type" validate:"omitempty,oneof=string bool"`
+	Description string      `yaml:"description" validate:"required"`
 	Default     interface{} `yaml:"default"`
 }

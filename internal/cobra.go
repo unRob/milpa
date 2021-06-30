@@ -130,25 +130,8 @@ Milpa, is an agricultural method that combines multiple crops in close proximity
 	}
 	root.PersistentFlags().AddFlagSet(RootFlagset())
 
-	root.AddCommand(&cobra.Command{
-		Use:               "__generate_completions [bash|zsh|fish]",
-		Short:             "Outputs a shell-specific script for autocompletions. See milpa help itself shell install-autocomplete",
-		Hidden:            true,
-		DisableAutoGenTag: true,
-		SilenceUsage:      true,
-		Args:              cobra.MinimumNArgs(1),
-		RunE: func(_ *cobra.Command, args []string) (err error) {
-			switch args[0] {
-			case "bash":
-				err = root.GenBashCompletion(os.Stdout)
-			case "zsh":
-				err = root.GenZshCompletion(os.Stdout)
-			case "fish":
-				err = root.GenFishCompletion(os.Stdout, true)
-			}
-			return
-		},
-	})
+	root.AddCommand(completionCommand)
+	root.AddCommand(doctorForCommands(commands))
 
 	for _, cmd := range commands {
 		leaf, err := cmd.ToCobra()

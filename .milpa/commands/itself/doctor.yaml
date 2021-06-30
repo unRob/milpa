@@ -1,0 +1,3 @@
+summary: Validates all commands found on the MILPA_PATH
+description: |
+  This command will run checks on all known commands, parsing specs and validating their values.
