@@ -21,7 +21,7 @@ import (
 	"github.com/spf13/pflag"
 )
 
-var custom_names map[string]string = map[string]string{"no-color": "NO_COLOR", "silent": "MILPA_SILENT", "verbose": "MILPA_VERBOSE"}
+var customNames map[string]string = map[string]string{"no-color": "NO_COLOR", "silent": "MILPA_SILENT", "verbose": "MILPA_VERBOSE"}
 
 func setEnvForOpts(env *[]string, flags *pflag.FlagSet) {
 	flags.VisitAll(func(f *pflag.Flag) {
@@ -32,7 +32,7 @@ func setEnvForOpts(env *[]string, flags *pflag.FlagSet) {
 		envName := ""
 		value := f.Value.String()
 
-		if cname, ok := custom_names[name]; ok {
+		if cname, ok := customNames[name]; ok {
 			if value == "false" {
 				return
 			}
@@ -61,7 +61,7 @@ func (cmd *Command) ToEval(args []string, flags *pflag.FlagSet) (string, error) 
 	envVars := []string{
 		fmt.Sprintf("export MILPA_COMMAND_NAME=%s", shellescape.Quote(cmd.FullName())),
 		fmt.Sprintf("export MILPA_COMMAND_KIND=%s", shellescape.Quote(cmd.Meta.Kind)),
-		fmt.Sprintf("export MILPA_COMMAND_PACKAGE=%s", shellescape.Quote(cmd.Meta.Package)),
+		fmt.Sprintf("export MILPA_COMMAND_REPO=%s", shellescape.Quote(cmd.Meta.Repo)),
 		fmt.Sprintf("export MILPA_COMMAND_PATH=%s", shellescape.Quote(cmd.Meta.Path)),
 	}
 

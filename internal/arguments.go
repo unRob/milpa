@@ -22,41 +22,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type CommandSetArgument struct {
-	From struct {
-		SubCommand string `yaml:"subcommand"`
-	} `yaml:"from"`
-	Values         []string
-	computedValues *[]string
-}
+type Arguments []Argument
 
-func (csa *CommandSetArgument) Resolve() ([]string, error) {
-	values := []string{}
-	if csa.From.SubCommand != "" {
-		if csa.computedValues == nil {
-			logrus.Debugf("executing sub command %s", csa.From.SubCommand)
-			// milpa := fmt.Sprintf("%s/milpa", os.Getenv("MILPA_ROOT"))
-			cmd := exec.Command("milpa", strings.Split(csa.From.SubCommand, " ")...)
-			out, err := cmd.Output()
-			if err != nil {
-				logrus.Error(err)
-				return values, err
-			}
-
-			val := strings.Split(strings.TrimSuffix(string(out), "\n"), "\n")
-			csa.computedValues = &val
-		}
-		values = *csa.computedValues
-	} else if len(csa.Values) > 0 {
-		return csa.Values, nil
-	}
-
-	return values, nil
-}
-
-type CommandArguments []CommandArgument
-
-func (args *CommandArguments) ToEnv(dst *[]string, actual []string) error {
+func (args *Arguments) ToEnv(dst *[]string, actual []string) error {
 	for idx, arg := range *args {
 		envName := fmt.Sprintf("MILPA_ARG_%s", strings.ToUpper(strings.ReplaceAll(arg.Name, "-", "_")))
 
@@ -85,8 +53,8 @@ func (args *CommandArguments) ToEnv(dst *[]string, actual []string) error {
 			value = shellescape.Quote(actual[idx])
 		}
 
-		if arg.Set != nil {
-			values, err := arg.Set.Resolve()
+		if arg.Validates() {
+			values, err := arg.Resolve()
 			if err != nil {
 				return err
 			}
@@ -112,7 +80,7 @@ func (args *CommandArguments) ToEnv(dst *[]string, actual []string) error {
 	return nil
 }
 
-func (args *CommandArguments) ToValidationFunction() func(cc *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+func (args *Arguments) ToValidationFunction() func(cc *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 	self := *args
 	expectedArgLen := len(self)
 	if expectedArgLen > 0 {
@@ -125,8 +93,8 @@ func (args *CommandArguments) ToValidationFunction() func(cc *cobra.Command, arg
 			if argsCompleted < expectedArgLen {
 				// el usuario pide completar un arg que aun esperamos
 				arg := self[argsCompleted]
-				if arg.Set != nil {
-					values, _ = arg.Set.Resolve()
+				if arg.Validates() {
+					values, _ = arg.Resolve()
 				} else {
 					directive = cobra.ShellCompDirectiveError
 				}
@@ -148,30 +116,56 @@ func (args *CommandArguments) ToValidationFunction() func(cc *cobra.Command, arg
 	return nil
 }
 
-type CommandArgument struct {
-	Name        string              `yaml:"name"`
-	Description string              `yaml:"description"`
-	Default     string              `yaml:"default"`
-	Set         *CommandSetArgument `yaml:"set"`
-	Variadic    bool                `yaml:"variadic"`
-	Required    bool                `yaml:"required"`
+type Argument struct {
+	Name             string   `yaml:"name"`
+	Description      string   `yaml:"description"`
+	Default          string   `yaml:"default"`
+	Variadic         bool     `yaml:"variadic"`
+	Required         bool     `yaml:"required"`
+	ValuesSubCommand string   `yaml:"values-subcommand"`
+	Values           []string `yaml:"values"`
+	computedValues   *[]string
 }
 
-func (cmdarg *CommandArgument) Validates() bool {
-	return cmdarg.Set != nil
+func (arg *Argument) Validates() bool {
+	return len(arg.Values) > 0 || arg.ValuesSubCommand != ""
 }
 
-func (cmdarg *CommandArgument) ToDesc() string {
-	spec := strings.ToUpper(cmdarg.Name)
+func (arg *Argument) ToDesc() string {
+	spec := strings.ToUpper(arg.Name)
 
-	if !cmdarg.Required {
+	if !arg.Required {
 		spec = fmt.Sprintf("[%s]", spec)
 	}
 
-	if cmdarg.Variadic {
+	if arg.Variadic {
 		spec = fmt.Sprintf("%s...", spec)
 	}
 	return spec
+}
+
+func (arg *Argument) Resolve() ([]string, error) {
+	values := []string{}
+	if arg.ValuesSubCommand != "" {
+		if arg.computedValues == nil {
+			logrus.Debugf("executing sub command %s", arg.ValuesSubCommand)
+			// milpa := fmt.Sprintf("%s/milpa", os.Getenv("MILPA_ROOT"))
+			cmd := exec.Command("milpa", strings.Split(arg.ValuesSubCommand, " ")...) // #nosec G204
+			out, err := cmd.Output()
+			if err != nil {
+				logrus.Error(err)
+				return values, err
+			}
+
+			val := strings.Split(strings.TrimSuffix(string(out), "\n"), "\n")
+			arg.computedValues = &val
+		}
+		values = *arg.computedValues
+	} else if len(arg.Values) > 0 {
+		values = arg.Values
+	}
+
+	return values, nil
 }
 
 type ValueType string
@@ -182,7 +176,7 @@ const (
 	ValueTypeBoolean ValueType = "boolean"
 )
 
-type CommandOption struct {
+type Option struct {
 	ShortName   string      `yaml:"short-name"`
 	Type        ValueType   `yaml:"type"`
 	Description string      `yaml:"description"`

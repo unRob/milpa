@@ -24,6 +24,15 @@ import (
 
 var version = "beta"
 
+func showHelp(cmd *cobra.Command) {
+	if cmd.Name() != "help" {
+		err := cmd.Help()
+		if err != nil {
+			os.Exit(70)
+		}
+	}
+}
+
 func handleError(cmd *cobra.Command, err error) {
 	if err != nil {
 		// see man sysexits || grep "#define EX" /usr/include/sysexits.h
@@ -32,9 +41,8 @@ func handleError(cmd *cobra.Command, err error) {
 			// 64 bad arguments
 			// EX_USAGE The command was used incorrectly, e.g., with the wrong number of arguments, a bad flag, a bad syntax in a parameter, or whatever.
 			fmt.Printf("error: %s\n", err)
-			if cmd.Name() != "help" {
-				cmd.Help()
-			}
+			showHelp(cmd)
+
 			os.Exit(64)
 		case internal.NotFound:
 			// 127 command not found
@@ -44,9 +52,7 @@ func handleError(cmd *cobra.Command, err error) {
 			if strings.HasPrefix(err.Error(), "unknown command") {
 				os.Exit(127)
 			} else if strings.HasPrefix(err.Error(), "unknown flag") || strings.HasPrefix(err.Error(), "unknown shorthand flag") {
-				if cmd.Name() != "help" {
-					cmd.Help()
-				}
+				showHelp(cmd)
 				os.Exit(64)
 			}
 		}
@@ -66,7 +72,7 @@ func main() {
 		DisableTimestamp:       true,
 	})
 
-	subcommands, err := internal.FindAllSubCommands()
+	subcommands, err := internal.FindAllSubCommands(true)
 	if err != nil {
 		logrus.Fatal(err)
 	}

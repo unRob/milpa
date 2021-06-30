@@ -45,5 +45,5 @@ func (err NotExecutable) Error() string {
 }
 
 func (err ConfigError) Error() string {
-	return fmt.Sprintf("Failed parsing %s: %v", err.Config, err.Err)
+	return fmt.Sprintf("Invalid configuration %s: %v", err.Config, err.Err)
 }

@@ -21,59 +21,60 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+const cmdPath = ".milpa/commands"
+
 type Command struct {
-	Meta         CommandMeta              `json:"_meta"`
-	Summary      string                   `yaml:"summary"`
-	Description  string                   `yaml:"description"`
-	Arguments    CommandArguments         `yaml:"arguments"`
-	Options      map[string]CommandOption `yaml:"options"`
+	Meta         Meta              `json:"_meta"`
+	Summary      string            `yaml:"summary"`
+	Description  string            `yaml:"description"`
+	Arguments    Arguments         `yaml:"arguments"`
+	Options      map[string]Option `yaml:"options"`
 	runtimeFlags *pflag.FlagSet
 }
 
-type CommandMeta struct {
-	Path    string
-	Package string
-	Name    []string
-	Kind    string
+type Meta struct {
+	Path string
+	Repo string
+	Name []string
+	Kind string
 }
 
-func New(path string, spec string, pkg string, kind string) (*Command, error) {
-	contents, err := ioutil.ReadFile(spec)
-	if err != nil {
-		return nil, fmt.Errorf("error reading %s: %w", spec, err)
+func metaForPath(path string, repo string) (meta Meta) {
+	meta.Path = path
+	meta.Repo = repo
+	name := strings.TrimSuffix(path, ".sh")
+	name = strings.TrimPrefix(name, repo+"/"+cmdPath+"/")
+	meta.Name = strings.Split(name, "/")
+
+	if strings.HasSuffix(path, ".sh") {
+		meta.Kind = "source"
+	} else {
+		meta.Kind = "exec"
 	}
 
-	commandPath := strings.SplitN(path, fmt.Sprintf("%s/.milpa/commands/", pkg), 2)[1]
-	commandName := strings.Split(strings.TrimSuffix(commandPath, ".sh"), "/")
-
-	cmd, err := parseCommand(contents, CommandMeta{
-		Path:    path,
-		Package: pkg,
-		Name:    commandName,
-		Kind:    kind,
-	})
-	if err != nil {
-		err = fmt.Errorf("error parsing %s: %w", spec, err)
-	}
-	return cmd, err
+	return
 }
 
-func parseCommand(yamlBytes []byte, meta CommandMeta) (*Command, error) {
-	cmd := &Command{
-		Meta:      meta,
-		Arguments: []CommandArgument{},
-		Options:   map[string]CommandOption{},
+func New(path string, repo string) (cmd *Command, err error) {
+	cmd = &Command{}
+	cmd.Meta = metaForPath(path, repo)
+	cmd.Arguments = []Argument{}
+	cmd.Options = map[string]Option{}
+
+	spec := strings.TrimSuffix(path, ".sh") + ".yaml"
+	var contents []byte
+	if contents, err = ioutil.ReadFile(spec); err == nil {
+		err = yaml.Unmarshal(contents, cmd)
 	}
-	err := yaml.Unmarshal(yamlBytes, cmd)
 
 	if err != nil {
-		if err, ok := err.(ConfigError); ok {
-			err.Config = meta.Path
+		err = ConfigError{
+			Err:    err,
+			Config: spec,
 		}
-		return nil, err
 	}
 
-	return cmd, nil
+	return
 }
 
 func (cmd *Command) FullName() string {
