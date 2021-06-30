@@ -20,6 +20,7 @@ import (
 	"github.com/alessio/shellescape"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 )
 
 type Arguments []Argument
@@ -177,8 +178,102 @@ const (
 )
 
 type Option struct {
-	ShortName   string      `yaml:"short-name"`
-	Type        ValueType   `yaml:"type" validate:"omitempty,oneof=string bool"`
-	Description string      `yaml:"description" validate:"required"`
-	Default     interface{} `yaml:"default"`
+	ShortName        string      `yaml:"short-name"`
+	Type             ValueType   `yaml:"type" validate:"omitempty,oneof=string bool"`
+	Description      string      `yaml:"description" validate:"required"`
+	Default          interface{} `yaml:"default"`
+	ValuesSubCommand string      `yaml:"values-subcommand" validate:"excluded_with=Values"`
+	Values           []string    `yaml:"values" validate:"excluded_with=ValuesSubCommand"`
+	computedValues   *[]string
+}
+
+func (opt *Option) Validates() bool {
+	return len(opt.Values) > 0 || opt.ValuesSubCommand != ""
+}
+
+func (opt *Option) Resolve() ([]string, error) {
+	values := []string{}
+	if opt.ValuesSubCommand != "" {
+		if opt.computedValues == nil {
+			logrus.Debugf("executing sub command %s", opt.ValuesSubCommand)
+			cmd := exec.Command("milpa", strings.Split(opt.ValuesSubCommand, " ")...) // #nosec G204
+			out, err := cmd.Output()
+			if err != nil {
+				logrus.Error(err)
+				return values, err
+			}
+
+			val := strings.Split(strings.TrimSuffix(string(out), "\n"), "\n")
+			opt.computedValues = &val
+		}
+		values = *opt.computedValues
+	} else if len(opt.Values) > 0 {
+		values = opt.Values
+	}
+
+	return values, nil
+}
+
+type Options map[string]*Option
+
+func (opts *Options) ToEnv(dst *[]string, flags *pflag.FlagSet) (err error) {
+	errors := []string{}
+	flags.VisitAll(func(f *pflag.Flag) {
+		name := f.Name
+		if name == "help" {
+			return
+		}
+		envName := ""
+		value := f.Value.String()
+
+		if cname, ok := customNames[name]; ok {
+			if value == "false" {
+				return
+			}
+			envName = cname
+		} else {
+			envName = fmt.Sprintf("MILPA_OPT_%s", strings.ToUpper(strings.ReplaceAll(name, "-", "_")))
+		}
+
+		switch f.Value.Type() {
+		case "bool":
+			if val, err := flags.GetBool(f.Name); err == nil && !val {
+				value = ""
+			} else {
+				value = "true"
+			}
+		default:
+			oopts := *opts
+			opt, ok := oopts[name]
+			if ok && opt.Validates() {
+				values, verr := opt.Resolve()
+				if verr != nil {
+					errors = append(errors, err.Error())
+					return
+				}
+				found := false
+				for _, validValue := range values {
+					if value == validValue {
+						found = true
+						break
+					}
+				}
+
+				if !found {
+					errors = append(errors,
+						fmt.Sprintf("invalid value for --%s: %s. Valid values are %s", name, value, strings.Join(values, ", ")),
+					)
+				}
+			}
+			logrus.Debugf("flag %s is a %s", f.Name, f.Value.Type())
+		}
+
+		value = shellescape.Quote(value)
+		*dst = append(*dst, fmt.Sprintf("export %s=%s", envName, value))
+	})
+
+	if len(errors) > 0 {
+		return BadArguments{strings.Join(errors, ". ")}
+	}
+	return nil
 }

@@ -54,6 +54,7 @@ func doctorForCommands(commands []*Command) *cobra.Command {
 			warn := color.New(color.FgYellow)
 			fail := color.New(color.FgRed)
 			success := color.New(color.FgGreen)
+			failedOverall := false
 
 			var milpaRoot string
 			if mp := os.Getenv("MILPA_ROOT"); mp != "" {
@@ -91,13 +92,21 @@ func doctorForCommands(commands []*Command) *cobra.Command {
 				}
 				prefix := "✅"
 				if hasFailures {
+					failedOverall = true
 					prefix = "❌"
 				}
 
 				fmt.Println(bold.Sprintf("%s %s", prefix, cmd.FullName()), "—", cmd.Meta.Path)
-				fmt.Println(message)
+				if message != "" {
+					fmt.Println(message)
+				}
 				fmt.Println("-----------")
 			}
+
+			if failedOverall {
+				return fmt.Errorf("Your milpa could use some help, check out errors above")
+			}
+
 			return
 		},
 	}

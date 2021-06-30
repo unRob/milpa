@@ -15,7 +15,7 @@ options:
     description: Create an empty, executable command. Useful when you'd like using something other than bash.
   config-format:
     description: The configuration format to use to describe this command
-    set: { values: [yaml] }
+    values: [yaml]
     default: yaml
   repo:
     type: string

@@ -24,37 +24,7 @@ import (
 var customNames map[string]string = map[string]string{"no-color": "NO_COLOR", "silent": "MILPA_SILENT", "verbose": "MILPA_VERBOSE"}
 
 func setEnvForOpts(env *[]string, flags *pflag.FlagSet) {
-	flags.VisitAll(func(f *pflag.Flag) {
-		name := f.Name
-		if name == "help" {
-			return
-		}
-		envName := ""
-		value := f.Value.String()
 
-		if cname, ok := customNames[name]; ok {
-			if value == "false" {
-				return
-			}
-			envName = cname
-		} else {
-			envName = fmt.Sprintf("MILPA_OPT_%s", strings.ToUpper(strings.ReplaceAll(name, "-", "_")))
-		}
-
-		switch f.Value.Type() {
-		case "bool":
-			if val, err := flags.GetBool(f.Name); err == nil && !val {
-				value = ""
-			} else {
-				value = "true"
-			}
-		default:
-			logrus.Debugf("flag %s is a %s", f.Name, f.Value.Type())
-		}
-
-		value = shellescape.Quote(value)
-		*env = append(*env, fmt.Sprintf("export %s=%s", envName, value))
-	})
 }
 
 func (cmd *Command) ToEval(args []string, flags *pflag.FlagSet) (string, error) {
@@ -65,11 +35,14 @@ func (cmd *Command) ToEval(args []string, flags *pflag.FlagSet) (string, error) 
 		fmt.Sprintf("export MILPA_COMMAND_PATH=%s", shellescape.Quote(cmd.Meta.Path)),
 	}
 
-	setEnvForOpts(&output, flags)
+	err := cmd.Options.ToEnv(&output, flags)
+	if err != nil {
+		return "", err
+	}
 
 	logrus.Debugf("Printing environment for args: %v", args)
 
-	err := cmd.Arguments.ToEnv(&output, args)
+	err = cmd.Arguments.ToEnv(&output, args)
 	if err != nil {
 		return "", err
 	}

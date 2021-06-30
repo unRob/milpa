@@ -26,10 +26,10 @@ const cmdPath = ".milpa/commands"
 
 type Command struct {
 	Meta         Meta
-	Summary      string            `yaml:"summary" validate:"required"`
-	Description  string            `yaml:"description" validate:"required"`
-	Arguments    Arguments         `yaml:"arguments" validate:"dive"`
-	Options      map[string]Option `yaml:"options" validate:"dive"`
+	Summary      string    `yaml:"summary" validate:"required"`
+	Description  string    `yaml:"description" validate:"required"`
+	Arguments    Arguments `yaml:"arguments" validate:"dive"`
+	Options      Options   `yaml:"options" validate:"dive"`
 	runtimeFlags *pflag.FlagSet
 	issues       []string
 }
@@ -57,17 +57,21 @@ func metaForPath(path string, repo string) (meta Meta) {
 	return
 }
 
-func New(path string, repo string) (cmd *Command, err error) {
+func New(path string, repo string, strict bool) (cmd *Command, err error) {
 	cmd = &Command{}
 	cmd.Meta = metaForPath(path, repo)
 	cmd.Arguments = []Argument{}
-	cmd.Options = map[string]Option{}
+	cmd.Options = Options{}
 	cmd.issues = []string{}
 
 	spec := strings.TrimSuffix(path, ".sh") + ".yaml"
 	var contents []byte
 	if contents, err = ioutil.ReadFile(spec); err == nil {
-		err = yaml.Unmarshal(contents, cmd)
+		if strict {
+			err = yaml.UnmarshalStrict(contents, cmd)
+		} else {
+			err = yaml.Unmarshal(contents, cmd)
+		}
 	}
 
 	if err != nil {
