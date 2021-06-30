@@ -14,80 +14,95 @@ package internal
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/bmatcuk/doublestar"
+	doublestar "github.com/bmatcuk/doublestar/v4"
 	"github.com/sirupsen/logrus"
 )
 
 var MilpaPath []string = strings.Split(os.Getenv("MILPA_PATH"), ":")
-
-type findResult struct {
-	Path string
-	Info os.FileInfo
-}
+var DefaultFS = os.DirFS("/")
 
 type findFilterfunc func(match string, info os.FileInfo) bool
 
-func findScripts(query []string, filter findFilterfunc) (results []*findResult) {
+func FilterNoneFunc(match string, info os.FileInfo) bool {
+	return false
+}
+
+func FilterDirectoriesFunc(match string, info os.FileInfo) bool {
+	return !info.IsDir()
+}
+
+type FindResult struct {
+}
+
+func FindScripts(query []string, filter findFilterfunc) (results map[string]struct {
+	Info os.FileInfo
+	Repo string
+}, err error) {
+
+	if len(MilpaPath) == 0 {
+		err = fmt.Errorf("no MILPA_PATH set on the environment")
+		return
+	}
+
 	logrus.Debugf("looking for scripts in %s", MilpaPath)
+	results = map[string]struct {
+		Info os.FileInfo
+		Repo string
+	}{}
 	for _, path := range MilpaPath {
-		queryBase := fmt.Sprintf("%s/.milpa/commands/%s", path, strings.Join(query, "/"))
-		matches, err := doublestar.Glob(fmt.Sprintf("%s/*{.sh,}", queryBase))
+		queryBase := strings.Join(append([]string{strings.TrimPrefix(path, "/"), cmdPath}, query...), "/")
+		matches, err := doublestar.Glob(DefaultFS, fmt.Sprintf("%s/*", queryBase))
 
-		if err == nil {
-			logrus.Debugf("found %d potential matches in %s", len(matches), path)
-			for _, match := range matches {
-				if !(strings.HasSuffix(match, ".sh") || filepath.Ext(match) == "") {
-					logrus.Debugf("ignoring %s", match)
-					continue
-				}
-
-				fileInfo, err := os.Stat(match)
-				if err != nil {
-					logrus.Debugf("ignoring %s, failed to stat: %v", match, err)
-					continue
-				}
-
-				if filter(match, fileInfo) {
-					results = append(results, &findResult{match, fileInfo})
-				}
-			}
-		} else {
+		if err != nil {
 			logrus.Debugf("errored while globbing")
+			continue
+		}
+
+		logrus.Debugf("found %d potential matches in %s", len(matches), path)
+		for _, match := range matches {
+			if !(strings.HasSuffix(match, ".sh") || filepath.Ext(match) == "") {
+				logrus.Debugf("ignoring %s, unknown extension", match)
+				continue
+			}
+
+			fileInfo, err := fs.Stat(DefaultFS, match)
+			if err != nil {
+				logrus.Debugf("ignoring %s, failed to stat: %v", match, err)
+				continue
+			}
+
+			if filter(match, fileInfo) {
+				results["/"+match] = struct {
+					Info fs.FileInfo
+					Repo string
+				}{fileInfo, path}
+			} else {
+				logrus.Debugf("ignoring %s, filtered", match)
+			}
 		}
 	}
 
 	return
 }
 
-func FindAllSubCommands() (cmds []*Command, err error) {
-	files := findScripts([]string{"**"}, func(_ string, info os.FileInfo) bool {
-		return !info.IsDir()
-	})
+func FindAllSubCommands(ignoreParsingErrors bool) (cmds []*Command, err error) {
+	files, err := FindScripts([]string{"**"}, FilterDirectoriesFunc)
+	if err != nil {
+		return cmds, err
+	}
 
 	logrus.Debugf("Found %d files", len(files))
 
-	for _, file := range files {
-		pc := strings.SplitN(file.Path, "/.milpa/commands/", 2)
-		pkg := pc[0]
-		kind := ""
-		spec := ""
-
-		if strings.HasSuffix(file.Path, ".sh") {
-			kind = "source"
-			spec = fmt.Sprintf("%s/.milpa/commands/%s.yaml", pkg, strings.Replace(pc[1], ".sh", "", 1))
-		} else {
-			kind = "exec"
-			spec = fmt.Sprintf("%s.yaml", file.Path)
-		}
-
+	for path, data := range files {
 		var cmd *Command
-		cmd, err = New(file.Path, spec, pkg, kind)
+		cmd, err = New(path, data.Repo)
 		if err != nil {
-			logrus.Debugf("Could not initialize command %s", file.Path)
+			logrus.Debugf("Could not initialize command %s", path)
 			return
 		}
 		logrus.Debugf("Initialized %s", cmd.FullName())

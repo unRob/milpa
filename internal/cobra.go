@@ -70,8 +70,8 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 				}
 				current := args[idx]
 
-				if arg.Set != nil {
-					values, err := arg.Set.Resolve()
+				if arg.Validates() {
+					values, err := arg.Resolve()
 					if err != nil {
 						return err
 					}
