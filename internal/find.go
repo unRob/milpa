@@ -26,20 +26,7 @@ import (
 var MilpaPath []string = strings.Split(os.Getenv("MILPA_PATH"), ":")
 var DefaultFS = os.DirFS("/")
 
-type findFilterfunc func(match string, info os.FileInfo) bool
-
-func FilterNoneFunc(match string, info os.FileInfo) bool {
-	return false
-}
-
-func FilterDirectoriesFunc(match string, info os.FileInfo) bool {
-	return !info.IsDir()
-}
-
-type FindResult struct {
-}
-
-func FindScripts(query []string, filter findFilterfunc) (results map[string]struct {
+func FindScripts(query []string) (results map[string]struct {
 	Info os.FileInfo
 	Repo string
 }, err error) {
@@ -74,24 +61,29 @@ func FindScripts(query []string, filter findFilterfunc) (results map[string]stru
 			if err != nil {
 				logrus.Debugf("ignoring %s, failed to stat: %v", match, err)
 				continue
+			} else if fileInfo.IsDir() {
+				logrus.Debugf("ignoring %s, not a directory", match)
+				continue
 			}
 
-			if filter(match, fileInfo) {
-				results["/"+match] = struct {
-					Info fs.FileInfo
-					Repo string
-				}{fileInfo, path}
-			} else {
-				logrus.Debugf("ignoring %s, filtered", match)
-			}
+			results["/"+match] = struct {
+				Info fs.FileInfo
+				Repo string
+			}{fileInfo, path}
 		}
 	}
 
 	return
 }
 
-func FindAllSubCommands(ignoreParsingErrors bool) (cmds []*Command, err error) {
-	files, err := FindScripts([]string{"**"}, FilterDirectoriesFunc)
+type ByPath []*Command
+
+func (cmds ByPath) Len() int           { return len(cmds) }
+func (cmds ByPath) Swap(i, j int)      { cmds[i], cmds[j] = cmds[j], cmds[i] }
+func (cmds ByPath) Less(i, j int) bool { return cmds[i].Meta.Path < cmds[j].Meta.Path }
+
+func FindAllSubCommands(returnOnError bool) (cmds []*Command, err error) {
+	files, err := FindScripts([]string{"**"})
 	if err != nil {
 		return cmds, err
 	}
@@ -102,10 +94,13 @@ func FindAllSubCommands(ignoreParsingErrors bool) (cmds []*Command, err error) {
 		var cmd *Command
 		cmd, err = New(path, data.Repo)
 		if err != nil {
-			logrus.Debugf("Could not initialize command %s", path)
-			return
+			logrus.Warnf("Could not initialize command %s, run `milpa itself doctor` to find out more", path)
+			if returnOnError {
+				return
+			}
+		} else {
+			logrus.Debugf("Initialized %s", cmd.FullName())
 		}
-		logrus.Debugf("Initialized %s", cmd.FullName())
 
 		cmds = append(cmds, cmd)
 	}

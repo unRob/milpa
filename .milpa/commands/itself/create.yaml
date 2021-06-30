@@ -8,13 +8,12 @@ arguments:
     variadic: true
 options:
   open:
-    type: boolean
+    type: bool
     description: Open the script file in your current $EDITOR after creation
   executable:
-    type: boolean
+    type: bool
     description: Create an empty, executable command. Useful when you'd like using something other than bash.
   config-format:
-    type: string
     description: The configuration format to use to describe this command
     set: { values: [yaml] }
     default: yaml

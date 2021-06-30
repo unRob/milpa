@@ -72,7 +72,7 @@ func main() {
 		DisableTimestamp:       true,
 	})
 
-	subcommands, err := internal.FindAllSubCommands(true)
+	subcommands, err := internal.FindAllSubCommands(os.Args[1] != "__doctor")
 	if err != nil {
 		logrus.Fatal(err)
 	}

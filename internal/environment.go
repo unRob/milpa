@@ -58,18 +58,18 @@ func setEnvForOpts(env *[]string, flags *pflag.FlagSet) {
 }
 
 func (cmd *Command) ToEval(args []string, flags *pflag.FlagSet) (string, error) {
-	envVars := []string{
+	output := []string{
 		fmt.Sprintf("export MILPA_COMMAND_NAME=%s", shellescape.Quote(cmd.FullName())),
 		fmt.Sprintf("export MILPA_COMMAND_KIND=%s", shellescape.Quote(cmd.Meta.Kind)),
 		fmt.Sprintf("export MILPA_COMMAND_REPO=%s", shellescape.Quote(cmd.Meta.Repo)),
 		fmt.Sprintf("export MILPA_COMMAND_PATH=%s", shellescape.Quote(cmd.Meta.Path)),
 	}
 
-	setEnvForOpts(&envVars, flags)
+	setEnvForOpts(&output, flags)
 
 	logrus.Debugf("Printing environment for args: %v", args)
 
-	err := cmd.Arguments.ToEnv(&envVars, args)
+	err := cmd.Arguments.ToEnv(&output, args)
 	if err != nil {
 		return "", err
 	}
@@ -77,7 +77,7 @@ func (cmd *Command) ToEval(args []string, flags *pflag.FlagSet) (string, error) 
 	for idx, arg := range args {
 		args[idx] = shellescape.Quote(arg)
 	}
-	envVars = append(envVars, "set -- "+strings.Join(args, " "))
+	output = append(output, "set -- "+strings.Join(args, " "))
 
-	return strings.Join(envVars, "\n"), nil
+	return strings.Join(output, "\n"), nil
 }

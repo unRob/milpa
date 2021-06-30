@@ -72,17 +72,15 @@ arguments:
   # so in this example, increment becomes $MILPA_ARG_INCREMENT
   # but it's also available as the first argument (i.e. `$1` in bash)
   - name: increment
-    # arguments can be validated to be part of a set
-    set:
-      # sets can be static, like so:
-      values: [micro, patch, minor, major]
-      # dynamic sets can come from the lines printed by another subcommand
-      # in this example, from `milpa scm versions`
-      # from: { subcommand: scm versions }
+    # arguments can be validated to be part of a static set of values
+    values: [micro, patch, minor, major]
+    # dynamic sets can come from the lines printed by another subcommand
+    # in this example, from `milpa scm versions`
+    # values-subcommand: scm versions
     # arguments can have a default
     default: patch
     # or be required
-    required: false
+    # required: true
 
 # options or flags are specified as a map
 options:
@@ -91,11 +89,11 @@ options:
   scheme:
     description: Determines the format of the tags for this repo.
     # options can also be validated against a set of values
-    set: { values: [semver, calver] }
+    values: [semver, calver]
     # and they may have defaults
     default: semver
     # or be required
-    required: false
+    # required: true
   prefix:
     description: |
       An optional prefix to prepend to release identifiers. If `calver` is chosen as `scheme`, you may specify a combination of `YY`, `YYYY`, `MM`, and `DD` to be replaced with the corresponding values of the local date. The default in that case is `YY`.
@@ -105,7 +103,7 @@ options:
     # flags can be boolean. Since environment variables can only be strings,
     # these false values (or defaults) will be set as an empty string, while
     # true values will be set as "true"
-    type: boolean
+    type: bool
     default: false
 ```
 
