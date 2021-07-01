@@ -1,0 +1,15 @@
+summary: Packages and releases milpa and friends
+description: |
+  Creates a `dist` folder with:
+
+  - dist/release/milpa-$os-$arch.tgz: the packaged milpa executable, compa binary, for each supported arch
+  - dist/release/compa-$os-$arch.shasum: the shasum binary for each supported arch
+  - dist/docs: html docs for commands, utils, and usage
+
+  The packaged milpa kernel contains:
+
+  - the `milpa` executable,
+  - the `compa` binary,
+  - milpa libraries,
+  - license, and
+  - readme
