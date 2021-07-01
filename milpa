@@ -14,7 +14,11 @@
 
 # MILPA ROOT points to this installation of the milpa kernel
 # lol, kernel. La gente bilingue seguro entiende el chiste.
-export MILPA_ROOT=${MILPA_ROOT:-/usr/local/var/milpa}
+export MILPA_ROOT=${MILPA_ROOT:-/usr/local/lib/milpa}
+if [[ ! -d "$MILPA_ROOT" ]]; then
+  >&2 echo "MILPA_ROOT is not a directory!: $MILPA_ROOT"
+  exit 78
+fi
 # MILPA_PATH contains all known milpa repositories
 # Repositories are folders that contain a .milpa directory within
 # set to MILPA_ROOT if empty, otherwise prepend $MILPA_ROOT:
@@ -24,7 +28,7 @@ _pwd="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 [[ -d "$_pwd/.milpa" ]] && [[ ! "$MILPA_PATH" =~ :?$_pwd:? ]] && MILPA_PATH="$MILPA_PATH:$_pwd"
 export MILPA_PATH
 # bash is fine and all, but we need a little helper to run parsing for us
-export MILPA_COMPA="${MILPA_COMPA:-compa}"
+export MILPA_COMPA="${MILPA_COMPA:-$MILPA_ROOT/compa}"
 
 # bail early if we're autocompleting
 [[ $1 == "__complete" ]] && exec "$MILPA_COMPA" "$@"
@@ -59,7 +63,7 @@ function load_milpa_util () {
     if [[ "${!env_name}" != "1" ]]; then
       # util not found
       >&2 echo "Missing util named $util_name"
-    exit 2
+      exit 78
     fi
   done
 }

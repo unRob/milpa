@@ -11,6 +11,9 @@ SHELL := /usr/bin/env bash
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+.PHONY: compa setup test lint clean
+TARGET_MACHINES = linux-amd64 linux-arm64 linux-arm linux-mips darwin-amd64 darwin-arm64
+TARGET_ARCHIVES = $(addsuffix .tgz,$(addprefix dist/release/milpa-,$(TARGET_MACHINES)))
 
 ifneq ($(ASDF_DIR), "")
 setup-golang:
@@ -28,7 +31,7 @@ setup: setup-golang
 	go get -u gotest.tools/gotestsum
 	go mod tidy
 
-
+# every day usage
 test:
 	gotestsum --format short -- ./...
 
@@ -37,5 +40,27 @@ lint:
 	shellcheck milpa .milpa/**/*.sh
 
 compa: compa.go go.mod go.sum internal/*
-	go build -ldflags "-s -w -X main.version=${MILPA_VERSION}" -o compa
+	go build -ldflags "-s -w -X main.version=${MILPA_VERSION}" compa
 
+# Releasing
+dist/release/milpa-%.tgz: compa.go go.mod go.sum internal/*
+	mkdir -p $(basename $(subst release,tmp,$@))/milpa
+
+	GOOS=$(firstword $(subst -, ,$*)) GOARCH=$(lastword $(subst -, ,$*)) go build -ldflags "-s -w -X main.version=${MILPA_VERSION}" -o $(basename $(subst release,tmp,$@))/milpa/compa
+	upx --no-progress -9 $(basename $(subst release,tmp,$@))/milpa/compa || true
+
+	cp -r ./milpa ./.milpa LICENSE.txt README.md $(basename $(subst release,tmp,$@))/milpa
+	mkdir -p $(dir $@)
+	tar -czf $@ -C $(basename $(subst release,tmp,$@)) milpa
+
+dist/release: $(TARGET_ARCHIVES)
+	$(info Built for $(TARGET_ARCHIVES))
+
+dist/docs:
+	mkdir -p $@
+	mkdir -p $@/meta/version
+	echo "${MILPA_VERSION}" >> meta/version
+	$(info tbd)
+
+clean:
+	rm -rf dist
