@@ -31,7 +31,7 @@ func (args *Arguments) ToEnv(dst *[]string, actual []string) error {
 
 		if idx >= len(actual) {
 			if arg.Required {
-				return fmt.Errorf("missing argument: %s", arg.Name)
+				return fmt.Errorf("missing argument: %s", strings.ToUpper(arg.Name))
 			}
 			logrus.Debugf("Skipping arg parsing for %s", arg.Name)
 			value := ""
@@ -85,7 +85,7 @@ func (args *Arguments) Validate(cc *cobra.Command, supplied []string) error {
 	for idx, arg := range *args {
 		argumentProvided := idx < len(supplied)
 		if arg.Required && !argumentProvided {
-			return BadArguments{fmt.Sprintf("Missing argument for %s", arg.Name)}
+			return BadArguments{fmt.Sprintf("Missing argument for %s", strings.ToUpper(arg.Name))}
 		}
 
 		if !argumentProvided {

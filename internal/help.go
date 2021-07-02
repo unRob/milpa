@@ -25,11 +25,11 @@ import (
 	"github.com/charmbracelet/glamour"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 )
 
-func sighGolang(str string) string {
-	return strings.ReplaceAll(str, "", "`")
+func addBackticks(str string) string {
+	return strings.ReplaceAll(str, "﹅", "`")
 }
 
 func findDocs(query []string, needle string) ([]string, error) {
@@ -107,7 +107,7 @@ var DocsCommand *cobra.Command = &cobra.Command{
 			return NotFound{Msg: "Unknown doc: " + err.Error()}
 		}
 
-		width, _, err := terminal.GetSize(0)
+		width, _, err := term.GetSize(0)
 		if err != nil {
 			return err
 		}
@@ -159,23 +159,45 @@ var HelpCommand *cobra.Command = &cobra.Command{
 	},
 	Run: func(c *cobra.Command, args []string) {
 		cmd, _, e := c.Root().Find(args)
-		if cmd == nil || e != nil {
-			c.Printf("Unknown help topic %#q\n", args)
-			cobra.CheckErr(c.Root().Usage())
+		if cmd == nil || e != nil || (len(args) > 0 && cmd != nil && cmd.Name() != args[len(args)-1]) {
+			if cmd == nil {
+				err := c.Root().Help()
+				if err != nil {
+					logrus.Error(err)
+					os.Exit(70)
+				}
+				logrus.Errorf("Unknown help topic %s", args)
+				os.Exit(127)
+			} else {
+				err := cmd.Help()
+
+				if err != nil {
+					logrus.Error(err)
+					os.Exit(70)
+				}
+
+				if len(args) > 1 {
+					logrus.Errorf("Unknown help topic %s for %s", args[1], args[0])
+				} else {
+					logrus.Errorf("Unknown help topic %s for milpa", args[0])
+				}
+				os.Exit(127)
+			}
 		} else {
 			cmd.InitDefaultHelpFlag() // make possible 'help' flag to be shown
 			cobra.CheckErr(cmd.Help())
 		}
 
-		// return nil
+		os.Exit(42)
 	},
 }
 
 // func (cmd *Command) Help
 
 type combinedCommand struct {
-	Spec    *Command
-	Command *cobra.Command
+	Spec          *Command
+	Command       *cobra.Command
+	GlobalOptions Options
 }
 
 func trimRightSpace(s string) string {
@@ -205,21 +227,29 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 	}
 	var buf bytes.Buffer
 	c := &combinedCommand{
-		Spec:    cmd,
-		Command: cc,
+		Spec:          cmd,
+		Command:       cc,
+		GlobalOptions: Root.Options,
 	}
 	err = tmpl.Execute(&buf, c)
 	if err != nil {
 		panic(err)
 	}
 
-	width, _, err := terminal.GetSize(0)
+	width, _, err := term.GetSize(0)
 	if err != nil {
 		panic(err)
 	}
 
+	style := glamour.WithAutoStyle
+	ok, err := cc.Flags().GetBool("no-color")
+	// logrus.Infof("no-color: %s", ok)
+	if err == nil && ok {
+		style = func() glamour.TermRendererOption { return glamour.WithStyles(glamour.ASCIIStyleConfig) }
+	}
+
 	renderer, err := glamour.NewTermRenderer(
-		glamour.WithAutoStyle(),
+		style(),
 		glamour.WithEmoji(),
 		glamour.WithWordWrap(width),
 	)
@@ -228,41 +258,45 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 		panic(err)
 	}
 
-	help, err := renderer.Render(buf.String())
+	help, err := renderer.Render(addBackticks(buf.String()))
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println(help)
-	os.Exit(42)
 }
 
-var HelpTemplate = sighGolang(`# milpa {{ .Spec.FullName }}
+var HelpTemplate = `# {{ if not (eq .Spec.Meta.Kind "root") }}milpa {{ end }}{{ .Spec.FullName }}
 
 {{ .Command.Short }}
 
 ## Usage:
 
-  {{ .Command.UseLine }}{{if .Command.HasAvailableSubCommands}} subcommand{{end}}
-
-## Description:
-
-{{ .Spec.Description }}
+  ﹅{{ .Command.UseLine }}{{if .Command.HasAvailableSubCommands}} subcommand{{end}}﹅
 
 {{ if .Command.HasAvailableSubCommands -}}
 ## Subcommands:
 
-{{- range .Command.Commands -}}
+{{ range .Command.Commands -}}
 {{- if (or .IsAvailableCommand (eq .Name "help")) -}}
-- {{rpad .Name .NamePadding }} - {{.Short}}
+- ﹅{{ .Name }}﹅ - {{.Short}}
 {{ end -}}
 {{- end -}}
+{{ else }}
+## Description:
+
+{{ .Spec.Description }}
 {{- end -}}
+{{ if eq .Spec.Meta.Kind "root" }}
+## Description:
+
+{{ .Spec.Description }}
+{{ end -}}
 
 {{- if .Spec.Arguments -}}
 ## Arguments:
 
 {{ range .Spec.Arguments -}}
-- {{ if .Required}}**{{ end }}${{ .Name | toUpper }}{{ if .Variadic}}...{{ end }}{{ if .Required }}**{{ end }} - {{ .Description }}
+- {{ if .Required}}**{{ end }}﹅{{ .Name | toUpper }}{{ if .Variadic}}...{{ end }}﹅{{ if .Required }}**{{ end }} - {{ .Description }}
 {{ end -}}
 {{- end -}}
 
@@ -270,14 +304,16 @@ var HelpTemplate = sighGolang(`# milpa {{ .Spec.FullName }}
 ## Options:
 
 {{ range $name, $opt := .Spec.Options -}}
-- --{{ $name }} (_{{$opt.Type}}_): {{$opt.Description}}.{{ if $opt.Default }} Default: _{{ $opt.Default }}_.{{ end }}
+- ﹅--{{ $name }}﹅ (_{{$opt.Type}}_): {{$opt.Description}}.{{ if $opt.Default }} Default: _{{ $opt.Default }}_.{{ end }}
 {{ end -}}
 {{- end -}}
 
 {{- if .Command.HasAvailableInheritedFlags -}}
 ## Global Options:
 
-{{.Command.InheritedFlags.FlagUsages | trimTrailingWhitespaces }}
+{{ range $name, $opt := .GlobalOptions -}}
+- ﹅--{{ $name }}﹅ (_{{$opt.Type}}_): {{$opt.Description}}.{{ if $opt.Default }} Default: _{{ $opt.Default }}_.{{ end }}
+{{ end -}}
 
 {{end}}
-`)
+`

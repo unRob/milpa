@@ -15,6 +15,7 @@ package internal
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
@@ -32,6 +33,38 @@ type Command struct {
 	Options      Options   `yaml:"options" validate:"dive"`
 	runtimeFlags *pflag.FlagSet
 	issues       []string
+}
+
+var Root *Command = &Command{
+	Summary:     "Runs commands found in .milpa folders",
+	Description: `Milpa, is an agricultural method that combines multiple crops in close proximity. ﹅milpa﹅ is a Bash script and tool to care for one's own garden of scripts. You and your team write scripts and a little spec for each command. Use bash, or any other command, and ﹅milpa﹅ provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.`,
+	Meta: Meta{
+		Path: os.Getenv("MILPA_ROOT") + "/milpa",
+		Name: []string{"milpa"},
+		Repo: os.Getenv("MILPA_ROOT"),
+		Kind: "root",
+	},
+	Options: Options{
+		"help": &Option{
+			ShortName:   "h",
+			Type:        "bool",
+			Description: "Display help for any command",
+		},
+		"verbose": &Option{
+			ShortName:   "v",
+			Type:        "bool",
+			Default:     os.Getenv("MILPA_VERBOSE") != "",
+			Description: "Log verbose output to stderr",
+		},
+		"no-color": &Option{
+			Type:        "bool",
+			Description: "Print to stderr without any formatting codes",
+		},
+		"silent": &Option{
+			Type:        "bool",
+			Description: "Silence non-error logging",
+		},
+	},
 }
 
 type Meta struct {

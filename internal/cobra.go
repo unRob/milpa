@@ -54,16 +54,16 @@ func (cmd *Command) Run(cc *cobra.Command, args []string) error {
 
 func (cmd *Command) ToCobra() (*cobra.Command, error) {
 	localName := cmd.Meta.Name[len(cmd.Meta.Name)-1]
-	useSpec := []string{localName, "[flags]"}
+	useSpec := []string{localName, "[options]"}
 	for _, arg := range cmd.Arguments {
 		useSpec = append(useSpec, arg.ToDesc())
 	}
 
 	// logrus.Debugf("Cobraizing %s", strings.Join(useSpec, " "))
 	cc := &cobra.Command{
-		Use:               strings.Join(useSpec, " "),
-		Short:             cmd.Summary,
-		Long:              color.New(color.Bold).Sprintf(strings.Join(useSpec, " ")) + "\n\n" + cmd.Summary + "\n\n" + cmd.Description,
+		Use:   strings.Join(useSpec, " "),
+		Short: cmd.Summary,
+		// Long:              color.New(color.Bold).Sprintf(strings.Join(useSpec, " ")) + "\n\n" + cmd.Summary + "\n\n" + cmd.Description,
 		DisableAutoGenTag: true,
 		SilenceUsage:      true,
 		SilenceErrors:     true,
@@ -98,15 +98,41 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 }
 
 func RootCommand(commands []*Command, version string) (*cobra.Command, error) {
-	bold := color.New(color.Bold)
 	root := &cobra.Command{
-		Use:     "milpa subcommand... [--silent|-v|--verbose] [--no-color] [-h|-help]",
+		Use:     "milpa [--silent|-v|--verbose] [--no-color] [-h|-help]",
 		Version: version,
-		Short:   "milpa runs other scripts from .milpa folders",
-		Long: `milpa runs other scripts from .milpa folders
+		Short:   "milpa runs commands from .milpa folders",
+		Long: `milpa runs commands from .milpa folders
 
-Milpa, is an agricultural method that combines multiple crops in close proximity. ` + bold.Sprintf("milpa") + ` is a Bash script and tool to care for one's own garden of scripts. You and your team write scripts and a little spec for each command. Use bash, or any other command, and ` + bold.Sprintf("milpa") + ` provides autocompletions, sub-commands and argument parsing+validation for you to focus on your scripts.`,
+Milpa, is an agricultural method that combines multiple crops in close proximity. ﹅milpa﹅ is a Bash script and tool to care for one's own garden of scripts. You and your team write scripts and a little spec for each command. Use bash, or any other command, and ﹅milpa﹅ provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.`,
 		DisableAutoGenTag: true,
+		SilenceUsage:      true,
+		SilenceErrors:     true,
+		ValidArgs:         []string{""},
+		Args: func(cmd *cobra.Command, args []string) error {
+			err := cobra.OnlyValidArgs(cmd, args)
+			if err != nil {
+
+				suggestions := []string{}
+				bold := color.New(color.Bold)
+				for _, l := range cmd.SuggestionsFor(args[len(args)-1]) {
+					suggestions = append(suggestions, bold.Sprint(l))
+				}
+				errMessage := fmt.Sprintf("Unknown subcommand %s", args[len(args)-1])
+				if len(suggestions) > 0 {
+					errMessage += ". Perhaps you meant " + strings.Join(suggestions, ", ") + "?"
+				}
+				return NotFound{errMessage, []string{}}
+			}
+			return nil
+		},
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if len(args) == 0 {
+				return NotFound{"No subcommand provided", []string{}}
+			}
+
+			return nil
+		},
 	}
 	root.PersistentFlags().AddFlagSet(RootFlagset())
 
@@ -114,6 +140,7 @@ Milpa, is an agricultural method that combines multiple crops in close proximity
 	root.AddCommand(doctorForCommands(commands))
 	root.SetHelpCommand(HelpCommand)
 	HelpCommand.AddCommand(DocsCommand)
+	root.SetHelpFunc(Root.ShowHelp)
 
 	for _, cmd := range commands {
 		leaf, err := cmd.ToCobra()
@@ -140,17 +167,16 @@ Milpa, is an agricultural method that combines multiple crops in close proximity
 					Short:                      fmt.Sprintf("%s subcommands", strings.Join(query, " ")),
 					DisableAutoGenTag:          true,
 					SuggestionsMinimumDistance: 2,
-					// SilenceUsage:      true,
+					SilenceUsage:               true,
+					SilenceErrors:              true,
 					Args: func(cmd *cobra.Command, args []string) error {
 						err := cobra.OnlyValidArgs(cmd, args)
 						if err != nil {
+
 							suggestions := []string{}
 							bold := color.New(color.Bold)
-
-							for _, l := range strings.Split(err.Error(), "\n") {
-								if strings.HasPrefix(l, "\t") {
-									suggestions = append(suggestions, bold.Sprint(strings.TrimPrefix(l, "\t")))
-								}
+							for _, l := range cmd.SuggestionsFor(args[len(args)-1]) {
+								suggestions = append(suggestions, bold.Sprint(l))
 							}
 							errMessage := fmt.Sprintf("Unknown subcommand %s", args[len(args)-1])
 							if len(suggestions) > 0 {
@@ -169,6 +195,16 @@ Milpa, is an agricultural method that combines multiple crops in close proximity
 						return nil
 					},
 				}
+				ccmd := &Command{
+					Summary:     fmt.Sprintf("%s subcommands", strings.Join(query, " ")),
+					Description: fmt.Sprintf("Runs subcommands within %s", strings.Join(query, " ")),
+					Arguments:   Arguments{},
+					Options:     Options{},
+					Meta: Meta{
+						Name: cmd.Meta.Name[0 : idx+1],
+					},
+				}
+				cc.SetHelpFunc(ccmd.ShowHelp)
 				container.AddCommand(cc)
 				container = cc
 			}

@@ -13,7 +13,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -34,42 +33,53 @@ func showHelp(cmd *cobra.Command) {
 }
 
 func handleError(cmd *cobra.Command, err error) {
-	if err != nil {
-		// see man sysexits || grep "#define EX" /usr/include/sysexits.h
-		switch err.(type) {
-		case internal.BadArguments, internal.ConfigError:
-			// 64 bad arguments
-			// EX_USAGE The command was used incorrectly, e.g., with the wrong number of arguments, a bad flag, a bad syntax in a parameter, or whatever.
-			fmt.Printf("error: %s\n", err)
-			showHelp(cmd)
-
-			os.Exit(64)
-		case internal.NotFound:
-			// 127 command not found
-			// https://tldp.org/LDP/abs/html/exitcodes.html
-			os.Exit(127)
-		default:
-			if strings.HasPrefix(err.Error(), "unknown command") {
-				os.Exit(127)
-			} else if strings.HasPrefix(err.Error(), "unknown flag") || strings.HasPrefix(err.Error(), "unknown shorthand flag") {
-				showHelp(cmd)
-				os.Exit(64)
-			}
+	if err == nil {
+		ok, err := cmd.Flags().GetBool("help")
+		if cmd.Name() == "help" || err == nil && ok {
+			os.Exit(42)
 		}
 
-		logrus.Errorf("Unknown error: %s", err)
-		os.Exit(2)
+		os.Exit(0)
 	}
+
+	// see man sysexits || grep "#define EX" /usr/include/sysexits.h
+	switch err.(type) {
+	case internal.BadArguments, internal.ConfigError:
+		// 64 bad arguments
+		// EX_USAGE The command was used incorrectly, e.g., with the wrong number of arguments, a bad flag, a bad syntax in a parameter, or whatever.
+		showHelp(cmd)
+		logrus.Error(err)
+		os.Exit(64)
+	case internal.NotFound:
+		// 127 command not found
+		// https://tldp.org/LDP/abs/html/exitcodes.html
+		showHelp(cmd)
+		logrus.Error(err)
+		os.Exit(127)
+	default:
+		if strings.HasPrefix(err.Error(), "unknown command") {
+			showHelp(cmd)
+			os.Exit(127)
+		} else if strings.HasPrefix(err.Error(), "unknown flag") || strings.HasPrefix(err.Error(), "unknown shorthand flag") {
+			showHelp(cmd)
+			logrus.Error(err)
+			os.Exit(64)
+		}
+	}
+	logrus.Errorf("Unknown error: %s", err)
+	os.Exit(2)
+
 }
 
 func main() {
-	if os.Getenv("MILPA_DEBUG") != "" {
+	if os.Getenv("DEBUG") != "" {
 		logrus.SetLevel(logrus.DebugLevel)
 	}
 
 	logrus.SetFormatter(&logrus.TextFormatter{
 		DisableLevelTruncation: true,
 		DisableTimestamp:       true,
+		ForceColors:            os.Getenv("NO_COLOR") == "",
 	})
 
 	isDoctor := false
@@ -85,33 +95,13 @@ func main() {
 	}
 
 	root, err := internal.RootCommand(subcommands, version)
-	// root.SilenceUsage = true
 	if err != nil {
 		logrus.Errorf("failed to get cobra command for %s: %v", os.Args, err)
 		os.Exit(64)
 	}
 
-	helpFunc := root.HelpFunc()
-	args := []string{}
 	initialArgs := []string{"milpa"}
-	helpRequested := false
-
-	root.SetHelpFunc(func(cmd *cobra.Command, _ []string) {
-		exitCode := 42
-		if !helpRequested && cmd.HasAvailableSubCommands() {
-			exitCode = 127
-		}
-		helpFunc(cmd, args)
-		os.Exit(exitCode)
-	})
-
-	args = os.Args[1:]
-
-	os.Args = append(initialArgs, args...) //nolint:gocritic
-
-	if len(os.Args) >= 2 && os.Args[1] == "help" {
-		helpRequested = true
-	}
+	os.Args = append(initialArgs, os.Args[1:]...) //nolint:gocritic
 
 	handleError(root.ExecuteC())
 }
