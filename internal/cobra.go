@@ -92,6 +92,8 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 		}
 	}
 
+	cc.SetHelpFunc(cmd.ShowHelp)
+
 	return cc, nil
 }
 
@@ -110,6 +112,8 @@ Milpa, is an agricultural method that combines multiple crops in close proximity
 
 	root.AddCommand(completionCommand)
 	root.AddCommand(doctorForCommands(commands))
+	root.SetHelpCommand(HelpCommand)
+	HelpCommand.AddCommand(DocsCommand)
 
 	for _, cmd := range commands {
 		leaf, err := cmd.ToCobra()

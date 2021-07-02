@@ -40,7 +40,7 @@ lint:
 	shellcheck milpa .milpa/**/*.sh
 
 compa: compa.go go.mod go.sum internal/*
-	go build -ldflags "-s -w -X main.version=${MILPA_VERSION}" compa
+	go build -ldflags "-s -w -X main.version=${MILPA_VERSION}" -o compa
 
 # Releasing
 dist/release/milpa-%.tgz: compa.go go.mod go.sum internal/*
