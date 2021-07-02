@@ -88,18 +88,9 @@ trap 'rm -rf $compaOut $compaErr' ERR EXIT TERM
     exit
   fi
 
-  error_message=""
-  while read -r line; do
-    if [[ "$line" = "Error: "* ]]; then
-      error_message+="${line/Error: /}"
-      continue
-    fi
-    >&2 echo "$line"
-  done < <(cat "$compaErr" "$compaOut")
+  cat "$compaOut"
+  cat "$compaErr"
   rm -rf "$compaOut" "$compaErr"
-
-
-  [[ "$error_message" != "" ]] && _log error "$error_message"
   exit $exitCode
 }
 
@@ -107,7 +98,7 @@ trap 'rm -rf $compaOut $compaErr' ERR EXIT TERM
 eval "$(cat "$compaOut")" || _fail "Failed setting command environment"
 
 [[ "${MILPA_VERBOSE:-$MILPA_OPT_VERBOSE}" == "true" ]] && export MILPA_VERBOSE="true"
-[[ "$MILPA_DEBUG" == 1 ]] && _log debug "milpa-helper output: $(cat "$compaErr")"
+[[ "$DEBUG" == 1 ]] && _log debug "milpa-helper output: $(cat "$compaErr")"
 _log debug "running <$MILPA_COMMAND_NAME from> <$MILPA_COMMAND_PATH> with arguments <${*}>"
 _log debug "milpa environment:"$'\n'"$(env | grep ^MILPA | sort)"
 

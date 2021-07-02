@@ -38,6 +38,6 @@ Enabled by the `--verbose` option. It shows information about what milpa is doin
 
 Enabled by the `--silent` option, to hide `_log` messages completely
 
-## MILPA_DEBUG
+## DEBUG
 
-Set `MILPA_DEBUG=1` and find out whatever roberto needed to debug before writing proper tests.
+Set `DEBUG=1` and find out whatever roberto needed to debug before writing proper tests.
