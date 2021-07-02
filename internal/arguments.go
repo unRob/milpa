@@ -152,7 +152,7 @@ func (args *Arguments) CompletionFunction() func(cc *cobra.Command, args []strin
 }
 
 type Argument struct {
-	Name             string   `yaml:"name" validate:"required"`
+	Name             string   `yaml:"name" validate:"required,excludesall=!$\\/%^@#?:'\""`
 	Description      string   `yaml:"description" validate:"required"`
 	Default          string   `yaml:"default" validate:"excluded_with=Required"`
 	Variadic         bool     `yaml:"variadic"`

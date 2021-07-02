@@ -4,16 +4,15 @@ related-commands: ["itself create", "itself docs generate"]
 ---
 # milpa command spec file
 
-Command specs go along with your scripts and help inform milpa of what its input should look like.
+Command specs go along with your scripts and help inform milpa of what its input should look like. Based on it, `milpa` will produce help pages and autocompletions, and may validate the arguments to your command.
 
 Specs must be written in YAML, have a `yaml` extension, and be named exactly like your command (minus the extension, if any). For example, given a command at `.milpa/commands/my-command.sh` the corresponding spec file would be `.milpa/commands/my-command.yaml`.
 
 ## Example
 
-Let's suppose we have a command `
+If we wanted to have a command written in bash at `milpa release`, we'll need to create file at `.milpa/commands/release.sh` and its corresponding spec at `.milpa/commands/release.yaml`. Let's take a look at what such a spec might look like:
 
 ```yaml
-# example spec
 # a summary is required. It shows up during autocomplete and command listings
 summary: Create a github release
 # a description is required as well. Add a longer description of how your command does its magic here
@@ -32,6 +31,7 @@ arguments:
   # each argument gets a name, your script will find these in the environment
   # so in this example, increment becomes $MILPA_ARG_INCREMENT
   # but it's also available as the first argument (i.e. `$1` in bash)
+  # `!$\/%^@#?:'"` are all disallowed characters in argument names.
   - name: increment
     # arguments require a description
     descrption: the increment to apply to the last git version
