@@ -86,7 +86,7 @@ trap 'rm -rf $compaOut $compaErr' ERR EXIT TERM
 
   if [[ "$exitCode" == 42 ]]; then
     # help requested
-    cat "$compaOut"
+    less -FIRX < "$compaOut"
     rm -rf "$compaOut" "$compaErr"
     exit
   fi

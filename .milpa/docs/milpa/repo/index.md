@@ -2,13 +2,13 @@
 related-docs: ["milpa commands", "milpa environment"]
 related-commands: ["itself create"]
 ---
-# !milpa! repo layout
+# !milpa! repositories
 
 Repositories are folders that contain a `.milpa` folder within. Use the `MILPA_PATH` environment variable to tell `!milpa!` where to look for repos (see [`!milpa! itself docs environment`](/.milpa/docs/milpa/environment.md#MILPA_PATH)). By default, `!milpa!` will prepend any folder named `.milpa` at the top-level of a git repository to the `MILPA_PATH`.
 
 Repositories must contain a `commands` folder, with [commands](/.milpa/docs/milpa/command/index.md), and may also include `utils` to be used by command executables, [hooks](/.milpa/docs/milpa/repo/hooks.md) that modify the environment of `!milpa!` commands, and [docs](/.milpa/docs/milpa/repo/docs.md), to document anything related to your `!milpa!` repo.
 
-## Example
+## Example repository layout
 
 Let's say you have this in your repo:
 
