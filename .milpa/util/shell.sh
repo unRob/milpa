@@ -13,7 +13,7 @@
 # limitations under the License.
 
 _CURRENT_SHELL=$(basename "$SHELL")
-function xsh_export (){
+function @milpa.shell.export (){
   case "$_CURRENT_SHELL" in
     fish)
       echo "set -x $1 $2"
@@ -24,7 +24,7 @@ function xsh_export (){
   esac
 }
 
-function xsh_prepend (){
+function @milpa.shell.prepend_path (){
   path_var="${2:-PATH}"
   case "$_CURRENT_SHELL" in
     fish)

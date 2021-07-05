@@ -99,9 +99,9 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 
 func RootCommand(commands []*Command, version string) (*cobra.Command, error) {
 	root := &cobra.Command{
-		Use:     "milpa [--silent|-v|--verbose] [--no-color] [-h|-help]",
+		Use:     os.Getenv("MILPA_NAME") + " [--silent|-v|--verbose] [--no-color] [-h|-help]",
 		Version: version,
-		Short:   "milpa runs commands from .milpa folders",
+		Short:   os.Getenv("MILPA_NAME") + " runs commands from .milpa folders",
 		Long: `milpa runs commands from .milpa folders
 
 Milpa, is an agricultural method that combines multiple crops in close proximity. ﹅milpa﹅ is a Bash script and tool to care for one's own garden of scripts. You and your team write scripts and a little spec for each command. Use bash, or any other command, and ﹅milpa﹅ provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.`,
@@ -140,6 +140,7 @@ Milpa, is an agricultural method that combines multiple crops in close proximity
 	root.AddCommand(doctorForCommands(commands))
 	root.SetHelpCommand(HelpCommand)
 	HelpCommand.AddCommand(DocsCommand)
+	DocsCommand.SetHelpFunc(Docs.ShowHelp)
 	root.SetHelpFunc(Root.ShowHelp)
 
 	for _, cmd := range commands {

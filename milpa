@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# milpa may have multiple names, let's make sure everyone knows about it
+# shellcheck disable=2155
+export MILPA_NAME="$(basename "$0")"
 # MILPA ROOT points to this installation of the milpa kernel
 # lol, kernel. La gente bilingue seguro entiende el chiste.
 export MILPA_ROOT=${MILPA_ROOT:-/usr/local/lib/milpa}
@@ -37,7 +40,7 @@ export MILPA_COMPA="${MILPA_COMPA:-$MILPA_ROOT/compa}"
 IFS=: read -ra MILPA_PATH_ARR <<<"$MILPA_PATH"
 export MILPA_PATH_ARR
 
-function load_milpa_util () {
+function @milpa.load_util () {
   # shell scripts can call load_milpa_util to load utils within the $MILPA_PATH
   # TODO: maybe bump $MILPA_COMMAND_REPO up in the path?
   local env_name
@@ -68,9 +71,9 @@ function load_milpa_util () {
   done
 }
 
-load_milpa_util log
-function _fail () {
-  _log error "$*"
+@milpa.load_util log
+function @milpa.fail () {
+  @milpa.log error "$*"
   exit 2
 }
 
@@ -98,9 +101,9 @@ trap 'rm -rf $compaOut $compaErr' ERR EXIT TERM
 eval "$(cat "$compaOut")" || _fail "Failed setting command environment"
 
 [[ "${MILPA_VERBOSE:-$MILPA_OPT_VERBOSE}" == "true" ]] && export MILPA_VERBOSE="true"
-[[ "$DEBUG" == 1 ]] && _log debug "milpa-helper output: $(cat "$compaErr")"
-_log debug "running <$MILPA_COMMAND_NAME from> <$MILPA_COMMAND_PATH> with arguments <${*}>"
-_log debug "milpa environment:"$'\n'"$(env | grep ^MILPA | sort)"
+[[ "$DEBUG" == 1 ]] && @milpa.log debug "milpa-helper output: $(cat "$compaErr")"
+@milpa.log debug "running <$MILPA_COMMAND_NAME from> <$MILPA_COMMAND_PATH> with arguments <${*}>"
+@milpa.log debug "milpa environment:"$'\n'"$(env | grep ^MILPA | sort)"
 
 rm -rf "$compaOut" "$compaErr"
 
@@ -118,6 +121,6 @@ case "$MILPA_COMMAND_KIND" in
     # shellcheck disable=1090
     source "$MILPA_COMMAND_PATH";;
   *)
-    _log warning "Unsure how to run $MILPA_COMMAND_NAME. Found $MILPA_COMMAND_PATH, but it is neither a .sh file nor executable"
+    @milpa.log warning "Unsure how to run $MILPA_COMMAND_NAME. Found $MILPA_COMMAND_PATH, but it is neither a .sh file nor executable"
     _fail "Unable to continue running sub-command."
 esac

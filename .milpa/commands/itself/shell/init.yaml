@@ -1,3 +1,13 @@
 summary: Initializes shells
 description: |
-  Add this to your POSIX shell compliant profile: `eval "$(milpa itself shell-init)"`
+  Running `!milpa! itself shell init` will look for shell scripts named `.milpa/hooks/shell-init.sh`/executables named `.milpa/hooks/shell-init` and source them.
+
+  These `shell-init` scripts should print shell-specific instructions that a user may `eval` during the initialization of a new shell prompt. The @milpa.shell bash functions will be available for script shells to facilitate printing `export` statements compatible with POSIX-compliant shells and `fish`.
+
+  ### Using with bash, zsh, etc:
+
+  On POSIX-compliant shells (zsh or bash, for example), you may add this to near the very end of shell profile (usually at `~/.zshrc` or `~/.bash_profile`): `eval "$(!milpa! itself shell init)"`
+
+  ### Using with fish:
+
+  When using fish, you'll need to `eval (!milpa! itself shell init)` around the end of your `~/.config/fish/config.fish` file.

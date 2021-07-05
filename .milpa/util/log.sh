@@ -34,14 +34,14 @@ else
 fi
 
 
-function _fmt() {
+function @milpa.fmt() {
   local code;
   case $1 in
     bold) code="$_FMT_BOLD" ;;
     warning) code="$_FMT_WARNING" ;;
     error) code="$_FMT_ERROR" ;;
     inverted) code="$_FMT_INVERTED" ;;
-    *) _fail "unknown formatting directive: $1" ;;
+    *) @milpa.fail "unknown formatting directive: $1" ;;
   esac
   shift
   echo -e "${code}$*${_FMT_RESET}"
@@ -61,10 +61,7 @@ function _print_message () {
   >&2 echo "${_C_GRAY}[${level}:${command_name// /:}${date}]${_FMT_RESET} $*"
 }
 
-function _log () {
-  if [[ "$MILPA_SILENT" == "true" ]]; then
-    return
-  fi
+function @milpa.log () {
   local prefix format level;
   level="info"
   case $1 in
@@ -74,8 +71,11 @@ function _log () {
     warn*) level="warning"; format="$_FMT_WARNING" ;;
     info) ;;
     debug) level="debug"; format="$_FMT_GRAY" ;;
-    *) _fail "unknown log kind: $1" ;;
+    *) @milpa.fail "unknown log kind: $1" ;;
   esac
+  if [[ "$MILPA_SILENT" == "true" ]] && [[ "$level" != "error" ]]; then
+    return
+  fi
   shift
   msg="$*"
   if [[ $# == 0 ]]; then

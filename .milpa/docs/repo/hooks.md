@@ -1,3 +1,0 @@
-# milpa repo hooks
-
-`milpa
