@@ -13,12 +13,14 @@
 package internal
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"sort"
 	"strings"
 
 	"github.com/fatih/color"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -110,4 +112,78 @@ func doctorForCommands(commands []*Command) *cobra.Command {
 			return
 		},
 	}
+}
+
+func writeDocs(dst string, path []string, cmd *cobra.Command) error {
+	if !cmd.IsAvailableCommand() {
+		return nil
+	}
+
+	dir := strings.Join(append([]string{dst}, path...), "/")
+	name := cmd.Name()
+
+	if cmd.HasAvailableSubCommands() {
+		dir = dir + "/" + name
+		name = "_index"
+	}
+
+	logrus.Debugf("Creating directory %s", dir)
+	os.MkdirAll(dir, 0760)
+	fname := dir + "/" + name + ".md"
+
+	frontMatter := `---
+title: ` + strings.Join(append(path, cmd.Name()), " ") + `
+type: docs
+---
+`
+
+	var tmp bytes.Buffer
+	cmd.SetOutput(&tmp)
+	cmd.Help()
+
+	logrus.Debugf("Creating file %s", fname)
+	f, err := os.OpenFile(fname, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	fixedLinks := bytes.ReplaceAll(tmp.Bytes(), []byte("[.milpa/"), []byte("[/"))
+	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("index.md"), []byte(""))
+
+	_, err = f.Write(append([]byte(frontMatter), fixedLinks...))
+	if err != nil {
+		return err
+	}
+
+	if cmd.HasAvailableSubCommands() {
+		for _, cc := range cmd.Commands() {
+			err := writeDocs(dst, append(path, cmd.Name()), cc)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+var generateDocumentationCommand *cobra.Command = &cobra.Command{
+	Use:               "__generate_documentation [DST]",
+	Short:             "Outputs markdownd documentation for all known commands",
+	Hidden:            true,
+	DisableAutoGenTag: true,
+	SilenceUsage:      true,
+	Args:              cobra.MinimumNArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) (err error) {
+		path := []string{}
+		dst := args[0]
+
+		err = writeDocs(dst, path, cmd.Root())
+		if err != nil {
+			return err
+		}
+
+		return nil
+	},
 }

@@ -1,3 +1,6 @@
+---
+title: milpa repo hooks
+---
 # !milpa! repo hooks
 
 `!milpa!` provides a couple of hook points for you to tweak the behavior of your shell and your repo's commands. Hooks for your repo must be placed in the `.milpa/hooks` folder.

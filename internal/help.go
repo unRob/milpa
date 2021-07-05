@@ -27,8 +27,8 @@ import (
 	"golang.org/x/term"
 )
 
-func addBackticks(str string) string {
-	return strings.ReplaceAll(str, "﹅", "`")
+func addBackticks(str []byte) []byte {
+	return bytes.ReplaceAll(str, []byte("﹅"), []byte("`"))
 }
 
 func findDocs(query []string, needle string) ([]string, error) {
@@ -290,6 +290,16 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 	if err != nil {
 		panic(err)
 	}
+	content := addBackticks(buf.Bytes())
+
+	if os.Getenv("MILPA_PLAIN_HELP") == "enabled" {
+		_, err = cc.OutOrStderr().Write(content)
+		if err != nil {
+			panic(err)
+		} else {
+			return
+		}
+	}
 
 	width, _, err := term.GetSize(0)
 	if err != nil {
@@ -298,7 +308,6 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 
 	style := glamour.WithAutoStyle
 	ok, err := cc.Flags().GetBool("no-color")
-	// logrus.Infof("no-color: %s", ok)
 	if err == nil && ok {
 		style = func() glamour.TermRendererOption { return glamour.WithStyles(glamour.ASCIIStyleConfig) }
 	}
@@ -313,11 +322,14 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 		panic(err)
 	}
 
-	help, err := renderer.Render(addBackticks(buf.String()))
+	help, err := renderer.RenderBytes(content)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(help)
+	_, err = cc.OutOrStderr().Write(help)
+	if err != nil {
+		panic(err)
+	}
 }
 
 var HelpTemplate = `# {{ if not (eq .Spec.Meta.Kind "root") }}{{ .Bin }} {{ end }}{{ .Spec.FullName }}
@@ -370,7 +382,7 @@ var HelpTemplate = `# {{ if not (eq .Spec.Meta.Kind "root") }}{{ .Bin }} {{ end 
 {{ end -}}
 {{- end -}}
 
-{{- if .Command.HasAvailableInheritedFlags -}}
+{{- if .Command.HasAvailableInheritedFlags }}
 ## Global Options:
 
 {{ range $name, $opt := .GlobalOptions -}}

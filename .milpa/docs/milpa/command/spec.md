@@ -1,4 +1,5 @@
 ---
+title: milpa command spec file
 related-docs: [milpa/command/environment, milpa/repo/index, milpa/repo/docs]
 related-commands: ["itself create", "itself docs generate"]
 ---

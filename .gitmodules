@@ -1,0 +1,3 @@
+[submodule "milpa.dev/themes/docsy"]
+	path = milpa.dev/themes/docsy
+	url = https://github.com/google/docsy.git

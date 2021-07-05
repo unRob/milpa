@@ -1,9 +1,10 @@
 ---
+title: milpa command
 related-docs: [milpa/environment]
 related-commands: ["itself create"]
 ---
 
-# !milpa! commands
+# milpa command
 
 `!milpa!` can run two types of commands:
 
