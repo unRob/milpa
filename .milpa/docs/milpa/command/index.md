@@ -8,7 +8,7 @@ related-commands: ["itself create"]
 `!milpa!` can run two types of commands:
 
 - bash scripts, with an `.sh` extension, or
-- executables without an extension, in whatever language you want.
+- executables without an extension, written in whatever language you want.
 
 ## Spec
 
@@ -18,7 +18,9 @@ In order for `!milpa!` to recognize your commands, you'll need to make sure you 
 
 `!milpa!` invokes your command with `source`, if it's a bash script with an `.sh` extension, and otherwise with `exec`. If your command does not have an extension, it must have the executable bit on (`chmod +x .milpa/commands/your-command`).
 
-The arguments and options passed by the user will be parsed and validated according to your spec, known options will be removed, and arguments will be passed to your command as typed. Unknown options will raise an error and your command will not be called.
+## Arguments and Options
+
+The arguments and options passed by the user will be parsed and validated according to your spec, known options will be removed, and arguments will be passed to your command as typed. Unknown options will raise an error and your command will not be called. Valid arguments and options will be available to your command as environment variables, continue reading for details.
 
 ## Environment Variables
 

@@ -80,12 +80,12 @@ func readDoc(query []string) ([]byte, error) {
 	for _, path := range MilpaPath {
 		candidate := path + "/.milpa/docs/" + queryString
 		logrus.Debugf("looking for doc named %s", candidate)
-		_, err := os.Stat(candidate + ".md")
+		_, err := os.Lstat(candidate + ".md")
 		if err == nil {
 			return ioutil.ReadFile(candidate + ".md")
 		}
 
-		if _, err := os.Stat(candidate + "/index.md"); err == nil {
+		if _, err := os.Lstat(candidate + "/index.md"); err == nil {
 			return ioutil.ReadFile(candidate + "/index.md")
 		}
 
@@ -376,6 +376,4 @@ var HelpTemplate = `# {{ if not (eq .Spec.Meta.Kind "root") }}{{ .Bin }} {{ end 
 {{ range $name, $opt := .GlobalOptions -}}
 - ﹅--{{ $name }}﹅ (_{{$opt.Type}}_): {{$opt.Description}}.{{ if $opt.Default }} Default: _{{ $opt.Default }}_.{{ end }}
 {{ end -}}
-
-{{end}}
-`
+{{end}}`
