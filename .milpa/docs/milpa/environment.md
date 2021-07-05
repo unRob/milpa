@@ -1,4 +1,5 @@
 ---
+title: milpa environment
 related-docs: [utils/log, command/environment]
 ---
 
@@ -48,4 +49,4 @@ Also enabled by the `--no-color` option to disable printing of formatting escape
 
 ## Command Environment
 
-Your commands will also have specific environment variables available, check out [milpa help docs milpa command](./milpa/docs/milpa/command/index.md#Environment-variables)
+Your commands will also have specific environment variables available, check out [milpa help docs milpa command](/.milpa/docs/milpa/command/index.md#Environment-variables)

@@ -1,3 +1,6 @@
+---
+title: milpa docs
+---
 # milpa
 
 "milpa", is an agricultural method that combines multiple crops in close proximity. [`milpa`](https://milpa.dev) is a Bash script and tool to care for one's own garden of scripts.

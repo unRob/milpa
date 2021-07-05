@@ -1,4 +1,6 @@
-## Getting started
+---
+title: Getting started
+---
 
 After milpa is installed, you'll find the best experience enabling command completion for your shell.
 

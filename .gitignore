@@ -1,3 +1,7 @@
 .vscode
 compa
 dist
+milpa.dev/content/docs/*
+milpa.dev/content/commands/*
+milpa.dev/_tmp
+milpa.dev/resources/_gen/*

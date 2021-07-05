@@ -137,6 +137,7 @@ Milpa, is an agricultural method that combines multiple crops in close proximity
 	root.PersistentFlags().AddFlagSet(RootFlagset())
 
 	root.AddCommand(completionCommand)
+	root.AddCommand(generateDocumentationCommand)
 	root.AddCommand(doctorForCommands(commands))
 	root.SetHelpCommand(HelpCommand)
 	HelpCommand.AddCommand(DocsCommand)

@@ -1,4 +1,5 @@
 ---
+title: milpa repo
 related-docs: ["milpa commands", "milpa environment"]
 related-commands: ["itself create"]
 ---

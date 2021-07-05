@@ -63,4 +63,4 @@ dist/docs:
 	$(info tbd)
 
 clean:
-	rm -rf dist
+	rm -rf dist milpa.dev/content/docs milpa.dev/content/commands
