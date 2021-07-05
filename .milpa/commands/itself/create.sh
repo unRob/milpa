@@ -25,7 +25,7 @@ milpa="$repo_path/.milpa"
 
 joinedName="${MILPA_ARG_NAME[*]}"
 path="$milpa/commands/${joinedName// /\/}"
-_log info "Creating command $(_fmt bold "${MILPA_ARG_NAME[*]}") at $path"
+@milpa.log info "Creating command $(@milpa.fmt bold "${MILPA_ARG_NAME[*]}") at $path"
 mkdir -p "$(dirname "$path")"
 
 if [[ "${MILPA_OPT_EXECUTABLE}" ]]; then
@@ -36,22 +36,12 @@ else
   echo "#!/usr/bin/env bash" >> "$path"
 fi
 
-cat > "${path#.sh}.${MILPA_OPT_CONFIG_FORMAT}" <<YAML
+cat > "${path%.sh}.${MILPA_OPT_CONFIG_FORMAT}" <<'YAML'
 summary: Does a thing
 description: |
   Longer description of how it does the thing
-# arguments:
-#   - name: something
-#     description: passes something to your script
-#     values-subcommand: another command
-# options:
-#   explode:
-#     type: bool
-#     description: something else
-#   stringOpt:
-#     description: what stringOpt does
-#     values: [eitherA orB orC]
+# see `milpa help docs command spec` for all the options
 YAML
 
-_log complete "$(_fmt bold "${MILPA_ARG_NAME[*]}") created"
+@milpa.log complete "$(@milpa.fmt bold "${MILPA_ARG_NAME[*]}") created"
 [[ "$MILPA_OPT_OPEN" ]] && $EDITOR "$path"

@@ -20,7 +20,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"unicode"
 
 	"github.com/charmbracelet/glamour"
 	"github.com/sirupsen/logrus"
@@ -34,6 +33,7 @@ func addBackticks(str string) string {
 
 func findDocs(query []string, needle string) ([]string, error) {
 	results := []string{}
+	found := map[string]bool{}
 	if len(MilpaPath) == 0 {
 		return results, fmt.Errorf("no MILPA_PATH set on the environment")
 	}
@@ -55,8 +55,9 @@ func findDocs(query []string, needle string) ([]string, error) {
 
 		for _, doc := range docs {
 			name := strings.TrimSuffix(filepath.Base(doc), ".md")
-			if needle == "" || strings.HasPrefix(name, needle) {
+			if _, ok := found[name]; (needle == "" || strings.HasPrefix(name, needle)) && !ok {
 				results = append(results, name)
+				found[name] = true
 			}
 		}
 
@@ -74,24 +75,65 @@ func readDoc(query []string) ([]byte, error) {
 		return nil, fmt.Errorf("requesting docs help")
 	}
 
-	queryString := strings.Join(query, "/") + ".md"
-	logrus.Debugf("looking for doc %s in %s", queryString, MilpaPath)
+	queryString := strings.Join(query, "/")
 
 	for _, path := range MilpaPath {
 		candidate := path + "/.milpa/docs/" + queryString
-		logrus.Debugf("looking for doc in %s", candidate)
+		logrus.Debugf("looking for doc named %s", candidate)
+		_, err := os.Stat(candidate + ".md")
+		if err == nil {
+			return ioutil.ReadFile(candidate + ".md")
+		}
+
+		if _, err := os.Stat(candidate + "/index.md"); err == nil {
+			return ioutil.ReadFile(candidate + "/index.md")
+		}
+
 		if _, err := os.Stat(candidate); err == nil {
-			return ioutil.ReadFile(candidate)
+			return []byte{}, BadArguments{fmt.Sprintf("Missing topic for %s", strings.Join(query, " "))}
 		}
 	}
 
 	return nil, fmt.Errorf("doc not found")
 }
 
+var Docs *Command = &Command{
+	Summary:     "Dislplays docs on TOPIC",
+	Description: "docs shows markdown-formatted documentation from " + os.Getenv("MILPA_NAME") + ` repos. See ` + "`" + os.Getenv("MILPA_NAME") + " help docs milpa repo docs` for more information on how to write your own.",
+	Arguments: Arguments{
+		Argument{
+			Name:        "topic",
+			Description: "The topic to show docs for",
+			Variadic:    true,
+			Required:    true,
+		},
+	},
+	Meta: Meta{
+		Path: os.Getenv("MILPA_ROOT") + "/milpa/docs",
+		Name: []string{"help", "docs"},
+		Repo: os.Getenv("MILPA_ROOT"),
+		Kind: "internal",
+	},
+	helpFunc: func() string {
+		topics, err := findDocs([]string{}, "")
+		if err != nil {
+			return ""
+		}
+		topicList := []string{}
+		for _, topic := range topics {
+			topicList = append(topicList, "- "+topic)
+		}
+
+		return `## Available topics:
+
+` + strings.Join(topicList, "\n")
+	},
+}
+
 var DocsCommand *cobra.Command = &cobra.Command{
-	Use:   "docs [topic]",
-	Short: "Docs on specific topics",
-	Long:  `docs shows formatted documentation from milpa repos`,
+	Use:   "docs [TOPIC]",
+	Short: "Displays docs on TOPIC",
+	Long:  "docs shows formatted documentation from " + os.Getenv("MILPA_NAME") + " repos",
 	ValidArgsFunction: func(c *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		logrus.Debugf("looking for docs given %v and %s", args, toComplete)
 		docs, err := findDocs(args, toComplete)
@@ -102,17 +144,34 @@ var DocsCommand *cobra.Command = &cobra.Command{
 		return docs, cobra.ShellCompDirectiveNoFileComp
 	},
 	RunE: func(c *cobra.Command, args []string) error {
+		if len(args) == 0 {
+			return BadArguments{Msg: "Missing doc topic to display"}
+		}
+
 		contents, err := readDoc(args)
 		if err != nil {
+			switch err.(type) {
+			case BadArguments:
+				return err
+			}
 			return NotFound{Msg: "Unknown doc: " + err.Error()}
 		}
+
+		frontmatterSep := []byte("---\n")
+		// logrus.Info(string(contents[0:4]) == "---\n")
+		if len(contents) > 3 && string(contents[0:4]) == string(frontmatterSep) {
+			// strip out frontmatter
+			parts := bytes.SplitN(contents, frontmatterSep, 3)
+			contents = parts[2]
+		}
+
+		contents = bytes.ReplaceAll(contents, []byte("!milpa!"), []byte(os.Getenv("MILPA_NAME")))
 
 		width, _, err := term.GetSize(0)
 		if err != nil {
 			return err
 		}
 
-		logrus.Debug(len(contents))
 		renderer, err := glamour.NewTermRenderer(
 			glamour.WithAutoStyle(),
 			glamour.WithEmoji(),
@@ -192,33 +251,28 @@ var HelpCommand *cobra.Command = &cobra.Command{
 	},
 }
 
-// func (cmd *Command) Help
-
 type combinedCommand struct {
 	Spec          *Command
 	Command       *cobra.Command
 	GlobalOptions Options
+	Bin           string
 }
 
-func trimRightSpace(s string) string {
-	return strings.TrimRightFunc(s, unicode.IsSpace)
+func (cmd *Command) HasAdditionalHelp() bool {
+	return cmd.helpFunc != nil
 }
 
-// rpad adds padding to the right of a string.
-func rpad(s string, padding int) string {
-	template := fmt.Sprintf("%%-%ds", padding)
-	return fmt.Sprintf(template, s)
+func (cmd *Command) AdditionalHelp() *string {
+	if cmd.helpFunc != nil {
+		str := cmd.helpFunc()
+		return &str
+	}
+	return nil
 }
 
 func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 	tmpl := template.New("help").Funcs(template.FuncMap{
-		"trim":                    strings.TrimSpace,
-		"trimRightSpace":          trimRightSpace,
-		"trimTrailingWhitespaces": trimRightSpace,
-		// "appendIfNotPresent":      appendIfNotPresent,
-		"rpad": rpad,
-		// "gt":                      Gt,
-		// "eq":                      Eq,
+		"trim":    strings.TrimSpace,
 		"toUpper": strings.ToUpper,
 	})
 	var err error
@@ -230,6 +284,7 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 		Spec:          cmd,
 		Command:       cc,
 		GlobalOptions: Root.Options,
+		Bin:           os.Getenv("MILPA_NAME"),
 	}
 	err = tmpl.Execute(&buf, c)
 	if err != nil {
@@ -265,7 +320,7 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 	fmt.Println(help)
 }
 
-var HelpTemplate = `# {{ if not (eq .Spec.Meta.Kind "root") }}milpa {{ end }}{{ .Spec.FullName }}
+var HelpTemplate = `# {{ if not (eq .Spec.Meta.Kind "root") }}{{ .Bin }} {{ end }}{{ .Spec.FullName }}
 
 {{ .Command.Short }}
 
@@ -282,23 +337,30 @@ var HelpTemplate = `# {{ if not (eq .Spec.Meta.Kind "root") }}milpa {{ end }}{{ 
 {{ end -}}
 {{- end -}}
 {{ else }}
+{{- if .Spec.Arguments -}}
+## Arguments:
+
+{{ range .Spec.Arguments -}}
+
+- {{ if .Required}}**{{ end }}﹅{{ .Name | toUpper }}{{ if .Variadic}}...{{ end }}﹅{{ if .Required }}**{{ end }} - {{ .Description }}
+{{ end -}}
+{{- end -}}
+
 ## Description:
 
 {{ .Spec.Description }}
-{{- end -}}
+{{- if .Spec.HasAdditionalHelp }}
+{{ .Spec.AdditionalHelp }}
+{{ end -}}
+
+{{ end -}}
 {{ if eq .Spec.Meta.Kind "root" }}
 ## Description:
 
 {{ .Spec.Description }}
 {{ end -}}
 
-{{- if .Spec.Arguments -}}
-## Arguments:
 
-{{ range .Spec.Arguments -}}
-- {{ if .Required}}**{{ end }}﹅{{ .Name | toUpper }}{{ if .Variadic}}...{{ end }}﹅{{ if .Required }}**{{ end }} - {{ .Description }}
-{{ end -}}
-{{- end -}}
 
 {{- if .Command.HasAvailableLocalFlags}}
 ## Options:

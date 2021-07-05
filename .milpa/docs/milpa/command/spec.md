@@ -2,15 +2,15 @@
 related-docs: [milpa/command/environment, milpa/repo/layout, milpa/repo/docs]
 related-commands: ["itself create", "itself docs generate"]
 ---
-# milpa command spec file
+# !milpa! command spec file
 
-Command specs go along with your scripts and help inform milpa of what its input should look like. Based on it, `milpa` will produce help pages and autocompletions, and may validate the arguments to your command.
+Command specs go along with your scripts and help inform `!milpa!` of what its input should look like. Based on it, `!milpa!` will produce help pages and autocompletions, and may validate the arguments to your command.
 
 Specs must be written in YAML, have a `yaml` extension, and be named exactly like your command (minus the extension, if any). For example, given a command at `.milpa/commands/my-command.sh` the corresponding spec file would be `.milpa/commands/my-command.yaml`.
 
 ## Example
 
-If we wanted to have a command written in bash at `milpa release`, we'll need to create file at `.milpa/commands/release.sh` and its corresponding spec at `.milpa/commands/release.yaml`. Let's take a look at what such a spec might look like:
+If we wanted to have a command written in bash at `!milpa! release`, we'll need to create file at `.milpa/commands/release.sh` and its corresponding spec at `.milpa/commands/release.yaml`. Let's take a look at what such a spec might look like:
 
 ```yaml
 # a summary is required. It shows up during autocomplete and command listings
@@ -38,7 +38,7 @@ arguments:
     # arguments can be validated to be part of a static set of values
     values: [micro, patch, minor, major]
     # commands may request values for validation dynamically by reading the
-    # lines printed by running another milpa subcommand.
+    # lines printed by running another !milpa! subcommand.
     # arguments may have `values` or `values-subcommand`, but not both.
     values-subcommand: scm versions
     # arguments can have a default
@@ -84,10 +84,10 @@ options:
 # you may specify related commands, help topics, and websites that are related to this command
 # these will be suggested to the user on help screens
 see-also:
-  # the user will be suggested to look at `milpa help scm versions`
+  # the user will be suggested to look at `!milpa! help scm versions`
   - scm versions
-  # the user will be suggested to look at `milpa help sdlc releasing`
-  - help/sdlc releasing
+  # the user will be suggested to look at `!milpa! help docs sdlc releasing`
+  - help docs sdlc releasing
   - https://docs.github.com/en/rest/reference/repos#create-a-release
   - https://semver.org/
 ```

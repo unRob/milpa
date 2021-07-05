@@ -16,18 +16,18 @@ case "$SHELL" in
   *bash)
     if [[ -d /etc/bash_completion.d ]]; then
       set -x
-      "$MILPA_COMPA" __generate_completions bash > /etc/bash_completion.d/milpa
+      "$MILPA_COMPA" __generate_completions bash > "/etc/bash_completion.d/$MILPA_NAME"
       set +x
     elif [[ -d /usr/local/etc/bash_completion.d ]]; then
       set -x
-      "$MILPA_COMPA" __generate_completions bash > /usr/local/etc/bash_completion.d/milpa
+      "$MILPA_NAME_COMPA" __generate_completions bash > "/usr/local/etc/bash_completion.d/milpa"
       set +x
     else
       _fail "No directory found for writing completion script (tried /etc/bash_completion.d and /usr/local/etc/bash_completion.d)"
     fi
     ;;
   *zsh)
-    $SHELL -i -c "command -v compinit >/dev/null" >/dev/null || _log warning <<EOF
+    $SHELL -i -c "command -v compinit >/dev/null" >/dev/null || @milpa.log warning <<EOF
 compinit has not been loaded into this shell, enable it by running
 
 echo "autoload -U compinit; compinit" >> ~/.zshrc
@@ -37,24 +37,24 @@ EOF
     dst=$(zsh -i -c 'printf "%s" "${${fpath[@]:#$HOME/*}[1]}"') || _fail "Unable to locate an fpath to install completions to"
     if [[ -w "$dst" ]]; then
       set -ex
-      "$MILPA_COMPA" __generate_completions zsh > "${dst}/_milpa"
+      "$MILPA_COMPA" __generate_completions zsh > "${dst}/_${MILPA_NAME}"
       set +ex
     else
-      _log warning "$dst does not look writeable for $USER, using sudo"
+      @milpa.log warning "$dst does not look writeable for $USER, using sudo"
       set -ex
-      "$MILPA_COMPA" __generate_completions zsh | sudo tee "${dst}/_milpa" >/dev/null
+      "$MILPA_COMPA" __generate_completions zsh | sudo tee "${dst}/_${MILPA_NAME}" >/dev/null
       set +ex
     fi
 
-    _log warning "Please restart your shell"
+    @milpa.log warning "Please restart your shell"
     ;;
   *fish)
     set -ex
-    "$MILPA_COMPA" __generate_completions fish > ~/.config/fish/completions/milpa.fish
+    "$MILPA_COMPA" __generate_completions fish > "$HOME/.config/fish/completions/${MILPA_NAME}.fish"
     set +x
   ;;
   *)
     _fail "No completion script found for shell $SHELL"
 esac
 
-_log complete "Shell completion added for $SHELL successfully"
+@milpa.log complete "Shell completion added for $SHELL successfully"

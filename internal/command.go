@@ -13,6 +13,7 @@
 package internal
 
 import (
+	"bytes"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -33,6 +34,7 @@ type Command struct {
 	Options      Options   `yaml:"options" validate:"dive"`
 	runtimeFlags *pflag.FlagSet
 	issues       []string
+	helpFunc     func() string
 }
 
 var Root *Command = &Command{
@@ -40,7 +42,7 @@ var Root *Command = &Command{
 	Description: `Milpa, is an agricultural method that combines multiple crops in close proximity. ﹅milpa﹅ is a Bash script and tool to care for one's own garden of scripts. You and your team write scripts and a little spec for each command. Use bash, or any other command, and ﹅milpa﹅ provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.`,
 	Meta: Meta{
 		Path: os.Getenv("MILPA_ROOT") + "/milpa",
-		Name: []string{"milpa"},
+		Name: []string{os.Getenv("MILPA_NAME")},
 		Repo: os.Getenv("MILPA_ROOT"),
 		Kind: "root",
 	},
@@ -100,6 +102,7 @@ func New(path string, repo string, strict bool) (cmd *Command, err error) {
 	spec := strings.TrimSuffix(path, ".sh") + ".yaml"
 	var contents []byte
 	if contents, err = ioutil.ReadFile(spec); err == nil {
+		contents := bytes.ReplaceAll(contents, []byte("!milpa!"), []byte(os.Getenv("MILPA_NAME")))
 		if strict {
 			err = yaml.UnmarshalStrict(contents, cmd)
 		} else {
@@ -115,6 +118,8 @@ func New(path string, repo string, strict bool) (cmd *Command, err error) {
 		cmd.issues = append(cmd.issues, err.Error())
 	}
 
+	cmd.Summary = strings.ReplaceAll(cmd.Summary, "!milpa!", os.Getenv("MILPA_NAME"))
+	cmd.Description = strings.ReplaceAll(cmd.Description, "!milpa!", os.Getenv("MILPA_NAME"))
 	return
 }
 
