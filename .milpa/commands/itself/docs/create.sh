@@ -21,26 +21,18 @@ else
 fi
 
 milpa="$repo_path/.milpa"
-
 joinedName="${MILPA_ARG_NAME[*]}"
-path="$milpa/commands/${joinedName// /\/}"
-@milpa.log info "Creating command $(@milpa.fmt bold "${MILPA_ARG_NAME[*]}") at $path"
+path="$milpa/docs/${joinedName// /\/}.md"
+@milpa.log info "Creating doc for $(@milpa.fmt bold "${MILPA_ARG_NAME[*]}") at $path"
 mkdir -p "$(dirname "$path")"
 
-if [[ "${MILPA_OPT_EXECUTABLE}" ]]; then
-  touch "$path"
-  chmod +x "$path"
-else
-  path="$path.sh"
-  echo "#!/usr/bin/env bash" >> "$path"
-fi
+cat > "$path" <<MD
+---
+title: $joinedName
+---
 
-cat > "${path%.sh}.${MILPA_OPT_CONFIG_FORMAT}" <<'YAML'
-summary: Does a thing
-description: |
-  Longer description of how it does the thing
-# see `milpa help docs command spec` for all the options
-YAML
+This document talks about $joinedName
+MD
 
-@milpa.log complete "$(@milpa.fmt bold "${MILPA_ARG_NAME[*]}") created"
+@milpa.log complete "doc $(@milpa.fmt bold "${MILPA_ARG_NAME[*]}") created"
 [[ "$MILPA_OPT_OPEN" ]] && $EDITOR "$path"

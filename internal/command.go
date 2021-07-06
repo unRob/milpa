@@ -24,7 +24,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-const cmdPath = ".milpa/commands"
+const cmdPath = "commands"
 
 type Command struct {
 	Meta         Meta

@@ -1,0 +1,40 @@
+on: push
+name: Tests
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.16.x
+
+      - name: Checkout source
+        uses: actions/checkout@v1
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
+
+      - name: Cache go modules
+        uses: actions/cache@v1
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.OS }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.OS }}-go-${{ env.cache-name }}-
+            ${{ runner.OS }}-go-
+
+      - name: shellcheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          check_together: 'yes'
+
+      - name: Unit tests
+        run: |
+          go get gotest.tools/gotestsum
+          gotestsum --format testname
+
+      - name: milpa doctor
+        run: |
+          make compa
+          MILPA_ROOT=$(pwd) MILPA_PATH=$(pwd)/internal $(pwd)/milpa itself doctor

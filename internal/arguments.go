@@ -13,15 +13,28 @@
 package internal
 
 import (
+	"bytes"
+	"context"
 	"fmt"
+	"os"
 	"os/exec"
 	"strings"
+	"time"
 
 	"github.com/alessio/shellescape"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
+
+func contains(haystack []string, needle string) bool {
+	for _, validValue := range haystack {
+		if needle == validValue {
+			return true
+		}
+	}
+	return false
+}
 
 type Arguments []Argument
 
@@ -54,7 +67,7 @@ func (args *Arguments) ToEnv(dst *[]string, actual []string) error {
 			value = shellescape.Quote(actual[idx])
 		}
 
-		if arg.Validates() {
+		if arg.Validates() && os.Getenv("MILPA_SKIP_VALIDATION") != "1" {
 			values, err := arg.Resolve()
 			if err != nil {
 				return err
@@ -93,20 +106,14 @@ func (args *Arguments) Validate(cc *cobra.Command, supplied []string) error {
 		}
 		current := supplied[idx]
 
-		if arg.Validates() {
+		if arg.Validates() && os.Getenv("MILPA_SKIP_VALIDATION") != "1" {
+			logrus.Debugf("Validating argument %s", arg.Name)
 			values, err := arg.Resolve()
 			if err != nil {
 				return err
 			}
-			found := false
-			for _, value := range values {
-				if value == current {
-					found = true
-					break
-				}
-			}
 
-			if !found {
+			if !contains(values, current) {
 				return BadArguments{fmt.Sprintf("%s is not a valid value for argument <%s>. Valid options are: %s", current, arg.Name, strings.Join(values, ", "))}
 			}
 		}
@@ -179,21 +186,38 @@ func (arg *Argument) ToDesc() string {
 	return spec
 }
 
+func recurse(name string, subcommand string, timeout time.Duration) ([]string, error) {
+	logrus.Debugf("executing sub command %s", subcommand)
+	ctx, cancel := context.WithTimeout(context.Background(), timeout*time.Second)
+	defer cancel()                                                              // The cancel should be deferred so resources are cleaned up
+	cmd := exec.CommandContext(ctx, "milpa", strings.Split(subcommand, " ")...) // #nosec G204
+	var stdout bytes.Buffer
+	cmd.Stdout = &stdout
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
+	err := cmd.Run()
+
+	if ctx.Err() == context.DeadlineExceeded {
+		fmt.Println("Sub-command timed out")
+		return []string{}, fmt.Errorf("could not resolve valid arguments before timeout")
+	}
+
+	if err != nil {
+		return []string{}, BadArguments{fmt.Sprintf("could not validate argument %s, sub-command <%s> failed: %s", name, subcommand, err)}
+	}
+
+	return strings.Split(strings.TrimSuffix(stdout.String(), "\n"), "\n"), nil
+}
+
 func (arg *Argument) Resolve() ([]string, error) {
 	values := []string{}
 	if arg.ValuesSubCommand != "" {
 		if arg.computedValues == nil {
-			logrus.Debugf("executing sub command %s", arg.ValuesSubCommand)
-			// milpa := fmt.Sprintf("%s/milpa", os.Getenv("MILPA_ROOT"))
-			cmd := exec.Command("milpa", strings.Split(arg.ValuesSubCommand, " ")...) // #nosec G204
-			out, err := cmd.Output()
+			resolved, err := recurse(arg.Name, arg.ValuesSubCommand, 5)
 			if err != nil {
-				logrus.Error(err)
 				return values, err
 			}
-
-			val := strings.Split(strings.TrimSuffix(string(out), "\n"), "\n")
-			arg.computedValues = &val
+			arg.computedValues = &resolved
 		}
 		values = *arg.computedValues
 	} else if len(arg.Values) > 0 {
@@ -229,16 +253,12 @@ func (opt *Option) Resolve() ([]string, error) {
 	values := []string{}
 	if opt.ValuesSubCommand != "" {
 		if opt.computedValues == nil {
-			logrus.Debugf("executing sub command %s", opt.ValuesSubCommand)
-			cmd := exec.Command("milpa", strings.Split(opt.ValuesSubCommand, " ")...) // #nosec G204
-			out, err := cmd.Output()
+			resolved, err := recurse("option", opt.ValuesSubCommand, 5)
 			if err != nil {
-				logrus.Error(err)
 				return values, err
 			}
 
-			val := strings.Split(strings.TrimSuffix(string(out), "\n"), "\n")
-			opt.computedValues = &val
+			opt.computedValues = &resolved
 		}
 		values = *opt.computedValues
 	} else if len(opt.Values) > 0 {
@@ -272,6 +292,7 @@ func (opts *Options) ToEnv(dst *[]string, flags *pflag.FlagSet) (err error) {
 	errors := []string{}
 	flags.VisitAll(func(f *pflag.Flag) {
 		name := f.Name
+		//nolint:goconst
 		if name == "help" {
 			return
 		}
@@ -297,21 +318,15 @@ func (opts *Options) ToEnv(dst *[]string, flags *pflag.FlagSet) (err error) {
 		default:
 			oopts := *opts
 			opt, ok := oopts[name]
-			if ok && opt.Validates() {
+			if value != "" && ok && opt.Validates() && os.Getenv("MILPA_SKIP_VALIDATION") != "1" {
+				logrus.Debugf("Validating option %s", name)
 				values, verr := opt.Resolve()
 				if verr != nil {
 					errors = append(errors, err.Error())
 					return
 				}
-				found := false
-				for _, validValue := range values {
-					if value == validValue {
-						found = true
-						break
-					}
-				}
 
-				if !found {
+				if !contains(values, value) {
 					errors = append(errors,
 						fmt.Sprintf("invalid value for --%s: %s. Valid values are %s", name, value, strings.Join(values, ", ")),
 					)

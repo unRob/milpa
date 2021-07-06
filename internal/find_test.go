@@ -87,7 +87,7 @@ func setupFS(filenames []string, pool map[string]*fstest.MapFile) *fstest.MapFS 
 		fs[fsBase+"/.milpa/commands/"+name] = pool[name]
 	}
 
-	MilpaPath = []string{fsBase}
+	MilpaPath = []string{fsBase + "/.milpa"}
 	DefaultFS = &fs
 	return &fs
 }

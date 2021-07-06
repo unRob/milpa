@@ -23,7 +23,7 @@ case "$SHELL" in
       "$MILPA_NAME_COMPA" __generate_completions bash > "/usr/local/etc/bash_completion.d/milpa"
       set +x
     else
-      _fail "No directory found for writing completion script (tried /etc/bash_completion.d and /usr/local/etc/bash_completion.d)"
+      @milpa.fail "No directory found for writing completion script (tried /etc/bash_completion.d and /usr/local/etc/bash_completion.d)"
     fi
     ;;
   *zsh)
@@ -34,7 +34,7 @@ echo "autoload -U compinit; compinit" >> ~/.zshrc
 and reloading your shell
 EOF
     # shellcheck disable=2016
-    dst=$(zsh -i -c 'printf "%s" "${${fpath[@]:#$HOME/*}[1]}"') || _fail "Unable to locate an fpath to install completions to"
+    dst=$(zsh -i -c 'printf "%s" "${${fpath[@]:#$HOME/*}[1]}"') || @milpa.fail "Unable to locate an fpath to install completions to"
     if [[ -w "$dst" ]]; then
       set -ex
       "$MILPA_COMPA" __generate_completions zsh > "${dst}/_${MILPA_NAME}"
@@ -54,7 +54,7 @@ EOF
     set +x
   ;;
   *)
-    _fail "No completion script found for shell $SHELL"
+    @milpa.fail "No completion script found for shell $SHELL"
 esac
 
 @milpa.log complete "Shell completion added for $SHELL successfully"

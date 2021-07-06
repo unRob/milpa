@@ -3,8 +3,6 @@ title: milpa command spec file
 related-docs: [milpa/command/environment, milpa/repo/index, milpa/repo/docs]
 related-commands: ["itself create", "itself docs generate"]
 ---
-# !milpa! command spec file
-
 Command specs go along with your scripts and help inform `!milpa!` of what its input should look like. Based on it, `!milpa!` will produce help pages and autocompletions, and may validate the arguments to your command.
 
 Specs must be written in YAML, have a `yaml` extension, and be named exactly like your command (minus the extension, if any). For example, given a command at `.milpa/commands/my-command.sh` the corresponding spec file would be `.milpa/commands/my-command.yaml`.

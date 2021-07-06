@@ -15,11 +15,12 @@ package internal
 import (
 	"bytes"
 	"fmt"
-	"html/template"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
+	"text/template"
 
 	"github.com/charmbracelet/glamour"
 	"github.com/sirupsen/logrus"
@@ -45,7 +46,7 @@ func findDocs(query []string, needle string) ([]string, error) {
 	}
 
 	for _, path := range MilpaPath {
-		qbase := path + "/.milpa/docs/" + queryString
+		qbase := path + "/docs" + queryString
 		q := qbase + "/*"
 		logrus.Debugf("looking for docs matching %s", q)
 		docs, err := filepath.Glob(q)
@@ -78,7 +79,7 @@ func readDoc(query []string) ([]byte, error) {
 	queryString := strings.Join(query, "/")
 
 	for _, path := range MilpaPath {
-		candidate := path + "/.milpa/docs/" + queryString
+		candidate := path + "/docs/" + queryString
 		logrus.Debugf("looking for doc named %s", candidate)
 		_, err := os.Lstat(candidate + ".md")
 		if err == nil {
@@ -157,12 +158,18 @@ var DocsCommand *cobra.Command = &cobra.Command{
 			return NotFound{Msg: "Unknown doc: " + err.Error()}
 		}
 
+		titleExp := regexp.MustCompile("^title: (.+)")
 		frontmatterSep := []byte("---\n")
-		// logrus.Info(string(contents[0:4]) == "---\n")
 		if len(contents) > 3 && string(contents[0:4]) == string(frontmatterSep) {
 			// strip out frontmatter
 			parts := bytes.SplitN(contents, frontmatterSep, 3)
-			contents = parts[2]
+			title := titleExp.FindString(string(parts[1]))
+			if title != "" {
+				title = strings.TrimPrefix(title, "title: ")
+			} else {
+				title = strings.Join(args, " ")
+			}
+			contents = bytes.Join([][]byte{[]byte("# " + title + "\n"), parts[2]}, []byte("\n"))
 		}
 
 		contents = bytes.ReplaceAll(contents, []byte("!milpa!"), []byte(os.Getenv("MILPA_NAME")))
@@ -186,7 +193,10 @@ var DocsCommand *cobra.Command = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		fmt.Println(string(doc))
+
+		if _, err := c.OutOrStderr().Write(doc); err != nil {
+			return err
+		}
 		os.Exit(42)
 
 		return nil
@@ -195,8 +205,11 @@ var DocsCommand *cobra.Command = &cobra.Command{
 
 var HelpCommand *cobra.Command = &cobra.Command{
 	Use:   "help [command]",
-	Short: "Help about any command",
-	Long:  `Help provides help for any command in the application.`,
+	Short: "Display usage information on any **COMMAND...**",
+	Long:  `Help provides the valid arguments and options for any command known to milpa.`,
+	// Annotations: map[string]string{
+	//   ""
+	// },
 	ValidArgsFunction: func(c *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		var completions []string
 		cmd, _, e := c.Root().Find(args)
@@ -272,8 +285,9 @@ func (cmd *Command) AdditionalHelp() *string {
 
 func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 	tmpl := template.New("help").Funcs(template.FuncMap{
-		"trim":    strings.TrimSpace,
-		"toUpper": strings.ToUpper,
+		"trim":       strings.TrimSpace,
+		"toUpper":    strings.ToUpper,
+		"trimSuffix": strings.TrimSuffix,
 	})
 	var err error
 	if tmpl, err = tmpl.Parse(HelpTemplate); err != nil {
@@ -332,25 +346,26 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 	}
 }
 
-var HelpTemplate = `# {{ if not (eq .Spec.Meta.Kind "root") }}{{ .Bin }} {{ end }}{{ .Spec.FullName }}
+var HelpTemplate = `# {{ if and (not (eq .Spec.Meta.Kind "root")) (not (eq .Command.Name "help")) }}{{ .Bin }} {{ end }}{{ .Spec.FullName }}{{if eq .Command.Name "help"}} help{{end}}
 
 {{ .Command.Short }}
 
-## Usage:
+## Usage
 
   ﹅{{ .Command.UseLine }}{{if .Command.HasAvailableSubCommands}} subcommand{{end}}﹅
 
 {{ if .Command.HasAvailableSubCommands -}}
-## Subcommands:
+## Subcommands
 
 {{ range .Command.Commands -}}
 {{- if (or .IsAvailableCommand (eq .Name "help")) -}}
 - ﹅{{ .Name }}﹅ - {{.Short}}
 {{ end -}}
 {{- end -}}
-{{ else }}
+{{- end -}}
+
 {{- if .Spec.Arguments -}}
-## Arguments:
+## Arguments
 
 {{ range .Spec.Arguments -}}
 
@@ -358,32 +373,35 @@ var HelpTemplate = `# {{ if not (eq .Spec.Meta.Kind "root") }}{{ .Bin }} {{ end 
 {{ end -}}
 {{- end -}}
 
-## Description:
+
+
+
+{{ if and (eq .Spec.Meta.Kind "root") (not (eq .Command.Name "help")) }}
+## Description
 
 {{ .Spec.Description }}
+{{ end -}}
 {{- if .Spec.HasAdditionalHelp }}
 {{ .Spec.AdditionalHelp }}
 {{ end -}}
 
-{{ end -}}
-{{ if eq .Spec.Meta.Kind "root" }}
-## Description:
-
-{{ .Spec.Description }}
-{{ end -}}
-
-
 
 {{- if .Command.HasAvailableLocalFlags}}
-## Options:
+## Options
 
 {{ range $name, $opt := .Spec.Options -}}
-- ﹅--{{ $name }}﹅ (_{{$opt.Type}}_): {{$opt.Description}}.{{ if $opt.Default }} Default: _{{ $opt.Default }}_.{{ end }}
+- ﹅--{{ $name }}﹅ (_{{$opt.Type}}_): {{ trimSuffix $opt.Description "."}}.{{ if $opt.Default }} Default: _{{ $opt.Default }}_.{{ end }}
 {{ end -}}
 {{- end -}}
 
+{{- if not (eq .Command.Name "milpa") }}
+## Description
+
+{{ if not (eq .Command.Long "") }}{{ .Command.Long }}{{ else }}{{ .Spec.Description }}{{end}}
+{{ end }}
+
 {{- if .Command.HasAvailableInheritedFlags }}
-## Global Options:
+## Global Options
 
 {{ range $name, $opt := .GlobalOptions -}}
 - ﹅--{{ $name }}﹅ (_{{$opt.Type}}_): {{$opt.Description}}.{{ if $opt.Default }} Default: _{{ $opt.Default }}_.{{ end }}

@@ -1,7 +1,7 @@
 ---
 title: Getting started
+weight: 1
 ---
-
 After milpa is installed, you'll find the best experience enabling command completion for your shell.
 
 We'll assume you have a repo with your team's code at `~/src/my-teams-app`, but you can also test `!milpa!` out by creating any folder, wherever you like.
@@ -13,6 +13,8 @@ Once that's set up, you'd get started with `!milpa!` by:
 3. creating a new command, and editing it's spec
 4. running the command to test it out
 
+## installing autocomplete
+
 ```sh
 # one of the best things about milpa is it's built-in support for shell completion
 # this happens after you type "milpa " at the prompt and press the `tab` key
@@ -21,7 +23,11 @@ Once that's set up, you'd get started with `!milpa!` by:
 milpa itself shell install-autocomplete
 
 # After this is done, you'll likely need to reload your shell or open a new session/tab.
+```
 
+## Creating a new command
+
+```sh
 # Start by heading to your project's git repo
 cd ~/src/my-teams-app
 
@@ -38,27 +44,50 @@ ls -lah .milpa/commands
 # you'll see output like:
 # -rw-r--r--  1 ada  staff  3141 Mar  14 15:09 developer-setup.sh
 # -rw-r--r--  1 ada  staff   314 Mar  14 15:09 developer-setup.yaml
+```
 
+## Actually writing a command
+
+```sh
 # now, we'll begin by editing our spec
 "$EDITOR" .milpa/commands/developer-setup.yaml
-# set a one-line `summary` and a more elaborated `description`
-# maybe add an option to specify if you'd like the fullstack or data setup?
-# the sky is the limit!
+```
 
-# finally, we'll add some onboarding logic to your command, for example:
-cat > .milpa/commands/developer-setup.sh <<<'SH'
+Our [spec](./milpa/docs/command/spec.md) should look like this:
+
+```yaml
+# .milpa/commands/developer-setup.yaml
+# We'll set a one-line `summary` and a more elaborated `description`
+summary: Bootstrap a developer's machine
+description: |
+  Installs all the fun stuff required for doing your dev job.
+
+# We'll add a --kind option to specify which kind of work the user will be doing
+options:
+  kind:
+    default: fullstack
+    values: [fullstack, data]
+    description: What kind of work will you be doing primarily?
+```
+
+Now, we can begin writing our [command](./milpa/docs/command/index.md):
+
+```sh
 #!/usr/bin/env bash
+# .milpa/commands/developer-setup.sh
 
-@milpa.log info "🚀 getting your computer ready for your ${MILPA_OPT_KIND:-fullstack} exploits 🚀"
+@milpa.log info "🚀 getting your computer ready for your ${MILPA_OPT_KIND:} exploits 🚀"
 
-# install some packages
-# configure credentials sources
-# please the compliance overlords, overladies, and overfolks
+@milpa.log info "installing some packages..."
+@milpa.log info "configuring credentials sources"
+@milpa.log info "pleasing the compliance overlords, overladies, and overfolks"
 
 @milpa log complete "Your system is ready to roll, $(whoami)!"
-SH
+```
 
-# now, we can check milpa recognizes the command and can parse it's spec
+Once we're done, we can check milpa recognizes the command and can parse it's spec:
+
+```sh
 milpa itself doctor
 # output will look like:
 # MILPA_ROOT is: /usr/local/lib/milpa
@@ -78,12 +107,16 @@ milpa itself doctor
 # if you don't see a checkmark next to your command's name, you'll get some
 # feedback on what went wrong, check out `milpa help docs spec` for more info on
 # how to write a command spec
+```
 
-# Once everything looks good, we should be ready to test our command out!
+## Running your new command
+
+Once everything looks good, we should be ready to test our command out!
+
+```sh
 milpa developer-setup
 # you'll see output like:
-# 🚀 getting your computer ready for your fullstack exploits 🚀
+# [info:developer-setup] 🚀 getting your computer ready for your fullstack exploits 🚀
 # ...
-# ✅ Your system is ready to roll, Ada!
-
+# [info:developer-setup] ✅ Your system is ready to roll, Ada!
 ```
