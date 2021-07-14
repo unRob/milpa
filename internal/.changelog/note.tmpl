@@ -1,0 +1,3 @@
+{{- define "note" -}}
+{{.Body }}{{if not (eq .Issue "0")}} (#{{ .Issue }})[https://github.com/unRob/pull/{{ .Issue }}]{{end}}
+{{- end -}}

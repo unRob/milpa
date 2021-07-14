@@ -1,6 +1,6 @@
 baseURL = "https://milpa.dev/"
 # languageCode = "en-us"
-title = "milpa"
+title = "milpa 🌽"
 
 enableRobotsTXT = true
 
@@ -76,14 +76,14 @@ anchor = "smart"
 # time_format_blog = "2006.01.02"
 
 [markup]
-  [markup.goldmark]
-    [markup.goldmark.renderer]
-      unsafe = true
-  [markup.highlight]
-      # See a complete list of available styles at https://xyproto.github.io/splash/docs/all.html
-      style = "monokai"
-      # Uncomment if you want your chosen highlight style used for code blocks without a specified language
-      # guessSyntax = "true"
+	[markup.goldmark]
+		[markup.goldmark.renderer]
+			unsafe = true
+	[markup.highlight]
+			# See a complete list of available styles at https://xyproto.github.io/splash/docs/all.html
+			style = "monokai"
+			# Uncomment if you want your chosen highlight style used for code blocks without a specified language
+			# guessSyntax = "true"
 
 # Everything below this are Site Params
 
@@ -93,7 +93,7 @@ section = ["HTML", "print"]
 
 [params]
 copyright = "Roberto Hidalgo"
-privacy_policy = "https://policies.google.com/privacy"
+# privacy_policy = "https://policies.google.com/privacy"
 
 # First one is picked as the Twitter card image if not set on page.
 # images = ["images/project-illustration.png"]
@@ -122,7 +122,7 @@ github_repo = "https://github.com/unRob/milpa"
 github_project_repo = "https://github.com/unRob/milpa"
 
 # Specify a value here if your content directory is not in your repo's root directory
-# github_subdir = ""
+github_subdir = ".milpa/docs"
 
 # Uncomment this if you have a newer GitHub repo with "main" as the default branch,
 # or specify a new value if you want to reference another branch in your GitHub links
@@ -143,7 +143,7 @@ prism_syntax_highlighting = false
 # User interface configuration
 [params.ui]
 # Enable to show the side bar menu in its compact state.
-sidebar_menu_compact = false
+sidebar_menu_compact = true
 #  Set to true to disable breadcrumb navigation.
 breadcrumb_disable = false
 #  Set to true to hide the sidebar search box (the top nav search box will still be displayed if search is enabled)
@@ -158,10 +158,10 @@ footer_about_disable = false
 # If you want this feature, but occasionally need to remove the "Feedback" section from a single page,
 # add "hide_feedback: true" to the page's front matter.
 [params.ui.feedback]
-# enable = true
+enable = false
 # The responses that the user sees after clicking "yes" (the page was helpful) or "no" (the page was not helpful).
-yes = 'Glad to hear it! Please <a href="https://github.com/USERNAME/REPOSITORY/issues/new">tell us how we can improve</a>.'
-no = 'Sorry to hear that. Please <a href="https://github.com/USERNAME/REPOSITORY/issues/new">tell us how we can improve</a>.'
+# yes = 'Glad to hear it! Please <a href="https://github.com/USERNAME/REPOSITORY/issues/new">tell us how we can improve</a>.'
+# no = 'Sorry to hear that. Please <a href="https://github.com/USERNAME/REPOSITORY/issues/new">tell us how we can improve</a>.'
 
 # Adds a reading time to the top of each doc.
 # If you want this feature, but occasionally need to remove the Reading time from a single page,
@@ -173,13 +173,27 @@ enable = false
 # End user relevant links. These will show up on left side of footer and in the community page if you have one.
 [[params.links.user]]
 	name ="Twitter"
-	url = "https://example.org/unRob"
+	url = "https://twitter.com/unRob"
 	icon = "fab fa-twitter"
-        desc = "Follow us on Twitter to get the latest news!"
+	desc = "Follow roberto on Twitter if you want to read tweets about plants and stuff in spanish"
 
 # Developer relevant links. These will show up on right side of footer and in the community page if you have one.
 [[params.links.developer]]
 	name = "GitHub"
 	url = "https://github.com/unRob/milpa"
 	icon = "fab fa-github"
-        desc = "Development takes place here!"
+	desc = "Wanna see how this mess got made?"
+
+
+[menu]
+[[menu.main]]
+	identifier = "docs"
+	name = "Documentation"
+	url = "/docs/milpa/"
+	pre = "<i class='fa fa-book'></i>"
+
+[[menu.main]]
+	identifier = "commands"
+	name = "Commands"
+	url = "/commands/"
+	pre = "<i class='fa fa-terminal'></i>"

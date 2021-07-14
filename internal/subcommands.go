@@ -15,14 +15,41 @@ package internal
 import (
 	"bytes"
 	"fmt"
+	"net/url"
 	"os"
 	"sort"
 	"strings"
 
 	"github.com/fatih/color"
+	"github.com/hashicorp/go-getter"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
+
+var versionCommand *cobra.Command = &cobra.Command{
+	Use:               "__version",
+	Short:             "Display the version of milpa",
+	Hidden:            true,
+	DisableAutoGenTag: true,
+	SilenceUsage:      true,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		output := cmd.ErrOrStderr()
+		version := cmd.Root().Annotations["version"]
+		if cmd.CalledAs() == "" {
+			// user asked for --version directly
+			output = cmd.OutOrStderr()
+			version = version + "\n"
+		}
+
+		_, err := output.Write([]byte(version))
+		if err != nil {
+			return err
+		}
+
+		os.Exit(42)
+		return nil
+	},
+}
 
 var completionCommand *cobra.Command = &cobra.Command{
 	Use:               "__generate_completions [bash|zsh|fish]",
@@ -115,7 +142,7 @@ func doctorForCommands(commands []*Command) *cobra.Command {
 }
 
 func writeDocs(dst string, path []string, cmd *cobra.Command) error {
-	if !cmd.IsAvailableCommand() {
+	if !cmd.IsAvailableCommand() && cmd.Name() != "help" {
 		return nil
 	}
 
@@ -123,26 +150,33 @@ func writeDocs(dst string, path []string, cmd *cobra.Command) error {
 	name := cmd.Name()
 
 	if cmd.HasAvailableSubCommands() {
-		dir = dir + "/" + name
+		if name != "milpa" {
+			dir = dir + "/" + name
+		}
 		name = "_index"
 	}
 
 	logrus.Debugf("Creating directory %s", dir)
-	os.MkdirAll(dir, 0760)
+	if err := os.MkdirAll(dir, 0760); err != nil {
+		return err
+	}
 	fname := dir + "/" + name + ".md"
 
 	frontMatter := `---
-title: ` + strings.Join(append(path, cmd.Name()), " ") + `
+title: ` + cmd.Name() + `
 type: docs
 ---
 `
 
 	var tmp bytes.Buffer
 	cmd.SetOutput(&tmp)
-	cmd.Help()
+
+	if err := cmd.Help(); err != nil {
+		return err
+	}
 
 	logrus.Debugf("Creating file %s", fname)
-	f, err := os.OpenFile(fname, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0600)
+	f, err := os.OpenFile(fname, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 	if err != nil {
 		return err
 	}
@@ -158,7 +192,12 @@ type: docs
 
 	if cmd.HasAvailableSubCommands() {
 		for _, cc := range cmd.Commands() {
-			err := writeDocs(dst, append(path, cmd.Name()), cc)
+			subPath := path
+			if cmd.Name() != "milpa" {
+				subPath = append(path, cmd.Name()) //nolint:gocritic
+			}
+
+			err := writeDocs(dst, subPath, cc)
 			if err != nil {
 				return err
 			}
@@ -170,7 +209,7 @@ type: docs
 
 var generateDocumentationCommand *cobra.Command = &cobra.Command{
 	Use:               "__generate_documentation [DST]",
-	Short:             "Outputs markdownd documentation for all known commands",
+	Short:             "Outputs markdown documentation for all known commands",
 	Hidden:            true,
 	DisableAutoGenTag: true,
 	SilenceUsage:      true,
@@ -184,6 +223,61 @@ var generateDocumentationCommand *cobra.Command = &cobra.Command{
 			return err
 		}
 
+		return nil
+	},
+}
+
+var fetchCommand *cobra.Command = &cobra.Command{
+	Use:               "__fetch [dst] [src]",
+	Short:             "Fetches stuff using go-getter",
+	Hidden:            true,
+	DisableAutoGenTag: true,
+	SilenceUsage:      true,
+	Args:              cobra.MinimumNArgs(2),
+	RunE: func(cmd *cobra.Command, args []string) (err error) {
+		src := args[0]
+		dst := args[1]
+
+		fqurl, err := getter.Detect(src, os.Getenv("PWD"), getter.Detectors)
+		if err != nil {
+			logrus.Fatal(err)
+		}
+		logrus.Debugf("Detected uri: %s", fqurl)
+
+		uri, err := url.Parse(fqurl)
+		if err != nil {
+			logrus.Fatal(err)
+		}
+		scheme := uri.Scheme
+
+		if scheme == "file" {
+			logrus.Fatal("Refusing to copy local folder")
+		}
+
+		if uri.Opaque != "" && uri.Opaque[0] == ':' {
+			logrus.Debugf("Unwrapping uri: %s", uri.Opaque[1:])
+			uri2, err := url.Parse(uri.Opaque[1:])
+			if err != nil {
+				logrus.Fatal(err)
+			}
+
+			uri = uri2
+		}
+
+		folder := strings.ReplaceAll(uri.Host, ".", "-")
+		folder += "-"
+		folder += strings.ReplaceAll(strings.TrimSuffix(strings.TrimPrefix(uri.Path, "/"), "/.milpa"), "/", "-")
+		folder = strings.ReplaceAll(folder, "--", "-")
+		folder = strings.ReplaceAll(folder, ".git", "")
+
+		logrus.Debugf("Downloading %s to %s using %s", src, dst+"/"+folder, scheme)
+
+		err = getter.Get(dst+"/"+folder, src)
+		if err != nil {
+			return err
+		}
+		logrus.Debug("Download complete")
+		fmt.Print(dst + "/" + folder)
 		return nil
 	},
 }

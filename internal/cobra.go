@@ -99,9 +99,9 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 
 func RootCommand(commands []*Command, version string) (*cobra.Command, error) {
 	root := &cobra.Command{
-		Use:     os.Getenv("MILPA_NAME") + " [--silent|-v|--verbose] [--no-color] [-h|-help]",
-		Version: version,
-		Short:   os.Getenv("MILPA_NAME") + " runs commands from .milpa folders",
+		Use:         os.Getenv("MILPA_NAME") + " [--silent|-v|--verbose] [--no-color] [-h|-help] [--version]",
+		Annotations: map[string]string{"version": version},
+		Short:       os.Getenv("MILPA_NAME") + " runs commands from .milpa folders",
 		Long: `milpa runs commands from .milpa folders
 
 Milpa, is an agricultural method that combines multiple crops in close proximity. ﹅milpa﹅ is a Bash script and tool to care for one's own garden of scripts. You and your team write scripts and a little spec for each command. Use bash, or any other command, and ﹅milpa﹅ provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.`,
@@ -128,6 +128,14 @@ Milpa, is an agricultural method that combines multiple crops in close proximity
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
+				if ok, err := cmd.Flags().GetBool("version"); err == nil && ok {
+					vc, _, err := cmd.Root().Find([]string{versionCommand.Name()})
+
+					if err != nil {
+						return err
+					}
+					return vc.RunE(vc, []string{})
+				}
 				return NotFound{"No subcommand provided", []string{}}
 			}
 
@@ -135,19 +143,26 @@ Milpa, is an agricultural method that combines multiple crops in close proximity
 		},
 	}
 	root.PersistentFlags().AddFlagSet(RootFlagset())
+	root.Flags().Bool("version", false, "Display the version of milpa")
 
+	root.AddCommand(versionCommand)
 	root.AddCommand(completionCommand)
 	root.AddCommand(generateDocumentationCommand)
 	root.AddCommand(doctorForCommands(commands))
+	root.AddCommand(fetchCommand)
 	root.SetHelpCommand(HelpCommand)
 	HelpCommand.AddCommand(DocsCommand)
 	DocsCommand.SetHelpFunc(Docs.ShowHelp)
 	root.SetHelpFunc(Root.ShowHelp)
 
+	return root, populateRoot(root, commands)
+}
+
+func populateRoot(root *cobra.Command, commands []*Command) error {
 	for _, cmd := range commands {
 		leaf, err := cmd.ToCobra()
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		container := root
@@ -213,5 +228,5 @@ Milpa, is an agricultural method that combines multiple crops in close proximity
 		}
 	}
 
-	return root, nil
+	return nil
 }

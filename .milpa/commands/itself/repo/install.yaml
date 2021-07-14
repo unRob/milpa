@@ -1,0 +1,30 @@
+summary: Installs a milpa repo
+description: |
+  Fetches a milpa repo and installs it to any of three locations:
+
+  - The path specified by the `TARGET` argument, if provided,
+  - In the `$MILPA_ROOT` (by default, /usr/local/lib/milpa), if `--global` is specified, or
+  - In `$XDG_DATA_HOME/milpa` folder, if `--user` is specified.
+
+  Repos will be fetched from the `.milpa` subdirectory of `SOURCE`, which must be an URL as specified by [go-getter](https://github.com/hashicorp/go-getter#url-format). Basically, an https, git, hg, s3 or gcs URL.
+
+  ### Examples
+
+  - `github.com/unRob/milpa` would download the `.milpa` folder from the `unRob/milpa` github repo, using **http**, and prompting for credentials for private repos.
+  - `git::ssh://git@github.com/unRob/milpa.git//internal` would download the `internal/.milpa` folder from the `unRob/milpa` github repo using **ssh credentials**, useful for skipping credential prompts for private repos
+
+arguments:
+  - name: source
+    description: A go-getter URL to fetch the repo from.
+    required: true
+  - name: target
+    description: The path where to place the resulting `.milpa` folder in.
+options:
+  global:
+    short-name: g
+    type: bool
+    description: If specified, install the repo to $MILPA_ROOT
+  user:
+    short-name: u
+    type: bool
+    description: If specified, install the repo to ~/.local/share/milpa/repos
