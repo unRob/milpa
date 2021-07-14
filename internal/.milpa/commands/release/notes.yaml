@@ -1,0 +1,14 @@
+summary: Updates the CHANGELOG
+description: |
+  Updates CHANGELOG.md with release notes. If no `VERSION` is provided, or `VERSION` matches the pre-release semver spec, the latest commit will be used and appended to the "Upcoming" section.
+arguments:
+  - name: version
+    description: the version to generate release notes for
+    default: HEAD
+options:
+  output:
+    type: bool
+    description: return the generated notes for this release
+  skip-update:
+    type: bool
+    description: don't update the changelog

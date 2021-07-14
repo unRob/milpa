@@ -1,0 +1,12 @@
+summary: Lists installed repos
+description: |
+  Milpa can install repositories from remote locations at two different locations, depending on how it was instaled.
+
+    - In the `$MILPA_ROOT` (by default, /usr/local/lib/milpa)
+    - In `$XDG_DATA_HOME/milpa` folder
+
+  For more information on installing packages, see [`milpa itself repo install --help`](/.milpa/commands/itself/repo/install.md)
+options:
+  paths-only:
+    description: Only output the paths to repos with no decoration
+    type: bool

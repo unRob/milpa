@@ -1,0 +1,47 @@
+on:
+  push:
+    tags:
+      - "[1-9]+.[0-9]+.[0-9]+"
+name: Release
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.16.x
+
+      - name: Checkout source
+        uses: actions/checkout@v1
+
+      - name: Cache go modules
+        uses: actions/cache@v1
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.OS }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.OS }}-go-${{ env.cache-name }}-
+            ${{ runner.OS }}-go-
+
+      - name: Setup dependencies
+        run: |
+          curl -LO https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz
+          tar xf upx-3.96-amd64_linux.tar.xz
+          sudo mv upx-3.96-amd64_linux /usr/local/bin/upx
+
+      - name: create release
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          export MILPA_ROOT=$(pwd)
+          export MILPA_PATH=$(pwd)/internal
+
+          $(pwd)/milpa release build "${GITHUB_REF##*/}"
+          $(pwd)/milpa release deploy "${GITHUB_REF##*/}"
+
+      - name: update git pages
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages
+          folder: dist/milpa.dev

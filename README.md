@@ -1,11 +1,8 @@
----
-title: milpa docs
----
 # milpa
 
 "milpa", is an agricultural method that combines multiple crops in close proximity. [`milpa`](https://milpa.dev) is a Bash script and tool to care for one's own garden of scripts.
 
-You and your team write scripts and a little spec for each command. Use bash, or any other command, and `milpa` provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.
+You and your team throw scripts and a little spec for each command at a folder in your repo. Use bash, or any other command, and `milpa` provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.
 
 For those in the know, it makes following these [Command Line Interface Guidelines](https://clig.dev/) easier.
 
@@ -30,6 +27,8 @@ milpa itself create --help
 milpa help docs milpa
 # see what's making milpa sad
 milpa itself doctor
+# add new commands to milpa written by strangers on the internet!
+milpa itself repo install github.com/nidito/unRob
 ```
 
 ## Enough words, show me some code
@@ -44,4 +43,3 @@ Milpa is built with, and thanks to:
 
 - [bash](https://www.gnu.org/software/bash/)
 - [spf13/cobra](https://cobra.dev)
-

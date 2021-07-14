@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx.>
+# Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,23 +22,40 @@ if [[ ! -d "$MILPA_ROOT" ]]; then
   >&2 echo "MILPA_ROOT is not a directory!: $MILPA_ROOT"
   exit 78
 fi
-# MILPA_PATH contains all known milpa repositories
-# Repositories are folders that contain a .milpa directory within
-# set to MILPA_ROOT if empty, otherwise prepend $MILPA_ROOT:
-MILPA_PATH="${MILPA_PATH+$MILPA_ROOT:}${MILPA_PATH:-$MILPA_ROOT}"
-# if the current working dir contains a .milpa folder, add that to the path as well
-_pwd="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-[[ -d "$_pwd/.milpa" ]] && [[ ! "$MILPA_PATH" =~ :?$_pwd:? ]] && MILPA_PATH="$MILPA_PATH:$_pwd"
+
+if [[ "$MILPA_COMMAND_NAME" == "" ]]; then
+  # MILPA_PATH contains all known milpa repositories
+  # Repositories are folders that contain a .milpa directory within and will look for comands
+  # in the order directories appear there. Only run this loop on the parent
+  # If MILPA_PATH is set, it'll start its search there
+  _PATH="${MILPA_PATH//:/\/.milpa:}${MILPA_PATH+/.milpa}"
+  # then, we'll look at MILPA_ROOT/.milpa
+  _PATH="$_PATH:${MILPA_ROOT}/.milpa"
+  # if the current working dir contains a .milpa folder, search that next
+  _pwd="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+  [[ -d "$_pwd/.milpa" ]] && [[ ! "$_PATH" =~ :?$_pwd/.milpa:? ]] && _PATH="$_PATH:$_pwd/.milpa"
+  # from there, it'll look for user repos at $XDG_DATA_HOME/milpa/repos
+  # followed by global repos at ${MILPA_ROOT}/repos
+  MILPA_REPOS_USER="${XDG_DATA_HOME:-$HOME/.local/share}/milpa/repos"
+  MILPA_REPOS_GLOBAL="${MILPA_ROOT}/repos"
+  MILPA_REPOS="$(find "$MILPA_REPOS_USER" "$MILPA_REPOS_GLOBAL" -type d -maxdepth 1 -mindepth 1 -print)"
+  if [[ "$MILPA_REPOS" != "" ]]; then
+    nb=$'\n'
+    MILPA_PATH="$_PATH:${MILPA_REPOS//$nb/\/.milpa}"
+  else
+    MILPA_PATH="$_PATH"
+  fi
+  # bash is fine and all, but we need a little helper to run parsing for us
+  export MILPA_COMPA="${MILPA_COMPA:-$MILPA_ROOT/compa}"
+fi
 export MILPA_PATH
-# bash is fine and all, but we need a little helper to run parsing for us
-export MILPA_COMPA="${MILPA_COMPA:-$MILPA_ROOT/compa}"
+# create an array from this MILPA_PATH
+IFS=: read -ra MILPA_PATH_ARR <<<"$MILPA_PATH"
 
 # bail early if we're autocompleting
 [[ $1 == "__complete" ]] && exec "$MILPA_COMPA" "$@"
 
-# create an array from this MILPA_PATH
-IFS=: read -ra MILPA_PATH_ARR <<<"$MILPA_PATH"
-export MILPA_PATH_ARR
+
 
 function @milpa.load_util () {
   # shell scripts can call load_milpa_util to load utils within the $MILPA_PATH
@@ -51,8 +68,8 @@ function @milpa.load_util () {
       continue
     fi
 
-    for pkg in $MILPA_PATH_ARR ; do
-      util_path="${pkg}/.milpa/util/$util_name.sh"
+    for pkg in ${MILPA_PATH_ARR[*]} ; do
+      util_path="${pkg}/util/$util_name.sh"
       if [[ -f "$util_path" ]]; then
         set -o allexport
         # shellcheck disable=1090
@@ -86,7 +103,7 @@ trap 'rm -rf $compaOut $compaErr' ERR EXIT TERM
 
   if [[ "$exitCode" == 42 ]]; then
     # help requested
-    less -FIRX < "$compaOut"
+    less -FIRX < "$compaErr"
     rm -rf "$compaOut" "$compaErr"
     exit
   fi
@@ -98,7 +115,7 @@ trap 'rm -rf $compaOut $compaErr' ERR EXIT TERM
 }
 
 # load parsed arguments and MILPA_ environment variables
-eval "$(cat "$compaOut")" || _fail "Failed setting command environment"
+eval "$(cat "$compaOut")" || @milpa.fail "Failed setting command environment"
 
 [[ "${MILPA_VERBOSE:-$MILPA_OPT_VERBOSE}" == "true" ]] && export MILPA_VERBOSE="true"
 [[ "$DEBUG" == 1 ]] && @milpa.log debug "milpa-helper output: $(cat "$compaErr")"
@@ -122,5 +139,5 @@ case "$MILPA_COMMAND_KIND" in
     source "$MILPA_COMMAND_PATH";;
   *)
     @milpa.log warning "Unsure how to run $MILPA_COMMAND_NAME. Found $MILPA_COMMAND_PATH, but it is neither a .sh file nor executable"
-    _fail "Unable to continue running sub-command."
+    @milpa.fail "Unable to continue running sub-command."
 esac

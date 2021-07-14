@@ -1,0 +1,50 @@
+{{- if .NotesByType.note -}}
+### 🧑🏽‍🌾 Notes
+
+{{range .NotesByType.note -}}
+- {{ template "note" .}}
+{{ end -}}
+{{- end -}}
+
+{{- if .NotesByType.deprecation -}}
+### 🍂 Deprecations
+
+{{range .NotesByType.deprecation -}}
+- {{ template "note" .}}
+{{ end -}}
+{{- end -}}
+
+{{- if index .NotesByType "breaking-change" -}}
+### ✂️ Breaking Changes
+
+{{range index .NotesByType "breaking-change" -}}
+- {{ template "note" .}}
+{{ end -}}
+{{- end -}}
+
+{{- $features := combineTypes .NotesByType.feature -}}
+{{- if $features }}
+### 🌱 Features
+
+{{range $features | sort -}}
+- {{ template "note" . }}
+{{ end -}}
+{{- end -}}
+
+{{- $improvements := combineTypes .NotesByType.improvement .NotesByType.enhancement -}}
+{{- if $improvements }}
+### 🌺 Improvements
+
+{{range $improvements | sort -}}
+- {{ template "note" . }}
+{{ end -}}
+{{- end -}}
+
+{{- if .NotesByType.bug }}
+### 💦 Bug fixes
+
+{{range .NotesByType.bug -}}
+- {{ template "note" . }}
+{{ end -}}
+{{- end }}
+---

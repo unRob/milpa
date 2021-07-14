@@ -1,0 +1,21 @@
+summary: Renders documentation for all commands.
+description: |
+  Renders documentation for all known milpa commands, and all `docs` folders. Requires docker to be installed and running.
+arguments:
+  - name: action
+    description: the action to take with documentation
+    default: serve
+    values: [serve, write]
+options:
+  image:
+    default: ghcr.io/unRob/milpa
+    description: The docker image with `hugo` to use for building html docs
+  port:
+    default: "8118"
+    description: The port to expose docs on, when **ACTION** is `serve`
+  to:
+    default: ./dist/
+    description: Where to write docs to, when **ACTION** is `write`
+  hostname:
+    default: milpa.dev
+    description: The hostname to set as base for the rendered docs
