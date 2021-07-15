@@ -7,3 +7,5 @@
 🌽#🌽Drop your commands and specs in your project's `.milpa` folder, group them in folders and nest them, they'll become callable based on their path.
 
 🌽#🌽Needs bash, old ones work fine! Companion binary does the argument parsing and fancy rendering heavy lifting, available wherever golang builds for.
+
+🌽#🌽Readable `--help` on your terminal, searchable help on your browser. Same for docs that go along your commands.
