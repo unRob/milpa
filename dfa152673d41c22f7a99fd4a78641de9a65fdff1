@@ -3,3 +3,5 @@
 🌽#🌽Command line argument, flag autocomplete for your commands on bash, zsh and fish. Completions can come from other commands.
 
 🌽#🌽Don't wanna write stuff over and over again? `milpa itself repo install` will come in handy to install remote milpa repos.
+
+🌽#🌽Drop your commands and specs in your project's `.milpa` folder, group them in folders and nest them, they'll become callable based on their path.
