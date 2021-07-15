@@ -1,3 +1,5 @@
 🌽#🌽Argument and flag run-time validation, so your command can focus on using them.
 
 🌽#🌽Command line argument, flag autocomplete for your commands on bash, zsh and fish. Completions can come from other commands.
+
+🌽#🌽Don't wanna write stuff over and over again? `milpa itself repo install` will come in handy to install remote milpa repos.
