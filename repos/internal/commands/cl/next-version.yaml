@@ -1,0 +1,6 @@
+summary: Returns the semver increment given upcoming entries in the changelog
+description: |
+  Basically:
+    - **major**: if a breaking-change entry is found
+    - **minor**: if a feature or improvement is found
+    - **patch**: for everything else

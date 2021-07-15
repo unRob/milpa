@@ -19,11 +19,12 @@ export MILPA_VERSION="$MILPA_ARG_VERSION"
 
 output="${MILPA_OPT_OUTPUT:-$MILPA_ROOT/dist}"
 
+# build packages
 RELEASE_TARGET="$output" make -j"$cores" "$output/packages" || @milpa.fail "Could not complete release build"
 @milpa.log success "Build complete"
 
+# create docs
 milpa release docs-image --skip-publish "$MILPA_VERSION" || @milpa.fail "Could not build docs image"
-
 @milpa.log info "Generating html docs"
 MILPA_PATH="$MILPA_ROOT/.milpa" milpa itself docs html write \
   --to "$output" \

@@ -189,12 +189,14 @@ func (arg *Argument) ToDesc() string {
 func recurse(name string, subcommand string, timeout time.Duration) ([]string, error) {
 	logrus.Debugf("executing sub command %s", subcommand)
 	ctx, cancel := context.WithTimeout(context.Background(), timeout*time.Second)
-	defer cancel()                                                              // The cancel should be deferred so resources are cleaned up
+	defer cancel() // The cancel should be deferred so resources are cleaned up
+
 	cmd := exec.CommandContext(ctx, "milpa", strings.Split(subcommand, " ")...) // #nosec G204
 	var stdout bytes.Buffer
 	cmd.Stdout = &stdout
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
+	cmd.Env = os.Environ()
 	err := cmd.Run()
 
 	if ctx.Err() == context.DeadlineExceeded {

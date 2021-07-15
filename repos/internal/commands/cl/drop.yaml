@@ -1,0 +1,17 @@
+summary: Removes all changelog entries from REF
+description: |
+  What the summary said
+arguments:
+  - name: ref
+    description: The git ref to remove entries from
+    default: HEAD
+options:
+  kind:
+    description: If specified, the kind of entry to drop
+    values:
+      - breaking-change
+      - bug
+      - deprecation
+      - feature
+      - improvement
+      - note

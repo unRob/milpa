@@ -18,7 +18,7 @@ arguments:
     description: A go-getter URL to fetch the repo from.
     required: true
   - name: target
-    description: The path where to place the resulting `.milpa` folder in.
+    description: The path where to place the resulting `.milpa` folder in
 options:
   global:
     short-name: g

@@ -23,14 +23,15 @@ if [[ ! -d "$MILPA_ROOT" ]]; then
   exit 78
 fi
 
-if [[ "$MILPA_COMMAND_NAME" == "" ]]; then
+# ignore some stuff if being called from within a command
+if [[ "$MILPA_PATH_PARSED" == "" ]]; then
   # MILPA_PATH contains all known milpa repositories
   # Repositories are folders that contain a .milpa directory within and will look for comands
   # in the order directories appear there. Only run this loop on the parent
   # If MILPA_PATH is set, it'll start its search there
-  _PATH="${MILPA_PATH//:/\/.milpa:}${MILPA_PATH+/.milpa}"
+  _PATH="${MILPA_PATH//:/\/.milpa:}${MILPA_PATH:+/.milpa}"
   # then, we'll look at MILPA_ROOT/.milpa
-  _PATH="$_PATH:${MILPA_ROOT}/.milpa"
+  _PATH="${_PATH}${_PATH:+:}${MILPA_ROOT}/.milpa"
   # if the current working dir contains a .milpa folder, search that next
   _pwd="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
   [[ -d "$_pwd/.milpa" ]] && [[ ! "$_PATH" =~ :?$_pwd/.milpa:? ]] && _PATH="$_PATH:$_pwd/.milpa"
@@ -38,7 +39,7 @@ if [[ "$MILPA_COMMAND_NAME" == "" ]]; then
   # followed by global repos at ${MILPA_ROOT}/repos
   MILPA_REPOS_USER="${XDG_DATA_HOME:-$HOME/.local/share}/milpa/repos"
   MILPA_REPOS_GLOBAL="${MILPA_ROOT}/repos"
-  MILPA_REPOS="$(find "$MILPA_REPOS_USER" "$MILPA_REPOS_GLOBAL" -type d -maxdepth 1 -mindepth 1 -print)"
+  MILPA_REPOS="$(find "$MILPA_REPOS_USER" "$MILPA_REPOS_GLOBAL" -maxdepth 1 -mindepth 1 -type d -print)"
   if [[ "$MILPA_REPOS" != "" ]]; then
     nb=$'\n'
     MILPA_PATH="$_PATH:${MILPA_REPOS//$nb/\/.milpa}"
@@ -47,7 +48,9 @@ if [[ "$MILPA_COMMAND_NAME" == "" ]]; then
   fi
   # bash is fine and all, but we need a little helper to run parsing for us
   export MILPA_COMPA="${MILPA_COMPA:-$MILPA_ROOT/compa}"
+  export MILPA_PATH_PARSED=1
 fi
+
 export MILPA_PATH
 # create an array from this MILPA_PATH
 IFS=: read -ra MILPA_PATH_ARR <<<"$MILPA_PATH"
@@ -90,24 +93,31 @@ function @milpa.load_util () {
 
 @milpa.load_util log
 function @milpa.fail () {
+  # print an error, then exit
   @milpa.log error "$*"
   exit 2
 }
 
+# create some files pipes for compa
 compaOut=$(mktemp -t "compaOut.XXX")
 compaErr=$(mktemp -t "compaErr.XXX")
 trap 'rm -rf $compaOut $compaErr' ERR EXIT TERM
 
+# figure out what the user is asking for
 "$MILPA_COMPA" "$@" >"$compaOut" 2>"$compaErr" || {
   exitCode=$?
 
+  # provide answers to life, the universe and everything
   if [[ "$exitCode" == 42 ]]; then
-    # help requested
+    # render help
     less -FIRX < "$compaErr"
     rm -rf "$compaOut" "$compaErr"
+    # compa exits with 42 when the user asked for help explicitly
+    # but asking for help shouldn't be an error, so we exit cleanly
     exit
   fi
 
+  # otherwise, something else happened
   cat "$compaOut"
   cat "$compaErr"
   rm -rf "$compaOut" "$compaErr"
@@ -115,15 +125,28 @@ trap 'rm -rf $compaOut $compaErr' ERR EXIT TERM
 }
 
 # load parsed arguments and MILPA_ environment variables
+set -o allexport
 eval "$(cat "$compaOut")" || @milpa.fail "Failed setting command environment"
+set +o allexport
+[[ -z "$MILPA_COMMAND_KIND" ]] && {
+  @milpa.log info "lookup stderr: $(cat "$compaErr")"
+  @milpa.log info "lookup stdout: $(cat "$compaOut")"
+  @milpa.log info "milpa environment:"
+  env | grep ^MILPA | sort | @milpa.log info
+  @milpa.fail "Command lookup exited cleanly, but no command provided for execution"
+}
 
+# normalize verbose flag
 [[ "${MILPA_VERBOSE:-$MILPA_OPT_VERBOSE}" == "true" ]] && export MILPA_VERBOSE="true"
-[[ "$DEBUG" == 1 ]] && @milpa.log debug "milpa-helper output: $(cat "$compaErr")"
+# print debugging output if requested
+[[ "$DEBUG" == 1 ]] && @milpa.log debug "lookup output: $(cat "$compaErr")"
 @milpa.log debug "running <$MILPA_COMMAND_NAME from> <$MILPA_COMMAND_PATH> with arguments <${*}>"
 @milpa.log debug "milpa environment:"$'\n'"$(env | grep ^MILPA | sort)"
 
+# thanks compa, good bye
 rm -rf "$compaOut" "$compaErr"
 
+# Run hooks if available
 if [[ -f "$MILPA_COMMAND_REPO/.milpa/hooks/before-run.sh" ]]; then
   set -o allexport
   # shellcheck disable=1091 source=/dev/null
@@ -131,6 +154,7 @@ if [[ -f "$MILPA_COMMAND_REPO/.milpa/hooks/before-run.sh" ]]; then
   set +o allexport
 fi
 
+# Run the subcommand
 case "$MILPA_COMMAND_KIND" in
   exec)
     exec "$MILPA_COMMAND_PATH" "$@" ;;
@@ -138,6 +162,5 @@ case "$MILPA_COMMAND_KIND" in
     # shellcheck disable=1090
     source "$MILPA_COMMAND_PATH";;
   *)
-    @milpa.log warning "Unsure how to run $MILPA_COMMAND_NAME. Found $MILPA_COMMAND_PATH, but it is neither a .sh file nor executable"
-    @milpa.fail "Unable to continue running sub-command."
+    @milpa.fail "Unable to continue running subcommand, unexpected kind <${MILPA_COMMAND_KIND}>."
 esac

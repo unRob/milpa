@@ -29,7 +29,7 @@ endif
 
 setup: setup-golang
 	$(info Configuring git hooks)
-	git config core.hooksPath $(shell git rev-parse --show-toplevel)/bin/hooks
+	git config core.hooksPath $(shell git rev-parse --show-toplevel)/internal/bin/hooks
 	$(info Installing dev go packages)
 	go get -u gotest.tools/gotestsum
 	go get -u github.com/hashicorp/go-getter/cmd/go-getter
@@ -41,7 +41,7 @@ test:
 
 lint:
 	golangci-lint run
-	shellcheck milpa bootstrap.sh .milpa/**/*.sh internal/.milpa/**/*.sh
+	shellcheck milpa bootstrap.sh .milpa/**/*.sh repos/internal/**/*.sh
 
 compa: compa.go go.mod go.sum internal/*
 	go build -ldflags "-s -w -X main.version=${MILPA_VERSION}" -o compa
