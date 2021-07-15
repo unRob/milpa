@@ -166,7 +166,7 @@ func (cmd *Command) CreateFlagSet() error {
 			opt.Type = ValueTypeString
 			def := ""
 			if opt.Default != nil {
-				def = opt.Default.(string)
+				def = fmt.Sprintf("%s", opt.Default)
 			}
 			fs.String(name, def, opt.Description)
 		default:

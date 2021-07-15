@@ -1,0 +1,21 @@
+summary: Creates/updates a changelog
+description: |
+  Creates a changelog entry. If no MESSAGE is provided, it will be read from stdin.
+arguments:
+  - name: kind
+    description: The kind of entry to create
+    values:
+      - breaking-change
+      - bug
+      - deprecation
+      - feature
+      - improvement
+      - note
+    required: true
+  - name: message
+    variadic: true
+    description: The message to add to this entry
+options:
+  ref:
+    description: The git ref to add this changelog entry to
+    default: HEAD

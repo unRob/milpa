@@ -12,10 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-function @milpa.repo.current_path () {
-  repo_path="$(pwd)"
-  while [[ ! -d "$repo_path/.milpa" ]]; do
-    repo_path=$(dirname "$repo_path")
-  done
-  echo "$repo_path"
-}
+entry="${MILPA_ARG_MESSAGE[*]}"
+if [[ "$entry" == "" || "$entry" == "-" ]]; then
+  if [[ -t 1 ]]; then
+    read -r -p "Enter the message for this <$MILPA_ARG_KIND>: " entry
+  else
+    entry=$(cat)
+  fi
+fi
+
+if [[ "$entry" == "" ]]; then
+  @milpa.fail "No entry message supplied"
+fi
+
+printf '🌽#🌽%s' "$entry" |
+  git notes --ref "changelog/$MILPA_ARG_KIND" \
+    append --file - "$MILPA_OPT_REF" ||
+      @milpa.fail "Could not add git note to $MILPA_OPT_REF"

@@ -12,10 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-function @milpa.repo.current_path () {
-  repo_path="$(pwd)"
-  while [[ ! -d "$repo_path/.milpa" ]]; do
-    repo_path=$(dirname "$repo_path")
-  done
-  echo "$repo_path"
-}
+set -e errexit
+#shellcheck disable=2155
+export MILPA_ROOT=$(pwd)
+
+make test
+make lint
+"$MILPA_ROOT/milpa" itself doctor
+"$MILPA_ROOT/milpa" cl update >/dev/null 2>&1
+
+if [[ -n "$(git status --porcelain CHANGELOG.md)" ]]; then
+  echo "Changelog updated, adding to commit"
+  git add "$MILPA_ROOT/CHANGELOG.md"
+fi

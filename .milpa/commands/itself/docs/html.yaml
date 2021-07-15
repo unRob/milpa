@@ -1,4 +1,4 @@
-summary: Renders documentation for all commands.
+summary: Renders or displays HTML documentation for all commands
 description: |
   Renders documentation for all known milpa commands, and all `docs` folders. Requires docker to be installed and running.
 arguments:

@@ -8,9 +8,14 @@
 make setup
 ```
 
+Remember to add notes to the changelog if making user-facing changes!
+
+```sh
+milpa cl add [breaking-change|bug|deprecation|feature|improvement|note] MESSAGE
+```
+
 ## Releasing
 
 ```sh
-export MILPA_PATH="$(pwd)/internal"
-milpa release create [major|minor|patch] [--pre [alpha|beta|rc]]
+milpa release create [--pre [alpha|beta|rc]]
 ```

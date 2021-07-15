@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-      - "[1-9]+.[0-9]+.[0-9]+"
+      - "[1-9]+.[0-9]+.[0-9]+*"
 name: Release
 jobs:
   release:
@@ -31,17 +31,36 @@ jobs:
           sudo mv upx-3.96-amd64_linux /usr/local/bin/upx
 
       - name: create release
+        id: build
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          version="${GITHUB_REF##*/}"
           export MILPA_ROOT=$(pwd)
-          export MILPA_PATH=$(pwd)/internal
+          $(pwd)/milpa release docs-image --docker-login "unrob:GITHUB_TOKEN" "$version"
 
-          $(pwd)/milpa release build "${GITHUB_REF##*/}"
-          $(pwd)/milpa release deploy "${GITHUB_REF##*/}"
+          prerelease = "false"
+          [[ "$GITHUB_REF" == *-* ]] && prerelease="true"
+          echo "::set-output name=prerelease::$prerelease"
+          $(pwd)/milpa release build "${version}"
+          $(pwd)/milpa cl show "${version}" >> release-notes.txt
 
-      - name: update git pages
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          body_path: ${{ github.workflow }}/release-notes.txt
+          files: |
+            dist/packages/*.tgz
+            dist/packages/*.shasum
+          prerelease: ${{ steps.build.outputs.prerelease }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: unRob/milpa
+
+      - name: update github pages
         uses: JamesIves/github-pages-deploy-action@4.1.4
+        if: ${{ steps.build.outputs.prerelease == "false" }}
         with:
           branch: gh-pages
           folder: dist/milpa.dev

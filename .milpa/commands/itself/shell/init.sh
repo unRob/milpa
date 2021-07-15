@@ -14,7 +14,7 @@
 
 @milpa.load_util shell
 
-IFS=':' read -r -a args <<< "${MILPA_PATH//:/\/.milpa/hooks:}/.milpa/hooks"
+IFS=':' read -r -a args <<< "${MILPA_PATH//:/\/hooks:}/hooks"
 @milpa.log debug "looking for env files in ${args[*]}"
 args+=( -name "shell-init" -o -name "shell-init.sh" )
 find "${args[@]}" 2>/dev/null | while read -r env_file; do
