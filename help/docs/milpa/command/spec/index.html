@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#"><head lang="en">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en" />
+  <meta property="og:title" content="" />
+  <meta property="og:description" content="" />
+  <title>milpa  help docs milpa command spec </title>
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/index.css"/>
+  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/command/spec/">
+</head>
+<body><header role="banner">
+  <h1 lang="es" ><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1>
+  <input
+    list="milpa-commands"
+    placeholder="type a milpa command"
+    type="text"
+    aria-label="milpa command selector"
+    id="command-selector"
+    tabindex="2"
+    value="help docs milpa command spec" />
+  <datalist id="milpa-commands">
+    
+    <option value="help" />
+
+
+<option value="help docs" />
+
+
+<option value="help docs milpa" />
+
+
+<option value="help docs milpa quick-guide" />
+
+
+
+<option value="help docs milpa environment" />
+
+
+
+<option value="help docs milpa repo" />
+
+
+<option value="help docs milpa repo docs" />
+
+
+
+<option value="help docs milpa repo hooks" />
+
+
+
+
+
+
+<option value="help docs milpa command" />
+
+
+<option value="help docs milpa command spec" />
+
+
+
+
+
+
+<option value="help docs milpa alternatives" />
+
+
+
+<option value="help docs milpa changelog" />
+
+
+
+
+
+
+
+
+
+
+
+    
+    <option value="itself" />
+
+
+<option value="itself create" />
+
+
+
+<option value="itself docs" />
+
+
+<option value="itself docs create" />
+
+
+
+<option value="itself docs html" />
+
+
+
+
+
+
+<option value="itself doctor" />
+
+
+
+<option value="itself repo" />
+
+
+<option value="itself repo install" />
+
+
+
+<option value="itself repo list" />
+
+
+
+<option value="itself repo uninstall" />
+
+
+
+
+
+
+<option value="itself shell" />
+
+
+<option value="itself shell init" />
+
+
+
+<option value="itself shell install-autocomplete" />
+
+
+
+
+
+
+<option value="itself version" />
+
+
+
+
+
+    
+  </datalist>
+  <a id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
+</header>
+
+
+<div id="wrapper"><div id="sidebar">
+  <nav id="table-of-contents" aria-hidden="true">
+    <span class="heading" id="table-of-contents-header">In this page</span>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#example">Example</a></li>
+  </ul>
+</nav>
+  </nav>
+  <nav id="commands" aria-label="List of available commands">
+    <span class="heading" id="commands-header" aria-hidden="true">Commands</span>
+    
+    <ul>
+    
+<li>
+  <a href="https://milpa.dev/help/" aria-haspopup="tree">help</a>
+
+<ul
+  class="sub-menu"
+  aria-hidden="true"
+  aria-expanded="false"
+  aria-label="help subcommands"
+>
+  
+  
+<li>
+  <a href="https://milpa.dev/help/docs/" aria-haspopup="tree">docs</a>
+
+<ul
+  class="sub-menu"
+  aria-hidden="true"
+  aria-expanded="false"
+  aria-label="docs subcommands"
+>
+  
+  
+<li>
+  <a href="https://milpa.dev/help/docs/milpa/" aria-haspopup="tree">milpa</a>
+
+<ul
+  class="sub-menu"
+  aria-hidden="true"
+  aria-expanded="false"
+  aria-label="milpa subcommands"
+>
+  
+  
+<li>
+  <a href="https://milpa.dev/help/docs/milpa/quick-guide/" >quick-guide</a>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/help/docs/milpa/environment/" >environment</a>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/help/docs/milpa/repo/" aria-haspopup="tree">repo</a>
+
+<ul
+  class="sub-menu"
+  aria-hidden="true"
+  aria-expanded="false"
+  aria-label="repo subcommands"
+>
+  
+  
+<li>
+  <a href="https://milpa.dev/help/docs/milpa/repo/docs/" >docs</a>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/help/docs/milpa/repo/hooks/" >hooks</a>
+
+
+  
+</ul>
+</li>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/help/docs/milpa/command/" aria-haspopup="tree">command</a>
+
+<ul
+  class="sub-menu"
+  aria-hidden="true"
+  aria-expanded="false"
+  aria-label="command subcommands"
+>
+  
+  
+<li>
+  <a href="https://milpa.dev/help/docs/milpa/command/spec/" >spec</a>
+
+
+  
+</ul>
+</li>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/help/docs/milpa/alternatives/" >alternatives</a>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/help/docs/milpa/changelog/" >changelog</a>
+
+
+  
+</ul>
+</li>
+
+
+  
+</ul>
+</li>
+
+
+  
+</ul>
+</li>
+
+
+    
+<li>
+  <a href="https://milpa.dev/itself/" aria-haspopup="tree">itself</a>
+
+<ul
+  class="sub-menu"
+  aria-hidden="true"
+  aria-expanded="false"
+  aria-label="itself subcommands"
+>
+  
+  
+<li>
+  <a href="https://milpa.dev/itself/create/" >create</a>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/itself/docs/" aria-haspopup="tree">docs</a>
+
+<ul
+  class="sub-menu"
+  aria-hidden="true"
+  aria-expanded="false"
+  aria-label="docs subcommands"
+>
+  
+  
+<li>
+  <a href="https://milpa.dev/itself/docs/create/" >create</a>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/itself/docs/html/" >html</a>
+
+
+  
+</ul>
+</li>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/itself/doctor/" >doctor</a>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/itself/repo/" aria-haspopup="tree">repo</a>
+
+<ul
+  class="sub-menu"
+  aria-hidden="true"
+  aria-expanded="false"
+  aria-label="repo subcommands"
+>
+  
+  
+<li>
+  <a href="https://milpa.dev/itself/repo/install/" >install</a>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/itself/repo/list/" >list</a>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/itself/repo/uninstall/" >uninstall</a>
+
+
+  
+</ul>
+</li>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/itself/shell/" aria-haspopup="tree">shell</a>
+
+<ul
+  class="sub-menu"
+  aria-hidden="true"
+  aria-expanded="false"
+  aria-label="shell subcommands"
+>
+  
+  
+<li>
+  <a href="https://milpa.dev/itself/shell/init/" >init</a>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/itself/shell/install-autocomplete/" >install-autocomplete</a>
+
+
+  
+</ul>
+</li>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/itself/version/" >version</a>
+
+
+  
+</ul>
+</li>
+
+
+    </ul>
+  </nav>
+</div>
+
+
+<main id="content" tabindex="3">
+<h1 id="command-name-header" class="sr-only">milpa help docs milpa command spec</h1>
+<p>Command specs go along with your scripts and help inform <code>milpa</code> of what its input should look like. Based on it, <code>milpa</code> will produce help pages and autocompletions, and may validate the arguments to your command.</p>
+<p>Specs must be written in YAML, have a <code>yaml</code> extension, and be named exactly like your command (minus the extension, if any). For example, given a command at <code>.milpa/commands/my-command.sh</code> the corresponding spec file would be <code>.milpa/commands/my-command.yaml</code>.</p>
+<h2 class="content-header" id="example">Example <a aria-hidden="true" class="heading-anchor" href="#example">#</a></h2>
+<p>If we wanted to have a command written in bash at <code>milpa release</code>, we&rsquo;ll need to create file at <code>.milpa/commands/release.sh</code> and its corresponding spec at <code>.milpa/commands/release.yaml</code>. Let&rsquo;s take a look at what such a spec might look like:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#177500"># a summary is required. It shows up during autocomplete and command listings</span>
+<span style="color:#000">summary</span>: <span style="color:#1c01ce">Create a github release</span>
+<span style="color:#177500"># a description is required as well. Add a longer description of how your command does its magic here</span>
+<span style="color:#000">description</span>: |<span style="color:#c41a16">
+</span><span style="color:#c41a16">  This command shows you a changelog and waits for approval before generating and pushing a new tag, creating a github release, and opening the browser at the new release.
+</span><span style="color:#c41a16">
+</span><span style="color:#c41a16">  ## Schemes
+</span><span style="color:#c41a16">
+</span><span style="color:#c41a16">  You may choose between [semver](https://semver.org) and [calver](https://calver.org). Their composition is as follows:
+</span><span style="color:#c41a16">
+</span><span style="color:#c41a16">  - **semver**: `{major}.{minor}.{patch}`, i.e. `3.14.1592`
+</span><span style="color:#c41a16">  - **calver**: `{date}.{minor}.{micro}`, where date is derived from the `prefix` option; for example `16.18.339`.</span>  
+
+<span style="color:#177500"># arguments is an ordered list of to arguments expected by your command</span>
+<span style="color:#000">arguments</span>:
+  <span style="color:#177500"># each argument gets a name, your script will find these in the environment</span>
+  <span style="color:#177500"># so in this example, increment becomes $MILPA_ARG_INCREMENT</span>
+  <span style="color:#177500"># but it&#39;s also available as the first argument (i.e. `$1` in bash)</span>
+  <span style="color:#177500"># `!$\/%^@#?:&#39;&#34;` are all disallowed characters in argument names.</span>
+  - <span style="color:#000">name</span>: <span style="color:#1c01ce">increment</span>
+    <span style="color:#177500"># arguments require a description</span>
+    <span style="color:#000">descrption</span>: <span style="color:#1c01ce">the increment to apply to the last git version</span>
+    <span style="color:#177500"># arguments can be validated to be part of a static set of values</span>
+    <span style="color:#000">values</span>: [<span style="color:#1c01ce">micro, patch, minor, major]</span>
+    <span style="color:#177500"># commands may request values for validation dynamically by reading the</span>
+    <span style="color:#177500"># lines printed by running another milpa subcommand.</span>
+    <span style="color:#177500"># arguments may have `values` or `values-subcommand`, but not both.</span>
+    <span style="color:#000">values-subcommand</span>: <span style="color:#1c01ce">scm versions</span>
+    <span style="color:#177500"># arguments can have a default</span>
+    <span style="color:#000">default</span>: <span style="color:#1c01ce">patch</span>
+    <span style="color:#177500"># or be required, but not have a default and be required at the same time.</span>
+    <span style="color:#000">required</span>: <span style="color:#a90d91">true</span>
+    <span style="color:#177500"># arguments may be variadic, that is, be all the arguments passed by the user</span>
+    <span style="color:#177500"># starting at the position of this argument forwards, in this case, since</span>
+    <span style="color:#177500"># there&#39;s only one argument, it would mean all arguments after the command name</span>
+    <span style="color:#177500"># (not including options)</span>
+    <span style="color:#000">variadic</span>: <span style="color:#a90d91">true</span>
+
+<span style="color:#177500"># options, also known as flags, are specified as a map</span>
+<span style="color:#000">options</span>:
+  <span style="color:#177500"># this sets the --scheme option</span>
+  <span style="color:#177500"># it will be available to your script as the $MILPA_OPT_SCHEME environment variable</span>
+  <span style="color:#177500"># your users will be able to use `--scheme &#34;semver&#34;` or `--scheme=semver` for example</span>
+  <span style="color:#000">scheme</span>:
+    <span style="color:#177500"># options require a description</span>
+    <span style="color:#000">description</span>: <span style="color:#1c01ce">Determines the format of the tags for this repo.</span>
+    <span style="color:#177500"># Sometimes, very commonly used flags might benefit from setting a short name</span>
+    <span style="color:#177500"># in this case, users would be able to use `-s calver`</span>
+    <span style="color:#000">short-name</span>: <span style="color:#1c01ce">s</span>
+    <span style="color:#177500"># options can also be validated against a set of values</span>
+    <span style="color:#000">values</span>: [<span style="color:#1c01ce">semver, calver]</span>
+    <span style="color:#177500"># and they may have defaults</span>
+    <span style="color:#000">default</span>: <span style="color:#1c01ce">semver</span>
+    <span style="color:#177500"># or be required, but not have a default and be required at the same time.</span>
+    <span style="color:#000">required</span>: <span style="color:#a90d91">true</span>
+  <span style="color:#000">prefix</span>: <span style="color:#177500"># becomes MILPA_OPT_PREFIX</span>
+    <span style="color:#000">description</span>: |<span style="color:#c41a16">
+</span><span style="color:#c41a16">      </span>      <span style="color:#1c01ce">An optional prefix to prepend to release identifiers. If `calver` is chosen as `scheme`, you may specify a combination of `YY`, `YYYY`, `MM`, and `DD` to be replaced with the corresponding values of the local date. The default in that case is `YY`.</span>
+    <span style="color:#177500"># if desired, defaults can be set to empty strings to be explicit</span>
+    <span style="color:#000">default</span>: <span style="color:#c41a16">&#34;&#34;</span>
+  <span style="color:#000">ask</span>: <span style="color:#177500"># becomes MILPA_OPT_ASK</span>
+    <span style="color:#000">description</span>: <span style="color:#1c01ce">Prompt for confirmation before creating a github release</span>
+    <span style="color:#177500"># flags can be boolean. Since environment variables can only be strings,</span>
+    <span style="color:#177500"># these false values (or defaults) will be set as an empty string, while</span>
+    <span style="color:#177500"># true values will be set as &#34;true&#34;</span>
+    <span style="color:#000">type</span>: <span style="color:#1c01ce">bool</span>
+    <span style="color:#000">default</span>: <span style="color:#a90d91">false</span>
+
+<span style="color:#177500"># you may specify related commands, help topics, and websites that are related to this command</span>
+<span style="color:#177500"># these will be suggested to the user on help screens</span>
+<span style="color:#000">see-also</span>:
+  <span style="color:#177500"># the user will be suggested to look at `milpa help scm versions`</span>
+  - <span style="color:#1c01ce">scm versions</span>
+  <span style="color:#177500"># the user will be suggested to look at `milpa help docs sdlc releasing`</span>
+  - <span style="color:#1c01ce">help docs sdlc releasing</span>
+  - <span style="color:#1c01ce">https://docs.github.com/en/rest/reference/repos#create-a-release</span>
+  - <span style="color:#1c01ce">https://semver.org/</span>
+</code></pre></div>
+
+    </main>
+    </div><script src="/js/index.js"></script>
+</body>
+</html>
