@@ -38,8 +38,10 @@ type Command struct {
 }
 
 var Root *Command = &Command{
-	Summary:     "Runs commands found in .milpa folders",
-	Description: `Milpa, is an agricultural method that combines multiple crops in close proximity. ﹅milpa﹅ is a Bash script and tool to care for one's own garden of scripts. You and your team write scripts and a little spec for each command. Use bash, or any other command, and ﹅milpa﹅ provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.`,
+	Summary: "Runs commands found in .milpa folders",
+	Description: `Milpa, is an agricultural method that combines multiple crops in close proximity. ﹅milpa﹅ is a Bash script and tool to care for one's own garden of scripts. You and your team write scripts and a little spec for each command. Use bash, or any other language, and ﹅milpa﹅ provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.
+
+  See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more information about ﹅milpa﹅`,
 	Meta: Meta{
 		Path: os.Getenv("MILPA_ROOT") + "/milpa",
 		Name: []string{os.Getenv("MILPA_NAME")},

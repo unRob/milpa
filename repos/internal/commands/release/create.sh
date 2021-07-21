@@ -48,6 +48,11 @@ if [[ "$MILPA_OPT_PRE" ]]; then
 fi
 
 @milpa.log info "Creating release with version $(@milpa.fmt inverted "$next")"
+read -r -p "Enter 'y' to continue: " -n 1
+echo
+[[ ! $REPLY =~ ^[Yy]$ ]] && @milpa.fail "Refusing to continue, expected 'y', got <$REPLY>"
+@milpa.log success "Continuing with release"
+
 
 if [[ ! "$MILPA_OPT_PRE" ]]; then
   # mainline releases need updated changelogs

@@ -107,3 +107,82 @@ func FindAllSubCommands(returnOnError bool) (cmds []*Command, err error) {
 
 	return
 }
+
+func findAllDocs() ([]string, error) {
+	results := []string{}
+	if len(MilpaPath) == 0 {
+		return results, fmt.Errorf("no MILPA_PATH set on the environment")
+	}
+
+	logrus.Debugf("looking for all docs in %s", MilpaPath)
+
+	for _, path := range MilpaPath {
+		q := path + "/docs/**/*.md"
+
+		logrus.Debugf("looking for all docs matching %s", q)
+		basepath, pattern := doublestar.SplitPattern(q)
+		fsys := os.DirFS(basepath)
+		docs, err := doublestar.Glob(fsys, pattern)
+		if err != nil {
+			logrus.Debugf("errored looking for all docs matching %s: %s", q, err)
+			return results, err
+		}
+
+		logrus.Debugf("found %d docs matching %s", len(docs), q)
+
+		for _, doc := range docs {
+			if strings.Contains(doc, ".template") {
+				continue
+			}
+			results = append(results, basepath+"/"+doc)
+		}
+
+	}
+
+	return results, nil
+}
+
+func findDocs(query []string, needle string, returnPaths bool) ([]string, error) {
+	results := []string{}
+	found := map[string]bool{}
+	if len(MilpaPath) == 0 {
+		return results, fmt.Errorf("no MILPA_PATH set on the environment")
+	}
+
+	logrus.Debugf("looking for docs in %s", MilpaPath)
+	queryString := ""
+	if len(query) > 0 {
+		queryString = strings.Join(query, "/")
+	}
+
+	for _, path := range MilpaPath {
+		qbase := path + "/docs/" + queryString
+		q := qbase + "/*"
+		if returnPaths {
+			q = qbase + "/*.md"
+		}
+		logrus.Debugf("looking for docs matching %s", q)
+		docs, err := filepath.Glob(q)
+		if err != nil {
+			return results, err
+		}
+
+		for _, doc := range docs {
+			if strings.Contains(doc, "/.template") {
+				continue
+			}
+			name := strings.TrimSuffix(filepath.Base(doc), ".md")
+			if _, ok := found[name]; (needle == "" || strings.HasPrefix(name, needle)) && !ok {
+				if returnPaths {
+					results = append(results, doc)
+				} else {
+					results = append(results, name)
+				}
+				found[name] = true
+			}
+		}
+
+	}
+
+	return results, nil
+}

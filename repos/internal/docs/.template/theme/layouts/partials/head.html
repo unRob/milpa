@@ -1,0 +1,14 @@
+<head lang="en">
+  <meta charset="utf-8">
+  {{/* <base href="{{ .Site.BaseURL }}"> */}}
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en" />
+  <meta property="og:title" content="{{ .Title }}" />
+  <meta property="og:description" content="{{ .Description }}" />
+  <title>milpa{{ if not .IsHome }} {{ replace .RelPermalink "/" " " }}{{end}}</title>
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ "/css/index.css" | relURL }}"/>
+  <link rel="canonical" href="{{ .Permalink }}">
+</head>

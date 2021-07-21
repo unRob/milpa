@@ -1,22 +1,25 @@
 on:
   push:
     tags:
-      - "[1-9]+.[0-9]+.[0-9]+*"
+      - "[0-9]+.[0-9]+.[0-9]+-alpha.[0-9]+"
+      - "[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+"
+      - "[0-9]+.[0-9]+.[0-9]+-rc.[0-9]+"
+      - "[0-9]+.[0-9]+.[0-9]+"
 name: Release
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - name: Install Go
-        uses: actions/setup-go@v1
+        uses: actions/setup-go@v2
         with:
           go-version: 1.16.x
 
       - name: Checkout source
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Cache go modules
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.OS }}-go-${{ hashFiles('**/go.sum') }}
@@ -28,7 +31,15 @@ jobs:
         run: |
           curl -LO https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz
           tar xf upx-3.96-amd64_linux.tar.xz
-          sudo mv upx-3.96-amd64_linux /usr/local/bin/upx
+          sudo mv upx-3.96-amd64_linux/upx /usr/local/bin/upx
+          MILPA_VERSION=ci make compa
+
+
+          git config --global user.email "milpa+ci@un.rob.mx"
+          git config --global user.name "Milpa CI"
+          git ls-remote | awk '/refs\/notes/ {print $2}' | while read -r noteKind; do
+            git pull --rebase origin "$noteKind"
+          done
 
       - name: create release
         id: build
@@ -37,30 +48,45 @@ jobs:
         run: |
           version="${GITHUB_REF##*/}"
           export MILPA_ROOT=$(pwd)
+          echo "::group::release docker image"
           $(pwd)/milpa release docs-image --docker-login "unrob:GITHUB_TOKEN" "$version"
+          echo "::endgroup::"
 
-          prerelease = "false"
-          [[ "$GITHUB_REF" == *-* ]] && prerelease="true"
+          export PATH="$PATH:$(pwd)"
+          prerelease="false"
+          if [[ "$GITHUB_REF" == *-* ]]; then
+            prerelease="true"
+            echo "Building a pre-release"
+          fi
           echo "::set-output name=prerelease::$prerelease"
+
+          echo "::group::building release"
           $(pwd)/milpa release build "${version}"
-          $(pwd)/milpa cl show "${version}" >> release-notes.txt
+          echo "::endgroup::"
+
+          echo "::group::Setting release notes"
+          echo "RELEASE_NOTES<<EOF" >> "$GITHUB_ENV"
+          git show "${version}" | awk '/^commit /{exit} f; /^Date: /{f=1}' | tee -a "$GITHUB_ENV"
+          echo "EOF" >> "$GITHUB_ENV"
+          echo "::endgroup::"
 
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          body_path: ${{ github.workflow }}/release-notes.txt
+          body: ${{ env.RELEASE_NOTES }}
           files: |
             dist/packages/*.tgz
             dist/packages/*.shasum
           prerelease: ${{ steps.build.outputs.prerelease }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: unRob/milpa
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
       - name: update github pages
         uses: JamesIves/github-pages-deploy-action@4.1.4
-        if: ${{ steps.build.outputs.prerelease == "false" }}
+        # re-enable when we only wanna build for stable releases
+        # if: ${{ steps.build.outputs.prerelease == "false" }}
         with:
           branch: gh-pages
           folder: dist/milpa.dev

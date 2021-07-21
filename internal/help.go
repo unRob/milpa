@@ -17,7 +17,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path/filepath"
 	"regexp"
 	"strings"
 	"text/template"
@@ -30,41 +29,6 @@ import (
 
 func addBackticks(str []byte) []byte {
 	return bytes.ReplaceAll(str, []byte("﹅"), []byte("`"))
-}
-
-func findDocs(query []string, needle string) ([]string, error) {
-	results := []string{}
-	found := map[string]bool{}
-	if len(MilpaPath) == 0 {
-		return results, fmt.Errorf("no MILPA_PATH set on the environment")
-	}
-
-	logrus.Debugf("looking for docs in %s", MilpaPath)
-	queryString := ""
-	if len(query) > 0 {
-		queryString = strings.Join(query, "/") + "/"
-	}
-
-	for _, path := range MilpaPath {
-		qbase := path + "/docs" + queryString
-		q := qbase + "/*"
-		logrus.Debugf("looking for docs matching %s", q)
-		docs, err := filepath.Glob(q)
-		if err != nil {
-			return results, err
-		}
-
-		for _, doc := range docs {
-			name := strings.TrimSuffix(filepath.Base(doc), ".md")
-			if _, ok := found[name]; (needle == "" || strings.HasPrefix(name, needle)) && !ok {
-				results = append(results, name)
-				found[name] = true
-			}
-		}
-
-	}
-
-	return results, nil
 }
 
 func readDoc(query []string) ([]byte, error) {
@@ -116,7 +80,7 @@ var Docs *Command = &Command{
 		Kind: "internal",
 	},
 	helpFunc: func() string {
-		topics, err := findDocs([]string{}, "")
+		topics, err := findDocs([]string{}, "", false)
 		if err != nil {
 			return ""
 		}
@@ -137,7 +101,7 @@ var DocsCommand *cobra.Command = &cobra.Command{
 	Long:  "docs shows formatted documentation from " + os.Getenv("MILPA_NAME") + " repos",
 	ValidArgsFunction: func(c *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		logrus.Debugf("looking for docs given %v and %s", args, toComplete)
-		docs, err := findDocs(args, toComplete)
+		docs, err := findDocs(args, toComplete, false)
 		if err != nil {
 			return nil, cobra.ShellCompDirectiveNoFileComp
 		}
@@ -200,6 +164,9 @@ var DocsCommand *cobra.Command = &cobra.Command{
 		os.Exit(42)
 
 		return nil
+	},
+	Annotations: map[string]string{
+		"MilpaDocs": "true",
 	},
 }
 
@@ -269,6 +236,7 @@ type combinedCommand struct {
 	Command       *cobra.Command
 	GlobalOptions Options
 	Bin           string
+	HideHeader    bool
 }
 
 func (cmd *Command) HasAdditionalHelp() bool {
@@ -299,6 +267,7 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 		Command:       cc,
 		GlobalOptions: Root.Options,
 		Bin:           os.Getenv("MILPA_NAME"),
+		HideHeader:    os.Getenv("MILPA_PLAIN_HELP") == "enabled",
 	}
 	err = tmpl.Execute(&buf, c)
 	if err != nil {
@@ -346,7 +315,9 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 	}
 }
 
-var HelpTemplate = `# {{ if and (not (eq .Spec.Meta.Kind "root")) (not (eq .Command.Name "help")) }}{{ .Bin }} {{ end }}{{ .Spec.FullName }}{{if eq .Command.Name "help"}} help{{end}}
+var HelpTemplate = `{{ if not .HideHeader }}
+  # {{ if and (not (eq .Spec.Meta.Kind "root")) (not (eq .Command.Name "help")) }}{{ .Bin }} {{ end }}{{ .Spec.FullName }}{{if eq .Command.Name "help"}} help{{end}}
+{{- end }}
 
 {{ .Command.Short }}
 

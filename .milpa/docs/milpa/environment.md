@@ -1,5 +1,4 @@
 ---
-title: milpa environment
 related-docs: [utils/log, command/environment]
 weight: 10
 ---
@@ -37,7 +36,7 @@ If desired, you may set a `MILPA_PATH` for all shells by adding it to your shell
 
 ## Output
 
-## `DEBUG`
+### `DEBUG`
 
 Set `DEBUG=1` and find out whatever roberto needed to debug before writing proper tests.
 
@@ -57,4 +56,4 @@ Also enabled by the `--no-color` option to disable printing of formatting escape
 
 ## Command Environment
 
-Your commands will also have specific environment variables available, check out [milpa help docs milpa command](/.milpa/docs/milpa/command/index.md#Environment-variables)
+Your commands will also have specific environment variables available, check out [milpa help docs milpa command](/.milpa/docs/milpa/command/index.md#environment-variables)
