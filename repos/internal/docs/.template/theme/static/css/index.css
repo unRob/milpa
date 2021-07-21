@@ -1,0 +1,294 @@
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Playfair Display";
+  font-size: 16px;
+  color: #2B3C2D;
+}
+
+header {
+  color: #CEFCD3;
+  background: #2B3C2D;
+  margin: 0;
+  font-family: "Fira Code";
+  font-weight: bold;
+  display: flex;
+}
+
+header h1 {
+  font-size: 32px;
+  margin: 0;
+  line-height: 53px;
+  width: 220px;
+  text-align: right;
+  margin-right: 20px;
+  margin-left: -20px;
+}
+
+header .emoji-maiz::before {
+  content: "🌽";
+  font-size: .8em;
+  margin: 0.7em;
+  mix-blend-mode: luminosity;
+}
+
+header h1 a {
+  color: #CEFCD3;
+  text-decoration: none;
+}
+
+header .emoji-maiz:hover::before {
+  mix-blend-mode: normal;
+}
+
+#command-selector {
+  font-size: 32px;
+  margin: 0;
+  padding-left: 20px;
+  background: rgba(255,255,255,.1);
+  border: none;
+  color: #CEFCD3;
+  font-family: "Fira Code";
+  font-weight: bold;
+  flex: auto;
+  transition: all .3s ease-in-out;
+  outline: 2px solid rgba(190, 197, 6, 0.0);
+}
+
+#command-selector:focus, #command-selector:hover {
+  background: rgba(255,255,255,.2);
+  outline: 2px solid rgba(190, 197, 6, 0.8);
+}
+
+#wrapper {
+  display: flex;
+  background: #dff4d4;
+  height: calc(100vh - 53px);
+  overflow: hidden;
+}
+
+#sidebar {
+  background: #fff;
+  min-width: 200px;
+  padding: 10px;
+  max-height: 100%;
+  overflow-y: scroll;
+}
+
+#sidebar nav {
+  margin-bottom: 1.5em;
+}
+
+#sidebar .heading {
+  font-size: 16px;
+  font-style: italic;
+  display: block;
+}
+
+#sidebar a {
+  color: #5D7260;
+  text-decoration: none;
+}
+
+#sidebar a:hover {
+  text-decoration: underline;
+}
+
+#commands {
+  overflow-y: scroll;
+}
+
+#commands ul {
+  font-family: "Fira Code";
+}
+
+#sidebar ul {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+}
+
+#sidebar ul ul {
+  margin-left: 10px;
+}
+
+#sidebar li {
+  list-style: none;
+  margin: 0;
+  padding: 2px 0;
+}
+
+#content {
+  padding: 20px;
+  max-width: 800px;
+  flex: auto;
+  overflow-y: scroll;
+}
+
+#content > h1:first-child {
+  margin-top: 0;
+}
+
+.content-header {
+  color: #12731D;
+}
+
+.heading-anchor {
+  font-family: "Fira Code";
+  font-weight: 400;
+  font-size: .7em;
+  opacity: .7;
+  display: none;
+}
+
+.content-header:hover .heading-anchor{
+  display: inline-block;
+}
+
+#content a {
+  color: #12731D;
+}
+
+#content pre, #content code {
+  font-family: "Fira Code";
+  font-size: .9em;
+  line-height: 1.2em;
+}
+
+#content p {
+  line-height: 1.4em;
+}
+
+#content p code, #content li > code {
+  background: rgba(65, 80, 66, 0.1);
+  border-radius: 3px;
+  color: #12731D;
+  padding:0 .3em;
+}
+
+.highlight pre {
+  background-color: rgba(65, 80, 66, 0.1) !important
+}
+
+pre {
+  padding: .6em;
+  white-space: pre-wrap;
+}
+
+hr {
+  border-bottom: 1px solid #96b452;
+  width: 60%;
+  margin: 0 auto;
+  margin-bottom: 1.5em;
+}
+
+.sr-only {
+  text-indent: -1000em;
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.sr-only:focus {
+  text-indent: 0;
+  clip: auto;
+  height: auto;
+  overflow: auto;
+  position: absolute;
+  width: auto;
+}
+
+#skip-to-content {
+  background: #CEFCD3;
+  color: #12731D;
+}
+
+
+@media screen and (prefers-color-scheme: dark) {
+  body {
+    color: #57b93a;
+  }
+
+  #sidebar {
+    background-color: #5D7260;
+    color: #CEFCD3;
+  }
+
+  #sidebar a {
+    color: #CEFCD3
+  }
+
+  #wrapper {
+    background-color: #2B3C2D;
+  }
+
+  #content a, .content-header {
+    color: #96b452;
+  }
+
+  #content p code, #content li > code {
+    color: #96b452;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  header h1 {
+    width: auto;
+    margin-left: 0;
+  }
+
+  header h1, #command-selector  {
+    font-size: 20px;
+  }
+
+  #sidebar {
+    display: none;
+  }
+
+  #command-selector {
+    padding-left: .2em;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .emoji-maiz::before {
+    display: none;
+  }
+
+  header h1 {
+    margin: 0 .2em;
+  }
+}
+
+@media print {
+  #sidebar, header {
+    display: none;
+  }
+
+  #wrapper {
+    display: block;
+    height: auto;
+    background: #fff;
+  }
+
+  #command-name-header {
+    display: block;
+    text-indent: 0;
+    position: relative;
+    clip: none;
+    height: auto;
+    width: auto;
+  }
+}

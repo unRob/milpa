@@ -1,0 +1,37 @@
+<div id="sidebar">
+  <nav id="table-of-contents" aria-hidden="true">
+    <span class="heading" id="table-of-contents-header">In this page</span>
+    {{ .TableOfContents }}
+  </nav>
+  <nav id="commands" aria-label="List of available commands">
+    <span class="heading" id="commands-header" aria-hidden="true">Commands</span>
+    {{ $currentPage := . }}
+    <ul>
+    {{- range (union .Site.Home.Pages .Site.Home.Sections).ByWeight }}
+    {{ template "command-menu-tree" . }}
+    {{- end }}
+    </ul>
+  </nav>
+</div>
+
+{{ define "command-menu-tree" -}}
+{{- $page := . -}}
+{{- $subPages := (union .Pages .Sections).ByWeight -}}
+{{- $hasChildren := gt (len $subPages) 0 -}}
+{{- $name := index (split (trim .RelPermalink "/") "/" | last 1) 0 }}
+<li>
+  <a href="{{ .Permalink }}" {{ if $hasChildren }}aria-haspopup="tree"{{ end }}>{{ $name }}</a>
+{{ if $hasChildren }}
+<ul
+  class="sub-menu"
+  aria-hidden="true"
+  aria-expanded="false"
+  aria-label="{{ $name }} subcommands"
+>
+  {{ range $subPages }}
+  {{ template "command-menu-tree" .}}
+  {{ end }}
+</ul>
+</li>
+{{ end }}
+{{ end }}

@@ -41,6 +41,8 @@ mkdir -p "$html/.well-known/milpa"
 echo -n "$MILPA_VERSION" > "$html/.well-known/milpa/latest-version"
 # github pages needs a CNAME, provide one
 echo -n "$MILPA_ARG_HOSTNAME" > "$html/CNAME"
+# github pages doesn't need to process our docs as jekyll
+echo -n "$MILPA_ARG_HOSTNAME" > "$html/.nojekyll"
 @milpa.log success "HTML docs written to $html"
 
 @milpa.log complete "Release built to $output"

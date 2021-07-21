@@ -13,9 +13,10 @@
 # limitations under the License.
 
 # Run with
-# curl -LO https://milpa.dev/install.sh | bash -
+# curl -L https://milpa.dev/install.sh | bash -
 
 if [[ -t 1 ]] && [[ -z ${NO_COLOR+x} ]]; then
+  [[ -z ${TERM+x} ]] && export TERM="xterm-color"
   _FMT_INVERTED=$(tput rev)
   _FMT_BOLD="$(tput bold)"
   _FMT_RESET="$(tput sgr0)"
@@ -31,21 +32,26 @@ else
   _FMT_GRAY=""
 fi
 
+function @fail () {
+  set +o xtrace
+  # print an error, then exit
+  >&2 echo "${_FMT_ERROR}$*${_FMT_RESET}"
+  exit 2
+}
+
 META_BASE="${META_BASE:-https://milpa.dev/}/.well-known/milpa/"
 ASSET_BASE="${GITHUB_REPO:-"https://github.com/unRob/milpa"}/releases" #/latest/download/ASSET.ext
-if [[ -x ${VERSION+x} ]]; then
+if [[ "${VERSION}" == "" ]]; then
   >&2 echo "${_FMT_GRAY}No VERSION provided, querying for default${_FMT_RESET}"
-  VERSION=$(curl -L "$META_BASE/latest-version")
+  VERSION=$(curl --silent --fail --show-error -L "$META_BASE/latest-version") || @fail "Could not fetch latest version!"
 fi
-PREFIX="${PREFIX:-/usr/local/lib}"
-TARGET="${PREFIX:-/usr/local/bin}"
+PREFIX="${PREFIX:-/usr/local/lib}/milpa"
+TARGET="${TARGET:-/usr/local/bin}"
 
 case "$(uname -s)" in
   Darwin) OS="darwin";;
   Linux) OS="linux";;
-  *)
-    >&2 echo "${_FMT_ERROR}unsupported OS: $OS${_FMT_RESET}"
-    exit 2
+  *) @fail "unsupported OS: $OS"
 esac
 
 machine="$(uname -m)"
@@ -55,20 +61,43 @@ case "$machine" in
   *) ARCH="$machine"
 esac
 
-sudo mkdir -pv "$PREFIX"
 
->&2 echo "${_FMT_BOLD}Downloading milpa version $VERSION to $PREFIX/milpa${_FMT_RESET}"
-curl -LO "$ASSET_BASE/$VERSION/dowload/milpa-$OS-$ARCH.tgz" | sudo tar xfz -C "$PREFIX" -
+globalRepos="${PREFIX}/repos"
+localRepos="${XDG_HOME_DATA:-$HOME/.local/share}/milpa/repos"
+package="milpa-$OS-$ARCH.tgz"
+
+# Get the package
+if [[ ! -f "$package" ]]; then
+  >&2 echo "${_FMT_BOLD}Downloading milpa version $VERSION to $PREFIX${_FMT_RESET}"
+  curl --silent --fail --show-error -LO "$ASSET_BASE/download/$VERSION/$package" || @fail "Could not download milpa package"
+else
+  >&2 echo "${_FMT_BOLD}Using downloaded package at $package${_FMT_RESET}"
+fi
+
+# Find some nice spot in the ground
+if [[ ! -d "$PREFIX" ]]; then
+  >&2 echo "${_FMT_BOLD}Creating $PREFIX, enter your password if prompted${_FMT_RESET}"
+  sudo mkdir -pv "$PREFIX" || @fail "Could not create $PREFIX directory"
+else
+  >&2 echo "${_FMT_WARNING}$PREFIX already exists, deleting previous installation...${_FMT_RESET}"
+  sudo find "$PREFIX" -maxdepth 1 -mindepth 1 \! -name repos -exec rm -rf {} \;
+fi
+
+# dig a hole, pour some seeds
+sudo tar xfz "$package" -C "$(dirname "$PREFIX")" || @fail "Could not extract milpa package to $PREFIX"
+
+# recycle the bag
+rm -rf "$package"
+
+# get ready for growing some scripts
 >&2 echo "Installing symbolic links to $TARGET"
-sudo ln -sfv "$PREFIX/milpa/milpa" "$TARGET/milpa"
-sudo ln -sfv "$PREFIX/milpa/compa" "$TARGET/compa"
-sudo mkdir -pv "${PREFIX}/milpa/repos"
-mkdir -pv "${XDG_HOME_DATA:-$HOME/.local/share}/milpa/repos"
+sudo ln -sfv "$PREFIX/milpa" "$TARGET/milpa"
+sudo ln -sfv "$PREFIX/compa" "$TARGET/compa"
+[[ -d "$globalRepos" ]] || sudo mkdir -pv "$globalRepos"
+[[ -d "$localRepos" ]] || mkdir -pv "$localRepos"
 
-installed_version=$("$TARGET/milpa" --version) || {
-  >&2 echo "${_FMT_ERROR}Could not get the installed version${_FMT_RESET}"
-  exit 2
-}
+# Test we can run milpa
+installed_version=$("$TARGET/milpa" --version) || @fail "Could not get the installed version"
 
 header="🌽 Installed milpa version $installed_version 🌽"
 hlen="$(( ${#header} + 3 ))"

@@ -104,7 +104,7 @@ func RootCommand(commands []*Command, version string) (*cobra.Command, error) {
 		Short:       os.Getenv("MILPA_NAME") + " runs commands from .milpa folders",
 		Long: `milpa runs commands from .milpa folders
 
-Milpa, is an agricultural method that combines multiple crops in close proximity. ﹅milpa﹅ is a Bash script and tool to care for one's own garden of scripts. You and your team write scripts and a little spec for each command. Use bash, or any other command, and ﹅milpa﹅ provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.`,
+` + Root.Description,
 		DisableAutoGenTag: true,
 		SilenceUsage:      true,
 		SilenceErrors:     true,
@@ -145,6 +145,7 @@ Milpa, is an agricultural method that combines multiple crops in close proximity
 	root.PersistentFlags().AddFlagSet(RootFlagset())
 	root.Flags().Bool("version", false, "Display the version of milpa")
 
+	root.CompletionOptions.DisableDefaultCmd = true
 	root.AddCommand(versionCommand)
 	root.AddCommand(completionCommand)
 	root.AddCommand(generateDocumentationCommand)
