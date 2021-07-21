@@ -1,22 +1,25 @@
 on:
   push:
     tags:
-      - "[1-9]+.[0-9]+.[0-9]+*"
+      - "[0-9]+.[0-9]+.[0-9]+-alpha.[0-9]+"
+      - "[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+"
+      - "[0-9]+.[0-9]+.[0-9]+-rc.[0-9]+"
+      - "[0-9]+.[0-9]+.[0-9]+"
 name: Release
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - name: Install Go
-        uses: actions/setup-go@v1
+        uses: actions/setup-go@v2
         with:
           go-version: 1.16.x
 
       - name: Checkout source
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Cache go modules
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.OS }}-go-${{ hashFiles('**/go.sum') }}
@@ -37,10 +40,13 @@ jobs:
         run: |
           version="${GITHUB_REF##*/}"
           export MILPA_ROOT=$(pwd)
-          $(pwd)/milpa release docs-image --docker-login "unrob:GITHUB_TOKEN" "$version"
+          $(pwd)/milpa release docs-image --docker-login "${GITHUB_REPOSITORY##*/}:GITHUB_TOKEN" "$version"
 
           prerelease = "false"
-          [[ "$GITHUB_REF" == *-* ]] && prerelease="true"
+          if [[ "$GITHUB_REF" == *-* ]]; then
+            prerelease="true"
+            echo "Building a pre-release"
+          fi
           echo "::set-output name=prerelease::$prerelease"
           $(pwd)/milpa release build "${version}"
           $(pwd)/milpa cl show "${version}" >> release-notes.txt
@@ -56,11 +62,12 @@ jobs:
           prerelease: ${{ steps.build.outputs.prerelease }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: unRob/milpa
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
       - name: update github pages
         uses: JamesIves/github-pages-deploy-action@4.1.4
-        if: ${{ steps.build.outputs.prerelease == "false" }}
+        # re-enable when we only wanna build for stable releases
+        # if: ${{ steps.build.outputs.prerelease == "false" }}
         with:
           branch: gh-pages
           folder: dist/milpa.dev

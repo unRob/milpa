@@ -1,6 +1,5 @@
 ---
-title: milpa command
-related-docs: [milpa/environment]
+related-docs: [milpa/environment, milpa/command/spec]
 related-commands: ["itself create"]
 weight: 15
 ---

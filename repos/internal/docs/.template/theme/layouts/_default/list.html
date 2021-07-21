@@ -1,0 +1,6 @@
+{{ define "main" }}
+<section class="content-list">
+  <h1 id="command-name-header" class="sr-only">milpa {{ replace (trim .RelPermalink "/") "/" " " }}</h1>
+	{{ .Content }}
+</div>
+{{ end }}

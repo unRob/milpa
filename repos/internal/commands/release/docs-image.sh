@@ -13,8 +13,8 @@
 # limitations under the License.
 
 docker build --tag milpa-docs -f \
-  "$MILPA_ROOT/.milpa/docs/.template/Dockerfile" \
-  "$MILPA_ROOT/.milpa/docs/.template" || @milpa.fail "could not build image"
+  "$MILPA_COMMAND_REPO/docs/.template/Dockerfile" \
+  "$MILPA_COMMAND_REPO/docs/.template" || @milpa.fail "could not build image"
 
 if [[ "$MILPA_OPT_SKIP_PUBLISH" ]]; then
   @milpa.log complete "Image built, publishing skipped"

@@ -1,6 +1,8 @@
 summary: Renders or displays HTML documentation for all commands
 description: |
-  Renders documentation for all known milpa commands, and all `docs` folders. Requires docker to be installed and running.
+  Renders documentation for all known milpa commands, and all `docs` folders. Requires docker to be installed and running. To learn more about milpa docs, check out [`milpa help docs milpa repo docs`](/.milpa/docs/milpa/repo/docs.md)
+
+  By default, documentation will be served from `http://localhost:8118` and if a browser is configured to open websites from the terminal, it'll open at that address.
 arguments:
   - name: action
     description: the action to take with documentation
@@ -8,7 +10,7 @@ arguments:
     values: [serve, write]
 options:
   image:
-    default: ghcr.io/unRob/milpa
+    default: ghcr.io/unRob/milpa:latest
     description: The docker image with `hugo` to use for building html docs
   port:
     default: "8118"
