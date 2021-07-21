@@ -1,5 +1,4 @@
 ---
-title: milpa repos
 related-docs: ["milpa commands", "milpa environment"]
 related-commands: ["itself create"]
 weight: 10

@@ -46,10 +46,10 @@ if [[ "$MILPA_PATH_PARSED" == "" ]]; then
   else
     MILPA_PATH="$_PATH"
   fi
-  # bash is fine and all, but we need a little helper to run parsing for us
-  export MILPA_COMPA="${MILPA_COMPA:-$MILPA_ROOT/compa}"
   export MILPA_PATH_PARSED=1
 fi
+# bash is fine and all, but we need a little helper to run parsing for us
+export MILPA_COMPA="${MILPA_COMPA:-$MILPA_ROOT/compa}"
 
 export MILPA_PATH
 # create an array from this MILPA_PATH

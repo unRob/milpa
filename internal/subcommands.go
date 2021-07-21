@@ -15,6 +15,7 @@ package internal
 import (
 	"bytes"
 	"fmt"
+	"io/ioutil"
 	"net/url"
 	"os"
 	"sort"
@@ -141,7 +142,57 @@ func doctorForCommands(commands []*Command) *cobra.Command {
 	}
 }
 
-func writeDocs(dst string, path []string, cmd *cobra.Command) error {
+func writeDocs(dst string) error {
+	allDocs, err := findAllDocs()
+	if err != nil {
+		return err
+	}
+
+	for _, doc := range allDocs {
+		contents, err := ioutil.ReadFile(doc)
+		if err != nil {
+			return err
+		}
+
+		contents = bytes.ReplaceAll(contents, []byte("!milpa!"), []byte(os.Getenv("MILPA_NAME")))
+		name := strings.TrimSuffix(strings.SplitN(doc, ".milpa/docs/", 2)[1], ".md")
+		components := strings.Split(name, "/")
+		last := len(components) - 1
+		dir := fmt.Sprintf("%s/help/docs/%s", dst, strings.Join(components[0:last], "/"))
+
+		if components[last] == "index" {
+			components[last] = "_index"
+		}
+
+		fname := fmt.Sprintf("%s/help/docs/%s.md", dst, strings.Join(components, "/"))
+		logrus.Debugf("Creating dir %s", dir)
+		if err := os.MkdirAll(dir, 0760); err != nil {
+			return err
+		}
+
+		logrus.Debugf("Creating file %s (%s)", fname, dir)
+		f, err := os.OpenFile(fname, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+
+		fixedLinks := bytes.ReplaceAll(contents, []byte("(/.milpa/docs"), []byte("(/help/docs"))
+		fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("(/.milpa/commands/"), []byte("(/"))
+		fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("index.md"), []byte(""))
+		fixedLinks = bytes.ReplaceAll(fixedLinks, []byte(".md"), []byte("/"))
+
+		_, err = f.Write(fixedLinks)
+		if err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+func writeCommandDocs(dst string, path []string, cmd *cobra.Command) error {
 	if !cmd.IsAvailableCommand() && cmd.Name() != "help" {
 		return nil
 	}
@@ -164,7 +215,6 @@ func writeDocs(dst string, path []string, cmd *cobra.Command) error {
 
 	frontMatter := `---
 title: ` + cmd.Name() + `
-type: docs
 ---
 `
 
@@ -182,8 +232,10 @@ type: docs
 	}
 	defer f.Close()
 
-	fixedLinks := bytes.ReplaceAll(tmp.Bytes(), []byte("[.milpa/"), []byte("[/"))
+	fixedLinks := bytes.ReplaceAll(tmp.Bytes(), []byte("(/.milpa/docs"), []byte("(/help/docs"))
+	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("(/.milpa/commands/"), []byte("(/"))
 	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("index.md"), []byte(""))
+	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte(".md"), []byte("/"))
 
 	_, err = f.Write(append([]byte(frontMatter), fixedLinks...))
 	if err != nil {
@@ -197,10 +249,15 @@ type: docs
 				subPath = append(path, cmd.Name()) //nolint:gocritic
 			}
 
-			err := writeDocs(dst, subPath, cc)
+			err := writeCommandDocs(dst, subPath, cc)
 			if err != nil {
 				return err
 			}
+		}
+	} else if cmd.Annotations["MilpaDocs"] == "true" {
+		err := writeDocs(dst)
+		if err != nil {
+			return err
 		}
 	}
 
@@ -218,7 +275,7 @@ var generateDocumentationCommand *cobra.Command = &cobra.Command{
 		path := []string{}
 		dst := args[0]
 
-		err = writeDocs(dst, path, cmd.Root())
+		err = writeCommandDocs(dst, path, cmd.Root())
 		if err != nil {
 			return err
 		}

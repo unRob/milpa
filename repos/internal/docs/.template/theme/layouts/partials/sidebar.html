@@ -1,0 +1,31 @@
+<aside id="sidebar">
+  <nav id="table-of-contents">
+    <h2>In this page</h2>
+    {{ .TableOfContents }}
+  </nav>
+  <nav id="commands">
+    <h2>Commands</h2>
+    {{ $currentPage := . }}
+    <ul>
+    {{- range (union .Site.Home.Pages .Site.Home.Sections).ByWeight }}
+    {{ template "command-menu-tree" . }}
+    {{- end }}
+    </ul>
+  </nav>
+</aside>
+
+{{ define "command-menu-tree" -}}
+{{- $page := . -}}
+{{- $subPages := (union .Pages .Sections).ByWeight -}}
+{{- $hasChildren := gt (len $subPages) 0 -}}
+<li>
+  <a href="{{ .Permalink }}">{{ index (split (trim .RelPermalink "/") "/" | last 1) 0 }}</a>
+</li>
+{{ if $hasChildren }}
+<ul class="sub-menu">
+  {{ range $subPages }}
+  {{ template "command-menu-tree" .}}
+  {{ end }}
+</ul>
+{{ end }}
+{{ end }}

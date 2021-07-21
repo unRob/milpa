@@ -2,16 +2,24 @@
 title: Getting started
 weight: 1
 ---
-After milpa is installed, you'll find the best experience enabling command completion for your shell.
 
 We'll assume you have a repo with your team's code at `~/src/my-teams-app`, but you can also test `!milpa!` out by creating any folder, wherever you like.
 
 Once that's set up, you'd get started with `!milpa!` by:
 
+0. Installing it,
 1. installing milpa's autocompletion script to your shell, possibly restarting your session,
 2. heading to your team's project folder
 3. creating a new command, and editing it's spec
 4. running the command to test it out
+
+## installing `milpa`
+
+Running the following command will install the latest version of `milpa`
+
+```sh
+curl -L https://milpa.dev/install.sh | bash -
+```
 
 ## installing autocomplete
 
