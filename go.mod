@@ -7,7 +7,7 @@ require (
 	github.com/bmatcuk/doublestar/v4 v4.0.2
 	github.com/charmbracelet/glamour v0.3.0
 	github.com/fatih/color v1.12.0
-	github.com/go-playground/validator/v10 v10.6.1
+	github.com/go-playground/validator/v10 v10.7.0
 	github.com/hashicorp/go-getter v1.5.5
 	github.com/kr/text v0.2.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
