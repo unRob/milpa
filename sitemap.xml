@@ -22,10 +22,6 @@
   </url><url>
     <loc>https://milpa.dev/help/docs/milpa/repo/hooks/</loc>
   </url><url>
-    <loc>https://milpa.dev/completion/bash/</loc>
-  </url><url>
-    <loc>https://milpa.dev/completion/</loc>
-  </url><url>
     <loc>https://milpa.dev/itself/create/</loc>
   </url><url>
     <loc>https://milpa.dev/itself/docs/create/</loc>
@@ -35,8 +31,6 @@
     <loc>https://milpa.dev/itself/docs/</loc>
   </url><url>
     <loc>https://milpa.dev/itself/doctor/</loc>
-  </url><url>
-    <loc>https://milpa.dev/completion/fish/</loc>
   </url><url>
     <loc>https://milpa.dev/help/</loc>
   </url><url>
@@ -54,8 +48,6 @@
   </url><url>
     <loc>https://milpa.dev/</loc>
   </url><url>
-    <loc>https://milpa.dev/completion/powershell/</loc>
-  </url><url>
     <loc>https://milpa.dev/itself/repo/</loc>
   </url><url>
     <loc>https://milpa.dev/itself/shell/</loc>
@@ -63,7 +55,5 @@
     <loc>https://milpa.dev/itself/repo/uninstall/</loc>
   </url><url>
     <loc>https://milpa.dev/itself/version/</loc>
-  </url><url>
-    <loc>https://milpa.dev/completion/zsh/</loc>
   </url>
 </urlset>

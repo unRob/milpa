@@ -78,17 +78,6 @@ shell-init(.sh) # This hook is run whenever milpa itself shell init is called. I
     </item>
     
     <item>
-      <title>bash</title>
-      <link>https://milpa.dev/completion/bash/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://milpa.dev/completion/bash/</guid>
-      <description>generate the autocompletion script for bash
-Usage # milpa completion bash
-Description # Milpa, is an agricultural method that combines multiple crops in close proximity. milpa is a Bash script and tool to care for one&amp;rsquo;s own garden of scripts. You and your team write scripts and a little spec for each command. Use bash, or any other language, and milpa provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.</description>
-    </item>
-    
-    <item>
       <title>create</title>
       <link>https://milpa.dev/itself/create/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -120,17 +109,6 @@ Arguments #  NAME... - the name you&amp;rsquo;d like for your doc  Options #  --
 Usage # milpa itself doctor [options]
 Description # This command will run checks on all known commands, parsing specs and validating their values.
 Global Options #  --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --verbose (bool): Log verbose output to stderr.  </description>
-    </item>
-    
-    <item>
-      <title>fish</title>
-      <link>https://milpa.dev/completion/fish/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://milpa.dev/completion/fish/</guid>
-      <description>generate the autocompletion script for fish
-Usage # milpa completion fish [flags]
-Description # Milpa, is an agricultural method that combines multiple crops in close proximity. milpa is a Bash script and tool to care for one&amp;rsquo;s own garden of scripts. You and your team write scripts and a little spec for each command. Use bash, or any other language, and milpa provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.</description>
     </item>
     
     <item>
@@ -194,17 +172,6 @@ Global Options #  --help (bool): Display help for any command.</description>
     </item>
     
     <item>
-      <title>powershell</title>
-      <link>https://milpa.dev/completion/powershell/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://milpa.dev/completion/powershell/</guid>
-      <description>generate the autocompletion script for powershell
-Usage # milpa completion powershell [flags]
-Description # Milpa, is an agricultural method that combines multiple crops in close proximity. milpa is a Bash script and tool to care for one&amp;rsquo;s own garden of scripts. You and your team write scripts and a little spec for each command. Use bash, or any other language, and milpa provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.</description>
-    </item>
-    
-    <item>
       <title>uninstall</title>
       <link>https://milpa.dev/itself/repo/uninstall/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -226,17 +193,6 @@ Global Options #  --help (bool): Display help for any command. --no-color (bool)
 Usage # milpa itself version [options]
 Description # Outputs the version of milpa to stdout, printing a new line if the output is a TTY. Also available as milpa --version
 Global Options #  --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --verbose (bool): Log verbose output to stderr.  </description>
-    </item>
-    
-    <item>
-      <title>zsh</title>
-      <link>https://milpa.dev/completion/zsh/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://milpa.dev/completion/zsh/</guid>
-      <description>generate the autocompletion script for zsh
-Usage # milpa completion zsh [flags]
-Description # Milpa, is an agricultural method that combines multiple crops in close proximity. milpa is a Bash script and tool to care for one&amp;rsquo;s own garden of scripts. You and your team write scripts and a little spec for each command. Use bash, or any other language, and milpa provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.</description>
     </item>
     
   </channel>

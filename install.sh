@@ -46,7 +46,7 @@ if [[ "${VERSION}" == "" ]]; then
   VERSION=$(curl --silent --fail --show-error -L "$META_BASE/latest-version") || @fail "Could not fetch latest version!"
 fi
 PREFIX="${PREFIX:-/usr/local/lib}/milpa"
-TARGET="${PREFIX:-/usr/local/bin}"
+TARGET="${TARGET:-/usr/local/bin}"
 
 case "$(uname -s)" in
   Darwin) OS="darwin";;
@@ -62,14 +62,14 @@ case "$machine" in
 esac
 
 
-globalRepos="${PREFIX}/milpa/repos"
+globalRepos="${PREFIX}/repos"
 localRepos="${XDG_HOME_DATA:-$HOME/.local/share}/milpa/repos"
 package="milpa-$OS-$ARCH.tgz"
 
 # Get the package
 if [[ ! -f "$package" ]]; then
   >&2 echo "${_FMT_BOLD}Downloading milpa version $VERSION to $PREFIX${_FMT_RESET}"
-  curl --silent --fail --show-error -LO "$ASSET_BASE/$VERSION/dowload/$package" || @fail "Could not download milpa package"
+  curl --silent --fail --show-error -LO "$ASSET_BASE/download/$VERSION/$package" || @fail "Could not download milpa package"
 else
   >&2 echo "${_FMT_BOLD}Using downloaded package at $package${_FMT_RESET}"
 fi
@@ -80,11 +80,11 @@ if [[ ! -d "$PREFIX" ]]; then
   sudo mkdir -pv "$PREFIX" || @fail "Could not create $PREFIX directory"
 else
   >&2 echo "${_FMT_WARNING}$PREFIX already exists, deleting previous installation...${_FMT_RESET}"
-  sudo find /usr/local/lib/milpa -maxdepth 1 -mindepth 1 \! -name repos -exec rm -rf {} \;
+  sudo find "$PREFIX" -maxdepth 1 -mindepth 1 \! -name repos -exec rm -rf {} \;
 fi
 
 # dig a hole, pour some seeds
-sudo tar xfz -C "$PREFIX" "$package" || @fail "Could not extract milpa package to $PREFIX"
+sudo tar xfz "$package" -C "$(dirname "$PREFIX")" || @fail "Could not extract milpa package to $PREFIX"
 
 # recycle the bag
 rm -rf "$package"
