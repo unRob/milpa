@@ -6,12 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en" />
-  <meta property="og:title" content="doctor" />
+  <meta property="og:title" content="completion" />
   <meta property="og:description" content="" />
-  <title>milpa  itself doctor </title>
+  <title>milpa  completion </title>
   <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/index.css"/>
-  <link rel="canonical" href="https://milpa.dev/itself/doctor/">
+  <link rel="canonical" href="https://milpa.dev/completion/">
 </head>
 <body><header role="banner">
   <h1 lang="es" ><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1>
@@ -22,7 +22,7 @@
     aria-label="milpa command selector"
     id="command-selector"
     tabindex="2"
-    value="itself doctor" />
+    value="completion" />
   <datalist id="milpa-commands">
     
     <option value="completion" />
@@ -180,7 +180,9 @@
     <nav id="TableOfContents">
   <ul>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#subcommands">Subcommands</a></li>
     <li><a href="#description">Description</a></li>
+    <li><a href="#description-1">Description</a></li>
     <li><a href="#global-options">Global Options</a></li>
   </ul>
 </nav>
@@ -478,12 +480,24 @@
 
 
 <main id="content" tabindex="3">
-<h1 id="command-name-header" class="sr-only">milpa itself doctor</h1>
-<p>Validates all commands found on the MILPA_PATH</p>
+<section class="content-list">
+  <h1 id="command-name-header" class="sr-only">milpa completion</h1>
+	<p>generate the autocompletion script for the specified shell</p>
 <h2 class="content-header" id="usage">Usage <a aria-hidden="true" class="heading-anchor" href="#usage">#</a></h2>
-<p><code>milpa itself doctor [options]</code></p>
+<p><code>milpa completion subcommand</code></p>
+<h2 class="content-header" id="subcommands">Subcommands <a aria-hidden="true" class="heading-anchor" href="#subcommands">#</a></h2>
+<ul>
+<li><code>bash</code> - generate the autocompletion script for bash</li>
+<li><code>fish</code> - generate the autocompletion script for fish</li>
+<li><code>powershell</code> - generate the autocompletion script for powershell</li>
+<li><code>zsh</code> - generate the autocompletion script for zsh</li>
+</ul>
 <h2 class="content-header" id="description">Description <a aria-hidden="true" class="heading-anchor" href="#description">#</a></h2>
-<p>This command will run checks on all known commands, parsing specs and validating their values.</p>
+<p>Milpa, is an agricultural method that combines multiple crops in close proximity. <code>milpa</code> is a Bash script and tool to care for one&rsquo;s own garden of scripts. You and your team write scripts and a little spec for each command. Use bash, or any other language, and <code>milpa</code> provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.</p>
+<p>See <a href="/help/docs/milpa/"><code>milpa help docs milpa</code></a> for more information about <code>milpa</code></p>
+<h2 class="content-header" id="description-1">Description <a aria-hidden="true" class="heading-anchor" href="#description-1">#</a></h2>
+<p>Generate the autocompletion script for milpa for the specified shell.
+See each sub-command&rsquo;s help for details on how to use the generated script.</p>
 <h2 class="content-header" id="global-options">Global Options <a aria-hidden="true" class="heading-anchor" href="#global-options">#</a></h2>
 <ul>
 <li><code>--help</code> (<em>bool</em>): Display help for any command.</li>
@@ -492,6 +506,7 @@
 <li><code>--verbose</code> (<em>bool</em>): Log verbose output to stderr.</li>
 </ul>
 
+</div>
 
     </main>
     </div><script src="/js/index.js"></script>

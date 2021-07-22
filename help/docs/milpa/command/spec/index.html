@@ -25,6 +25,28 @@
     value="help docs milpa command spec" />
   <datalist id="milpa-commands">
     
+    <option value="completion" />
+
+
+<option value="completion bash" />
+
+
+
+<option value="completion fish" />
+
+
+
+<option value="completion powershell" />
+
+
+
+<option value="completion zsh" />
+
+
+
+
+
+    
     <option value="help" />
 
 
@@ -165,6 +187,45 @@
     <span class="heading" id="commands-header" aria-hidden="true">Commands</span>
     
     <ul>
+    
+<li>
+  <a href="https://milpa.dev/completion/" aria-haspopup="tree">completion</a>
+
+<ul
+  class="sub-menu"
+  aria-hidden="true"
+  aria-expanded="false"
+  aria-label="completion subcommands"
+>
+  
+  
+<li>
+  <a href="https://milpa.dev/completion/bash/" >bash</a>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/completion/fish/" >fish</a>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/completion/powershell/" >powershell</a>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/completion/zsh/" >zsh</a>
+
+
+  
+</ul>
+</li>
+
+
     
 <li>
   <a href="https://milpa.dev/help/" aria-haspopup="tree">help</a>
@@ -420,7 +481,7 @@
 <p>Specs must be written in YAML, have a <code>yaml</code> extension, and be named exactly like your command (minus the extension, if any). For example, given a command at <code>.milpa/commands/my-command.sh</code> the corresponding spec file would be <code>.milpa/commands/my-command.yaml</code>.</p>
 <h2 class="content-header" id="example">Example <a aria-hidden="true" class="heading-anchor" href="#example">#</a></h2>
 <p>If we wanted to have a command written in bash at <code>milpa release</code>, we&rsquo;ll need to create file at <code>.milpa/commands/release.sh</code> and its corresponding spec at <code>.milpa/commands/release.yaml</code>. Let&rsquo;s take a look at what such a spec might look like:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#177500"># a summary is required. It shows up during autocomplete and command listings</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#177500"># a summary is required. It shows up during autocomplete and command listings</span>
 <span style="color:#000">summary</span>: <span style="color:#1c01ce">Create a github release</span>
 <span style="color:#177500"># a description is required as well. Add a longer description of how your command does its magic here</span>
 <span style="color:#000">description</span>: |<span style="color:#c41a16">

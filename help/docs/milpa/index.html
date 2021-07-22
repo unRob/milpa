@@ -25,6 +25,28 @@
     value="help docs milpa" />
   <datalist id="milpa-commands">
     
+    <option value="completion" />
+
+
+<option value="completion bash" />
+
+
+
+<option value="completion fish" />
+
+
+
+<option value="completion powershell" />
+
+
+
+<option value="completion zsh" />
+
+
+
+
+
+    
     <option value="help" />
 
 
@@ -167,6 +189,45 @@
     <span class="heading" id="commands-header" aria-hidden="true">Commands</span>
     
     <ul>
+    
+<li>
+  <a href="https://milpa.dev/completion/" aria-haspopup="tree">completion</a>
+
+<ul
+  class="sub-menu"
+  aria-hidden="true"
+  aria-expanded="false"
+  aria-label="completion subcommands"
+>
+  
+  
+<li>
+  <a href="https://milpa.dev/completion/bash/" >bash</a>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/completion/fish/" >fish</a>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/completion/powershell/" >powershell</a>
+
+
+  
+  
+<li>
+  <a href="https://milpa.dev/completion/zsh/" >zsh</a>
+
+
+  
+</ul>
+</li>
+
+
     
 <li>
   <a href="https://milpa.dev/help/" aria-haspopup="tree">help</a>
@@ -421,7 +482,7 @@
   <h1 id="command-name-header" class="sr-only">milpa help docs milpa</h1>
 	<h1 class="content-header" id="milpa">milpa <a aria-hidden="true" class="heading-anchor" href="#milpa">#</a></h1>
 <p>&ldquo;<em>milpa</em>&rdquo; is an agricultural method that combines multiple crops in close proximity. <a href="https://milpa.dev"><code>milpa</code></a> is a Bash script and tool to care for one&rsquo;s own garden of scripts.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#177500"># install on mac and linux with:</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#177500"># install on mac and linux with:</span>
 curl -L https://milpa.dev/install.sh | bash -
 </code></pre></div><p>You and your team write scripts and a little spec for each of them. Use bash, or any other language, and <code>milpa</code> provides <strong>autocompletions</strong>, <strong>subcommands</strong>, <strong>argument parsing</strong> and <strong>validation</strong> so you can skip the toil and focus on your scripts.</p>
 <p>There&rsquo;s <a href="/help/docs/milpa/alternatives/">a few reasons why</a> you and your team might wanna use milpa, but basically, it&rsquo;s meant to provide all those nice features above while making it easier to follow the <a href="https://clig.dev">Command Line Interface Guidelines</a>.</p>
@@ -431,7 +492,7 @@ curl -L https://milpa.dev/install.sh | bash -
 <p>Your milpa repos will contain <strong>commands</strong> and their corresponding specs, among other things. These can be executables written in whatever language you want, or bash shell scripts. Get the full story with <a href="/help/docs/milpa/command/">milpa help docs milpa command</a></p>
 <h2 class="content-header" id="enough-words-show-me-some-code">Enough words, show me some code <a aria-hidden="true" class="heading-anchor" href="#enough-words-show-me-some-code">#</a></h2>
 <p>For a brief intro to get started, check out <a href="/help/docs/milpa/quick-guide/">milpa help docs milpa quick-guide</a>.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#177500"># milpa is a program you run</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#177500"># milpa is a program you run</span>
 milpa
 <span style="color:#177500"># you can add a command at .milpa/commands/hello.{sh,yaml} and milpa will gladly run it</span>
 milpa hello
