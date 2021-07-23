@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>milpa on milpa 🌽</title>
+    <title>milpa 🌽</title>
     <link>https://milpa.dev/</link>
-    <description>Recent content in milpa on milpa 🌽</description>
+    <description>Recent content on milpa 🌽</description>
     <generator>Hugo -- gohugo.io</generator><atom:link href="https://milpa.dev/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Getting started</title>
@@ -78,7 +78,7 @@ shell-init(.sh) # This hook is run whenever milpa itself shell init is called. I
     </item>
     
     <item>
-      <title>create</title>
+      <title></title>
       <link>https://milpa.dev/itself/create/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -89,7 +89,7 @@ Arguments #  NAME... - the name you&amp;rsquo;d like for your command  Options #
     </item>
     
     <item>
-      <title>create</title>
+      <title></title>
       <link>https://milpa.dev/itself/docs/create/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -100,7 +100,18 @@ Arguments #  NAME... - the name you&amp;rsquo;d like for your doc  Options #  --
     </item>
     
     <item>
-      <title>doctor</title>
+      <title></title>
+      <link>https://milpa.dev/itself/docs/html/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://milpa.dev/itself/docs/html/</guid>
+      <description>Renders or displays HTML documentation for all commands
+Usage # milpa itself docs html [options] [ACTION] [flags]
+Arguments #  ACTION - the action to take with documentation  Options #  --hostname (string): The hostname to set as base for the rendered docs. Default: milpa.dev. --image (string): The docker image with hugo to use for building html docs. Default: ghcr.io/unrob/milpa:latest. --port (string): The port to expose docs on, when ACTION is serve.</description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://milpa.dev/itself/doctor/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -112,31 +123,7 @@ Global Options #  --help (bool): Display help for any command. --no-color (bool)
     </item>
     
     <item>
-      <title>html</title>
-      <link>https://milpa.dev/itself/docs/html/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://milpa.dev/itself/docs/html/</guid>
-      <description>Renders or displays HTML documentation for all commands
-Usage # milpa itself docs html [options] [ACTION] [flags]
-Arguments #  ACTION - the action to take with documentation  Options #  --hostname (string): The hostname to set as base for the rendered docs. Default: milpa.dev. --image (string): The docker image with hugo to use for building html docs. Default: ghcr.io/unrob/milpa:latest. --port (string): The port to expose docs on, when ACTION is serve.</description>
-    </item>
-    
-    <item>
-      <title>init</title>
-      <link>https://milpa.dev/itself/shell/init/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://milpa.dev/itself/shell/init/</guid>
-      <description>Initializes shells
-Usage # milpa itself shell init [options]
-Description # Running milpa itself shell init will look for shell scripts named .milpa/hooks/shell-init.sh/executables named .milpa/hooks/shell-init and source them.
-These shell-init scripts should print shell-specific instructions that a user may eval during the initialization of a new shell prompt. The @milpa.shell bash functions will be available for script shells to facilitate printing export statements compatible with POSIX-compliant shells and fish.
-Using with bash, zsh, etc: # On POSIX-compliant shells (zsh or bash, for example), you may add this to near the very end of shell profile (usually at ~/.</description>
-    </item>
-    
-    <item>
-      <title>install</title>
+      <title></title>
       <link>https://milpa.dev/itself/repo/install/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -147,19 +134,7 @@ Arguments #  SOURCE - A go-getter URL to fetch the repo from. TARGET - The path 
     </item>
     
     <item>
-      <title>install-autocomplete</title>
-      <link>https://milpa.dev/itself/shell/install-autocomplete/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://milpa.dev/itself/shell/install-autocomplete/</guid>
-      <description>Generates shell completion scripts
-Usage # milpa itself shell install-autocomplete [options]
-Description # Generates a shell completion script for the current $SHELL. It currently supports bash, fish and zsh. It will write a (_)milpa file in your shell&amp;rsquo;s completion function folder:
- for bash, either /etc/bash_completion.d or /usr/local/etc/bash_completion.d for zsh, whatever is first in $fpath, for example: /usr/local/share/zsh/site-functions for fish, $HOME/.config/fish/completions/  You&amp;rsquo;ll need to reload your shell (for example, by restarting your terminal), and make sure your shell&amp;rsquo;s completion system is enabled!</description>
-    </item>
-    
-    <item>
-      <title>list</title>
+      <title></title>
       <link>https://milpa.dev/itself/repo/list/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -172,7 +147,7 @@ Global Options #  --help (bool): Display help for any command.</description>
     </item>
     
     <item>
-      <title>uninstall</title>
+      <title></title>
       <link>https://milpa.dev/itself/repo/uninstall/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -184,7 +159,32 @@ Global Options #  --help (bool): Display help for any command. --no-color (bool)
     </item>
     
     <item>
-      <title>version</title>
+      <title></title>
+      <link>https://milpa.dev/itself/shell/init/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://milpa.dev/itself/shell/init/</guid>
+      <description>Initializes shells
+Usage # milpa itself shell init [options]
+Description # Running milpa itself shell init will look for shell scripts named .milpa/hooks/shell-init.sh/executables named .milpa/hooks/shell-init and source them.
+These shell-init scripts should print shell-specific instructions that a user may eval during the initialization of a new shell prompt. The @milpa.shell bash functions will be available for script shells to facilitate printing export statements compatible with POSIX-compliant shells and fish.
+Using with bash, zsh, etc: # On POSIX-compliant shells (zsh or bash, for example), you may add this to near the very end of shell profile (usually at ~/.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://milpa.dev/itself/shell/install-autocomplete/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://milpa.dev/itself/shell/install-autocomplete/</guid>
+      <description>Generates shell completion scripts
+Usage # milpa itself shell install-autocomplete [options]
+Description # Generates a shell completion script for the current $SHELL. It currently supports bash, fish and zsh. It will write a (_)milpa file in your shell&amp;rsquo;s completion function folder:
+ for bash, either /etc/bash_completion.d or /usr/local/etc/bash_completion.d for zsh, whatever is first in $fpath, for example: /usr/local/share/zsh/site-functions for fish, $HOME/.config/fish/completions/  You&amp;rsquo;ll need to reload your shell (for example, by restarting your terminal), and make sure your shell&amp;rsquo;s completion system is enabled!</description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://milpa.dev/itself/version/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       

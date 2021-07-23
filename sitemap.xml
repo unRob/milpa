@@ -14,6 +14,12 @@
   </url><url>
     <loc>https://milpa.dev/help/docs/milpa/changelog/</loc>
   </url><url>
+    <loc>https://milpa.dev/</loc>
+  </url><url>
+    <loc>https://milpa.dev/help/</loc>
+  </url><url>
+    <loc>https://milpa.dev/help/docs/</loc>
+  </url><url>
     <loc>https://milpa.dev/help/docs/milpa/</loc>
   </url><url>
     <loc>https://milpa.dev/help/docs/milpa/command/spec/</loc>
@@ -22,37 +28,31 @@
   </url><url>
     <loc>https://milpa.dev/help/docs/milpa/repo/hooks/</loc>
   </url><url>
+    <loc>https://milpa.dev/itself/</loc>
+  </url><url>
     <loc>https://milpa.dev/itself/create/</loc>
-  </url><url>
-    <loc>https://milpa.dev/itself/docs/create/</loc>
-  </url><url>
-    <loc>https://milpa.dev/help/docs/</loc>
   </url><url>
     <loc>https://milpa.dev/itself/docs/</loc>
   </url><url>
-    <loc>https://milpa.dev/itself/doctor/</loc>
-  </url><url>
-    <loc>https://milpa.dev/help/</loc>
+    <loc>https://milpa.dev/itself/docs/create/</loc>
   </url><url>
     <loc>https://milpa.dev/itself/docs/html/</loc>
   </url><url>
-    <loc>https://milpa.dev/itself/shell/init/</loc>
-  </url><url>
-    <loc>https://milpa.dev/itself/repo/install/</loc>
-  </url><url>
-    <loc>https://milpa.dev/itself/shell/install-autocomplete/</loc>
-  </url><url>
-    <loc>https://milpa.dev/itself/</loc>
-  </url><url>
-    <loc>https://milpa.dev/itself/repo/list/</loc>
-  </url><url>
-    <loc>https://milpa.dev/</loc>
+    <loc>https://milpa.dev/itself/doctor/</loc>
   </url><url>
     <loc>https://milpa.dev/itself/repo/</loc>
   </url><url>
-    <loc>https://milpa.dev/itself/shell/</loc>
+    <loc>https://milpa.dev/itself/repo/install/</loc>
+  </url><url>
+    <loc>https://milpa.dev/itself/repo/list/</loc>
   </url><url>
     <loc>https://milpa.dev/itself/repo/uninstall/</loc>
+  </url><url>
+    <loc>https://milpa.dev/itself/shell/</loc>
+  </url><url>
+    <loc>https://milpa.dev/itself/shell/init/</loc>
+  </url><url>
+    <loc>https://milpa.dev/itself/shell/install-autocomplete/</loc>
   </url><url>
     <loc>https://milpa.dev/itself/version/</loc>
   </url>
