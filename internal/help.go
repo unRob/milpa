@@ -317,6 +317,10 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 
 var HelpTemplate = `{{ if not .HideHeader }}
   # {{ if and (not (eq .Spec.Meta.Kind "root")) (not (eq .Command.Name "help")) }}{{ .Bin }} {{ end }}{{ .Spec.FullName }}{{if eq .Command.Name "help"}} help{{end}}
+{{- else }}
+---
+description: {{ .Command.Short }}
+---
 {{- end }}
 
 {{ .Command.Short }}

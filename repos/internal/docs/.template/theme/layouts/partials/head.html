@@ -5,10 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en" />
-  <meta property="og:title" content="{{ .Title }}" />
+  <meta property="og:title" content="{{ if not .IsHome }}{{ replace .RelPermalink "/" " " }}{{else}}milpa command line utility{{end}}" />
+  <meta property="og:site_name" content="🌽 milpa" />
   <meta property="og:description" content="{{ .Description }}" />
+  <meta property="og:url" content="{{ .Permalink }}" />
   <title>milpa{{ if not .IsHome }} {{ replace .RelPermalink "/" " " }}{{end}}</title>
   <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ "/css/index.css" | relURL }}"/>
+  {{ $style := resources.Get   "css/index.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $style.Permalink }}"/>
   <link rel="canonical" href="{{ .Permalink }}">
 </head>
