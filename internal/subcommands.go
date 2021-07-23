@@ -213,11 +213,6 @@ func writeCommandDocs(dst string, path []string, cmd *cobra.Command) error {
 	}
 	fname := dir + "/" + name + ".md"
 
-	frontMatter := `---
-title: ` + cmd.Name() + `
----
-`
-
 	var tmp bytes.Buffer
 	cmd.SetOutput(&tmp)
 
@@ -237,7 +232,7 @@ title: ` + cmd.Name() + `
 	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("index.md"), []byte(""))
 	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte(".md"), []byte("/"))
 
-	_, err = f.Write(append([]byte(frontMatter), fixedLinks...))
+	_, err = f.Write(fixedLinks)
 	if err != nil {
 		return err
 	}
