@@ -1,1 +1,2 @@
-<script src="{{ "/js/index.js" | relURL }}"></script>
+{{ $script := resources.Get "js/index.js" | minify | fingerprint }}
+<script src="{{ $script.Permalink }}"></script>
