@@ -3,9 +3,9 @@ title: Getting started
 weight: 1
 ---
 
-We'll assume you have a repo with your team's code at `~/src/my-teams-app`, but you can also test `!milpa!` out by creating any folder, wherever you like.
+We'll assume you have a repo with your team's code at `~/src/my-teams-app`, but you can also test `milpa` out by creating any folder, wherever you like.
 
-Once that's set up, you'd get started with `!milpa!` by:
+Once that's set up, you'd get started with `milpa` by:
 
 0. Installing it,
 1. installing milpa's autocompletion script to your shell, possibly restarting your session,

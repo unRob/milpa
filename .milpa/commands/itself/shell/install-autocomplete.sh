@@ -16,11 +16,11 @@ case "$SHELL" in
   *bash)
     if [[ -d /etc/bash_completion.d ]]; then
       set -x
-      "$MILPA_COMPA" __generate_completions bash > "/etc/bash_completion.d/$MILPA_NAME"
+      "$MILPA_COMPA" __generate_completions bash > "/etc/bash_completion.d/milpa"
       set +x
     elif [[ -d /usr/local/etc/bash_completion.d ]]; then
       set -x
-      "$MILPA_NAME_COMPA" __generate_completions bash > "/usr/local/etc/bash_completion.d/milpa"
+      "$MILPA_COMPA" __generate_completions bash | sudo tee "/usr/local/etc/bash_completion.d/milpa"
       set +x
     else
       @milpa.fail "No directory found for writing completion script (tried /etc/bash_completion.d and /usr/local/etc/bash_completion.d)"
@@ -37,12 +37,12 @@ EOF
     dst=$(zsh -i -c 'printf "%s" "${${fpath[@]:#$HOME/*}[1]}"') || @milpa.fail "Unable to locate an fpath to install completions to"
     if [[ -w "$dst" ]]; then
       set -ex
-      "$MILPA_COMPA" __generate_completions zsh > "${dst}/_${MILPA_NAME}"
+      "$MILPA_COMPA" __generate_completions zsh > "${dst}/_milpa"
       set +ex
     else
       @milpa.log warning "$dst does not look writeable for $USER, using sudo"
       set -ex
-      "$MILPA_COMPA" __generate_completions zsh | sudo tee "${dst}/_${MILPA_NAME}" >/dev/null
+      "$MILPA_COMPA" __generate_completions zsh | sudo tee "${dst}/_milpa" >/dev/null
       set +ex
     fi
 
@@ -50,7 +50,7 @@ EOF
     ;;
   *fish)
     set -ex
-    "$MILPA_COMPA" __generate_completions fish > "$HOME/.config/fish/completions/${MILPA_NAME}.fish"
+    "$MILPA_COMPA" __generate_completions fish > "$HOME/.config/fish/completions/milpa.fish"
     set +x
   ;;
   *)
