@@ -15,17 +15,21 @@
 tmpdir="${DOCS_TMP_DIR:-$HOME/.cache/milpa}"
 content="$tmpdir/html"
 
-@milpa.log info "generating command docs"
-MILPA_PLAIN_HELP=enabled "$MILPA_COMPA" __generate_documentation "$content" || @milpa.fail "Could not generate command documentation"
+function generate_content_folder() {
+  @milpa.log info "generating command docs"
+  MILPA_PLAIN_HELP=enabled "$MILPA_COMPA" __generate_documentation "$content" || @milpa.fail "Could not generate command documentation"
 
-mv -v "$content/help/docs.md" "$content/help/docs/_index.md"
+  mv -v "$content/help/docs.md" "$content/help/docs/_index.md"
 
-cat - <(tail -n +2 "$MILPA_ROOT/CHANGELOG.md") > "$content/help/docs/milpa/changelog.md" <<YAML
+  cat - <(tail -n +2 "$MILPA_ROOT/CHANGELOG.md") > "$content/help/docs/milpa/changelog.md" <<YAML
 ---
 weight: 100
 ---
 
 YAML
+}
+
+generate_content_folder
 
 
 if [[ "$MILPA_ARG_ACTION" == "serve" ]]; then
@@ -57,7 +61,22 @@ if [[ "$MILPA_ARG_ACTION" == "serve" ]]; then
   [[ "$OSTYPE" == darwin* ]] && open "http://localhost:$MILPA_OPT_PORT"
   [[ "$OSTYPE" == linux* ]] && xdg-open "http://localhost:$MILPA_OPT_PORT"
 
-  exec docker attach "$containerID"
+  (
+    trap 'kill 0' SIGINT;
+    if command -v fswatch >/dev/null; then
+      IFS=: read -ra MILPA_PATH_ARR <<<"$MILPA_PATH"
+      @milpa.log info "Listening for changes in ${MILPA_PATH_ARR[*]//:/ }..."
+      @milpa.log warning "Press CTRL-C twice to stop"
+      fswatch --one-per-batch --recursive --print0 "${MILPA_PATH_ARR[@]//:/ }" | while read -r -d "" _; do
+        @milpa.log info "Changes found on MILPA_PATH"
+        generate_content_folder
+      done &
+    else
+      @milpa.log warning "fswatch is not available, will not listen for changes"
+    fi
+    docker attach "$containerID"
+    wait
+  )
 else
   dst="$(realpath "${MILPA_OPT_TO}")/${MILPA_OPT_HOSTNAME}"
   @milpa.log info "Writing docs to $dst"

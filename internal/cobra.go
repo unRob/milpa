@@ -99,9 +99,9 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 
 func RootCommand(commands []*Command, version string) (*cobra.Command, error) {
 	root := &cobra.Command{
-		Use:         os.Getenv("MILPA_NAME") + " [--silent|-v|--verbose] [--no-color] [-h|-help] [--version]",
+		Use:         "milpa [--silent|-v|--verbose] [--no-color] [-h|-help] [--version]",
 		Annotations: map[string]string{"version": version},
-		Short:       os.Getenv("MILPA_NAME") + " runs commands from .milpa folders",
+		Short:       "milpa runs commands from .milpa folders",
 		Long: `milpa runs commands from .milpa folders
 
 ` + Root.Description,

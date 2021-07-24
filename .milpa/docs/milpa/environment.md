@@ -2,21 +2,21 @@
 related-docs: [utils/log, command/environment]
 weight: 10
 ---
-There's a few environment variables that control the behavior of `!milpa!`.
+There's a few environment variables that control the behavior of `milpa`.
 
 ## Paths
 
 ### `MILPA_ROOT`
 
-`MILPA_ROOT` points to the installed !milpa! _kernel_, by default `/usr/local/lib/milpa`. This folder contains a !milpa! repo, the `!milpa!` executable, and a helper binary named `compa`, along a copy of the license and the source repo's README.
+`MILPA_ROOT` points to the installed milpa _kernel_, by default `/usr/local/lib/milpa`. This folder contains a milpa repo, the `milpa` executable, and a helper binary named `compa`, along a copy of the license and the source repo's README.
 
-You can set it to a local installation, like a fork, and run `$MILPA_ROOT/!milpa!` to use that fork's scripts instead of an installed version.
+You can set it to a local installation, like a fork, and run `$MILPA_ROOT/milpa` to use that fork's scripts instead of an installed version.
 
 If you choose to install to a different path than the default, you may wanna add `MILPA_ROOT=/path/to/your/install` you your shell profile.
 
 ### `MILPA_PATH`
 
-The `MILPA_PATH` environment variable tells `!milpa!` where to look for repos.
+The `MILPA_PATH` environment variable tells `milpa` where to look for repos.
 
 By default, `milpa` will look for repos in the following order:
 
@@ -42,7 +42,7 @@ Set `DEBUG=1` and find out whatever roberto needed to debug before writing prope
 
 ### `MILPA_VERBOSE`
 
-Enabled by the `--verbose` option. It shows information about what `!milpa!` is doing, along any `@milpa.log debug` messages from commands.
+Enabled by the `--verbose` option. It shows information about what `milpa` is doing, along any `@milpa.log debug` messages from commands.
 
 ### `MILPA_SILENT`
 

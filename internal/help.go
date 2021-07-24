@@ -64,7 +64,7 @@ func readDoc(query []string) ([]byte, error) {
 
 var Docs *Command = &Command{
 	Summary:     "Dislplays docs on TOPIC",
-	Description: "docs shows markdown-formatted documentation from " + os.Getenv("MILPA_NAME") + ` repos. See ` + "`" + os.Getenv("MILPA_NAME") + " help docs milpa repo docs` for more information on how to write your own.",
+	Description: "Shows markdown-formatted documentation from milpa repos. See `milpa help docs milpa repo docs` for more information on how to write your own.",
 	Arguments: Arguments{
 		Argument{
 			Name:        "topic",
@@ -79,13 +79,16 @@ var Docs *Command = &Command{
 		Repo: os.Getenv("MILPA_ROOT"),
 		Kind: "internal",
 	},
-	helpFunc: func() string {
+	helpFunc: func(printLinks bool) string {
 		topics, err := findDocs([]string{}, "", false)
 		if err != nil {
 			return ""
 		}
 		topicList := []string{}
 		for _, topic := range topics {
+			if printLinks {
+				topic = fmt.Sprintf("[%s](%s)", topic, topic)
+			}
 			topicList = append(topicList, "- "+topic)
 		}
 
@@ -97,8 +100,8 @@ var Docs *Command = &Command{
 
 var DocsCommand *cobra.Command = &cobra.Command{
 	Use:   "docs [TOPIC]",
-	Short: "Displays docs on TOPIC",
-	Long:  "docs shows formatted documentation from " + os.Getenv("MILPA_NAME") + " repos",
+	Short: Docs.Summary,
+	Long:  Docs.Description,
 	ValidArgsFunction: func(c *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		logrus.Debugf("looking for docs given %v and %s", args, toComplete)
 		docs, err := findDocs(args, toComplete, false)
@@ -136,8 +139,6 @@ var DocsCommand *cobra.Command = &cobra.Command{
 			contents = bytes.Join([][]byte{[]byte("# " + title + "\n"), parts[2]}, []byte("\n"))
 		}
 
-		contents = bytes.ReplaceAll(contents, []byte("!milpa!"), []byte(os.Getenv("MILPA_NAME")))
-
 		width, _, err := term.GetSize(0)
 		if err != nil {
 			return err
@@ -174,9 +175,6 @@ var HelpCommand *cobra.Command = &cobra.Command{
 	Use:   "help [command]",
 	Short: "Display usage information on any **COMMAND...**",
 	Long:  `Help provides the valid arguments and options for any command known to milpa.`,
-	// Annotations: map[string]string{
-	//   ""
-	// },
 	ValidArgsFunction: func(c *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		var completions []string
 		cmd, _, e := c.Root().Find(args)
@@ -235,17 +233,16 @@ type combinedCommand struct {
 	Spec          *Command
 	Command       *cobra.Command
 	GlobalOptions Options
-	Bin           string
-	HideHeader    bool
+	HTMLOutput    bool
 }
 
 func (cmd *Command) HasAdditionalHelp() bool {
 	return cmd.helpFunc != nil
 }
 
-func (cmd *Command) AdditionalHelp() *string {
+func (cmd *Command) AdditionalHelp(printLinks bool) *string {
 	if cmd.helpFunc != nil {
-		str := cmd.helpFunc()
+		str := cmd.helpFunc(printLinks)
 		return &str
 	}
 	return nil
@@ -266,8 +263,7 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 		Spec:          cmd,
 		Command:       cc,
 		GlobalOptions: Root.Options,
-		Bin:           os.Getenv("MILPA_NAME"),
-		HideHeader:    os.Getenv("MILPA_PLAIN_HELP") == "enabled",
+		HTMLOutput:    os.Getenv("MILPA_PLAIN_HELP") == "enabled",
 	}
 	err = tmpl.Execute(&buf, c)
 	if err != nil {
@@ -315,8 +311,8 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 	}
 }
 
-var HelpTemplate = `{{ if not .HideHeader }}
-  # {{ if and (not (eq .Spec.Meta.Kind "root")) (not (eq .Command.Name "help")) }}{{ .Bin }} {{ end }}{{ .Spec.FullName }}{{if eq .Command.Name "help"}} help{{end}}
+var HelpTemplate = `{{- if not .HTMLOutput }}
+# {{ if and (not (eq .Spec.Meta.Kind "root")) (not (eq .Command.Name "help")) }}milpa {{ end }}{{ .Spec.FullName }}{{if eq .Command.Name "help"}} help{{end}}
 {{- else }}
 ---
 description: {{ .Command.Short }}
@@ -332,10 +328,15 @@ description: {{ .Command.Short }}
 {{ if .Command.HasAvailableSubCommands -}}
 ## Subcommands
 
+{{ $hh := .HTMLOutput -}}
 {{ range .Command.Commands -}}
 {{- if (or .IsAvailableCommand (eq .Name "help")) -}}
-- ﹅{{ .Name }}﹅ - {{.Short}}
-{{ end -}}
+- {{ if $hh -}}
+[﹅{{ .Name }}﹅]({{.Name}})
+{{- else -}}
+﹅{{ .Name }}﹅
+{{- end }} - {{.Short}}
+{{ end }}
 {{- end -}}
 {{- end -}}
 
@@ -344,11 +345,9 @@ description: {{ .Command.Short }}
 
 {{ range .Spec.Arguments -}}
 
-- {{ if .Required}}**{{ end }}﹅{{ .Name | toUpper }}{{ if .Variadic}}...{{ end }}﹅{{ if .Required }}**{{ end }} - {{ .Description }}
+- ﹅{{ .Name | toUpper }}{{ if .Variadic}}...{{ end }}﹅{{ if .Required }} _required_{{ end }} - {{ .Description }}
 {{ end -}}
 {{- end -}}
-
-
 
 
 {{ if and (eq .Spec.Meta.Kind "root") (not (eq .Command.Name "help")) }}
@@ -357,7 +356,7 @@ description: {{ .Command.Short }}
 {{ .Spec.Description }}
 {{ end -}}
 {{- if .Spec.HasAdditionalHelp }}
-{{ .Spec.AdditionalHelp }}
+{{ .Spec.AdditionalHelp .HTMLOutput }}
 {{ end -}}
 
 

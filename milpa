@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# milpa may have multiple names, let's make sure everyone knows about it
-# shellcheck disable=2155
-export MILPA_NAME="$(basename "$0")"
 # MILPA ROOT points to this installation of the milpa kernel
 # lol, kernel. La gente bilingue seguro entiende el chiste.
 export MILPA_ROOT=${MILPA_ROOT:-/usr/local/lib/milpa}

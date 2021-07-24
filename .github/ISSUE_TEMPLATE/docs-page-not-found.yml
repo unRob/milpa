@@ -8,7 +8,7 @@ body:
       value: |
         Thanks for taking the time to fill out this 404 report!
   - type: input
-    id: URL
+    id: url
     attributes:
       label: Not found URL
       description: Paste in the address you've found a 404 error at
@@ -16,7 +16,7 @@ body:
     validations:
       required: true
   - type: input
-    id: URL
+    id: referral
     attributes:
       label: Referral URL
       description: Paste in the address where you found the link that took you to the 404 error
