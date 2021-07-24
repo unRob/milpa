@@ -154,6 +154,10 @@ header .emoji-maiz:hover::before {
   color: #12731D;
 }
 
+#content a:hover {
+  color: #57b93a;
+}
+
 #content pre, #content code {
   font-family: "Fira Code";
   font-size: .9em;
@@ -164,7 +168,7 @@ header .emoji-maiz:hover::before {
   line-height: 1.4em;
 }
 
-#content p code, #content li > code {
+#content p code, #content li > code, #content a code {
   background: rgba(65, 80, 66, 0.1);
   border-radius: 3px;
   color: #12731D;
@@ -178,6 +182,14 @@ header .emoji-maiz:hover::before {
 pre {
   padding: .6em;
   white-space: pre-wrap;
+}
+
+#content li {
+  margin: .4em 0;
+}
+
+#content img {
+  max-width: 100%;
 }
 
 hr {

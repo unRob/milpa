@@ -3,18 +3,18 @@ related-docs: [milpa/environment, milpa/command/spec]
 related-commands: ["itself create"]
 weight: 15
 ---
-`!milpa!` can run two types of commands:
+`milpa` can run two types of commands:
 
 - bash scripts, with an `.sh` extension, or
 - executables without an extension, written in whatever language you want.
 
 ## Spec
 
-In order for `!milpa!` to recognize your commands, you'll need to make sure you also add its corresponding [command spec](/.milpa/docs/milpa/command/spec.md).
+In order for `milpa` to recognize your commands, you'll need to make sure you also add its corresponding [command spec](/.milpa/docs/milpa/command/spec.md).
 
 ## Your command itself
 
-`!milpa!` invokes your command with `source`, if it's a bash script with an `.sh` extension, and otherwise with `exec`. If your command does not have an extension, it must have the executable bit on (`chmod +x .milpa/commands/your-command`).
+`milpa` invokes your command with `source`, if it's a bash script with an `.sh` extension, and otherwise with `exec`. If your command does not have an extension, it must have the executable bit on (`chmod +x .milpa/commands/your-command`).
 
 ## Arguments and Options
 
@@ -26,7 +26,7 @@ Along the [global environment variables](/.milpa/docs/milpa/environment.md), you
 
 ### `MILPA_COMMAND_*`
 
-Your script has access to the following variables set by `!milpa!` after parsing arguments and running validations:
+Your script has access to the following variables set by `milpa` after parsing arguments and running validations:
 
 - `MILPA_COMMAND_NAME`: the space delimited name of your command, i.e. `db connect`;
 - `MILPA_COMMAND_KIND`: either `source` for `.sh` scripts, or `exec` for executables;

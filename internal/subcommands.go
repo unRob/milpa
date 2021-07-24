@@ -154,7 +154,6 @@ func writeDocs(dst string) error {
 			return err
 		}
 
-		contents = bytes.ReplaceAll(contents, []byte("!milpa!"), []byte(os.Getenv("MILPA_NAME")))
 		name := strings.TrimSuffix(strings.SplitN(doc, ".milpa/docs/", 2)[1], ".md")
 		components := strings.Split(name, "/")
 		last := len(components) - 1

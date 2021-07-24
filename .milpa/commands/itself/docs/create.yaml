@@ -1,6 +1,6 @@
 summary: Creates a new doc in your milpa
 description: |
-  See [`!milpa! help docs`](/.milpa/commands/help/docs/) for more info on docs.
+  See [`milpa help docs`](/.milpa/commands/help/docs/) for more info on docs.
 arguments:
   - name: name
     description: the name you'd like for your doc

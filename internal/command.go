@@ -13,7 +13,6 @@
 package internal
 
 import (
-	"bytes"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -34,7 +33,7 @@ type Command struct {
 	Options      Options   `yaml:"options" validate:"dive"`
 	runtimeFlags *pflag.FlagSet
 	issues       []string
-	helpFunc     func() string
+	helpFunc     func(printLinks bool) string
 }
 
 var Root *Command = &Command{
@@ -44,7 +43,7 @@ var Root *Command = &Command{
   See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more information about ﹅milpa﹅`,
 	Meta: Meta{
 		Path: os.Getenv("MILPA_ROOT") + "/milpa",
-		Name: []string{os.Getenv("MILPA_NAME")},
+		Name: []string{"milpa"},
 		Repo: os.Getenv("MILPA_ROOT"),
 		Kind: "root",
 	},
@@ -104,7 +103,6 @@ func New(path string, repo string, strict bool) (cmd *Command, err error) {
 	spec := strings.TrimSuffix(path, ".sh") + ".yaml"
 	var contents []byte
 	if contents, err = ioutil.ReadFile(spec); err == nil {
-		contents := bytes.ReplaceAll(contents, []byte("!milpa!"), []byte(os.Getenv("MILPA_NAME")))
 		if strict {
 			err = yaml.UnmarshalStrict(contents, cmd)
 		} else {
@@ -120,8 +118,6 @@ func New(path string, repo string, strict bool) (cmd *Command, err error) {
 		cmd.issues = append(cmd.issues, err.Error())
 	}
 
-	cmd.Summary = strings.ReplaceAll(cmd.Summary, "!milpa!", os.Getenv("MILPA_NAME"))
-	cmd.Description = strings.ReplaceAll(cmd.Description, "!milpa!", os.Getenv("MILPA_NAME"))
 	return
 }
 

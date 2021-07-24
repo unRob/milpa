@@ -1,4 +1,4 @@
-return (function navigateOnCommand () {
+(function navigateOnCommand () {
   const allCommands = Array.from(document.querySelectorAll("#milpa-commands option")).map((opt) => opt.value)
   const commandSelector = document.querySelector("#command-selector")
   const initialValue = commandSelector.value
@@ -21,4 +21,4 @@ return (function navigateOnCommand () {
       }
     }
   })
-})()
+})();

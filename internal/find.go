@@ -168,10 +168,18 @@ func findDocs(query []string, needle string, returnPaths bool) ([]string, error)
 		}
 
 		for _, doc := range docs {
-			if strings.Contains(doc, "/.template") {
+			fname := filepath.Base(doc)
+			extensionParts := strings.Split(fname, ".")
+			ext := ""
+			if len(extensionParts) > 1 {
+				ext = extensionParts[len(extensionParts)-1]
+			}
+
+			if strings.Contains(doc, "/.template") || (ext != "" && ext != "md") {
+				logrus.Debugf("Ignoring non-doc file: %s, ext: %s, md: %v", doc, ext, (ext != "" && ext != ".md"))
 				continue
 			}
-			name := strings.TrimSuffix(filepath.Base(doc), ".md")
+			name := strings.TrimSuffix(fname, ".md")
 			if _, ok := found[name]; (needle == "" || strings.HasPrefix(name, needle)) && !ok {
 				if returnPaths {
 					results = append(results, doc)
