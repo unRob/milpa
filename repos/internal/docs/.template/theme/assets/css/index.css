@@ -1,6 +1,5 @@
 
 html, body {
-  height: 100%;
   margin: 0;
   padding: 0;
 }
@@ -9,6 +8,7 @@ body {
   font-family: "Playfair Display";
   font-size: 16px;
   color: #2B3C2D;
+  background-color: #dff4d4
 }
 
 header {
@@ -18,6 +18,10 @@ header {
   font-family: "Fira Code";
   font-weight: bold;
   display: flex;
+  position: sticky;
+  top: 0;
+  height: 53px;
+  z-index: 100;
 }
 
 header h1 {
@@ -28,6 +32,7 @@ header h1 {
   text-align: right;
   margin-right: 20px;
   margin-left: -20px;
+  height: 53px;
 }
 
 header .emoji-maiz::before {
@@ -65,19 +70,44 @@ header .emoji-maiz:hover::before {
   outline: 2px solid rgba(190, 197, 6, 0.8);
 }
 
-#wrapper {
-  display: flex;
-  background: #dff4d4;
-  height: calc(100vh - 53px);
-  overflow: hidden;
+#menu-toggle {
+  width: 53px;
+  background: rgba(255,255,255,.2);
+  border: none;
+  transition: background-color .2s ease-in;
+  display: none;
+}
+
+#menu-toggle svg {
+  transition: transform .2s ease-in;
+  transform: rotate(0deg);
+}
+#menu-toggle.open svg {
+  transform: rotate(90deg);
+}
+
+#menu-toggle path {
+  stroke:#2B3C2D;
+  transition: stroke .2s ease-in;
+}
+
+#menu-toggle:hover {
+  background: rgba(255,255,255,.3);
+}
+
+#menu-toggle:hover path {
+  stroke: #CEFCD3
 }
 
 #sidebar {
+  position: fixed;
   background: #fff;
-  min-width: 200px;
+  width: 200px;
   padding: 10px;
-  max-height: 100%;
+  top: 53px;
+  height: calc(100vh - 73px);
   overflow-y: scroll;
+  z-index: 10;
 }
 
 #sidebar nav {
@@ -126,8 +156,7 @@ header .emoji-maiz:hover::before {
 #content {
   padding: 20px;
   max-width: 800px;
-  flex: auto;
-  overflow-y: scroll;
+  padding-left: 240px;
 }
 
 #content > h1:first-child {
@@ -136,6 +165,7 @@ header .emoji-maiz:hover::before {
 
 .content-header {
   color: #12731D;
+  display: inline-block;
 }
 
 .heading-anchor {
@@ -146,7 +176,7 @@ header .emoji-maiz:hover::before {
   display: none;
 }
 
-.content-header:hover .heading-anchor{
+.content-header-wrapper:hover .heading-anchor{
   display: inline-block;
 }
 
@@ -183,6 +213,7 @@ pre {
   padding: .6em;
   white-space: pre-wrap;
 }
+
 
 #content li {
   margin: .4em 0;
@@ -221,12 +252,14 @@ hr {
 #skip-to-content {
   background: #CEFCD3;
   color: #12731D;
+  padding: 1em;
+  z-index: 1000;
 }
-
 
 @media screen and (prefers-color-scheme: dark) {
   body {
-    color: #57b93a;
+    color: #96b452;
+    background-color: #2B3C2D;
   }
 
   #sidebar {
@@ -238,16 +271,27 @@ hr {
     color: #CEFCD3
   }
 
-  #wrapper {
-    background-color: #2B3C2D;
+  #content .content-header {
+    color: #c0e394;
   }
 
-  #content a, .content-header {
-    color: #96b452;
+  #content a {
+    color: #c0e394;
   }
 
-  #content p code, #content li > code {
+  #content p code, #content li > code, #content a code {
     color: #96b452;
+    background: #132b17;
+  }
+
+  .highlight pre {
+    background-color: #132b17!important;
+  }
+}
+
+@media screen and (prefers-color-scheme: dark) and (max-width: 768px) {
+  #sidebar {
+    background-color: rgba(93, 114, 96, .9) !important;
   }
 }
 
@@ -261,17 +305,57 @@ hr {
     margin-left: 0;
   }
 
-  header h1, #command-selector  {
+  header h1, #command-selector {
     font-size: 20px;
+  }
+
+  #menu-toggle {
+    display: block;
   }
 
   #sidebar {
     display: none;
+    width: 100%;
+    padding: 1em 0;
+    height: calc(100vh - 81px);
+    opacity: .95;
+    background-color: rgba(223, 244, 212, .9);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+  }
+
+
+  #sidebar .heading {
+    font-size: 2em;
+  }
+
+  #sidebar ul {
+    font-size: 1em;
+  }
+
+  #sidebar nav {
+    margin: 0 auto;
+    margin-bottom: 1.5em;
+    width: 60%;
+  }
+
+  #sidebar.open {
+    display: block;
   }
 
   #command-selector {
     padding-left: .2em;
   }
+
+  #content {
+    padding-left: 20px;
+  }
+
+  .sidebar-open #content {
+    opacity: .5;
+    transform: scale(.95);
+  }
+
 }
 
 @media screen and (max-width: 480px) {
@@ -285,14 +369,15 @@ hr {
 }
 
 @media print {
-  #sidebar, header {
-    display: none;
+  body {
+    background-color: #fff;
+  }
+  #content {
+    padding-left: 20px;
   }
 
-  #wrapper {
-    display: block;
-    height: auto;
-    background: #fff;
+  #sidebar, header {
+    display: none;
   }
 
   #command-name-header {
@@ -302,5 +387,15 @@ hr {
     clip: none;
     height: auto;
     width: auto;
+  }
+
+  #content p code, #content li > code, #content a code {
+    background: none;
+    color: black;
+    padding:0 .3em;
+  }
+
+  .highlight pre {
+    background-color: transparent !important
   }
 }

@@ -21,4 +21,19 @@
       }
     }
   })
+
+  const sidebar = document.querySelector("#sidebar");
+  document.querySelector("#menu-toggle").addEventListener("click", function(evt){
+    let classes = this.classList
+    classes.toggle("open")
+    if (classes.contains("open")) {
+      sidebar.classList.add("open")
+      sidebar.setAttribute("aria-hidden", "false")
+      document.body.classList.add("sidebar-open")
+    } else {
+      sidebar.classList.remove("open")
+      sidebar.setAttribute("aria-hidden", "true")
+      document.body.classList.remove("sidebar-open")
+    }
+  })
 })();

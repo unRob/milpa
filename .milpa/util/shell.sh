@@ -24,6 +24,20 @@ function @milpa.shell.export (){
   esac
 }
 
+function @milpa.shell.append_path (){
+  path_var="${2:-PATH}"
+  case "$_CURRENT_SHELL" in
+    fish)
+      # set PATH $PATH some/new/path
+      echo "set $path_var \$$path_var $1"
+      ;;
+    *sh)
+      # export PATH="$PATH:some/new/path"
+      echo "export $path_var=\"\$$path_var:$1\""
+      ;;
+  esac
+}
+
 function @milpa.shell.prepend_path (){
   path_var="${2:-PATH}"
   case "$_CURRENT_SHELL" in
