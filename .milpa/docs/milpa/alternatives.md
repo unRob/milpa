@@ -1,6 +1,7 @@
 ---
 title: Why use milpa
-weight: 50
+description: Use-cases and alternatives when using milpa
+weight: 2
 ---
 
 I built milpa with a few use cases in mind:

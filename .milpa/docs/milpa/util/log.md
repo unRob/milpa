@@ -1,3 +1,7 @@
+---
+description: Functions related to output
+---
+
 The `log` util contains shell functions related to output of informational messages. This utility is **loaded by default**.
 
 If [`TERM`](https://linux.die.net/man/7/term) is not set, then it'll default to `xterm-color`.
