@@ -17,6 +17,16 @@ Installing it, installing milpa&amp;rsquo;s autocompletion script to your shell,
     </item>
     
     <item>
+      <title>Why use milpa</title>
+      <link>https://milpa.dev/help/docs/milpa/alternatives/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://milpa.dev/help/docs/milpa/alternatives/</guid>
+      <description>I built milpa with a few use cases in mind:
+ I need to share groups of scripts used by most folks in an engineering team (i.e. setup development environments, work with secrets/credentials) I want to share context and code, without having to ask folks to run stuff off READMEs I forget I have all these functions and scripts in my dotfiles/PATH/fpath that I always have to read the source for before using them, if I&amp;rsquo;ve not run them in a while.</description>
+    </item>
+    
+    <item>
       <title></title>
       <link>https://milpa.dev/help/docs/milpa/environment/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -25,16 +35,6 @@ Installing it, installing milpa&amp;rsquo;s autocompletion script to your shell,
       <description>There&amp;rsquo;s a few environment variables that control the behavior of milpa.
 Paths #  MILPA_ROOT #  MILPA_ROOT points to the installed milpa kernel, by default /usr/local/lib/milpa. This folder contains a milpa repo, the milpa executable, and a helper binary named compa, along a copy of the license and the source repo&amp;rsquo;s README.
 You can set it to a local installation, like a fork, and run $MILPA_ROOT/milpa to use that fork&amp;rsquo;s scripts instead of an installed version.</description>
-    </item>
-    
-    <item>
-      <title>Why use milpa</title>
-      <link>https://milpa.dev/help/docs/milpa/alternatives/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://milpa.dev/help/docs/milpa/alternatives/</guid>
-      <description>I built milpa with a few use cases in mind:
- I need to share groups of scripts used by most folks in an engineering team (i.e. setup development environments, work with secrets/credentials) I want to share context and code, without having to ask folks to run stuff off READMEs I forget I have all these functions and scripts in my dotfiles/PATH/fpath that I always have to read the source for before using them, if I&amp;rsquo;ve not run them in a while.</description>
     </item>
     
     <item>
@@ -63,8 +63,9 @@ Specs must be written in YAML, have a yaml extension, and be named exactly like 
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://milpa.dev/help/docs/milpa/repo/docs/</guid>
-      <description>!milpa can render any markdown-formatted documents stored at .milpa/docs to the terminal and browser. Files must be named with an / extension and may exist at any folder depth. Files named .milpa/docs/whatever/ may be displayed by running either milpa help docs whatever or milpa help docs whatever index
-Same docs are rendered to HTML, using the milpa itself docs html command.</description>
+      <description>milpa can render any markdown-formatted documents stored at .milpa/docs to the terminal and browser. Files must be named with an / extension and may exist at any folder depth. Files named .milpa/docs/whatever/ may be displayed by running either milpa help docs whatever or milpa help docs whatever index
+Same docs are rendered to HTML, using the milpa itself docs html command.
+These docs are brought to you courtesy of the recursive department of departamental recursiveness.</description>
     </item>
     
     <item>

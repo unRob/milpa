@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html prefix="og: http://ogp.me/ns#" lang="en"><head lang="en">
   <meta charset="utf-8">
-  
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en" />
-  <meta property="og:title" content=" help docs milpa repo hooks " />
+  <meta property="og:title" content="help docs milpa repo hooks" />
   <meta property="og:site_name" content="🌽 milpa" />
-  <meta property="og:description" content="" />
+  <meta property="og:description" content="Hook points for milpa commands" />
+  <meta name="description" content="Hook points for milpa commands" />
   <meta property="og:url" content="https://milpa.dev/help/docs/milpa/repo/hooks/" />
-  <title>milpa  help docs milpa repo hooks </title>
-  
-  <link rel="stylesheet" href="https://milpa.dev/css/index.min.958ee4efda6d7a2c2d9ef507092fee9b7f3128c771d9e025e55a95c335403f40.css"/>
+  <title>milpa help docs milpa repo hooks</title>
+  <link rel="stylesheet" href="/css/bundle.min.ede1eef6269c98894bb1d97136560b8364cb9d02c32b628bfd58bd5aaaf24d68.css"/>
+
   <link rel="canonical" href="https://milpa.dev/help/docs/milpa/repo/hooks/">
 
   
@@ -35,151 +35,39 @@
     id="command-selector"
     value="help docs milpa repo hooks" />
   <datalist id="milpa-commands">
-    
     <option value="help" />
-
-
 <option value="help docs" />
-
-
 <option value="help docs milpa" />
-
-
 <option value="help docs milpa quick-guide" />
-
-
-
-<option value="help docs milpa environment" />
-
-
-
-<option value="help docs milpa repo" />
-
-
-<option value="help docs milpa repo docs" />
-
-
-
-<option value="help docs milpa repo hooks" />
-
-
-
-
-
-
-<option value="help docs milpa command" />
-
-
-<option value="help docs milpa command spec" />
-
-
-
-
-
-
 <option value="help docs milpa alternatives" />
-
-
-
-<option value="help docs milpa changelog" />
-
-
-
+<option value="help docs milpa environment" />
+<option value="help docs milpa repo" />
+<option value="help docs milpa repo docs" />
+<option value="help docs milpa repo hooks" />
+<option value="help docs milpa command" />
+<option value="help docs milpa command spec" />
 <option value="help docs milpa util" />
-
-
 <option value="help docs milpa util log" />
-
-
-
 <option value="help docs milpa util repo" />
-
-
-
 <option value="help docs milpa util shell" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    <option value="itself" />
-
-
+<option value="help docs milpa changelog" />
+<option value="itself" />
 <option value="itself create" />
-
-
-
 <option value="itself docs" />
-
-
 <option value="itself docs create" />
-
-
-
 <option value="itself docs html" />
-
-
-
-
-
-
 <option value="itself doctor" />
-
-
-
 <option value="itself repo" />
-
-
 <option value="itself repo install" />
-
-
-
 <option value="itself repo list" />
-
-
-
 <option value="itself repo uninstall" />
-
-
-
-
-
-
 <option value="itself shell" />
-
-
 <option value="itself shell init" />
-
-
-
 <option value="itself shell install-autocomplete" />
-
-
-
-
-
-
 <option value="itself version" />
-
-
-
-
-
-    
-  </datalist>
+</datalist>
   <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewBox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg"><title>Menu Icon</title><g transform="translate(10.016 -803.03)"><g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336"><path d="m19.668 1032.7h250.65"/><path d="m19.668 932.69h250.65"/><path d="m19.668 832.69h250.65"/></g></g></svg></button>
 </header>
-
 
 <div id="sidebar" aria-hidden="false">
   <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
@@ -226,6 +114,12 @@
   
 <li >
   <a href="https://milpa.dev/help/docs/milpa/quick-guide/">quick-guide</a>
+
+
+  
+  
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/alternatives/">alternatives</a>
 
 
   
@@ -283,18 +177,6 @@
   
   
 <li >
-  <a href="https://milpa.dev/help/docs/milpa/alternatives/">alternatives</a>
-
-
-  
-  
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
-
-
-  
-  
-<li >
   <a href="https://milpa.dev/help/docs/milpa/util/">util</a>
 
 <ul
@@ -322,6 +204,12 @@
   
 </ul>
 </li>
+
+
+  
+  
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
 
 
   
@@ -463,19 +351,19 @@
 <h1 id="command-name-header" class="sr-only">milpa help docs milpa repo hooks</h1>
 <p><code>milpa</code> provides a couple of hook points for you to tweak the behavior of your shell and your repo&rsquo;s commands. Hooks for your repo must be placed in the <code>.milpa/hooks</code> folder.</p>
 <div class="content-header-wrapper">
-<h2 class="content-header" id="shell-initsh"><code>shell-init(.sh)</code></h2> <a aria-hidden="true" class="heading-anchor" href="#shell-initsh">#</a>
+<h2 class="content-header" id="shell-initsh"><code>shell-init(.sh)</code></h2> <a aria-hidden="true" class="heading-anchor" href="#shell-initsh" tabindex="-1">#</a>
 </div>
 <p>This hook is run whenever <code>milpa itself shell init</code> is called. Its purpose is to set any environment variables specific to your repo during every shell&rsquo;s initialization process. This hook can be either a bash shell script with an <code>.sh</code> extension, or an executable file without extension.</p>
 <div class="content-header-wrapper">
-<h2 class="content-header" id="before-runsh"><code>before-run.sh</code></h2> <a aria-hidden="true" class="heading-anchor" href="#before-runsh">#</a>
+<h2 class="content-header" id="before-runsh"><code>before-run.sh</code></h2> <a aria-hidden="true" class="heading-anchor" href="#before-runsh" tabindex="-1">#</a>
 </div>
 <p>This hook runs before invoking any command from your repo, and may be useful to do additional validations or checks before actually calling any of your commands. The full <a href="/help/docs/milpa/environment/">environment</a> is available for this hook. This hook must be a bash shell script with an <code>.sh</code> extension.</p>
 <div class="content-header-wrapper">
-<h2 class="content-header" id="post-installsh"><code>post-install.sh</code></h2> <a aria-hidden="true" class="heading-anchor" href="#post-installsh">#</a>
+<h2 class="content-header" id="post-installsh"><code>post-install.sh</code></h2> <a aria-hidden="true" class="heading-anchor" href="#post-installsh" tabindex="-1">#</a>
 </div>
 <p>This hook is run after <code>milpa itself repo install</code> to bootstrap the installation of a remote repository (see <a href="/itself/repo/install/"><code>milpa itself repo install</code></a>). This hook must be a bash shell script with an <code>.sh</code> extension.</p>
 <div class="content-header-wrapper">
-<h2 class="content-header" id="post-uninstallsh"><code>post-uninstall.sh</code></h2> <a aria-hidden="true" class="heading-anchor" href="#post-uninstallsh">#</a>
+<h2 class="content-header" id="post-uninstallsh"><code>post-uninstall.sh</code></h2> <a aria-hidden="true" class="heading-anchor" href="#post-uninstallsh" tabindex="-1">#</a>
 </div>
 <p>This hook is run during <code>milpa itself repo uninstall</code> to perform any necessary cleanup of a remote repository (see <a href="/itself/repo/uninstall/"><code>milpa itself repo uninstall</code></a>). This hook must be a bash shell script with an <code>.sh</code> extension.</p>
 

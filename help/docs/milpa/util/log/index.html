@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html prefix="og: http://ogp.me/ns#" lang="en"><head lang="en">
   <meta charset="utf-8">
-  
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en" />
-  <meta property="og:title" content=" help docs milpa util log " />
+  <meta property="og:title" content="help docs milpa util log" />
   <meta property="og:site_name" content="🌽 milpa" />
-  <meta property="og:description" content="" />
+  <meta property="og:description" content="Functions related to output" />
+  <meta name="description" content="Functions related to output" />
   <meta property="og:url" content="https://milpa.dev/help/docs/milpa/util/log/" />
-  <title>milpa  help docs milpa util log </title>
-  
-  <link rel="stylesheet" href="https://milpa.dev/css/index.min.958ee4efda6d7a2c2d9ef507092fee9b7f3128c771d9e025e55a95c335403f40.css"/>
+  <title>milpa help docs milpa util log</title>
+  <link rel="stylesheet" href="/css/bundle.min.ede1eef6269c98894bb1d97136560b8364cb9d02c32b628bfd58bd5aaaf24d68.css"/>
+
   <link rel="canonical" href="https://milpa.dev/help/docs/milpa/util/log/">
 
   
@@ -35,151 +35,39 @@
     id="command-selector"
     value="help docs milpa util log" />
   <datalist id="milpa-commands">
-    
     <option value="help" />
-
-
 <option value="help docs" />
-
-
 <option value="help docs milpa" />
-
-
 <option value="help docs milpa quick-guide" />
-
-
-
-<option value="help docs milpa environment" />
-
-
-
-<option value="help docs milpa repo" />
-
-
-<option value="help docs milpa repo docs" />
-
-
-
-<option value="help docs milpa repo hooks" />
-
-
-
-
-
-
-<option value="help docs milpa command" />
-
-
-<option value="help docs milpa command spec" />
-
-
-
-
-
-
 <option value="help docs milpa alternatives" />
-
-
-
-<option value="help docs milpa changelog" />
-
-
-
+<option value="help docs milpa environment" />
+<option value="help docs milpa repo" />
+<option value="help docs milpa repo docs" />
+<option value="help docs milpa repo hooks" />
+<option value="help docs milpa command" />
+<option value="help docs milpa command spec" />
 <option value="help docs milpa util" />
-
-
 <option value="help docs milpa util log" />
-
-
-
 <option value="help docs milpa util repo" />
-
-
-
 <option value="help docs milpa util shell" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    <option value="itself" />
-
-
+<option value="help docs milpa changelog" />
+<option value="itself" />
 <option value="itself create" />
-
-
-
 <option value="itself docs" />
-
-
 <option value="itself docs create" />
-
-
-
 <option value="itself docs html" />
-
-
-
-
-
-
 <option value="itself doctor" />
-
-
-
 <option value="itself repo" />
-
-
 <option value="itself repo install" />
-
-
-
 <option value="itself repo list" />
-
-
-
 <option value="itself repo uninstall" />
-
-
-
-
-
-
 <option value="itself shell" />
-
-
 <option value="itself shell init" />
-
-
-
 <option value="itself shell install-autocomplete" />
-
-
-
-
-
-
 <option value="itself version" />
-
-
-
-
-
-    
-  </datalist>
+</datalist>
   <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewBox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg"><title>Menu Icon</title><g transform="translate(10.016 -803.03)"><g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336"><path d="m19.668 1032.7h250.65"/><path d="m19.668 932.69h250.65"/><path d="m19.668 832.69h250.65"/></g></g></svg></button>
 </header>
-
 
 <div id="sidebar" aria-hidden="false">
   <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
@@ -228,6 +116,12 @@
   
 <li >
   <a href="https://milpa.dev/help/docs/milpa/quick-guide/">quick-guide</a>
+
+
+  
+  
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/alternatives/">alternatives</a>
 
 
   
@@ -285,18 +179,6 @@
   
   
 <li >
-  <a href="https://milpa.dev/help/docs/milpa/alternatives/">alternatives</a>
-
-
-  
-  
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
-
-
-  
-  
-<li >
   <a href="https://milpa.dev/help/docs/milpa/util/">util</a>
 
 <ul
@@ -324,6 +206,12 @@
   
 </ul>
 </li>
+
+
+  
+  
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
 
 
   
@@ -466,15 +354,15 @@
 <p>The <code>log</code> util contains shell functions related to output of informational messages. This utility is <strong>loaded by default</strong>.</p>
 <p>If <a href="https://linux.die.net/man/7/term"><code>TERM</code></a> is not set, then it&rsquo;ll default to <code>xterm-color</code>.</p>
 <div class="content-header-wrapper">
-<h2 class="content-header" id="functions">Functions</h2> <a aria-hidden="true" class="heading-anchor" href="#functions">#</a>
+<h2 class="content-header" id="functions">Functions</h2> <a aria-hidden="true" class="heading-anchor" href="#functions" tabindex="-1">#</a>
 </div>
 <div class="content-header-wrapper">
-<h3 class="content-header" id="milpafmt"><code>@milpa.fmt</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpafmt">#</a>
+<h3 class="content-header" id="milpafmt"><code>@milpa.fmt</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpafmt" tabindex="-1">#</a>
 </div>
 <p><code>@milpa.fmt CODE MESSAGE</code></p>
 <p>Returns <code>MESSAGE</code> formatted with <code>CODE</code> and does not print a new line. Code can be any of <code>bold</code>, <code>warning</code>, <code>error</code> and <code>inverted</code>.</p>
 <div class="content-header-wrapper">
-<h3 class="content-header" id="milpalog"><code>@milpa.log</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpalog">#</a>
+<h3 class="content-header" id="milpalog"><code>@milpa.log</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpalog" tabindex="-1">#</a>
 </div>
 <p><code>@milpa.log LEVEL [MESSAGE]</code></p>
 <p>Prints <code>MESSAGE</code> with a log prefix, unless <code>--silent</code> is specified or <code>LEVEL</code> is error. Level may be one of:</p>

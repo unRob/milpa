@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html prefix="og: http://ogp.me/ns#" lang="en"><head lang="en">
   <meta charset="utf-8">
-  
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en" />
-  <meta property="og:title" content=" help docs milpa util shell " />
+  <meta property="og:title" content="help docs milpa util shell" />
   <meta property="og:site_name" content="🌽 milpa" />
-  <meta property="og:description" content="" />
+  <meta property="og:description" content="Functions related to shell-init hooks" />
+  <meta name="description" content="Functions related to shell-init hooks" />
   <meta property="og:url" content="https://milpa.dev/help/docs/milpa/util/shell/" />
-  <title>milpa  help docs milpa util shell </title>
-  
-  <link rel="stylesheet" href="https://milpa.dev/css/index.min.958ee4efda6d7a2c2d9ef507092fee9b7f3128c771d9e025e55a95c335403f40.css"/>
+  <title>milpa help docs milpa util shell</title>
+  <link rel="stylesheet" href="/css/bundle.min.ede1eef6269c98894bb1d97136560b8364cb9d02c32b628bfd58bd5aaaf24d68.css"/>
+
   <link rel="canonical" href="https://milpa.dev/help/docs/milpa/util/shell/">
 
   
@@ -35,151 +35,39 @@
     id="command-selector"
     value="help docs milpa util shell" />
   <datalist id="milpa-commands">
-    
     <option value="help" />
-
-
 <option value="help docs" />
-
-
 <option value="help docs milpa" />
-
-
 <option value="help docs milpa quick-guide" />
-
-
-
-<option value="help docs milpa environment" />
-
-
-
-<option value="help docs milpa repo" />
-
-
-<option value="help docs milpa repo docs" />
-
-
-
-<option value="help docs milpa repo hooks" />
-
-
-
-
-
-
-<option value="help docs milpa command" />
-
-
-<option value="help docs milpa command spec" />
-
-
-
-
-
-
 <option value="help docs milpa alternatives" />
-
-
-
-<option value="help docs milpa changelog" />
-
-
-
+<option value="help docs milpa environment" />
+<option value="help docs milpa repo" />
+<option value="help docs milpa repo docs" />
+<option value="help docs milpa repo hooks" />
+<option value="help docs milpa command" />
+<option value="help docs milpa command spec" />
 <option value="help docs milpa util" />
-
-
 <option value="help docs milpa util log" />
-
-
-
 <option value="help docs milpa util repo" />
-
-
-
 <option value="help docs milpa util shell" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    <option value="itself" />
-
-
+<option value="help docs milpa changelog" />
+<option value="itself" />
 <option value="itself create" />
-
-
-
 <option value="itself docs" />
-
-
 <option value="itself docs create" />
-
-
-
 <option value="itself docs html" />
-
-
-
-
-
-
 <option value="itself doctor" />
-
-
-
 <option value="itself repo" />
-
-
 <option value="itself repo install" />
-
-
-
 <option value="itself repo list" />
-
-
-
 <option value="itself repo uninstall" />
-
-
-
-
-
-
 <option value="itself shell" />
-
-
 <option value="itself shell init" />
-
-
-
 <option value="itself shell install-autocomplete" />
-
-
-
-
-
-
 <option value="itself version" />
-
-
-
-
-
-    
-  </datalist>
+</datalist>
   <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewBox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg"><title>Menu Icon</title><g transform="translate(10.016 -803.03)"><g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336"><path d="m19.668 1032.7h250.65"/><path d="m19.668 932.69h250.65"/><path d="m19.668 832.69h250.65"/></g></g></svg></button>
 </header>
-
 
 <div id="sidebar" aria-hidden="false">
   <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
@@ -229,6 +117,12 @@
   
 <li >
   <a href="https://milpa.dev/help/docs/milpa/quick-guide/">quick-guide</a>
+
+
+  
+  
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/alternatives/">alternatives</a>
 
 
   
@@ -286,18 +180,6 @@
   
   
 <li >
-  <a href="https://milpa.dev/help/docs/milpa/alternatives/">alternatives</a>
-
-
-  
-  
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
-
-
-  
-  
-<li >
   <a href="https://milpa.dev/help/docs/milpa/util/">util</a>
 
 <ul
@@ -325,6 +207,12 @@
   
 </ul>
 </li>
+
+
+  
+  
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
 
 
   
@@ -467,20 +355,20 @@
 <p>The <code>repo</code> util contains shell functions useful during <a href="/.milpa/help/docs/milpa/repo/hooks/#shell-initsh"><code>shell-init</code></a> hook scripts, where it&rsquo;s loaded by default.</p>
 <p>These functions are compatible with shells whose name ends in &ldquo;sh&rdquo; and are POSIX-compliant, and the fish shell.</p>
 <div class="content-header-wrapper">
-<h2 class="content-header" id="functions">Functions</h2> <a aria-hidden="true" class="heading-anchor" href="#functions">#</a>
+<h2 class="content-header" id="functions">Functions</h2> <a aria-hidden="true" class="heading-anchor" href="#functions" tabindex="-1">#</a>
 </div>
 <div class="content-header-wrapper">
-<h3 class="content-header" id="milpashellexport"><code>@milpa.shell.export</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpashellexport">#</a>
+<h3 class="content-header" id="milpashellexport"><code>@milpa.shell.export</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpashellexport" tabindex="-1">#</a>
 </div>
 <p><code>@milpa.shell.export NAME VALUE</code></p>
 <p>Prints a command, that when evaluated by a user&rsquo;s shell, will set an environment variable on the current process, much like POSIX&rsquo;s <code>export</code> builtin.</p>
 <div class="content-header-wrapper">
-<h3 class="content-header" id="milpashellappend_path"><code>@milpa.shell.append_path</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpashellappend_path">#</a>
+<h3 class="content-header" id="milpashellappend_path"><code>@milpa.shell.append_path</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpashellappend_path" tabindex="-1">#</a>
 </div>
 <p><code>@milpa.shell.export DIRECTORY [VARIABLE]</code></p>
 <p>Prints a command, that when evaluated by a user&rsquo;s shell, will append the <code>DIRECTORY</code> to <code>VARIABLE</code> (by default, <code>PATH</code>).</p>
 <div class="content-header-wrapper">
-<h3 class="content-header" id="milpashellprepend_path"><code>@milpa.shell.prepend_path</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpashellprepend_path">#</a>
+<h3 class="content-header" id="milpashellprepend_path"><code>@milpa.shell.prepend_path</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpashellprepend_path" tabindex="-1">#</a>
 </div>
 <p><code>@milpa.shell.export DIRECTORY [VARIABLE]</code></p>
 <p>Prints a command, that when evaluated by a user&rsquo;s shell, will prepend the <code>DIRECTORY</code> to <code>VARIABLE</code> (by default, <code>PATH</code>).</p>

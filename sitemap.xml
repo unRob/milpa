@@ -4,13 +4,15 @@
   <url>
     <loc>https://milpa.dev/help/docs/milpa/quick-guide/</loc>
   </url><url>
+    <loc>https://milpa.dev/help/docs/milpa/alternatives/</loc>
+  </url><url>
     <loc>https://milpa.dev/help/docs/milpa/environment/</loc>
   </url><url>
     <loc>https://milpa.dev/help/docs/milpa/repo/</loc>
   </url><url>
     <loc>https://milpa.dev/help/docs/milpa/command/</loc>
   </url><url>
-    <loc>https://milpa.dev/help/docs/milpa/alternatives/</loc>
+    <loc>https://milpa.dev/help/docs/milpa/util/</loc>
   </url><url>
     <loc>https://milpa.dev/help/docs/milpa/changelog/</loc>
   </url><url>
@@ -27,8 +29,6 @@
     <loc>https://milpa.dev/help/docs/milpa/repo/docs/</loc>
   </url><url>
     <loc>https://milpa.dev/help/docs/milpa/repo/hooks/</loc>
-  </url><url>
-    <loc>https://milpa.dev/help/docs/milpa/util/</loc>
   </url><url>
     <loc>https://milpa.dev/help/docs/milpa/util/log/</loc>
   </url><url>
