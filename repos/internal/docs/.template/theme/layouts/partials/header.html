@@ -1,4 +1,5 @@
 <header role="banner">
+  <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
   <h1 lang="es" {{ if .IsHome }}class="emoji-maiz"{{end}}>{{ if .IsHome }}milpa{{else}}<a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a>{{end}}</h1>
   <input
     list="milpa-commands"
@@ -6,14 +7,13 @@
     type="text"
     aria-label="milpa command selector"
     id="command-selector"
-    tabindex="2"
     value="{{ if not .IsHome }}{{ replace (trim .RelPermalink "/") "/" " " }}{{ end }}" />
   <datalist id="milpa-commands">
     {{ range (union .Site.Home.Pages .Site.Home.Sections).ByWeight }}
     {{ template "command-autocomplete-list" . }}
     {{ end }}
   </datalist>
-  <a id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
+  <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewBox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg"><title>Menu Icon</title><g transform="translate(10.016 -803.03)"><g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336"><path d="m19.668 1032.7h250.65"/><path d="m19.668 932.69h250.65"/><path d="m19.668 832.69h250.65"/></g></g></svg></button>
 </header>
 
 {{ define "command-autocomplete-list" -}}
