@@ -11,7 +11,7 @@ options:
     description: If enabled, the image will be created but not pushed
   docker-repo:
     description: The docker repo url to push to
-    default: ghcr.io/unrob/milpa
+    default: ghcr.io/unrob/milpa/docs
   docker-login:
     description: the username and environment variable's name to use when logging into --docker-repo, separated by a colon.
 
