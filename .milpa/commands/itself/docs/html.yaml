@@ -10,7 +10,7 @@ arguments:
     values: [serve, write]
 options:
   image:
-    default: ghcr.io/unrob/milpa:latest
+    default: ghcr.io/unrob/milpa/docs:latest
     description: The docker image with `hugo` to use for building html docs
   port:
     default: "8118"
