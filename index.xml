@@ -146,7 +146,7 @@ Arguments #   NAME... required - the name you&amp;rsquo;d like for your doc  Opt
       <guid>https://milpa.dev/itself/docs/html/</guid>
       <description>Renders or displays HTML documentation for all commands
 Usage #  milpa itself docs html [options] [ACTION] [flags]
-Arguments #   ACTION - the action to take with documentation  Options #   --hostname (string): The hostname to set as base for the rendered docs. Default: milpa.dev. --image (string): The docker image with hugo to use for building html docs. Default: ghcr.io/unrob/milpa:latest. --port (string): The port to expose docs on, when ACTION is serve.</description>
+Arguments #   ACTION - the action to take with documentation  Options #   --hostname (string): The hostname to set as base for the rendered docs. Default: milpa.dev. --image (string): The docker image with hugo to use for building html docs. Default: ghcr.io/unrob/milpa/docs:latest. --port (string): The port to expose docs on, when ACTION is serve.</description>
     </item>
     
     <item>

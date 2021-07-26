@@ -355,7 +355,7 @@
 </div>
 <p><code>@milpa.load_util UTIL_NAME...</code></p>
 <p>In your scripts, you may load utilities like so:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/usr/bin/env bash
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/usr/bin/env bash
 </span><span class="cp"></span>
 <span class="c1"># loads the repo util</span>
 @milpa.load_util repo
@@ -378,7 +378,7 @@
 </div>
 <p>To add your own to your repo, create a <code>util</code> folder and add <code>your-util-name.sh</code> under it. You may put in there whatever you want available for your shell scripts. Ideally, you&rsquo;d put in there a few functions, whose name may start with <code>@milpa</code>, but are not required to be named in any particular way.</p>
 <p>Then, you can:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">@milpa.load_util your-util-name
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">@milpa.load_util your-util-name
 
 <span class="c1"># and use whatever functions you put in there</span>
 do_some_cool_stuff <span class="s2">&#34;</span><span class="nv">$SHELL</span><span class="s2">&#34;</span>
