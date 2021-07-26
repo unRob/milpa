@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#"><head lang="en">
+<html prefix="og: http://ogp.me/ns#" lang="en"><head lang="en">
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en" />
   <meta property="og:title" content=" help docs milpa quick-guide " />
@@ -13,10 +13,11 @@
   <title>milpa  help docs milpa quick-guide </title>
   <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="https://milpa.dev/css/index.min.350c645dd467bcd50b71416bac463a478c2e58065d4670c7f80624307f855745.css"/>
+  <link rel="stylesheet" href="https://milpa.dev/css/index.min.9802e51da5edbc4281421701c12b0cc94fa958b52ba6299e786f991bea2835ed.css"/>
   <link rel="canonical" href="https://milpa.dev/help/docs/milpa/quick-guide/">
 </head>
 <body><header role="banner">
+  <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
   <h1 lang="es" ><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1>
   <input
     list="milpa-commands"
@@ -24,7 +25,6 @@
     type="text"
     aria-label="milpa command selector"
     id="command-selector"
-    tabindex="2"
     value="help docs milpa quick-guide" />
   <datalist id="milpa-commands">
     
@@ -74,6 +74,24 @@
 
 
 <option value="help docs milpa changelog" />
+
+
+
+<option value="help docs milpa util" />
+
+
+<option value="help docs milpa util log" />
+
+
+
+<option value="help docs milpa util repo" />
+
+
+
+<option value="help docs milpa util shell" />
+
+
+
 
 
 
@@ -151,14 +169,12 @@
 
     
   </datalist>
-  <a id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
+  <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewBox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg"><title>Menu Icon</title><g transform="translate(10.016 -803.03)"><g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336"><path d="m19.668 1032.7h250.65"/><path d="m19.668 932.69h250.65"/><path d="m19.668 832.69h250.65"/></g></g></svg></button>
 </header>
 
 
-<div id="wrapper"><div id="sidebar">
-  <nav id="table-of-contents" aria-hidden="true">
-    <span class="heading" id="table-of-contents-header">In this page</span>
-    <nav id="TableOfContents">
+<div id="sidebar" aria-hidden="false">
+  <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
   <ul>
     <li><a href="#installing-milpa">installing <code>milpa</code></a></li>
     <li><a href="#installing-autocomplete">installing autocomplete</a></li>
@@ -167,76 +183,69 @@
     <li><a href="#running-your-new-command">Running your new command</a></li>
   </ul>
 </nav>
-  </nav>
-  <nav id="commands" aria-label="List of available commands">
-    <span class="heading" id="commands-header" aria-hidden="true">Commands</span>
+  
+
+  <nav id="commands" aria-labelledby="commands-header">
+    <span class="heading" id="commands-header">Commands</span>
     
     <ul>
     
-<li>
-  <a href="https://milpa.dev/help/" aria-haspopup="tree">help</a>
+<li >
+  <a href="https://milpa.dev/help/">help</a>
 
 <ul
   class="sub-menu"
-  aria-hidden="true"
-  aria-expanded="false"
   aria-label="help subcommands"
 >
   
   
-<li>
-  <a href="https://milpa.dev/help/docs/" aria-haspopup="tree">docs</a>
+<li >
+  <a href="https://milpa.dev/help/docs/">docs</a>
 
 <ul
   class="sub-menu"
-  aria-hidden="true"
-  aria-expanded="false"
   aria-label="docs subcommands"
 >
   
   
-<li>
-  <a href="https://milpa.dev/help/docs/milpa/" aria-haspopup="tree">milpa</a>
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/">milpa</a>
 
 <ul
   class="sub-menu"
-  aria-hidden="true"
-  aria-expanded="false"
   aria-label="milpa subcommands"
 >
   
   
-<li>
-  <a href="https://milpa.dev/help/docs/milpa/quick-guide/" >quick-guide</a>
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/quick-guide/">quick-guide</a>
 
 
   
   
-<li>
-  <a href="https://milpa.dev/help/docs/milpa/environment/" >environment</a>
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/environment/">environment</a>
 
 
   
   
-<li>
-  <a href="https://milpa.dev/help/docs/milpa/repo/" aria-haspopup="tree">repo</a>
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/repo/">repo</a>
 
 <ul
   class="sub-menu"
-  aria-hidden="true"
-  aria-expanded="false"
   aria-label="repo subcommands"
 >
   
   
-<li>
-  <a href="https://milpa.dev/help/docs/milpa/repo/docs/" >docs</a>
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/repo/docs/">docs</a>
 
 
   
   
-<li>
-  <a href="https://milpa.dev/help/docs/milpa/repo/hooks/" >hooks</a>
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/repo/hooks/">hooks</a>
 
 
   
@@ -246,19 +255,17 @@
 
   
   
-<li>
-  <a href="https://milpa.dev/help/docs/milpa/command/" aria-haspopup="tree">command</a>
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/command/">command</a>
 
 <ul
   class="sub-menu"
-  aria-hidden="true"
-  aria-expanded="false"
   aria-label="command subcommands"
 >
   
   
-<li>
-  <a href="https://milpa.dev/help/docs/milpa/command/spec/" >spec</a>
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/command/spec/">spec</a>
 
 
   
@@ -268,14 +275,46 @@
 
   
   
-<li>
-  <a href="https://milpa.dev/help/docs/milpa/alternatives/" >alternatives</a>
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/alternatives/">alternatives</a>
 
 
   
   
-<li>
-  <a href="https://milpa.dev/help/docs/milpa/changelog/" >changelog</a>
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
+
+
+  
+  
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/util/">util</a>
+
+<ul
+  class="sub-menu"
+  aria-label="util subcommands"
+>
+  
+  
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/util/log/">log</a>
+
+
+  
+  
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/util/repo/">repo</a>
+
+
+  
+  
+<li >
+  <a href="https://milpa.dev/help/docs/milpa/util/shell/">shell</a>
+
+
+  
+</ul>
+</li>
 
 
   
@@ -294,42 +333,38 @@
 
 
     
-<li>
-  <a href="https://milpa.dev/itself/" aria-haspopup="tree">itself</a>
+<li >
+  <a href="https://milpa.dev/itself/">itself</a>
 
 <ul
   class="sub-menu"
-  aria-hidden="true"
-  aria-expanded="false"
   aria-label="itself subcommands"
 >
   
   
-<li>
-  <a href="https://milpa.dev/itself/create/" >create</a>
+<li >
+  <a href="https://milpa.dev/itself/create/">create</a>
 
 
   
   
-<li>
-  <a href="https://milpa.dev/itself/docs/" aria-haspopup="tree">docs</a>
+<li >
+  <a href="https://milpa.dev/itself/docs/">docs</a>
 
 <ul
   class="sub-menu"
-  aria-hidden="true"
-  aria-expanded="false"
   aria-label="docs subcommands"
 >
   
   
-<li>
-  <a href="https://milpa.dev/itself/docs/create/" >create</a>
+<li >
+  <a href="https://milpa.dev/itself/docs/create/">create</a>
 
 
   
   
-<li>
-  <a href="https://milpa.dev/itself/docs/html/" >html</a>
+<li >
+  <a href="https://milpa.dev/itself/docs/html/">html</a>
 
 
   
@@ -339,37 +374,35 @@
 
   
   
-<li>
-  <a href="https://milpa.dev/itself/doctor/" >doctor</a>
+<li >
+  <a href="https://milpa.dev/itself/doctor/">doctor</a>
 
 
   
   
-<li>
-  <a href="https://milpa.dev/itself/repo/" aria-haspopup="tree">repo</a>
+<li >
+  <a href="https://milpa.dev/itself/repo/">repo</a>
 
 <ul
   class="sub-menu"
-  aria-hidden="true"
-  aria-expanded="false"
   aria-label="repo subcommands"
 >
   
   
-<li>
-  <a href="https://milpa.dev/itself/repo/install/" >install</a>
+<li >
+  <a href="https://milpa.dev/itself/repo/install/">install</a>
 
 
   
   
-<li>
-  <a href="https://milpa.dev/itself/repo/list/" >list</a>
+<li >
+  <a href="https://milpa.dev/itself/repo/list/">list</a>
 
 
   
   
-<li>
-  <a href="https://milpa.dev/itself/repo/uninstall/" >uninstall</a>
+<li >
+  <a href="https://milpa.dev/itself/repo/uninstall/">uninstall</a>
 
 
   
@@ -379,25 +412,23 @@
 
   
   
-<li>
-  <a href="https://milpa.dev/itself/shell/" aria-haspopup="tree">shell</a>
+<li >
+  <a href="https://milpa.dev/itself/shell/">shell</a>
 
 <ul
   class="sub-menu"
-  aria-hidden="true"
-  aria-expanded="false"
   aria-label="shell subcommands"
 >
   
   
-<li>
-  <a href="https://milpa.dev/itself/shell/init/" >init</a>
+<li >
+  <a href="https://milpa.dev/itself/shell/init/">init</a>
 
 
   
   
-<li>
-  <a href="https://milpa.dev/itself/shell/install-autocomplete/" >install-autocomplete</a>
+<li >
+  <a href="https://milpa.dev/itself/shell/install-autocomplete/">install-autocomplete</a>
 
 
   
@@ -407,8 +438,8 @@
 
   
   
-<li>
-  <a href="https://milpa.dev/itself/version/" >version</a>
+<li >
+  <a href="https://milpa.dev/itself/version/">version</a>
 
 
   
@@ -421,7 +452,7 @@
 </div>
 
 
-<main id="content" tabindex="3">
+<main id="content">
 <h1 id="command-name-header" class="sr-only">milpa help docs milpa quick-guide</h1>
 <p>We&rsquo;ll assume you have a repo with your team&rsquo;s code at <code>~/src/my-teams-app</code>, but you can also test <code>milpa</code> out by creating any folder, wherever you like.</p>
 <p>Once that&rsquo;s set up, you&rsquo;d get started with <code>milpa</code> by:</p>
@@ -432,10 +463,14 @@
 <li>creating a new command, and editing it&rsquo;s spec</li>
 <li>running the command to test it out</li>
 </ol>
-<h2 class="content-header" id="installing-milpa">installing <code>milpa</code> <a aria-hidden="true" class="heading-anchor" href="#installing-milpa">#</a></h2>
+<div class="content-header-wrapper">
+<h2 class="content-header" id="installing-milpa">installing <code>milpa</code></h2> <a aria-hidden="true" class="heading-anchor" href="#installing-milpa">#</a>
+</div>
 <p>Running the following command will install the latest version of <code>milpa</code></p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">curl -L https://milpa.dev/install.sh | bash -
-</code></pre></div><h2 class="content-header" id="installing-autocomplete">installing autocomplete <a aria-hidden="true" class="heading-anchor" href="#installing-autocomplete">#</a></h2>
+</code></pre></div><div class="content-header-wrapper">
+<h2 class="content-header" id="installing-autocomplete">installing autocomplete</h2> <a aria-hidden="true" class="heading-anchor" href="#installing-autocomplete">#</a>
+</div>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#177500"># one of the best things about milpa is it&#39;s built-in support for shell completion</span>
 <span style="color:#177500"># this happens after you type &#34;milpa &#34; at the prompt and press the `tab` key</span>
 <span style="color:#177500"># milpa will offer suggestions on commands, arguments and options based on your</span>
@@ -443,7 +478,9 @@
 milpa itself shell install-autocomplete
 
 <span style="color:#177500"># After this is done, you&#39;ll likely need to reload your shell or open a new session/tab.</span>
-</code></pre></div><h2 class="content-header" id="creating-a-new-command">Creating a new command <a aria-hidden="true" class="heading-anchor" href="#creating-a-new-command">#</a></h2>
+</code></pre></div><div class="content-header-wrapper">
+<h2 class="content-header" id="creating-a-new-command">Creating a new command</h2> <a aria-hidden="true" class="heading-anchor" href="#creating-a-new-command">#</a>
+</div>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#177500"># Start by heading to your project&#39;s git repo</span>
 <span style="color:#a90d91">cd</span> ~/src/my-teams-app
 
@@ -460,7 +497,9 @@ ls -lah .milpa/commands
 <span style="color:#177500"># you&#39;ll see output like:</span>
 <span style="color:#177500"># -rw-r--r--  1 ada  staff  3141 Mar  14 15:09 developer-setup.sh</span>
 <span style="color:#177500"># -rw-r--r--  1 ada  staff   314 Mar  14 15:09 developer-setup.yaml</span>
-</code></pre></div><h2 class="content-header" id="actually-writing-a-command">Actually writing a command <a aria-hidden="true" class="heading-anchor" href="#actually-writing-a-command">#</a></h2>
+</code></pre></div><div class="content-header-wrapper">
+<h2 class="content-header" id="actually-writing-a-command">Actually writing a command</h2> <a aria-hidden="true" class="heading-anchor" href="#actually-writing-a-command">#</a>
+</div>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#177500"># now, we&#39;ll begin by editing our spec</span>
 <span style="color:#c41a16">&#34;</span><span style="color:#000">$EDITOR</span><span style="color:#c41a16">&#34;</span> .milpa/commands/developer-setup.yaml
 </code></pre></div><p>Our <a href="./milpa/docs/command/spec/">spec</a> should look like this:</p>
@@ -507,7 +546,9 @@ ls -lah .milpa/commands
 <span style="color:#177500"># if you don&#39;t see a checkmark next to your command&#39;s name, you&#39;ll get some</span>
 <span style="color:#177500"># feedback on what went wrong, check out `milpa help docs spec` for more info on</span>
 <span style="color:#177500"># how to write a command spec</span>
-</code></pre></div><h2 class="content-header" id="running-your-new-command">Running your new command <a aria-hidden="true" class="heading-anchor" href="#running-your-new-command">#</a></h2>
+</code></pre></div><div class="content-header-wrapper">
+<h2 class="content-header" id="running-your-new-command">Running your new command</h2> <a aria-hidden="true" class="heading-anchor" href="#running-your-new-command">#</a>
+</div>
 <p>Once everything looks good, we should be ready to test our command out!</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">milpa developer-setup
 <span style="color:#177500"># you&#39;ll see output like:</span>
@@ -517,7 +558,6 @@ ls -lah .milpa/commands
 </code></pre></div>
 
     </main>
-    </div>
-<script src="https://milpa.dev/js/index.min.139f391b177da4758910aea167c22ab66414f87c28acdb484d97716f0f896375.js"></script>
+<script src="https://milpa.dev/js/index.min.c23ded03377b9b7f9a9ddcf0d496c3f2053edb162c919e520ab621fc19a4e882.js"></script>
 </body>
 </html>

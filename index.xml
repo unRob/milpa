@@ -13,7 +13,7 @@
       <guid>https://milpa.dev/help/docs/milpa/quick-guide/</guid>
       <description>We&amp;rsquo;ll assume you have a repo with your team&amp;rsquo;s code at ~/src/my-teams-app, but you can also test milpa out by creating any folder, wherever you like.
 Once that&amp;rsquo;s set up, you&amp;rsquo;d get started with milpa by:
-Installing it, installing milpa&amp;rsquo;s autocompletion script to your shell, possibly restarting your session, heading to your team&amp;rsquo;s project folder creating a new command, and editing it&amp;rsquo;s spec running the command to test it out  installing milpa # Running the following command will install the latest version of milpa</description>
+Installing it, installing milpa&amp;rsquo;s autocompletion script to your shell, possibly restarting your session, heading to your team&amp;rsquo;s project folder creating a new command, and editing it&amp;rsquo;s spec running the command to test it out  installing milpa #  Running the following command will install the latest version of milpa</description>
     </item>
     
     <item>
@@ -23,7 +23,7 @@ Installing it, installing milpa&amp;rsquo;s autocompletion script to your shell,
       
       <guid>https://milpa.dev/help/docs/milpa/environment/</guid>
       <description>There&amp;rsquo;s a few environment variables that control the behavior of milpa.
-Paths # MILPA_ROOT # MILPA_ROOT points to the installed milpa kernel, by default /usr/local/lib/milpa. This folder contains a milpa repo, the milpa executable, and a helper binary named compa, along a copy of the license and the source repo&amp;rsquo;s README.
+Paths #  MILPA_ROOT #  MILPA_ROOT points to the installed milpa kernel, by default /usr/local/lib/milpa. This folder contains a milpa repo, the milpa executable, and a helper binary named compa, along a copy of the license and the source repo&amp;rsquo;s README.
 You can set it to a local installation, like a fork, and run $MILPA_ROOT/milpa to use that fork&amp;rsquo;s scripts instead of an installed version.</description>
     </item>
     
@@ -44,7 +44,7 @@ You can set it to a local installation, like a fork, and run $MILPA_ROOT/milpa t
       
       <guid>https://milpa.dev/help/docs/milpa/changelog/</guid>
       <description>Milpa follows the semver 2.0.0 specification.
-Upcoming # 🌱 Features #  (dfa152) Argument and flag run-time validation, so your command can focus on using them. (dfa152) Command line argument, flag autocomplete for your commands on bash, zsh and fish. Completions can come from other commands. (dfa152) Don&amp;rsquo;t wanna write stuff over and over again? milpa itself repo install will come in handy to install remote milpa repos. (dfa152) Drop your commands and specs in your project&amp;rsquo;s .</description>
+Upcoming #  🌱 Features #   (dfa152) Argument and flag run-time validation, so your command can focus on using them. (dfa152) Command line argument, flag autocomplete for your commands on bash, zsh and fish. Completions can come from other commands. (dfa152) Don&amp;rsquo;t wanna write stuff over and over again? milpa itself repo install will come in handy to install remote milpa repos. (dfa152) Drop your commands and specs in your project&amp;rsquo;s .</description>
     </item>
     
     <item>
@@ -74,7 +74,45 @@ Same docs are rendered to HTML, using the milpa itself docs html command.</descr
       
       <guid>https://milpa.dev/help/docs/milpa/repo/hooks/</guid>
       <description>milpa provides a couple of hook points for you to tweak the behavior of your shell and your repo&amp;rsquo;s commands. Hooks for your repo must be placed in the .milpa/hooks folder.
-shell-init(.sh) # This hook is run whenever milpa itself shell init is called. Its purpose is to set any environment variables specific to your repo during every shell&amp;rsquo;s initialization process. This hook can be either a bash shell script with an .</description>
+shell-init(.sh) #  This hook is run whenever milpa itself shell init is called. Its purpose is to set any environment variables specific to your repo during every shell&amp;rsquo;s initialization process. This hook can be either a bash shell script with an .</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://milpa.dev/help/docs/milpa/util/log/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://milpa.dev/help/docs/milpa/util/log/</guid>
+      <description>The log util contains shell functions related to output of informational messages. This utility is loaded by default.
+If TERM is not set, then it&amp;rsquo;ll default to xterm-color.
+Functions #  @milpa.fmt #  @milpa.fmt CODE MESSAGE
+Returns MESSAGE formatted with CODE and does not print a new line. Code can be any of bold, warning, error and inverted.
+@milpa.log #  @milpa.log LEVEL [MESSAGE]
+Prints MESSAGE with a log prefix, unless --silent is specified or LEVEL is error.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://milpa.dev/help/docs/milpa/util/repo/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://milpa.dev/help/docs/milpa/util/repo/</guid>
+      <description>The repo util contains shell functions related to milpa repositories
+Functions #  @milpa.repo.current_path #  @milpa.repo.current_path
+Returns the nearest .milpa repo from the current working directory where milpa was invoked from. It returns 2 if it reaches the / directory without finding a .milpa folder in its path.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://milpa.dev/help/docs/milpa/util/shell/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://milpa.dev/help/docs/milpa/util/shell/</guid>
+      <description>The repo util contains shell functions useful during shell-init hook scripts, where it&amp;rsquo;s loaded by default.
+These functions are compatible with shells whose name ends in &amp;ldquo;sh&amp;rdquo; and are POSIX-compliant, and the fish shell.
+Functions #  @milpa.shell.export #  @milpa.shell.export NAME VALUE
+Prints a command, that when evaluated by a user&amp;rsquo;s shell, will set an environment variable on the current process, much like POSIX&amp;rsquo;s export builtin.
+@milpa.shell.append_path #  @milpa.</description>
     </item>
     
     <item>
@@ -84,8 +122,8 @@ shell-init(.sh) # This hook is run whenever milpa itself shell init is called. I
       
       <guid>https://milpa.dev/itself/create/</guid>
       <description>Create a milpa command
-Usage # milpa itself create [options] NAME... [flags]
-Arguments #  NAME... required - the name you&amp;rsquo;d like for your command  Options #  --config-format (string): The configuration format to use to describe this command. Default: yaml. --executable (bool): Create an empty, executable command. Useful when you&amp;rsquo;d like using something other than bash. --open (bool): Open the script file in your current $EDITOR after creation. --repo (string): a path to the milpa repo to create this command in.</description>
+Usage #  milpa itself create [options] NAME... [flags]
+Arguments #   NAME... required - the name you&amp;rsquo;d like for your command  Options #   --config-format (string): The configuration format to use to describe this command. Default: yaml. --executable (bool): Create an empty, executable command. Useful when you&amp;rsquo;d like using something other than bash. --open (bool): Open the script file in your current $EDITOR after creation.</description>
     </item>
     
     <item>
@@ -95,8 +133,8 @@ Arguments #  NAME... required - the name you&amp;rsquo;d like for your command  
       
       <guid>https://milpa.dev/itself/docs/create/</guid>
       <description>Creates a new doc in your milpa
-Usage # milpa itself docs create [options] NAME... [flags]
-Arguments #  NAME... required - the name you&amp;rsquo;d like for your doc  Options #  --open (bool): Open the script file in your current $EDITOR after creation. --repo (string): a path to the milpa repo to create this doc in. By default, the nearest .milpa directory from pwd and up.  Description # See milpa help docs for more info on docs.</description>
+Usage #  milpa itself docs create [options] NAME... [flags]
+Arguments #   NAME... required - the name you&amp;rsquo;d like for your doc  Options #   --open (bool): Open the script file in your current $EDITOR after creation. --repo (string): a path to the milpa repo to create this doc in. By default, the nearest .milpa directory from pwd and up.</description>
     </item>
     
     <item>
@@ -106,8 +144,8 @@ Arguments #  NAME... required - the name you&amp;rsquo;d like for your doc  Opti
       
       <guid>https://milpa.dev/itself/docs/html/</guid>
       <description>Renders or displays HTML documentation for all commands
-Usage # milpa itself docs html [options] [ACTION] [flags]
-Arguments #  ACTION - the action to take with documentation  Options #  --hostname (string): The hostname to set as base for the rendered docs. Default: milpa.dev. --image (string): The docker image with hugo to use for building html docs. Default: ghcr.io/unrob/milpa:latest. --port (string): The port to expose docs on, when ACTION is serve.</description>
+Usage #  milpa itself docs html [options] [ACTION] [flags]
+Arguments #   ACTION - the action to take with documentation  Options #   --hostname (string): The hostname to set as base for the rendered docs. Default: milpa.dev. --image (string): The docker image with hugo to use for building html docs. Default: ghcr.io/unrob/milpa:latest. --port (string): The port to expose docs on, when ACTION is serve.</description>
     </item>
     
     <item>
@@ -117,9 +155,9 @@ Arguments #  ACTION - the action to take with documentation  Options #  --hostna
       
       <guid>https://milpa.dev/itself/doctor/</guid>
       <description>Validates all commands found on the MILPA_PATH
-Usage # milpa itself doctor [options]
-Description # This command will run checks on all known commands, parsing specs and validating their values.
-Global Options #  --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --verbose (bool): Log verbose output to stderr.  </description>
+Usage #  milpa itself doctor [options]
+Description #  This command will run checks on all known commands, parsing specs and validating their values.
+Global Options #   --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --verbose (bool): Log verbose output to stderr.  </description>
     </item>
     
     <item>
@@ -129,8 +167,8 @@ Global Options #  --help (bool): Display help for any command. --no-color (bool)
       
       <guid>https://milpa.dev/itself/repo/install/</guid>
       <description>Installs a milpa repo
-Usage # milpa itself repo install [options] SOURCE [TARGET] [flags]
-Arguments #  SOURCE required - A go-getter URL to fetch the repo from. TARGET - The path where to place the resulting .milpa folder in  Options #  --global (bool): If specified, install the repo to $MILPA_ROOT. --user (bool): If specified, install the repo to ~/.local/share/milpa/repos.  Description # Fetches a milpa repo and installs it to any of three locations:</description>
+Usage #  milpa itself repo install [options] SOURCE [TARGET] [flags]
+Arguments #   SOURCE required - A go-getter URL to fetch the repo from. TARGET - The path where to place the resulting .milpa folder in  Options #   --global (bool): If specified, install the repo to $MILPA_ROOT. --user (bool): If specified, install the repo to ~/.local/share/milpa/repos.  Description #  Fetches a milpa repo and installs it to any of three locations:</description>
     </item>
     
     <item>
@@ -140,10 +178,9 @@ Arguments #  SOURCE required - A go-getter URL to fetch the repo from. TARGET - 
       
       <guid>https://milpa.dev/itself/repo/list/</guid>
       <description>Lists installed repos
-Usage # milpa itself repo list [options] [flags]
-Options #  --paths-only (bool): Only output the paths to repos with no decoration.  Description # Milpa can install repositories from remote locations at two different locations, depending on how it was instaled.
- In the $MILPA_ROOT (by default, /usr/local/lib/milpa) In $XDG_DATA_HOME/milpa folder  For more information on installing packages, see milpa itself repo install --help
-Global Options #  --help (bool): Display help for any command.</description>
+Usage #  milpa itself repo list [options] [flags]
+Options #   --paths-only (bool): Only output the paths to repos with no decoration.  Description #  Milpa can install repositories from remote locations at two different locations, depending on how it was instaled.
+ In the $MILPA_ROOT (by default, /usr/local/lib/milpa) In $XDG_DATA_HOME/milpa folder  For more information on installing packages, see milpa itself repo install --help</description>
     </item>
     
     <item>
@@ -153,9 +190,9 @@ Global Options #  --help (bool): Display help for any command.</description>
       
       <guid>https://milpa.dev/itself/repo/uninstall/</guid>
       <description>Removes an installed milpa repo
-Usage # milpa itself repo uninstall [options] PATH
-Arguments #  PATH required - The repo path to uninstall  Description # Uninstalls a milpa repo by PATH. See milpa itself repo list --help for a list of available repos
-Global Options #  --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --verbose (bool): Log verbose output to stderr.</description>
+Usage #  milpa itself repo uninstall [options] PATH
+Arguments #   PATH required - The repo path to uninstall  Description #  Uninstalls a milpa repo by PATH. See milpa itself repo list --help for a list of available repos
+Global Options #   --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging.</description>
     </item>
     
     <item>
@@ -165,10 +202,9 @@ Global Options #  --help (bool): Display help for any command. --no-color (bool)
       
       <guid>https://milpa.dev/itself/shell/init/</guid>
       <description>Initializes shells
-Usage # milpa itself shell init [options]
-Description # Running milpa itself shell init will look for shell scripts named .milpa/hooks/shell-init.sh/executables named .milpa/hooks/shell-init and source them.
-These shell-init scripts should print shell-specific instructions that a user may eval during the initialization of a new shell prompt. The @milpa.shell bash functions will be available for script shells to facilitate printing export statements compatible with POSIX-compliant shells and fish.
-Using with bash, zsh, etc: # On POSIX-compliant shells (zsh or bash, for example), you may add this to near the very end of shell profile (usually at ~/.</description>
+Usage #  milpa itself shell init [options]
+Description #  Running milpa itself shell init will look for shell scripts named .milpa/hooks/shell-init.sh/executables named .milpa/hooks/shell-init and source them.
+These shell-init scripts should print shell-specific instructions that a user may eval during the initialization of a new shell prompt. The @milpa.shell bash functions will be available for script shells to facilitate printing export statements compatible with POSIX-compliant shells and fish.</description>
     </item>
     
     <item>
@@ -178,8 +214,8 @@ Using with bash, zsh, etc: # On POSIX-compliant shells (zsh or bash, for example
       
       <guid>https://milpa.dev/itself/shell/install-autocomplete/</guid>
       <description>Generates shell completion scripts
-Usage # milpa itself shell install-autocomplete [options]
-Description # Generates a shell completion script for the current $SHELL. It currently supports bash, fish and zsh. It will write a (_)milpa file in your shell&amp;rsquo;s completion function folder:
+Usage #  milpa itself shell install-autocomplete [options]
+Description #  Generates a shell completion script for the current $SHELL. It currently supports bash, fish and zsh. It will write a (_)milpa file in your shell&amp;rsquo;s completion function folder:
  for bash, either /etc/bash_completion.d or /usr/local/etc/bash_completion.d for zsh, whatever is first in $fpath, for example: /usr/local/share/zsh/site-functions for fish, $HOME/.config/fish/completions/  You&amp;rsquo;ll need to reload your shell (for example, by restarting your terminal), and make sure your shell&amp;rsquo;s completion system is enabled!</description>
     </item>
     
@@ -190,9 +226,9 @@ Description # Generates a shell completion script for the current $SHELL. It cur
       
       <guid>https://milpa.dev/itself/version/</guid>
       <description>Displays the version of milpa
-Usage # milpa itself version [options]
-Description # Outputs the version of milpa to stdout, printing a new line if the output is a TTY. Also available as milpa --version
-Global Options #  --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --verbose (bool): Log verbose output to stderr.  </description>
+Usage #  milpa itself version [options]
+Description #  Outputs the version of milpa to stdout, printing a new line if the output is a TTY. Also available as milpa --version
+Global Options #   --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --verbose (bool): Log verbose output to stderr.  </description>
     </item>
     
   </channel>

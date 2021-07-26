@@ -6,15 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en" />
-  <meta property="og:title" content=" help docs milpa repo docs " />
+  <meta property="og:title" content=" help docs milpa util repo " />
   <meta property="og:site_name" content="🌽 milpa" />
   <meta property="og:description" content="" />
-  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/repo/docs/" />
-  <title>milpa  help docs milpa repo docs </title>
+  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/util/repo/" />
+  <title>milpa  help docs milpa util repo </title>
   <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="https://milpa.dev/css/index.min.9802e51da5edbc4281421701c12b0cc94fa958b52ba6299e786f991bea2835ed.css"/>
-  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/repo/docs/">
+  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/util/repo/">
 </head>
 <body><header role="banner">
   <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
@@ -25,7 +25,7 @@
     type="text"
     aria-label="milpa command selector"
     id="command-selector"
-    value="help docs milpa repo docs" />
+    value="help docs milpa util repo" />
   <datalist id="milpa-commands">
     
     <option value="help" />
@@ -174,7 +174,15 @@
 
 
 <div id="sidebar" aria-hidden="false">
-  <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span></nav>
+  <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
+  <ul>
+    <li><a href="#functions">Functions</a>
+      <ul>
+        <li><a href="#milparepocurrent_path"><code>@milpa.repo.current_path</code></a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
   
 
   <nav id="commands" aria-labelledby="commands-header">
@@ -445,9 +453,16 @@
 
 
 <main id="content">
-<h1 id="command-name-header" class="sr-only">milpa help docs milpa repo docs</h1>
-<p><code>!milpa</code> can render any markdown-formatted documents stored at <code>.milpa/docs</code> to the terminal and browser. Files must be named with an <code>/</code> extension and may exist at any folder depth. Files named <code>.milpa/docs/whatever/</code> may be displayed by running either <code>milpa help docs whatever</code> or <code>milpa help docs whatever index</code></p>
-<p>Same docs are rendered to HTML, using the <a href="/itself/docs"><code>milpa itself docs html</code></a> command.</p>
+<h1 id="command-name-header" class="sr-only">milpa help docs milpa util repo</h1>
+<p>The <code>repo</code> util contains shell functions related to milpa repositories</p>
+<div class="content-header-wrapper">
+<h2 class="content-header" id="functions">Functions</h2> <a aria-hidden="true" class="heading-anchor" href="#functions">#</a>
+</div>
+<div class="content-header-wrapper">
+<h3 class="content-header" id="milparepocurrent_path"><code>@milpa.repo.current_path</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milparepocurrent_path">#</a>
+</div>
+<p><code>@milpa.repo.current_path</code></p>
+<p>Returns the nearest <code>.milpa</code> repo from the current working directory where <code>milpa</code> was invoked from. It returns <code>2</code> if it reaches the <code>/</code> directory without finding a <code>.milpa</code> folder in its path.</p>
 
 
     </main>
