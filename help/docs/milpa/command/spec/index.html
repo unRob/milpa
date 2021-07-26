@@ -11,10 +11,18 @@
   <meta property="og:description" content="" />
   <meta property="og:url" content="https://milpa.dev/help/docs/milpa/command/spec/" />
   <title>milpa  help docs milpa command spec </title>
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="https://milpa.dev/css/index.min.9802e51da5edbc4281421701c12b0cc94fa958b52ba6299e786f991bea2835ed.css"/>
+  <link rel="stylesheet" href="https://milpa.dev/css/index.min.958ee4efda6d7a2c2d9ef507092fee9b7f3128c771d9e025e55a95c335403f40.css"/>
   <link rel="canonical" href="https://milpa.dev/help/docs/milpa/command/spec/">
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="preload" as="style">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" />
+  </noscript>
 </head>
 <body><header role="banner">
   <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
@@ -456,7 +464,7 @@
 <h2 class="content-header" id="example">Example</h2> <a aria-hidden="true" class="heading-anchor" href="#example">#</a>
 </div>
 <p>If we wanted to have a command written in bash at <code>milpa release</code>, we&rsquo;ll need to create file at <code>.milpa/commands/release.sh</code> and its corresponding spec at <code>.milpa/commands/release.yaml</code>. Let&rsquo;s take a look at what such a spec might look like:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#177500"># a summary is required. It shows up during autocomplete and command listings</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#177500"># a summary is required. It shows up during autocomplete and command listings</span>
 <span style="color:#000">summary</span>: <span style="color:#1c01ce">Create a github release</span>
 <span style="color:#177500"># a description is required as well. Add a longer description of how your command does its magic here</span>
 <span style="color:#000">description</span>: |<span style="color:#c41a16">

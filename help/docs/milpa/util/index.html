@@ -11,10 +11,18 @@
   <meta property="og:description" content="" />
   <meta property="og:url" content="https://milpa.dev/help/docs/milpa/util/" />
   <title>milpa  help docs milpa util </title>
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="https://milpa.dev/css/index.min.9802e51da5edbc4281421701c12b0cc94fa958b52ba6299e786f991bea2835ed.css"/>
+  <link rel="stylesheet" href="https://milpa.dev/css/index.min.958ee4efda6d7a2c2d9ef507092fee9b7f3128c771d9e025e55a95c335403f40.css"/>
   <link rel="canonical" href="https://milpa.dev/help/docs/milpa/util/">
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="preload" as="style">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" />
+  </noscript>
 </head>
 <body><header role="banner">
   <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
@@ -459,7 +467,7 @@
 </div>
 <p><code>@milpa.load_util UTIL_NAME...</code></p>
 <p>In your scripts, you may load utilities like so:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#633820">#!/usr/bin/env bash
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#633820">#!/usr/bin/env bash
 </span><span style="color:#633820"></span>
 <span style="color:#177500"># loads the repo util</span>
 @milpa.load_util repo
@@ -482,7 +490,7 @@
 </div>
 <p>To add your own to your repo, create a <code>util</code> folder and add <code>your-util-name.sh</code> under it. You may put in there whatever you want available for your shell scripts. Ideally, you&rsquo;d put in there a few functions, whose name may start with <code>@milpa</code>, but are not required to be named in any particular way.</p>
 <p>Then, you can:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">@milpa.load_util your-util-name
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">@milpa.load_util your-util-name
 
 <span style="color:#177500"># and use whatever functions you put in there</span>
 do_some_cool_stuff <span style="color:#c41a16">&#34;</span><span style="color:#000">$SHELL</span><span style="color:#c41a16">&#34;</span>
