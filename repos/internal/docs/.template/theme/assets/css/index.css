@@ -5,7 +5,7 @@ html, body {
 }
 
 body {
-  font-family: "Playfair Display";
+  font-family: "Playfair Display", Georgia, serif;
   font-size: 16px;
   color: #2B3C2D;
   background-color: #dff4d4
@@ -15,7 +15,7 @@ header {
   color: #CEFCD3;
   background: #2B3C2D;
   margin: 0;
-  font-family: "Fira Code";
+  font-family: "Fira Code", monospace;
   font-weight: bold;
   display: flex;
   position: sticky;
@@ -58,7 +58,7 @@ header .emoji-maiz:hover::before {
   background: rgba(255,255,255,.1);
   border: none;
   color: #CEFCD3;
-  font-family: "Fira Code";
+  font-family: "Fira Code", monospace;
   font-weight: bold;
   flex: auto;
   transition: all .3s ease-in-out;
@@ -134,7 +134,7 @@ header .emoji-maiz:hover::before {
 }
 
 #commands ul {
-  font-family: "Fira Code";
+  font-family: "Fira Code", monospace;
 }
 
 #sidebar ul {
@@ -169,7 +169,7 @@ header .emoji-maiz:hover::before {
 }
 
 .heading-anchor {
-  font-family: "Fira Code";
+  font-family: "Fira Code", monospace;
   font-weight: 400;
   font-size: .7em;
   opacity: .7;
@@ -189,7 +189,7 @@ header .emoji-maiz:hover::before {
 }
 
 #content pre, #content code {
-  font-family: "Fira Code";
+  font-family: "Fira Code", monospace;
   font-size: .9em;
   line-height: 1.2em;
 }
@@ -203,10 +203,6 @@ header .emoji-maiz:hover::before {
   border-radius: 3px;
   color: #12731D;
   padding:0 .3em;
-}
-
-.highlight pre {
-  background-color: rgba(65, 80, 66, 0.1) !important
 }
 
 pre {
@@ -256,6 +252,7 @@ hr {
   z-index: 1000;
 }
 
+
 @media screen and (prefers-color-scheme: dark) {
   body {
     color: #96b452;
@@ -284,9 +281,6 @@ hr {
     background: #132b17;
   }
 
-  .highlight pre {
-    background-color: #132b17!important;
-  }
 }
 
 @media screen and (prefers-color-scheme: dark) and (max-width: 768px) {

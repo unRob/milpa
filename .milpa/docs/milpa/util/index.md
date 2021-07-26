@@ -1,3 +1,7 @@
+---
+description: Milpa comes with a shell library full of functions
+weight: 20
+---
 `milpa` scripts that are written with bash may use any of the built-in or repo-specific shell utilities under the `.milpa/utils` folder.
 
 ## Usage

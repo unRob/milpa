@@ -1,3 +1,7 @@
+---
+description: Functions related to milpa repositories
+---
+
 The `repo` util contains shell functions related to milpa repositories
 
 ## Functions

@@ -1,5 +1,6 @@
 ---
 related-docs: [utils/log, command/environment]
+description: An overview of all milpa environment variables
 weight: 10
 ---
 There's a few environment variables that control the behavior of `milpa`.

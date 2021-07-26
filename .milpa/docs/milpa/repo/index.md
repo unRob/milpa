@@ -2,6 +2,7 @@
 related-docs: ["milpa commands", "milpa environment"]
 related-commands: ["itself create"]
 weight: 10
+description: Repository layout
 ---
 Repositories are folders that contain a `.milpa` folder within. Use the `MILPA_PATH` environment variable to tell `milpa` where to look for repos (see [`milpa itself docs environment`](/.milpa/docs/milpa/environment.md#MILPA_PATH)). By default, `milpa` will prepend any folder named `.milpa` at the top-level of a git repository to the `MILPA_PATH`.
 
