@@ -1,6 +1,7 @@
 ---
 related-docs: [milpa/command/environment, milpa/repo/index, milpa/repo/docs]
 related-commands: ["itself create", "itself docs generate"]
+index: Command specs
 ---
 Command specs go along with your scripts and help inform `milpa` of what its input should look like. Based on it, `milpa` will produce help pages and autocompletions, and may validate the arguments to your command.
 

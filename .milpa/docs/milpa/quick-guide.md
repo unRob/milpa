@@ -1,5 +1,6 @@
 ---
 title: Getting started
+description: A quick guide to getting started with milpa
 weight: 1
 ---
 

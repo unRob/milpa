@@ -23,6 +23,7 @@ function generate_content_folder() {
 
   cat - <(tail -n +2 "$MILPA_ROOT/CHANGELOG.md") > "$content/help/docs/milpa/changelog.md" <<YAML
 ---
+description: "Changelog entries for every released version"
 weight: 100
 ---
 

@@ -2,6 +2,7 @@
 related-docs: [milpa/environment, milpa/command/spec]
 related-commands: ["itself create"]
 weight: 15
+description: Commands overview
 ---
 `milpa` can run two types of commands:
 
