@@ -50,7 +50,7 @@ func (cmd *Command) Run(cc *cobra.Command, args []string) error {
 	}
 
 	if os.Getenv("COMPA_OUT") != "" {
-		return os.WriteFile(os.Getenv("COMPA_OUT"), []byte(env), 0666)
+		return os.WriteFile(os.Getenv("COMPA_OUT"), []byte(env), 0600)
 	}
 
 	fmt.Println(env)

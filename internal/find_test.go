@@ -23,7 +23,7 @@ import (
 )
 
 var fsBase = "usr/local/milpa"
-var allCommands map[string]*fstest.MapFile = map[string]*fstest.MapFile{
+var allCommands = map[string]*fstest.MapFile{
 	"shell-script.sh": {
 		Data: []byte(`#!/usr/bin env bash
 echo "hello"`),
