@@ -179,7 +179,7 @@ var DocsCommand *cobra.Command = &cobra.Command{
 var HelpCommand *cobra.Command = &cobra.Command{
 	Use:   "help [command]",
 	Short: "Display usage information on any **COMMAND...**",
-	Long:  `Help provides the valid arguments and options for any command known to milpa.`,
+	Long:  `Help provides the valid arguments and options for any command known to milpa. By default, ﹅milpa help﹅ will query the environment variable ﹅COLORFGBG﹅ to decide which style to use when rendering help, except if ﹅MILPA_HELP_STYLE﹅ is set. Valid styles are: **light**, **dark**, and **auto**.`,
 	ValidArgsFunction: func(c *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		var completions []string
 		cmd, _, e := c.Root().Find(args)
@@ -290,14 +290,24 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 		panic(err)
 	}
 
-	style := glamour.WithAutoStyle
+	var styleFunc func() glamour.TermRendererOption
+	style := os.Getenv("MILPA_HELP_STYLE")
+	switch style {
+	case "dark":
+		styleFunc = func() glamour.TermRendererOption { return glamour.WithStylePath("dark") }
+	case "light":
+		styleFunc = func() glamour.TermRendererOption { return glamour.WithStylePath("ligth") }
+	default:
+		styleFunc = glamour.WithAutoStyle
+	}
+
 	ok, err := cc.Flags().GetBool("no-color")
 	if err == nil && ok {
-		style = func() glamour.TermRendererOption { return glamour.WithStyles(glamour.ASCIIStyleConfig) }
+		styleFunc = func() glamour.TermRendererOption { return glamour.WithStylePath("notty") }
 	}
 
 	renderer, err := glamour.NewTermRenderer(
-		style(),
+		styleFunc(),
 		glamour.WithEmoji(),
 		glamour.WithWordWrap(width),
 	)

@@ -46,10 +46,10 @@ if [[ "$MILPA_ARG_ACTION" == "serve" ]]; then
     --detach \
     -p "$MILPA_OPT_PORT:$MILPA_OPT_PORT" \
     -v "$content:/src/content/" \
-    -v "${MILPA_ROOT}/repos/internal/docs/.template/theme:/src/themes/cli/" \
-    -v "${MILPA_ROOT}/repos/internal/docs/.template/config.toml:/src/config.toml" \
     "$MILPA_OPT_IMAGE" serve --debug --port "$MILPA_OPT_PORT")" || @milpa.fail "Could not spin up website generator"
     # to debug add:
+    # -v "${MILPA_ROOT}/repos/internal/docs/.template/theme:/src/themes/cli/" \
+    # -v "${MILPA_ROOT}/repos/internal/docs/.template/config.toml:/src/config.toml" \
 
   docker logs --follow milpa_docs &
 
