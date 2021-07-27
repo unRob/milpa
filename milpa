@@ -101,7 +101,7 @@ compaErr=$(mktemp -t "compaErr.XXX")
 trap 'rm -rf $compaOut $compaErr' ERR EXIT TERM
 
 # figure out what the user is asking for
-"$MILPA_COMPA" "$@" >"$compaOut" 2>"$compaErr" || {
+COMPA_OUT="$compaOut" "$MILPA_COMPA" "$@" 2>"$compaErr" || {
   exitCode=$?
 
   # provide answers to life, the universe and everything

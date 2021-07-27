@@ -144,22 +144,7 @@ var DocsCommand *cobra.Command = &cobra.Command{
 			contents = bytes.Join([][]byte{[]byte("# " + title + "\n"), parts[2]}, []byte("\n"))
 		}
 
-		width, _, err := term.GetSize(0)
-		if err != nil {
-			return err
-		}
-
-		renderer, err := glamour.NewTermRenderer(
-			glamour.WithAutoStyle(),
-			glamour.WithEmoji(),
-			glamour.WithWordWrap(width),
-		)
-
-		if err != nil {
-			return err
-		}
-
-		doc, err := renderer.RenderBytes(contents)
+		doc, err := renderMD(contents, c)
 		if err != nil {
 			return err
 		}
@@ -274,54 +259,56 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 	if err != nil {
 		panic(err)
 	}
-	content := addBackticks(buf.Bytes())
 
-	if os.Getenv("MILPA_PLAIN_HELP") == "enabled" {
-		_, err = cc.OutOrStderr().Write(content)
-		if err != nil {
-			panic(err)
-		} else {
-			return
-		}
-	}
-
-	width, _, err := term.GetSize(0)
+	content, err := renderMD(buf.Bytes(), cc)
 	if err != nil {
 		panic(err)
 	}
 
-	var styleFunc func() glamour.TermRendererOption
-	style := os.Getenv("MILPA_HELP_STYLE")
-	switch style {
-	case "dark":
-		styleFunc = func() glamour.TermRendererOption { return glamour.WithStylePath("dark") }
-	case "light":
-		styleFunc = func() glamour.TermRendererOption { return glamour.WithStylePath("light") }
-	default:
-		styleFunc = glamour.WithAutoStyle
+	_, err = cc.OutOrStderr().Write(content)
+	if err != nil {
+		panic(err)
 	}
+}
+
+func renderMD(content []byte, cc *cobra.Command) ([]byte, error) {
+	content = addBackticks(content)
+
+	if os.Getenv("MILPA_PLAIN_HELP") == "enabled" {
+		return content, nil
+	}
+
+	width, _, err := term.GetSize(0)
+	if err != nil {
+		return content, err
+	}
+
+	var styleFunc glamour.TermRendererOption
 
 	ok, err := cc.Flags().GetBool("no-color")
 	if err == nil && ok {
-		styleFunc = func() glamour.TermRendererOption { return glamour.WithStylePath("notty") }
+		styleFunc = glamour.WithStandardStyle("notty")
+	} else {
+		style := os.Getenv("MILPA_HELP_STYLE")
+		switch style {
+		case "dark":
+			styleFunc = glamour.WithStandardStyle("dark")
+		case "light":
+			styleFunc = glamour.WithStandardStyle("light")
+		default:
+			styleFunc = glamour.WithStandardStyle("auto")
+		}
 	}
 
 	renderer, err := glamour.NewTermRenderer(
-		styleFunc(),
+		styleFunc,
 		glamour.WithEmoji(),
 		glamour.WithWordWrap(width),
 	)
 
 	if err != nil {
-		panic(err)
+		return content, err
 	}
 
-	help, err := renderer.RenderBytes(content)
-	if err != nil {
-		panic(err)
-	}
-	_, err = cc.OutOrStderr().Write(help)
-	if err != nil {
-		panic(err)
-	}
+	return renderer.RenderBytes(content)
 }
