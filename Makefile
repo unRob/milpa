@@ -50,7 +50,9 @@ compa: compa.go go.mod go.sum internal/*
 $(RELEASE_TARGET)/packages/milpa-%.tgz: compa.go go.mod go.sum internal/*.go
 	mkdir -p $(basename $(subst packages,tmp,$@))/milpa
 
-	GOOS=$(firstword $(subst -, ,$*)) GOARCH=$(lastword $(subst -, ,$*)) go build -ldflags "-s -w -X main.version=${MILPA_VERSION}" -o $(basename $(subst packages,tmp,$@))/milpa/compa
+	GOOS=$(firstword $(subst -, ,$*)) GOARCH=$(lastword $(subst -, ,$*)) \
+		go build -ldflags "-s -w -X main.version=${MILPA_VERSION}" -trimpath \
+		-o $(basename $(subst packages,tmp,$@))/milpa/compa
 	upx --no-progress -9 $(basename $(subst packages,tmp,$@))/milpa/compa
 
 	cp -r ./milpa ./.milpa LICENSE.txt README.md CHANGELOG.md $(basename $(subst packages,tmp,$@))/milpa

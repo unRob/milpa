@@ -296,7 +296,7 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 	case "dark":
 		styleFunc = func() glamour.TermRendererOption { return glamour.WithStylePath("dark") }
 	case "light":
-		styleFunc = func() glamour.TermRendererOption { return glamour.WithStylePath("ligth") }
+		styleFunc = func() glamour.TermRendererOption { return glamour.WithStylePath("light") }
 	default:
 		styleFunc = glamour.WithAutoStyle
 	}
