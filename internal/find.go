@@ -23,7 +23,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var MilpaPath []string = strings.Split(os.Getenv("MILPA_PATH"), ":")
+var MilpaPath = strings.Split(os.Getenv("MILPA_PATH"), ":")
 var DefaultFS = os.DirFS("/")
 
 func FindScripts(query []string) (results map[string]struct {

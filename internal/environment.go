@@ -21,7 +21,7 @@ import (
 	"github.com/spf13/pflag"
 )
 
-var customNames map[string]string = map[string]string{"no-color": "NO_COLOR", "silent": "MILPA_SILENT", "verbose": "MILPA_VERBOSE"}
+var customNames = map[string]string{"no-color": "NO_COLOR", "silent": "MILPA_SILENT", "verbose": "MILPA_VERBOSE"}
 
 func (cmd *Command) ToEval(args []string, flags *pflag.FlagSet) (string, error) {
 	output := []string{

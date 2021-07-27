@@ -36,7 +36,7 @@ type Command struct {
 	helpFunc     func(printLinks bool) string
 }
 
-var Root *Command = &Command{
+var Root = &Command{
 	Summary: "Runs commands found in .milpa folders",
 	Description: `﹅milpa﹅ is a command-line tool to care for one's own garden of scripts, its name comes from "milpa", an agricultural method that combines multiple crops in close proximity. You and your team write scripts and a little spec for each command -use bash, or any other language-, and ﹅milpa﹅ provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.
 
