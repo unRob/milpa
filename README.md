@@ -1,17 +1,17 @@
 # milpa
 
-"_milpa_" is an agricultural method that combines multiple crops in close proximity. [`milpa`](https://milpa.dev) is a Bash script and tool to care for one's own garden of scripts.
+[`milpa`](https://milpa.dev) is a command-line tool to care for one's own garden of scripts, its name comes from "milpa", an agricultural method that combines multiple crops in close proximity
 
 ```sh
 # install on mac and linux with:
 curl -L https://milpa.dev/install.sh | bash -
 ```
 
-You and your team write scripts and a little spec for each of them. Use bash, or any other language, and `milpa` provides **autocompletions**, **subcommands**, **argument parsing** and **validation** so you can skip the toil and focus on your scripts.
+You and your team write scripts and a little spec for each of them—use bash, or any other language—, and `milpa` provides **autocompletions**, **subcommands**, **argument parsing** and **validation** so you can skip the toil and focus on your scripts.
 
 There's [a few reasons why](/.milpa/docs/milpa/alternatives.md) you and your team might wanna use milpa, but basically, it's meant to provide all those nice features above while making it easier to follow the [Command Line Interface Guidelines](https://clig.dev).
 
-`milpa` is licensed under the Apache License 2.0, and it's code is available at [github.com/unRob/milpa](https://github.com/unRob/milpa).
+`milpa` is licensed under the Apache License 2.0, and its code is available at [github.com/unRob/milpa](https://github.com/unRob/milpa).
 
 ## Concepts
 

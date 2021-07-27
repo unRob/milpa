@@ -101,7 +101,7 @@ func RootCommand(commands []*Command, version string) (*cobra.Command, error) {
 	root := &cobra.Command{
 		Use:         "milpa [--silent|-v|--verbose] [--no-color] [-h|-help] [--version]",
 		Annotations: map[string]string{"version": version},
-		Short:       "milpa runs commands from .milpa folders",
+		Short:       Root.Summary,
 		Long: `milpa runs commands from .milpa folders
 
 ` + Root.Description,
