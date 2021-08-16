@@ -21,13 +21,13 @@ function print_repo() {
 }
 
 [[ ! "$MILPA_OPT_PATHS_ONLY" ]] && echo "$(@milpa.fmt inverted " Local repos "): $MILPA_REPOS_USER"
-find "$MILPA_REPOS_USER" -type d -maxdepth 1 -mindepth 1 | while read -r repo; do
+find -L "$MILPA_REPOS_USER" -maxdepth 1 -mindepth 1 -type d | while read -r repo; do
   print_repo "$repo"
 done
 
 
 [[ ! "$MILPA_OPT_PATHS_ONLY" ]] && echo
 [[ ! "$MILPA_OPT_PATHS_ONLY" ]] && echo "$(@milpa.fmt inverted " Global repos "): $MILPA_REPOS_GLOBAL"
-find "$MILPA_REPOS_GLOBAL" -type d -maxdepth 1 -mindepth 1 | while read -r repo; do
+find -L "$MILPA_REPOS_GLOBAL" -maxdepth 1 -mindepth 1 -type d | while read -r repo; do
   print_repo "$repo"
 done
