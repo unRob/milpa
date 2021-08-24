@@ -36,7 +36,7 @@ if [[ "$MILPA_PATH_PARSED" == "" ]]; then
   # followed by global repos at ${MILPA_ROOT}/repos
   MILPA_REPOS_USER="${XDG_DATA_HOME:-$HOME/.local/share}/milpa/repos"
   MILPA_REPOS_GLOBAL="${MILPA_ROOT}/repos"
-  MILPA_REPOS="$(find "$MILPA_REPOS_USER" "$MILPA_REPOS_GLOBAL" -maxdepth 1 -mindepth 1 -type d -print)"
+  MILPA_REPOS="$(find -L "$MILPA_REPOS_USER" "$MILPA_REPOS_GLOBAL" -maxdepth 1 -mindepth 1 -type d -print)"
   if [[ "$MILPA_REPOS" != "" ]]; then
     nb=$'\n'
     MILPA_PATH="$_PATH:${MILPA_REPOS//$nb/\/.milpa}"
