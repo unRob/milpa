@@ -6,10 +6,9 @@ require (
 	github.com/alessio/shellescape v1.4.1
 	github.com/bmatcuk/doublestar/v4 v4.0.2
 	github.com/charmbracelet/glamour v0.3.0
-	github.com/fatih/color v1.12.0
+	github.com/fatih/color v1.13.0
 	github.com/go-playground/validator/v10 v10.9.0
 	github.com/hashicorp/go-getter v1.5.5
-	github.com/mattn/go-isatty v0.0.13 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.2.1
