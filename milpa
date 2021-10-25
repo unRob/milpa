@@ -39,7 +39,7 @@ if [[ "$MILPA_PATH_PARSED" == "" ]]; then
   MILPA_REPOS="$(find -L "$MILPA_REPOS_USER" "$MILPA_REPOS_GLOBAL" -maxdepth 1 -mindepth 1 -type d -print)"
   if [[ "$MILPA_REPOS" != "" ]]; then
     nb=$'\n'
-    MILPA_PATH="$_PATH:${MILPA_REPOS//$nb/\/.milpa}"
+    MILPA_PATH="$_PATH:${MILPA_REPOS//$nb/:}"
   else
     MILPA_PATH="$_PATH"
   fi
