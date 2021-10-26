@@ -133,6 +133,9 @@ set +o allexport
   @milpa.fail "Command lookup exited cleanly, but no command provided for execution"
 }
 
+@milpa.load_util milpa-version
+_milpa_check_for_updates_automagically
+
 # normalize verbose flag
 [[ "${MILPA_VERBOSE:-$MILPA_OPT_VERBOSE}" == "true" ]] && export MILPA_VERBOSE="true"
 # print debugging output if requested
