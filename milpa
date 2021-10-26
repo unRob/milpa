@@ -144,10 +144,10 @@ set +o allexport
 rm -rf "$compaOut" "$compaErr"
 
 # Run hooks if available
-if [[ -f "$MILPA_COMMAND_REPO/.milpa/hooks/before-run.sh" ]]; then
+if [[ -f "$MILPA_COMMAND_REPO/hooks/before-run.sh" ]]; then
   set -o allexport
   # shellcheck disable=1091 source=/dev/null
-  source "$MILPA_COMMAND_REPO/.milpa/hooks/before-run.sh"
+  source "$MILPA_COMMAND_REPO/hooks/before-run.sh"
   set +o allexport
 fi
 
