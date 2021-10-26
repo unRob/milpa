@@ -63,7 +63,8 @@ esac
 
 
 globalRepos="${PREFIX}/repos"
-localRepos="${XDG_HOME_DATA:-$HOME/.local/share}/milpa/repos"
+milpaLocal="${XDG_HOME_DATA:-$HOME/.local/share}"
+localRepos="${milpaLocal}/milpa/repos"
 package="milpa-$OS-$ARCH.tgz"
 
 # Get the package
@@ -78,7 +79,7 @@ fi
 if [[ ! -d "$PREFIX" ]]; then
   >&2 echo "${_FMT_BOLD}Creating $PREFIX, enter your password if prompted${_FMT_RESET}"
   if [[ -w "$(dirname "$PREFIX")" ]]; then
-    mkdir -pv "$PREFIX" 
+    mkdir -pv "$PREFIX"
   else
     sudo mkdir -pv "$PREFIX"
   fi || @fail "Could not create $PREFIX directory"
@@ -109,6 +110,9 @@ else
   sudo ln -sfv "$PREFIX/compa" "$TARGET/compa"
 [[ -d "$globalRepos" ]] || sudo mkdir -pv "$globalRepos"
 fi
+
+# update version so milpa doesn't look for updates innecessarily
+date "+%s" > "$milpaLocal/last-update-check"
 
 # recycle the bag
 rm -rf "$package"
