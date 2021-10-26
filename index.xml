@@ -222,6 +222,18 @@ Description #  Generates a shell completion script for the current $SHELL. It cu
     
     <item>
       <title></title>
+      <link>https://milpa.dev/itself/upgrade/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://milpa.dev/itself/upgrade/</guid>
+      <description>Does a thing
+Usage #  milpa itself upgrade [options]
+Description #  Longer description of how it does the thing
+Global Options #   --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --verbose (bool): Log verbose output to stderr.  </description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://milpa.dev/itself/version/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
