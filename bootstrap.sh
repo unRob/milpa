@@ -77,23 +77,42 @@ fi
 # Find some nice spot in the ground
 if [[ ! -d "$PREFIX" ]]; then
   >&2 echo "${_FMT_BOLD}Creating $PREFIX, enter your password if prompted${_FMT_RESET}"
-  sudo mkdir -pv "$PREFIX" || @fail "Could not create $PREFIX directory"
+  if [[ -w "$(dirname "$PREFIX")" ]]; then
+    mkdir -pv "$PREFIX" 
+  else
+    sudo mkdir -pv "$PREFIX"
+  fi || @fail "Could not create $PREFIX directory"
 else
   >&2 echo "${_FMT_WARNING}$PREFIX already exists, deleting previous installation...${_FMT_RESET}"
-  sudo find "$PREFIX" -maxdepth 1 -mindepth 1 \! -name repos -exec rm -rf {} \;
+  if [[ -w "$PREFIX" ]]; then
+    find "$PREFIX" -maxdepth 1 -mindepth 1 \! -name repos -exec rm -rf {} \;
+  else
+    sudo find "$PREFIX" -maxdepth 1 -mindepth 1 \! -name repos -exec rm -rf {} \;
+  fi
 fi
 
 # dig a hole, pour some seeds
-sudo tar xfz "$package" -C "$(dirname "$PREFIX")" || @fail "Could not extract milpa package to $PREFIX"
+if [[ -w "$PREFIX" ]]; then
+  tar xfz "$package" -C "$(dirname "$PREFIX")" || @fail "Could not extract milpa package to $PREFIX"
+else
+  sudo tar xfz "$package" -C "$(dirname "$PREFIX")" || @fail "Could not extract milpa package to $PREFIX"
+fi
+
+# get ready for growing some scripts
+>&2 echo "Installing symbolic links to $TARGET"
+if [[ -w "$PREFIX" ]]; then
+  ln -sfv "$PREFIX/milpa" "$TARGET/milpa"
+  ln -sfv "$PREFIX/compa" "$TARGET/compa"
+  [[ -d "$globalRepos" ]] || mkdir -pv "$globalRepos"
+else
+  sudo ln -sfv "$PREFIX/milpa" "$TARGET/milpa"
+  sudo ln -sfv "$PREFIX/compa" "$TARGET/compa"
+[[ -d "$globalRepos" ]] || sudo mkdir -pv "$globalRepos"
+fi
 
 # recycle the bag
 rm -rf "$package"
 
-# get ready for growing some scripts
->&2 echo "Installing symbolic links to $TARGET"
-sudo ln -sfv "$PREFIX/milpa" "$TARGET/milpa"
-sudo ln -sfv "$PREFIX/compa" "$TARGET/compa"
-[[ -d "$globalRepos" ]] || sudo mkdir -pv "$globalRepos"
 [[ -d "$localRepos" ]] || mkdir -pv "$localRepos"
 
 # Test we can run milpa
