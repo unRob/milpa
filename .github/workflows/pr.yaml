@@ -9,8 +9,15 @@ jobs:
         with:
           go-version: 1.16.x
 
+      - name: Setup BATS
+        uses: mig4/setup-bats@v1
+        with:
+          bats-version: 1.5.0
+
       - name: Checkout source
         uses: actions/checkout@v2
+        with:
+          submodules: true
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
@@ -28,13 +35,21 @@ jobs:
         uses: ludeeus/action-shellcheck@master
         with:
           check_together: 'yes'
+          ignore: test/_helpers/bats-assert test/_helpers/bats-file test/_helpers/bats-support
 
       - name: Unit tests
         run: |
           go get gotest.tools/gotestsum
           gotestsum --format testname
 
-      - name: milpa doctor
+      - name: Build compa
         run: |
           make compa
+
+      - name: Integration tests
+        run: |
+          bats --tap test/*.bats test/commands/**/*.bats
+
+      - name: milpa doctor
+        run: |
           MILPA_ROOT=$(pwd) MILPA_PATH=$(pwd)/internal $(pwd)/milpa itself doctor

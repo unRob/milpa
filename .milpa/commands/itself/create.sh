@@ -23,7 +23,7 @@ fi
 milpa="$repo_path/.milpa"
 
 joinedName="${MILPA_ARG_NAME[*]}"
-path="$milpa/commands/${joinedName// /\/}"
+path="$milpa/commands/${joinedName// //}"
 @milpa.log info "Creating command $(@milpa.fmt bold "${MILPA_ARG_NAME[*]}") at $path"
 mkdir -p "$(dirname "$path")"
 
@@ -44,3 +44,5 @@ YAML
 
 @milpa.log complete "$(@milpa.fmt bold "${MILPA_ARG_NAME[*]}") created"
 [[ "$MILPA_OPT_OPEN" ]] && $EDITOR "$path"
+
+exit 0

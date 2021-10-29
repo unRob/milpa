@@ -1,4 +1,4 @@
-SHELL := /usr/bin/env bash -O globstar
+SHELL := /usr/bin/env bash
 # Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,10 +11,11 @@ SHELL := /usr/bin/env bash -O globstar
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-.PHONY: compa setup test lint clean
+.PHONY: compa setup test clean
 RELEASE_TARGET ?= dist
 TARGET_MACHINES = linux-amd64 linux-arm64 linux-arm linux-mips darwin-amd64 darwin-arm64
 TARGET_ARCHIVES = $(addsuffix .tgz,$(addprefix $(RELEASE_TARGET)/packages/milpa-,$(TARGET_MACHINES)))
+TEST_OUTPUT ?= pretty
 
 ifneq ($(ASDF_DIR), "")
 setup-golang:
@@ -38,10 +39,11 @@ setup: setup-golang
 # every day usage
 test:
 	gotestsum --format short -- ./...
+	bats --formatter "$(TEST_OUTPUT)" test/*.bats test/commands/**/*.bats
 
-lint:
+lint: compa.go go.mod go.sum internal/* bootstrap.sh $(wildcard .milpa/**/*.sh) $(wildcard repos/internal/**/*.sh)
 	golangci-lint run
-	shellcheck milpa bootstrap.sh .milpa/**/*.sh repos/internal/**/*.sh
+	shellcheck milpa bootstrap.sh $(wildcard .milpa/**/*.sh) $(wildcard repos/internal/**/*.sh) test/_helpers/*.bash
 
 compa: compa.go go.mod go.sum internal/*
 	go build -ldflags "-s -w -X main.version=${MILPA_VERSION}" -o compa

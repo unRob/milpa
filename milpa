@@ -34,9 +34,9 @@ if [[ "$MILPA_PATH_PARSED" == "" ]]; then
   [[ -d "$_pwd/.milpa" ]] && [[ ! "$_PATH" =~ :?$_pwd/.milpa:? ]] && _PATH="$_PATH:$_pwd/.milpa"
   # from there, it'll look for user repos at $XDG_DATA_HOME/milpa/repos
   # followed by global repos at ${MILPA_ROOT}/repos
-  MILPA_REPOS_USER="${XDG_DATA_HOME:-$HOME/.local/share}/milpa/repos"
+  MILPA_REPOS_USER="${XDG_DATA_HOME:-$HOME}/.local/share/milpa/repos"
   MILPA_REPOS_GLOBAL="${MILPA_ROOT}/repos"
-  MILPA_REPOS="$(find -L "$MILPA_REPOS_USER" "$MILPA_REPOS_GLOBAL" -maxdepth 1 -mindepth 1 -type d -print)"
+  MILPA_REPOS="$(find -L "$MILPA_REPOS_USER" "$MILPA_REPOS_GLOBAL" -maxdepth 1 -mindepth 1 -type d -print 2>/dev/null)"
   if [[ "$MILPA_REPOS" != "" ]]; then
     nb=$'\n'
     MILPA_PATH="$_PATH:${MILPA_REPOS//$nb/:}"
@@ -47,19 +47,14 @@ if [[ "$MILPA_PATH_PARSED" == "" ]]; then
 fi
 # bash is fine and all, but we need a little helper to run parsing for us
 export MILPA_COMPA="${MILPA_COMPA:-$MILPA_ROOT/compa}"
-
 export MILPA_PATH
-# create an array from this MILPA_PATH
-IFS=: read -ra MILPA_PATH_ARR <<<"$MILPA_PATH"
-
 # bail early if we're autocompleting
 [[ $1 == "__complete" ]] && exec "$MILPA_COMPA" "$@"
 
 
-
 function @milpa.load_util () {
-  # shell scripts can call load_milpa_util to load utils within the $MILPA_PATH
-  # TODO: maybe bump $MILPA_COMMAND_REPO up in the path?
+  # shell scripts can call @milpa.load_util to load utils from MILPA_ROOT
+  # or the current MILPA_COMMAND_REPO
   local env_name
   for util_name in "$@"; do
     env_name="_MILPA_UTIL_${util_name//-/_}"
@@ -68,7 +63,12 @@ function @milpa.load_util () {
       continue
     fi
 
-    for pkg in ${MILPA_PATH_ARR[*]} ; do
+    libpath=( "$MILPA_ROOT/.milpa" )
+    if [[ -z "${MILPA_COMMAND_REPO+x}" ]]; then
+      libpath+=( "$MILPA_COMMAND_REPO" )
+    fi
+
+    for pkg in ${libpath[*]} ; do
       util_path="${pkg}/util/$util_name.sh"
       if [[ -f "$util_path" ]]; then
         set -o allexport
@@ -82,7 +82,7 @@ function @milpa.load_util () {
 
     if [[ "${!env_name}" != "1" ]]; then
       # util not found
-      >&2 echo "Missing util named $util_name"
+      >&2 echo "Missing util named $util_name in ${libpath[*]}"
       exit 78
     fi
   done
