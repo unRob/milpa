@@ -1,0 +1,7 @@
+summary: Builds compa for dev or test
+description: |
+  By default, using a git-generated version
+arguments:
+  - name: version
+    description: Sets a specific version
+    default: auto

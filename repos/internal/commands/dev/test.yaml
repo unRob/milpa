@@ -1,0 +1,3 @@
+summary: Runs unit and integration tests
+description: |
+  a wrapper for milpa dev test *

@@ -1,0 +1,3 @@
+summary: Runs lint on go and shell files
+description: |
+  a wrapper for milpa dev lint *

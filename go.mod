@@ -9,6 +9,7 @@ require (
 	github.com/fatih/color v1.13.0
 	github.com/go-playground/validator/v10 v10.9.0
 	github.com/hashicorp/go-getter v1.5.9
+	github.com/hashicorp/go-version v1.3.0 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.2.1

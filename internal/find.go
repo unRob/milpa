@@ -17,6 +17,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	doublestar "github.com/bmatcuk/doublestar/v4"
@@ -78,9 +79,14 @@ func FindScripts(query []string) (results map[string]struct {
 
 type ByPath []*Command
 
-func (cmds ByPath) Len() int           { return len(cmds) }
-func (cmds ByPath) Swap(i, j int)      { cmds[i], cmds[j] = cmds[j], cmds[i] }
-func (cmds ByPath) Less(i, j int) bool { return cmds[i].Meta.Path < cmds[j].Meta.Path }
+func (cmds ByPath) Len() int      { return len(cmds) }
+func (cmds ByPath) Swap(i, j int) { cmds[i], cmds[j] = cmds[j], cmds[i] }
+func (cmds ByPath) Less(i, j int) bool {
+	if cmds[i].Meta.Path == cmds[j].Meta.Path {
+		return cmds[i].FullName() < cmds[j].FullName()
+	}
+	return cmds[i].Meta.Path < cmds[j].Meta.Path
+}
 
 func FindAllSubCommands(returnOnError bool) (cmds []*Command, err error) {
 	files, err := FindScripts([]string{"**"})
@@ -90,7 +96,16 @@ func FindAllSubCommands(returnOnError bool) (cmds []*Command, err error) {
 
 	logrus.Debugf("Found %d files", len(files))
 
-	for path, data := range files {
+	// make sure we always sort commands by path before initializing
+	// this helps with "index" commands, i.e. commands named like an existing folder
+	keys := make([]string, 0, len(files))
+	for k := range files {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, path := range keys {
+		data := files[path]
 		var cmd *Command
 		cmd, err = New(path, data.Repo, !returnOnError)
 		if err != nil {
@@ -105,6 +120,7 @@ func FindAllSubCommands(returnOnError bool) (cmds []*Command, err error) {
 		cmds = append(cmds, cmd)
 	}
 
+	sort.Sort(ByPath(cmds))
 	return
 }
 

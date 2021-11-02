@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# current_branch=$(git rev-parse --abbrev-ref HEAD)
-# [[ "$current_branch" != "main" ]] && @milpa.fail "Refusing to release on branch <$current_branch>"
-# [[ -n "$(git status --porcelain)" ]] && @milpa.fail "Git tree is messy, won't continue"
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+[[ "$current_branch" != "main" ]] && @milpa.fail "Refusing to release on branch <$current_branch>"
+[[ -n "$(git status --porcelain)" ]] && @milpa.fail "Git tree is messy, won't continue"
 
 function next_semver() {
   local components

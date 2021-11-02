@@ -12,16 +12,38 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cores="$(sysctl -n hw.physicalcpu 2>/dev/null || grep -c ^processor /proc/cpuinfo)"
-
 export MILPA_VERSION="$MILPA_ARG_VERSION"
-@milpa.log info "Starting build"
 
 output="${MILPA_OPT_OUTPUT:-$MILPA_ROOT/dist}"
-
+all_targets=( linux/amd64 linux/arm64 linux/arm linux/mips darwin/amd64 darwin/arm64 )
 # build packages
-RELEASE_TARGET="$output" make -j"$cores" "$output/packages" || @milpa.fail "Could not complete release build"
+
+if [[ "${#MILPA_ARG_TARGETS}" -eq 0 ]] || [[ "${MILPA_ARG_TARGETS[1]}" == "auto" ]]; then
+  MILPA_ARG_TARGETS=( "${all_targets[@]}" )
+fi
+
+@milpa.log info "Starting build for ${MILPA_ARG_TARGETS[*]}"
+mkdir -p "$output"
+GOFLAGS="-trimpath" gox -osarch "${MILPA_ARG_TARGETS[*]}" \
+  -ldflags "-s -w -X main.version=${MILPA_VERSION}" \
+  -output "$output/{{.OS}}-{{.Arch}}" || @milpa.fail "Could not build with gox"
 @milpa.log success "Build complete"
+
+
+@milpa.log info "Generating archives"
+for pair in "${MILPA_ARG_TARGETS[@]//\//-}"; do
+  dist_dir="$output/tmp/$pair/milpa"
+  package="$output/milpa-$pair.tgz"
+
+  mkdir -p "$dist_dir"
+  upx --no-progress -9 -o "$dist_dir/compa" "$output/$pair" || @milpa.fail "Could not compress $dist_dir/compa"
+  rm -rf "${output:?}/$pair"
+
+  cp -rv ./milpa ./.milpa LICENSE.txt README.md CHANGELOG.md "$dist_dir/"
+  tar -czf "$package" -C "$dist_dir/" milpa || @milpa.fail "Could not archive $package"
+  openssl dgst -sha256 "$package" | awk '{print $2}' > "${package##.tgz}.shasum" || @milpa.fail "Could not generate shasum for $package"
+done
+@milpa.log success "Archives generated"
 
 # create docs
 milpa release docs-image --skip-publish "$MILPA_VERSION" || @milpa.fail "Could not build docs image"
