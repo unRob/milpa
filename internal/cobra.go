@@ -18,6 +18,7 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
@@ -181,10 +182,10 @@ func populateRoot(root *cobra.Command, commands []*Command) error {
 
 			query := []string{cp}
 			if cc, _, err := container.Find(query); err == nil && cc != container {
-				// logrus.Debugf("found %s in %s", query, cc.Name())
+				logrus.Debugf("found %s in %s", query, cc.Name())
 				container = cc
 			} else {
-				// logrus.Debugf("creating %s in %s", query, container.Name())
+				logrus.Debugf("creating %s in %s", query, container.Name())
 				cc := &cobra.Command{
 					Use:                        cp,
 					Short:                      fmt.Sprintf("%s subcommands", strings.Join(query, " ")),
