@@ -44,6 +44,8 @@ jobs:
 
       - name: Build compa
         run: |
+          MILPA_VERSION="test-$(date -u "+%s")"
+          echo "TEST_MILPA_VERSION=$MILPA_VERSION" >> $GITHUB_ENV
           make compa
 
       - name: Integration tests
