@@ -17,6 +17,8 @@ jobs:
 
       - name: Checkout source
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Cache go modules
         uses: actions/cache@v2
@@ -29,16 +31,24 @@ jobs:
 
       - name: Setup dependencies
         run: |
+          echo "::group::install upx"
           curl -LO https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz
           tar xf upx-3.96-amd64_linux.tar.xz
           sudo mv upx-3.96-amd64_linux/upx /usr/local/bin/upx
-          go build -ldflags "-s -w -X main.version=CI" -o compa
+          echo "::endgroup::"
 
+          echo "::group::build compa"
+          go build -ldflags "-s -w -X main.version=CI" -o compa
+          echo "::endgroup::"
+
+          echo "::group::pull notes"
           git config --global user.email "milpa+ci@un.rob.mx"
           git config --global user.name "Milpa CI"
           git ls-remote | awk '/refs\/notes/ {print $2}' | while read -r noteKind; do
             git pull --rebase origin "$noteKind"
           done
+          echo "::endgroup::"
+
           go get -u github.com/mitchellh/gox
 
 
@@ -78,8 +88,8 @@ jobs:
         with:
           body: ${{ env.RELEASE_NOTES }}
           files: |
-            dist/packages/*.tgz
-            dist/packages/*.shasum
+            dist/*.tgz
+            dist/*.shasum
           prerelease: ${{ steps.build.outputs.prerelease }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
