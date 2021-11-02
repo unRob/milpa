@@ -12,8 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+cd "$(git rev-parse --show-toplevel)" || @milpa.fail "could not cd into root directory"
+
 @milpa.log info "Configuring git hooks"
 git config core.hooksPath "$(git rev-parse --show-toplevel)/internal/bin/hooks"
+
+@milpa.log info "Making sure submodules are here"
+git submodule update --init --recursive
 
 if [[ "$ASDF_DIR" ]]; then
    @milpa.log info "Installing golang version with asdf"
@@ -26,6 +31,7 @@ if [[ "$ASDF_DIR" ]]; then
     asdf install || @milpa.fail "could not install golang version"
     asdf reshim golang
   fi
+  @milpa.log success "go is now installed"
 fi
 
 @milpa.log info "Installing go packages"
