@@ -47,6 +47,7 @@ jobs:
         run: |
           version="${GITHUB_REF##*/}"
           export MILPA_ROOT=$(pwd)
+          export MILPA_DISABLE_UPDATE_CHECKS="1"
           echo "::group::release docker image"
           $(pwd)/milpa release docs-image --docker-login "unrob:GITHUB_TOKEN" "$version"
           echo "::endgroup::"
