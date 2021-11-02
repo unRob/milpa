@@ -4,7 +4,7 @@ on:
 name: Debug
 
 jobs:
-  release:
+  debug:
     runs-on: ubuntu-latest
     steps:
       - name: Install Go
@@ -28,7 +28,7 @@ jobs:
 
       - name: Setup dependencies
         run: |
-          version="${GITHUB_REF##*/}"
+          version="0.0.0-alpha.10"
           echo "::group::Release notes"
           git config --global user.email "milpa+ci@un.rob.mx"
           git config --global user.name "Milpa CI"
@@ -39,5 +39,5 @@ jobs:
           mkdir -p dist
           git show "${version}" | awk '/^commit /{exit} f; /^Date: /{f=1}' > dist/release-notes.md
           cat dist/release-notes.md
-          wc -b dist/release-notes.md
+          wc -c dist/release-notes.md
           echo "::endgroup::"

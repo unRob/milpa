@@ -32,6 +32,7 @@ jobs:
       - name: Setup dependencies
         run: |
           version="${GITHUB_REF##*/}"
+          echo "version is $version"
           echo "::group::install upx"
           curl -LO https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz
           tar xf upx-3.96-amd64_linux.tar.xz
@@ -52,7 +53,7 @@ jobs:
           mkdir -p dist
           git show "${version}" | awk '/^commit /{exit} f; /^Date: /{f=1}' > dist/release-notes.md
           cat dist/release-notes.md
-          wc -b dist/release-notes.md
+          wc -c dist/release-notes.md
           echo "::endgroup::"
 
           go get -u github.com/mitchellh/gox
