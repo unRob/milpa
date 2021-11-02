@@ -40,7 +40,8 @@ for pair in "${MILPA_ARG_TARGETS[@]//\//-}"; do
   rm -rf "${output:?}/$pair"
 
   cp -rv ./milpa ./.milpa LICENSE.txt README.md CHANGELOG.md "$dist_dir/"
-  tar -czf "$package" -C "$dist_dir/" milpa || @milpa.fail "Could not archive $package"
+  rm -rf "$package"
+  tar -czf "$package" -C "$(dirname "$dist_dir")" milpa || @milpa.fail "Could not archive $package"
   openssl dgst -sha256 "$package" | awk '{print $2}' > "${package##.tgz}.shasum" || @milpa.fail "Could not generate shasum for $package"
 done
 @milpa.log success "Archives generated"

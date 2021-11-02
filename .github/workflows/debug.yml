@@ -1,0 +1,43 @@
+on:
+  push:
+    branches: [ debug/* ]
+name: Debug
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16.x
+
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Cache go modules
+        uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.OS }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.OS }}-go-${{ env.cache-name }}-
+            ${{ runner.OS }}-go-
+
+      - name: Setup dependencies
+        run: |
+          version="0.0.0-alpha.10"
+          echo "::group::Release notes"
+          git config --global user.email "milpa+ci@un.rob.mx"
+          git config --global user.name "Milpa CI"
+          git ls-remote | awk '/refs\/notes/ {print $2}' | while read -r noteKind; do
+            git pull --rebase origin "$noteKind"
+          done
+
+          mkdir -p dist
+          git show "${version}" | awk '/^commit /{exit} f; /^Date: /{f=1}' > dist/release-notes.md
+          cat dist/release-notes.md
+          wc -c dist/release-notes.md
+          echo "::endgroup::"
