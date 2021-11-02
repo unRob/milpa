@@ -32,8 +32,7 @@ jobs:
           curl -LO https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz
           tar xf upx-3.96-amd64_linux.tar.xz
           sudo mv upx-3.96-amd64_linux/upx /usr/local/bin/upx
-          MILPA_VERSION=ci make compa
-
+          go build -ldflags "-s -w -X main.version=CI" -o compa
 
           git config --global user.email "milpa+ci@un.rob.mx"
           git config --global user.name "Milpa CI"

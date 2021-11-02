@@ -1,0 +1,3 @@
+summary: Runs unit tests
+description: |
+  Runs unit tests using gotestsum

@@ -12,9 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [[ -z ${!MILPA_ARG_VAR+x} ]]; then
-  echo "${MILPA_ARG_VAR} is not set"
-  exit 2
-fi
+@milpa.load_util shell
+@milpa.log info "Exporting shell variables"
 
-echo "${!MILPA_ARG_VAR}"
+root="${MILPA_COMMAND_REPO%%/repos/internal*}"
+@milpa.shell.export "MILPA_ROOT" "$root"
+
+# shellcheck disable=2049
+if [[ ! "$PATH" = "$root"* ]]; then
+  @milpa.shell.prepend_path "$root"
+fi

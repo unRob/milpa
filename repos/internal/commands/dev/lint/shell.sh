@@ -12,9 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [[ -z ${!MILPA_ARG_VAR+x} ]]; then
-  echo "${MILPA_ARG_VAR} is not set"
-  exit 2
-fi
+cd "$MILPA_ROOT" || @milpa.fail "could not cd into $MILPA_ROOT"
 
-echo "${!MILPA_ARG_VAR}"
+@milpa.log info "Linting shell scripts"
+shellcheck milpa bootstrap.sh .milpa/**/*.sh repos/internal/commands/**/*.sh test/_helpers/*.bash || exit 2
+@milpa.log complete "Shell files are up to spec"

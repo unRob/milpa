@@ -1,0 +1,12 @@
+summary: Runs integration tests
+description: |
+  Runs integration tests using bats
+arguments:
+  - name: paths
+    description: the paths to test, if none are passed, the whole suite runs
+    variadic: true
+options:
+  format:
+    description: the format for test output
+    default: auto
+    values: [pretty, auto, tap]

@@ -12,18 +12,46 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+function files_touched () {
+  [[ -n "$(git status --porcelain "$@")" ]]
+}
+
 set -e errexit
 #shellcheck disable=2155
 export MILPA_ROOT=$(pwd)
+if [[ ! -x "$MILPA_ROOT/compa" ]]; then
+  milpa dev build --test
+fi
 #shellcheck disable=2155
-export TEST_MILPA_VERSION="$(compa __version 2>&1)"
+export TEST_MILPA_VERSION="$("$MILPA_ROOT/compa" __version 2>&1)"
 
-make test
-make lint
-"$MILPA_ROOT/milpa" itself doctor
+# things checked by golangci-lint run and gotestsum
+GO_DEPS=( compa.go go.mod go.sum internal/**/*.go )
+# things checked by shellcheck
+SHELL_DEPS=( bootstrap.sh .milpa/**/*.sh repos/internal/**/*.sh )
+# things checked bats
+INTEGRATION_DEPS=( "${SHELL_DEPS[@]}" "${GO_DEPS[@]}" test/_helpers/*.bash test/*.bats test/commands/**/*.bats )
+# things checked by go doctor
+DOCTOR_DEPS=( "${SHELL_DEPS[@]}" "${GO_DEPS[@]}" .milpa/commands/**/*.yaml )
+
+files_touched "${SHELL_DEPS[@]}" && "$MILPA_ROOT/milpa" dev lint shell
+
+if files_touched "${GO_DEPS[@]}"; then
+  go mod tidy
+  if files_touched go.mod go.sum; then
+    echo "Go modules updated, adding to commit"
+    git add "go.mod" "go.sum"
+  fi
+  "$MILPA_ROOT/milpa" dev lint go
+  "$MILPA_ROOT/milpa" dev test unit
+fi
+
+files_touched "${INTEGRATION_DEPS[@]}" && "$MILPA_ROOT/milpa" dev test integration
+files_touched "${DOCTOR_DEPS[@]}" && "$MILPA_ROOT/milpa" itself doctor
+
 "$MILPA_ROOT/milpa" cl update >/dev/null 2>&1
 
-if [[ -n "$(git status --porcelain CHANGELOG.md)" ]]; then
+if files_touched CHANGELOG.md; then
   echo "Changelog updated, adding to commit"
   git add "$MILPA_ROOT/CHANGELOG.md"
 fi

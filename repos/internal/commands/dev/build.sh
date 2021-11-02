@@ -12,9 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [[ -z ${!MILPA_ARG_VAR+x} ]]; then
-  echo "${MILPA_ARG_VAR} is not set"
-  exit 2
+if [[ "$MILPA_ARG_VERSION" == "auto" ]]; then
+  VERSION="$(git describe)"
+else
+  VERSION="$MILPA_ARG_VERSION"
 fi
+cd "$MILPA_ROOT" || @milpa.fail "could not cd into $MILPA_ROOT"
 
-echo "${!MILPA_ARG_VAR}"
+@milpa.log info "Building compa version $VERSION"
+go build -ldflags "-s -w -X main.version=${VERSION}" -o compa || exit 2
+@milpa.log complete "compa version $VERSION built"
+

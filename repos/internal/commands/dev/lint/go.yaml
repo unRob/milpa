@@ -1,0 +1,3 @@
+summary: Lints go files in this repo
+description: |
+  Runs golangci-lint on all go files

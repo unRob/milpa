@@ -42,11 +42,13 @@ jobs:
           go get gotest.tools/gotestsum
           gotestsum --format testname
 
-      - name: Build compa
+      - name: Build compa and environment
         run: |
-          MILPA_VERSION="test-$(date -u "+%s")"
-          echo "TEST_MILPA_VERSION=$MILPA_VERSION" >> $GITHUB_ENV
-          make compa
+          version="test-$(date -u "+%s")"
+          echo "TEST_MILPA_VERSION=$version" >> $GITHUB_ENV
+          echo "MILPA_ROOT=$(pwd)" >> $GITHUB_ENV
+          echo "MILPA_PATH=$(pwd)/internal" >> $GITHUB_ENV
+          go build -ldflags "-s -w -X main.version=${version}" -o compa
 
       - name: Integration tests
         run: |
@@ -54,4 +56,4 @@ jobs:
 
       - name: milpa doctor
         run: |
-          MILPA_ROOT=$(pwd) MILPA_PATH=$(pwd)/internal $(pwd)/milpa itself doctor
+          $(pwd)/milpa itself doctor

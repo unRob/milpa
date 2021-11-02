@@ -15,34 +15,48 @@
 @milpa.load_util repo
 
 if [[ "$MILPA_OPT_REPO" == "" ]]; then
-  repo_path="$(@milpa.repo.current_path)"
+  repo_path="$(@milpa.repo.current_path)/.milpa"
 else
   repo_path="$MILPA_OPT_REPO"
 fi
 
-milpa="$repo_path/.milpa"
+command_name=${MILPA_ARG_NAME[*]}
+command_path="$repo_path/commands/${command_name// //}"
 
-joinedName="${MILPA_ARG_NAME[*]}"
-path="$milpa/commands/${joinedName// //}"
-@milpa.log info "Creating command $(@milpa.fmt bold "${MILPA_ARG_NAME[*]}") at $path"
-mkdir -p "$(dirname "$path")"
+[[ "${MILPA_OPT_EXECUTABLE}" ]] || command_path="$command_path.sh"
+
+[[ -f "$command_path" ]] && @milpa.fail "Command already exists at $command_path"
+
+@milpa.log info "Creating command $(@milpa.fmt bold "${command_name}") at $command_path"
+mkdir -p "$(dirname "$command_path")"
 
 if [[ "${MILPA_OPT_EXECUTABLE}" ]]; then
-  touch "$path"
-  chmod +x "$path"
+  touch "$command_path" || @milpa.fail "could not create $command_path"
+  chmod +x "$command_path"
 else
-  path="$path.sh"
-  echo "#!/usr/bin/env bash" >> "$path"
+  echo "#!/usr/bin/env bash" >> "$command_path" || @milpa.fail "could not create $command_path"
 fi
 
-cat > "${path%.sh}.${MILPA_OPT_CONFIG_FORMAT}" <<'YAML'
+cat > "${command_path%.sh}.${MILPA_OPT_CONFIG_FORMAT}" <<'YAML'
 summary: Does a thing
 description: |
   Longer description of how it does the thing
 # see `milpa help docs command spec` for all the options
+# arguments:
+#   - name: something
+#     description: Sets SOMETHING
+#     required: true
+#     variadic: false
+#     values-subcommand: list things
+#     values: []
+# options:
+#   option:
+#     description: sets OPTION
+#     default: fourty-two
+#     values: [one, two, fourty-two]
 YAML
 
-@milpa.log complete "$(@milpa.fmt bold "${MILPA_ARG_NAME[*]}") created"
-[[ "$MILPA_OPT_OPEN" ]] && $EDITOR "$path"
+@milpa.log complete "$(@milpa.fmt bold "${command_name}") created"
+[[ "$MILPA_OPT_OPEN" ]] && $EDITOR "$command_path"
 
 exit 0

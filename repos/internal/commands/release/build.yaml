@@ -19,6 +19,9 @@ arguments:
   - name: hostname
     description: the hostname where documentation and install scripts will be served under
     default: milpa.dev
+  - name: targets
+    description: the targets to build for
+    variadic: true
 options:
   output:
     description: the path where to put built assets in

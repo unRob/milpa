@@ -11,21 +11,29 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+load 'test/_helpers/setup.bash'
+_suite_setup
 
-setup_file() {
-  load 'test/_helpers/setup.bash'
-  _suite_setup
-}
 
 setup () {
   load 'test/_helpers/bats-support/load.bash'
   load 'test/_helpers/bats-assert/load.bash'
-  cd "$XDG_DATA_HOME" || exit 2
+  _common_setup
 }
 
 @test "milpa with no arguments shows help" {
   run milpa
   assert_failure 127
+  assert_output --regexp "## Usage"
+}
+
+@test "milpa help exits cleanly" {
+  run milpa help
+  assert_success
+  assert_output --regexp "## Usage"
+
+  run milpa --help
+  assert_success
   assert_output --regexp "## Usage"
 }
 
@@ -36,7 +44,7 @@ setup () {
 }
 
 @test "milpa includes global repos in MILPA_PATH" {
-  run "$MILPA_ROOT/milpa" debug-env MILPA_PATH
+  run milpa debug-env MILPA_PATH
   assert_success
   assert_output "$MILPA_ROOT/.milpa:$MILPA_ROOT/repos/test-suite"
 }

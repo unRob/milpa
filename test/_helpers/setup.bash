@@ -12,7 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+function _common_setup () {
+  cd "$XDG_DATA_HOME/home" || exit 2
+}
+
 function _suite_setup() {
+  unset XDG_DATA_HOME MILPA_ROOT MILPA_PATH MILPA_PATH_PARSED DEBUG
   export XDG_DATA_HOME="${BATS_SUITE_TMPDIR//\/\///}/home"
   # shellcheck disable=2155
   export PROJECT_ROOT="$( cd "${BATS_TEST_FILENAME%%/test/*}" >/dev/null 2>&1 && pwd )"
@@ -22,14 +27,15 @@ function _suite_setup() {
   export PATH="$PROJECT_ROOT:$PATH"
   export NO_COLOR=1
   export MILPA_PLAIN_HELP=enabled
-
+  export milpa="$MILPA_ROOT/milpa"
+  mkdir -p "$XDG_DATA_HOME/home"
   [[ -f "$XDG_DATA_HOME/setup-complete" ]] && return 0
   mkdir -pv "$MILPA_ROOT/repos"
-  ln -sfv "$PROJECT_ROOT/milpa" "$MILPA_ROOT/milpa"
-  ln -sfv "$PROJECT_ROOT/compa" "$MILPA_ROOT/compa"
-  ln -sfv "$PROJECT_ROOT/.milpa" "$MILPA_ROOT/.milpa"
-  mkdir -pv "$XDG_DATA_HOME/.local/share/milpa/repos"
-  ln -sfv "$PROJECT_ROOT/test/.milpa" "$MILPA_ROOT/repos/test-suite"
+  ln -sf "$PROJECT_ROOT/milpa" "$MILPA_ROOT/milpaa"
+  ln -sf "$PROJECT_ROOT/compa" "$MILPA_ROOT/compa"
+  ln -sf "$PROJECT_ROOT/.milpa" "$MILPA_ROOT/.milpa"
+  mkdir -p "$XDG_DATA_HOME/.local/share/milpa/repos"
+  ln -sf "$PROJECT_ROOT/test/.milpa" "$MILPA_ROOT/repos/test-suite"
   touch "$XDG_DATA_HOME/setup-complete"
 }
 

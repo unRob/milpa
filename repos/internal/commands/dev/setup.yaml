@@ -1,0 +1,3 @@
+summary: Sets up the development environment
+description: |
+  Installs git hooks, golang with asdf (if available), and go dependencies

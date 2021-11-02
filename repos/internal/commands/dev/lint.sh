@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [[ -z ${!MILPA_ARG_VAR+x} ]]; then
-  echo "${MILPA_ARG_VAR} is not set"
-  exit 2
-fi
-
-echo "${!MILPA_ARG_VAR}"
+set -e
+milpa dev lint shell
+milpa dev lint go

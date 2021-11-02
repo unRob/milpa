@@ -12,9 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [[ -z ${!MILPA_ARG_VAR+x} ]]; then
-  echo "${MILPA_ARG_VAR} is not set"
-  exit 2
-fi
-
-echo "${!MILPA_ARG_VAR}"
+cd "$MILPA_ROOT" || @milpa.fail "could not cd into $MILPA_ROOT"
+@milpa.log info "Running unit tests"
+gotestsum --format short -- ./... || exit 2
+@milpa.log complete "Unit tests passed"
