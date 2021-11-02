@@ -39,6 +39,8 @@ jobs:
           git ls-remote | awk '/refs\/notes/ {print $2}' | while read -r noteKind; do
             git pull --rebase origin "$noteKind"
           done
+          go get -u github.com/mitchellh/gox
+
 
       - name: create release
         id: build
