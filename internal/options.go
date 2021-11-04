@@ -96,7 +96,7 @@ type Option struct {
 
 // Validates tells if the user-supplied value needs validation.
 func (opt *Option) Validates() bool {
-	return opt.Values.Validates()
+	return opt.Values != nil && opt.Values.Validates()
 }
 
 // providesAutocomplete tells if this option provides autocomplete values.
