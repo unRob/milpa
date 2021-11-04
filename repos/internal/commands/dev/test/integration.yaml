@@ -9,4 +9,4 @@ options:
   format:
     description: the format for test output
     default: auto
-    values: [pretty, auto, tap]
+    values: {static: [pretty, auto, tap] }

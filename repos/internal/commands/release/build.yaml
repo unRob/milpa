@@ -16,12 +16,23 @@ arguments:
   - name: version
     description: The semver number to build
     required: true
+    values:
+      script: git tag -l
   - name: hostname
     description: the hostname where documentation and install scripts will be served under
     default: milpa.dev
   - name: targets
     description: the targets to build for
     variadic: true
+    values:
+      static:
+        - auto
+        - linux/amd64
+        - linux/arm64
+        - linux/arm
+        - linux/mips
+        - darwin/amd64
+        - darwin/arm64
 options:
   output:
     description: the path where to put built assets in

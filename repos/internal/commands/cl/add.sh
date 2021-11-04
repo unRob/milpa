@@ -11,11 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+@milpa.load_util user-input
 
 entry="${MILPA_ARG_MESSAGE[*]}"
 if [[ "$entry" == "" || "$entry" == "-" ]]; then
   if [[ -t 1 ]]; then
-    read -r -p "Enter the message for this <$MILPA_ARG_KIND>: " entry
+    entry=$(@milpa.ask "Enter the message for this <$MILPA_ARG_KIND>:")
   else
     entry=$(cat)
   fi

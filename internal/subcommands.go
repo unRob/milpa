@@ -25,6 +25,8 @@ import (
 	"github.com/hashicorp/go-getter"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	_c "github.com/unrob/milpa/internal/constants"
+	"github.com/unrob/milpa/internal/runtime"
 )
 
 var versionCommand *cobra.Command = &cobra.Command{
@@ -39,7 +41,7 @@ var versionCommand *cobra.Command = &cobra.Command{
 		if cmd.CalledAs() == "" {
 			// user asked for --version directly
 			output = cmd.OutOrStderr()
-			version = version + "\n"
+			version += "\n"
 		}
 
 		_, err := output.Write([]byte(version))
@@ -87,17 +89,17 @@ func doctorForCommands(commands []*Command) *cobra.Command {
 			failedOverall := false
 
 			var milpaRoot string
-			if mp := os.Getenv("MILPA_ROOT"); mp != "" {
+			if mp := os.Getenv(_c.EnvVarMilpaRoot); mp != "" {
 				milpaRoot = strings.Join(strings.Split(mp, ":"), "\n")
 			} else {
 				milpaRoot = warn.Sprint("empty")
 			}
-			bold.Printf("MILPA_ROOT is: %s\n", milpaRoot)
+			bold.Printf("%s is: %s\n", _c.EnvVarMilpaRoot, milpaRoot)
 
 			var milpaPath string
-			bold.Printf("MILPA_PATH is: ")
-			if mp := os.Getenv("MILPA_PATH"); mp != "" {
-				milpaPath = "\n" + strings.Join(strings.Split(mp, ":"), "\n")
+			bold.Printf("%s is: ", _c.EnvVarMilpaPath)
+			if mp := os.Getenv(_c.EnvVarMilpaPath); mp != "" {
+				milpaPath = "\n" + strings.Join(runtime.MilpaPath, "\n")
 			} else {
 				milpaPath = warn.Sprint("empty")
 			}
@@ -111,11 +113,13 @@ func doctorForCommands(commands []*Command) *cobra.Command {
 				message := ""
 
 				hasFailures := false
-				for property, isValid := range report {
+				for property, status := range report {
 					formatter := success
-					if !isValid {
+					if status == 1 {
 						hasFailures = true
 						formatter = fail
+					} else if status == 2 {
+						formatter = warn
 					}
 
 					message += formatter.Sprintf("  - %s\n", property)
@@ -142,6 +146,13 @@ func doctorForCommands(commands []*Command) *cobra.Command {
 	}
 }
 
+func fixLinks(contents []byte) []byte {
+	fixedLinks := bytes.ReplaceAll(contents, []byte("(/"+_c.RepoDocs), []byte("(/help/docs"))
+	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("(/"+_c.RepoCommands+"/"), []byte("(/"))
+	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("index.md"), []byte(""))
+	return bytes.ReplaceAll(fixedLinks, []byte(".md"), []byte("/"))
+}
+
 func writeDocs(dst string) error {
 	allDocs, err := findAllDocs()
 	if err != nil {
@@ -154,7 +165,7 @@ func writeDocs(dst string) error {
 			return err
 		}
 
-		name := strings.TrimSuffix(strings.SplitN(doc, ".milpa/docs/", 2)[1], ".md")
+		name := strings.TrimSuffix(strings.SplitN(doc, _c.RepoDocs+"/", 2)[1], ".md")
 		components := strings.Split(name, "/")
 		last := len(components) - 1
 		dir := fmt.Sprintf("%s/help/docs/%s", dst, strings.Join(components[0:last], "/"))
@@ -176,12 +187,7 @@ func writeDocs(dst string) error {
 		}
 		defer f.Close()
 
-		fixedLinks := bytes.ReplaceAll(contents, []byte("(/.milpa/docs"), []byte("(/help/docs"))
-		fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("(/.milpa/commands/"), []byte("(/"))
-		fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("index.md"), []byte(""))
-		fixedLinks = bytes.ReplaceAll(fixedLinks, []byte(".md"), []byte("/"))
-
-		_, err = f.Write(fixedLinks)
+		_, err = f.Write(fixLinks(contents))
 		if err != nil {
 			return err
 		}
@@ -192,7 +198,7 @@ func writeDocs(dst string) error {
 }
 
 func writeCommandDocs(dst string, path []string, cmd *cobra.Command) error {
-	if !cmd.IsAvailableCommand() && cmd.Name() != "help" {
+	if !cmd.IsAvailableCommand() && cmd.Name() != _c.HelpCommandName {
 		return nil
 	}
 
@@ -200,7 +206,7 @@ func writeCommandDocs(dst string, path []string, cmd *cobra.Command) error {
 	name := cmd.Name()
 
 	if cmd.HasAvailableSubCommands() {
-		if name != "milpa" {
+		if name != _c.Milpa {
 			dir = dir + "/" + name
 		}
 		name = "_index"
@@ -226,12 +232,7 @@ func writeCommandDocs(dst string, path []string, cmd *cobra.Command) error {
 	}
 	defer f.Close()
 
-	fixedLinks := bytes.ReplaceAll(tmp.Bytes(), []byte("(/.milpa/docs"), []byte("(/help/docs"))
-	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("(/.milpa/commands/"), []byte("(/"))
-	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("index.md"), []byte(""))
-	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte(".md"), []byte("/"))
-
-	_, err = f.Write(fixedLinks)
+	_, err = f.Write(fixLinks(tmp.Bytes()))
 	if err != nil {
 		return err
 	}

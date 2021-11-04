@@ -9,9 +9,10 @@ options:
   kind:
     description: If specified, the kind of entry to drop
     values:
-      - breaking-change
-      - bug
-      - deprecation
-      - feature
-      - improvement
-      - note
+      static:
+        - breaking-change
+        - bug
+        - deprecation
+        - feature
+        - improvement
+        - note

@@ -25,12 +25,25 @@ else
   fi
 fi
 
-@milpa.log info "Downloading repo..."
-new_repo=$("$MILPA_COMPA" __fetch "${MILPA_ARG_SOURCE//\/.milpa/}/.milpa" "$target") || @milpa.fail "Failed to download repo"
-@milpa.log success "Repo dowloaded"
+base="${MILPA_ARG_SOURCE%%/.milpa/*}"
+if [[ -d "$base/.milpa" ]]; then
+  base="$(cd "$base" && pwd)"
+  repo_name="${base##*/}"
+  repo_name="${repo_name#.}"
+  dst="$target/$repo_name"
+  @milpa.log info "Local repository detected, symlinking..."
+  [[ -d "$dst" ]] && @milpa.fail "A repo named $repo_name already exists at $dst"
+  ln -sfv "$base/.milpa" "$dst"
+  @milpa.log success "Symlink created"
+else
+  @milpa.log info "Downloading repo..."
+  new_repo=$("$MILPA_COMPA" __fetch "$base/.milpa" "$target") || @milpa.fail "Failed to download repo"
+  @milpa.log success "Repo dowloaded"
+  echo -n "$MILPA_ARG_SOURCE" > "$new_repo/downloaded-from"
+fi
+exit
 
 @milpa.log info "Running repo setup tasks"
-echo -n "$MILPA_ARG_SOURCE" > "$new_repo/downloaded-from"
 if [[ -f "$new_repo/hooks/post-install.sh" ]]; then
   @milpa.log info "Running post-install hook"
   #shellcheck disable=1090,1091

@@ -3,5 +3,6 @@ description: |
   Automation might trigger a release if github is in a good mood
 options:
   pre:
-    values: [alpha, beta, rc]
+    values:
+      static: [alpha, beta, rc]
     description: create a pre-release

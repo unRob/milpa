@@ -22,9 +22,10 @@ import (
 
 	doublestar "github.com/bmatcuk/doublestar/v4"
 	"github.com/sirupsen/logrus"
+	_c "github.com/unrob/milpa/internal/constants"
+	runtime "github.com/unrob/milpa/internal/runtime"
 )
 
-var MilpaPath = strings.Split(os.Getenv("MILPA_PATH"), ":")
 var DefaultFS = os.DirFS("/")
 
 func FindScripts(query []string) (results map[string]struct {
@@ -32,17 +33,17 @@ func FindScripts(query []string) (results map[string]struct {
 	Repo string
 }, err error) {
 
-	if len(MilpaPath) == 0 {
-		err = fmt.Errorf("no MILPA_PATH set on the environment")
+	if len(runtime.MilpaPath) == 0 {
+		err = fmt.Errorf("no %s set on the environment", _c.EnvVarMilpaPath)
 		return
 	}
 
-	logrus.Debugf("looking for scripts in %s", MilpaPath)
+	logrus.Debugf("looking for scripts in %s", _c.EnvVarMilpaPath)
 	results = map[string]struct {
 		Info os.FileInfo
 		Repo string
 	}{}
-	for _, path := range MilpaPath {
+	for _, path := range runtime.MilpaPath {
 		queryBase := strings.Join(append([]string{strings.TrimPrefix(path, "/"), cmdPath}, query...), "/")
 		matches, err := doublestar.Glob(DefaultFS, fmt.Sprintf("%s/*", queryBase))
 
@@ -74,7 +75,7 @@ func FindScripts(query []string) (results map[string]struct {
 		}
 	}
 
-	return
+	return results, err
 }
 
 type ByPath []*Command
@@ -109,8 +110,8 @@ func FindAllSubCommands(returnOnError bool) (cmds []*Command, err error) {
 		var cmd *Command
 		cmd, err = New(path, data.Repo, !returnOnError)
 		if err != nil {
-			logrus.Warnf("Could not initialize command %s, run `milpa itself doctor` to find out more", path)
 			if returnOnError {
+				logrus.Warnf("Could not initialize command %s, run `%s itself doctor` to find out more", path, _c.Milpa)
 				return
 			}
 		} else {
@@ -121,19 +122,19 @@ func FindAllSubCommands(returnOnError bool) (cmds []*Command, err error) {
 	}
 
 	sort.Sort(ByPath(cmds))
-	return
+	return cmds, err
 }
 
 func findAllDocs() ([]string, error) {
 	results := []string{}
-	if len(MilpaPath) == 0 {
-		return results, fmt.Errorf("no MILPA_PATH set on the environment")
+	if err := runtime.CheckMilpaPathSet(); err != nil {
+		return results, err
 	}
 
-	logrus.Debugf("looking for all docs in %s", MilpaPath)
+	logrus.Debugf("looking for all docs in %s", runtime.MilpaPath)
 
-	for _, path := range MilpaPath {
-		q := path + "/docs/**/*.md"
+	for _, path := range runtime.MilpaPath {
+		q := path + "/" + _c.RepoDocsFolderName + "/**/*.md"
 
 		logrus.Debugf("looking for all docs matching %s", q)
 		basepath, pattern := doublestar.SplitPattern(q)
@@ -147,7 +148,7 @@ func findAllDocs() ([]string, error) {
 		logrus.Debugf("found %d docs matching %s", len(docs), q)
 
 		for _, doc := range docs {
-			if strings.Contains(doc, ".template") {
+			if strings.Contains(doc, _c.RepoDocsTemplateFolderName) {
 				continue
 			}
 			results = append(results, basepath+"/"+doc)
@@ -161,18 +162,18 @@ func findAllDocs() ([]string, error) {
 func findDocs(query []string, needle string, returnPaths bool) ([]string, error) {
 	results := []string{}
 	found := map[string]bool{}
-	if len(MilpaPath) == 0 {
-		return results, fmt.Errorf("no MILPA_PATH set on the environment")
+	if err := runtime.CheckMilpaPathSet(); err != nil {
+		return results, err
 	}
 
-	logrus.Debugf("looking for docs in %s", MilpaPath)
+	logrus.Debugf("looking for docs in %s", runtime.MilpaPath)
 	queryString := ""
 	if len(query) > 0 {
 		queryString = strings.Join(query, "/")
 	}
 
-	for _, path := range MilpaPath {
-		qbase := path + "/docs/" + queryString
+	for _, path := range runtime.MilpaPath {
+		qbase := path + "/" + _c.RepoDocsFolderName + "/" + queryString
 		q := qbase + "/*"
 		if returnPaths {
 			q = qbase + "/*.md"
@@ -191,7 +192,7 @@ func findDocs(query []string, needle string, returnPaths bool) ([]string, error)
 				ext = extensionParts[len(extensionParts)-1]
 			}
 
-			if strings.Contains(doc, "/.template") || (ext != "" && ext != "md") {
+			if strings.Contains(doc, "/"+_c.RepoDocsTemplateFolderName) || (ext != "" && ext != "md") {
 				logrus.Debugf("Ignoring non-doc file: %s, ext: %s, md: %v", doc, ext, (ext != "" && ext != ".md"))
 				continue
 			}

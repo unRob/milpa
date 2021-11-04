@@ -6,4 +6,4 @@ description: Render markdown docs to the terminal or browser
 
 Same docs are rendered to HTML, using the [`milpa itself docs html`](/.milpa/commands/itself/docs) command.
 
-These docs are brought to you courtesy of the recursive department of departamental recursiveness.
+These docs are brought to you courtesy of the **Recursive Department of Departamental Recursiveness**.

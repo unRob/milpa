@@ -2,6 +2,8 @@
 
 [`milpa`](https://milpa.dev) is a command-line tool to care for one's own garden of scripts, its name comes from "milpa", an agricultural method that combines multiple crops in close proximity
 
+For a brief intro to get started, check out [milpa help docs milpa quick-guide](/.milpa/docs/milpa/quick-guide.md).
+
 ```sh
 # install on mac and linux with:
 curl -L https://milpa.dev/install.sh | bash -
@@ -20,8 +22,6 @@ There's [a few reasons why](/.milpa/docs/milpa/alternatives.md) you and your tea
 Your milpa repos will contain **commands** and their corresponding specs, among other things. These can be executables written in whatever language you want, or bash shell scripts. Get the full story with [milpa help docs milpa command](/.milpa/docs/milpa/command/index.md)
 
 ## Enough words, show me some code
-
-For a brief intro to get started, check out [milpa help docs milpa quick-guide](/.milpa/docs/milpa/quick-guide.md).
 
 ```sh
 # milpa is a program you run

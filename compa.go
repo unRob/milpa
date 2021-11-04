@@ -19,51 +19,50 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/unrob/milpa/internal"
+	_c "github.com/unrob/milpa/internal/constants"
+	"github.com/unrob/milpa/internal/runtime"
 )
 
 var version = "beta"
 
 func showHelp(cmd *cobra.Command) {
-	if cmd.Name() != "help" {
+	if cmd.Name() != _c.HelpCommandName {
 		err := cmd.Help()
 		if err != nil {
-			os.Exit(70)
+			os.Exit(_c.ExitStatusProgrammerError)
 		}
 	}
 }
 
 func handleError(cmd *cobra.Command, err error) {
 	if err == nil {
-		ok, err := cmd.Flags().GetBool("help")
-		if cmd.Name() == "help" || err == nil && ok {
-			os.Exit(42)
+		ok, err := cmd.Flags().GetBool(_c.HelpCommandName)
+		if cmd.Name() == _c.HelpCommandName || err == nil && ok {
+			os.Exit(_c.ExitStatusRenderHelp)
 		}
 
-		os.Exit(0)
+		os.Exit(_c.ExitStatusOk)
 	}
 
-	// see man sysexits || grep "#define EX" /usr/include/sysexits.h
 	switch err.(type) {
 	case internal.BadArguments, internal.ConfigError:
-		// 64 bad arguments
-		// EX_USAGE The command was used incorrectly, e.g., with the wrong number of arguments, a bad flag, a bad syntax in a parameter, or whatever.
 		showHelp(cmd)
 		logrus.Error(err)
-		os.Exit(64)
+		os.Exit(_c.ExitStatusUsage)
 	case internal.NotFound:
 		// 127 command not found
 		// https://tldp.org/LDP/abs/html/exitcodes.html
 		showHelp(cmd)
 		logrus.Error(err)
-		os.Exit(127)
+		os.Exit(_c.ExitStatusNotFound)
 	default:
 		if strings.HasPrefix(err.Error(), "unknown command") {
 			showHelp(cmd)
-			os.Exit(127)
+			os.Exit(_c.ExitStatusNotFound)
 		} else if strings.HasPrefix(err.Error(), "unknown flag") || strings.HasPrefix(err.Error(), "unknown shorthand flag") {
 			showHelp(cmd)
 			logrus.Error(err)
-			os.Exit(64)
+			os.Exit(_c.ExitStatusUsage)
 		}
 	}
 	logrus.Errorf("Unknown error: %s", err)
@@ -72,21 +71,17 @@ func handleError(cmd *cobra.Command, err error) {
 }
 
 func main() {
-	if os.Getenv("DEBUG") != "" {
+	if os.Getenv(_c.EnvVarDebug) != "" {
 		logrus.SetLevel(logrus.DebugLevel)
 	}
 
 	logrus.SetFormatter(&logrus.TextFormatter{
 		DisableLevelTruncation: true,
 		DisableTimestamp:       true,
-		ForceColors:            os.Getenv("NO_COLOR") == "",
+		ForceColors:            os.Getenv(_c.EnvVarMilpaUnstyled) == "",
 	})
 
-	isDoctor := false
-	if len(os.Args) >= 2 {
-		isDoctor = os.Args[1] == "__doctor" || (len(os.Args) > 2 && (os.Args[1] == "itself" && os.Args[2] == "doctor"))
-	}
-
+	isDoctor := runtime.DoctorModeEnabled()
 	logrus.Debugf("doctor mode enabled: %v", isDoctor)
 
 	subcommands, err := internal.FindAllSubCommands(!isDoctor)

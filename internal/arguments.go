@@ -13,18 +13,14 @@
 package internal
 
 import (
-	"bytes"
-	"context"
 	"fmt"
-	"os"
-	"os/exec"
 	"strings"
-	"time"
 
 	"github.com/alessio/shellescape"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
+	_c "github.com/unrob/milpa/internal/constants"
+	runtime "github.com/unrob/milpa/internal/runtime"
 )
 
 func contains(haystack []string, needle string) bool {
@@ -36,11 +32,13 @@ func contains(haystack []string, needle string) bool {
 	return false
 }
 
+// Arguments is an ordered list of Argument.
 type Arguments []Argument
 
+// ToEnv writes shell variables to dst.
 func (args *Arguments) ToEnv(dst *[]string, actual []string) error {
 	for idx, arg := range *args {
-		envName := fmt.Sprintf("MILPA_ARG_%s", strings.ToUpper(strings.ReplaceAll(arg.Name, "-", "_")))
+		envName := fmt.Sprintf("%s%s", _c.OutputPrefixArg, strings.ToUpper(strings.ReplaceAll(arg.Name, "-", "_")))
 
 		if idx >= len(actual) {
 			if arg.Required {
@@ -67,8 +65,8 @@ func (args *Arguments) ToEnv(dst *[]string, actual []string) error {
 			value = shellescape.Quote(actual[idx])
 		}
 
-		if arg.Validates() && os.Getenv("MILPA_SKIP_VALIDATION") != "1" {
-			values, err := arg.Resolve()
+		if arg.Validates() && runtime.ValidationEnabled() {
+			values, _, err := arg.Resolve()
 			if err != nil {
 				return err
 			}
@@ -94,6 +92,7 @@ func (args *Arguments) ToEnv(dst *[]string, actual []string) error {
 	return nil
 }
 
+// Validate runs validation on provided arguments.
 func (args *Arguments) Validate(cc *cobra.Command, supplied []string) error {
 	for idx, arg := range *args {
 		argumentProvided := idx < len(supplied)
@@ -106,9 +105,9 @@ func (args *Arguments) Validate(cc *cobra.Command, supplied []string) error {
 		}
 		current := supplied[idx]
 
-		if arg.Validates() && os.Getenv("MILPA_SKIP_VALIDATION") != "1" {
+		if arg.Validates() && runtime.ValidationEnabled() {
 			logrus.Debugf("Validating argument %s", arg.Name)
-			values, err := arg.Resolve()
+			values, _, err := arg.Resolve()
 			if err != nil {
 				return err
 			}
@@ -122,21 +121,28 @@ func (args *Arguments) Validate(cc *cobra.Command, supplied []string) error {
 	return nil
 }
 
+// CompletionFunction is called by cobra when asked to complete arguments.
 func (args *Arguments) CompletionFunction() func(cc *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 	self := *args
 	expectedArgLen := len(self)
+	hasVariadicArg := expectedArgLen > 0 && self[len(self)-1].Variadic
 	if expectedArgLen > 0 {
 		return func(cc *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			argsCompleted := len(args)
 
 			values := []string{}
 			directive := cobra.ShellCompDirectiveDefault
-			// logrus.Infof("argsCompleted: %d, expected: %d", argsCompleted, expectedArgLen)
-			if argsCompleted < expectedArgLen {
-				// el usuario pide completar un arg que aun esperamos
-				arg := self[argsCompleted]
-				if arg.Validates() {
-					values, _ = arg.Resolve()
+			if argsCompleted < expectedArgLen || hasVariadicArg {
+				var arg Argument
+				if hasVariadicArg && argsCompleted >= expectedArgLen {
+					// completing a variadic argument
+					arg = self[len(self)-1]
+				} else {
+					// completing regular argument (maybe variadic!)
+					arg = self[argsCompleted]
+				}
+				if arg.providesAutocomplete() {
+					values, directive, _ = arg.Resolve()
 				} else {
 					directive = cobra.ShellCompDirectiveError
 				}
@@ -158,21 +164,33 @@ func (args *Arguments) CompletionFunction() func(cc *cobra.Command, args []strin
 	return nil
 }
 
+// Argument represents a single command-line argument.
 type Argument struct {
-	Name             string   `yaml:"name" validate:"required,excludesall=!$\\/%^@#?:'\""`
-	Description      string   `yaml:"description" validate:"required"`
-	Default          string   `yaml:"default" validate:"excluded_with=Required"`
-	Variadic         bool     `yaml:"variadic"`
-	Required         bool     `yaml:"required" validate:"excluded_with=Default"`
-	ValuesSubCommand string   `yaml:"values-subcommand" validate:"excluded_with=Values"`
-	Values           []string `yaml:"values" validate:"excluded_with=ValuesSubCommand"`
-	computedValues   *[]string
+	// Name is how this variable will be exposed to the underlying command.
+	Name string `yaml:"name" validate:"required,excludesall=!$\\/%^@#?:'\""`
+	// Description is what this argument is for.
+	Description string `yaml:"description" validate:"required"`
+	// Default is the default value for this argument if none is provided.
+	Default string `yaml:"default" validate:"excluded_with=Required"`
+	// Variadic makes an argument a list of all values from this one on.
+	Variadic bool `yaml:"variadic"`
+	// Required raises an error if an argument is not provided.
+	Required bool `yaml:"required" validate:"excluded_with=Default"`
+	// Values (DEPRECATED, renaming to Values) describes autocompletion and validation for an argument
+	Values *ValueSource `yaml:"values" validate:"omitempty"`
 }
 
+// Validates tells if the user-supplied value needs validation.
 func (arg *Argument) Validates() bool {
-	return len(arg.Values) > 0 || arg.ValuesSubCommand != ""
+	return arg.Values != nil && arg.Values.Validates()
 }
 
+// providesAutocomplete tells if this option provides autocomplete values.
+func (arg *Argument) providesAutocomplete() bool {
+	return arg.Values != nil
+}
+
+// ToDesc prints out the description of an argument for help and docs.
 func (arg *Argument) ToDesc() string {
 	spec := strings.ToUpper(arg.Name)
 
@@ -186,163 +204,15 @@ func (arg *Argument) ToDesc() string {
 	return spec
 }
 
-func recurse(name string, subcommand string, timeout time.Duration) ([]string, error) {
-	logrus.Debugf("executing sub command %s", subcommand)
-	ctx, cancel := context.WithTimeout(context.Background(), timeout*time.Second)
-	defer cancel() // The cancel should be deferred so resources are cleaned up
-
-	cmd := exec.CommandContext(ctx, "milpa", strings.Split(subcommand, " ")...) // #nosec G204
-	var stdout bytes.Buffer
-	cmd.Stdout = &stdout
-	var stderr bytes.Buffer
-	cmd.Stderr = &stderr
-	cmd.Env = os.Environ()
-	err := cmd.Run()
-
-	if ctx.Err() == context.DeadlineExceeded {
-		fmt.Println("Sub-command timed out")
-		return []string{}, fmt.Errorf("could not resolve valid arguments before timeout")
-	}
-
-	if err != nil {
-		return []string{}, BadArguments{fmt.Sprintf("could not validate argument %s, sub-command <%s> failed: %s", name, subcommand, err)}
-	}
-
-	return strings.Split(strings.TrimSuffix(stdout.String(), "\n"), "\n"), nil
-}
-
-func (arg *Argument) Resolve() ([]string, error) {
-	values := []string{}
-	if arg.ValuesSubCommand != "" {
-		if arg.computedValues == nil {
-			resolved, err := recurse(arg.Name, arg.ValuesSubCommand, 5)
-			if err != nil {
-				return values, err
-			}
-			arg.computedValues = &resolved
-		}
-		values = *arg.computedValues
-	} else if len(arg.Values) > 0 {
-		values = arg.Values
-	}
-
-	return values, nil
-}
-
-type ValueType string
-
-const (
-	ValueTypeDefault ValueType = ""
-	ValueTypeString  ValueType = "string"
-	ValueTypeBoolean ValueType = "bool"
-)
-
-type Option struct {
-	ShortName        string      `yaml:"short-name"`
-	Type             ValueType   `yaml:"type" validate:"omitempty,oneof=string bool"`
-	Description      string      `yaml:"description" validate:"required"`
-	Default          interface{} `yaml:"default"`
-	ValuesSubCommand string      `yaml:"values-subcommand" validate:"excluded_with=Values"`
-	Values           []string    `yaml:"values" validate:"excluded_with=ValuesSubCommand"`
-	computedValues   *[]string
-}
-
-func (opt *Option) Validates() bool {
-	return len(opt.Values) > 0 || opt.ValuesSubCommand != ""
-}
-
-func (opt *Option) Resolve() ([]string, error) {
-	values := []string{}
-	if opt.ValuesSubCommand != "" {
-		if opt.computedValues == nil {
-			resolved, err := recurse("option", opt.ValuesSubCommand, 5)
-			if err != nil {
-				return values, err
-			}
-
-			opt.computedValues = &resolved
-		}
-		values = *opt.computedValues
-	} else if len(opt.Values) > 0 {
-		values = opt.Values
-	}
-
-	return values, nil
-}
-
-func (opt *Option) ValidationFunction(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	values, err := opt.Resolve()
-	if err != nil {
-		return values, cobra.ShellCompDirectiveError
-	}
-
-	if toComplete != "" {
-		filtered := []string{}
-		for _, value := range values {
-			if strings.HasPrefix(value, toComplete) {
-				filtered = append(filtered, value)
-			}
-		}
-		values = filtered
-	}
-	return values, cobra.ShellCompDirectiveDefault
-}
-
-type Options map[string]*Option
-
-func (opts *Options) ToEnv(dst *[]string, flags *pflag.FlagSet) (err error) {
-	errors := []string{}
-	flags.VisitAll(func(f *pflag.Flag) {
-		name := f.Name
-		//nolint:goconst
-		if name == "help" {
+// Resolve returns autocomplete values for an argument.
+func (arg *Argument) Resolve() (values []string, flag cobra.ShellCompDirective, err error) {
+	if arg.Values != nil {
+		values, flag, err = arg.Values.Resolve()
+		if err != nil {
+			flag = cobra.ShellCompDirectiveError
 			return
 		}
-		envName := ""
-		value := f.Value.String()
-
-		if cname, ok := customNames[name]; ok {
-			if value == "false" {
-				return
-			}
-			envName = cname
-		} else {
-			envName = fmt.Sprintf("MILPA_OPT_%s", strings.ToUpper(strings.ReplaceAll(name, "-", "_")))
-		}
-
-		switch f.Value.Type() {
-		case "bool":
-			if val, err := flags.GetBool(f.Name); err == nil && !val {
-				value = ""
-			} else {
-				value = "true"
-			}
-		default:
-			oopts := *opts
-			opt, ok := oopts[name]
-			if value != "" && ok && opt.Validates() && os.Getenv("MILPA_SKIP_VALIDATION") != "1" {
-				logrus.Debugf("Validating option %s", name)
-				values, verr := opt.Resolve()
-				if verr != nil {
-					errors = append(errors, err.Error())
-					return
-				}
-
-				if !contains(values, value) {
-					errors = append(errors,
-						fmt.Sprintf("invalid value for --%s: %s. Valid values are %s", name, value, strings.Join(values, ", ")),
-					)
-				}
-			}
-			logrus.Debugf("flag %s is a %s", f.Name, f.Value.Type())
-		}
-
-		value = shellescape.Quote(value)
-		*dst = append(*dst, fmt.Sprintf("export %s=%s", envName, value))
-	})
-
-	if len(errors) > 0 {
-		return BadArguments{strings.Join(errors, ". ")}
 	}
-	return nil
+
+	return
 }

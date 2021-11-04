@@ -1,4 +1,3 @@
-summary: Does a thing
+summary: Upgrades milpa to the latest available version
 description: |
-  Longer description of how it does the thing
-# see `milpa help docs command spec` for all the options
+  If a new version is available, this command will download and install it.
