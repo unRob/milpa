@@ -13,6 +13,12 @@
 # limitations under the License.
 
 @milpa.log info "Removing $(@milpa.fmt bold "$MILPA_ARG_PATH")"
+if [[ -L "$MILPA_ARG_PATH" ]]; then
+  rm -f "$MILPA_ARG_PATH"
+else
+  rm -rf "$MILPA_ARG_PATH"
+fi
+
 if [[ -f "$MILPA_ARG_PATH/hooks/post-uninstall.sh" ]]; then
   @milpa.log info "Running post-uninstall hook"
   # run in a subshell so we don't care if it uninstall hook does weird stuff
@@ -22,4 +28,4 @@ if [[ -f "$MILPA_ARG_PATH/hooks/post-uninstall.sh" ]]; then
   ) || @milpa.log warning "Could not run post-uninstall hook to completion"
 fi
 
-rm -rf "$MILPA_ARG_PATH"
+@milpa.log complete "$MILPA_ARG_PATH uninstalled"

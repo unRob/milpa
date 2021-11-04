@@ -35,7 +35,9 @@ if [[ "$ASDF_DIR" ]]; then
 fi
 
 @milpa.log info "Installing go packages"
+cd || @milpa.fail "could not cd into home"
 command -v gotestsum >/dev/null || go get -u gotest.tools/gotestsum
 command -v gox >/dev/null || go get -u github.com/mitchellh/gox
-command -v gotestsum >/dev/null || go get -u gotest.tools/gotestsum
+command -v golangci-lint >/dev/null || go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
+popd || @milpa.fail "could not return to previous dir"
 go mod tidy

@@ -13,3 +13,5 @@ options:
   repo:
     type: string
     description: a path to the milpa repo to create this doc in. By default, the nearest .milpa directory from `pwd` and up.
+    values: {dirs: ""}
+

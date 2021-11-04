@@ -19,16 +19,15 @@ import (
 	"github.com/alessio/shellescape"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
+	_c "github.com/unrob/milpa/internal/constants"
 )
-
-var customNames = map[string]string{"no-color": "NO_COLOR", "silent": "MILPA_SILENT", "verbose": "MILPA_VERBOSE"}
 
 func (cmd *Command) ToEval(args []string, flags *pflag.FlagSet) (string, error) {
 	output := []string{
-		fmt.Sprintf("export MILPA_COMMAND_NAME=%s", shellescape.Quote(cmd.FullName())),
-		fmt.Sprintf("export MILPA_COMMAND_KIND=%s", shellescape.Quote(cmd.Meta.Kind)),
-		fmt.Sprintf("export MILPA_COMMAND_REPO=%s", shellescape.Quote(cmd.Meta.Repo)),
-		fmt.Sprintf("export MILPA_COMMAND_PATH=%s", shellescape.Quote(cmd.Meta.Path)),
+		fmt.Sprintf("export %s=%s", _c.OutputCommandName, shellescape.Quote(cmd.FullName())),
+		fmt.Sprintf("export %s=%s", _c.OutputCommandKind, shellescape.Quote(cmd.Meta.Kind)),
+		fmt.Sprintf("export %s=%s", _c.OutputCommandRepo, shellescape.Quote(cmd.Meta.Repo)),
+		fmt.Sprintf("export %s=%s", _c.OutputCommandPath, shellescape.Quote(cmd.Meta.Path)),
 	}
 
 	err := cmd.Options.ToEnv(&output, flags)

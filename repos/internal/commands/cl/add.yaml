@@ -5,12 +5,13 @@ arguments:
   - name: kind
     description: The kind of entry to create
     values:
-      - breaking-change
-      - bug
-      - deprecation
-      - feature
-      - improvement
-      - note
+      static:
+        - breaking-change
+        - bug
+        - deprecation
+        - feature
+        - improvement
+        - note
     required: true
   - name: message
     variadic: true

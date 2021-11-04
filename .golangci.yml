@@ -1,28 +1,38 @@
 linters-settings:
   gocyclo:
     min-complexity: 18
+  tagliatelle:
+    case:
+      rules:
+        yaml: kebab
 
 linters:
   fast: false
   enable:
     - deadcode
     - errcheck
-    # - exportloopref
+    - exportloopref
     - goconst
     - gocritic
     - gocyclo
+    - godot
+    - godox
     - gofmt
     - goimports
-    - revive
     - gosec
     - gosimple
     - govet
+    - ifshort
     - ineffassign
     - misspell
+    - nakedret
+    - nilerr
     - prealloc
+    - revive
     - staticcheck
     - structcheck
     - stylecheck
+    - tagliatelle
     - typecheck
     - unconvert
     - unparam

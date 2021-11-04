@@ -21,6 +21,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+	_c "github.com/unrob/milpa/internal/constants"
+	runtime "github.com/unrob/milpa/internal/runtime"
 )
 
 var rootFlagset *pflag.FlagSet
@@ -28,13 +30,13 @@ var rootFlagset *pflag.FlagSet
 func RootFlagset() *pflag.FlagSet {
 	if rootFlagset == nil {
 
-		verboseDefault := os.Getenv("MILPA_VERBOSE") != ""
-		colorDefault := os.Getenv("NO_COLOR") != ""
+		verboseDefault := runtime.VerboseEnabled()
+		noColor := !runtime.ColorEnabled()
 
 		rootFlagset = pflag.NewFlagSet("compa", pflag.ContinueOnError)
 		rootFlagset.BoolP("verbose", "v", verboseDefault, "Log verbose output to stderr")
 		rootFlagset.BoolP("help", "h", false, "Display help for any command")
-		rootFlagset.Bool("no-color", colorDefault, "Do not print any formatting codes")
+		rootFlagset.Bool("no-color", noColor, "Do not print any formatting codes")
 		rootFlagset.Bool("silent", false, "Do not print any logs to stderr")
 		rootFlagset.Usage = func() {}
 		rootFlagset.SortFlags = false
@@ -50,8 +52,8 @@ func (cmd *Command) Run(cc *cobra.Command, args []string) error {
 		return err
 	}
 
-	if os.Getenv("COMPA_OUT") != "" {
-		return os.WriteFile(os.Getenv("COMPA_OUT"), []byte(env), 0600)
+	if os.Getenv(_c.EnvVarCompaOut) != "" {
+		return os.WriteFile(os.Getenv(_c.EnvVarCompaOut), []byte(env), 0600)
 	}
 
 	fmt.Println(env)
@@ -91,10 +93,8 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 	cc.Flags().AddFlagSet(cmd.runtimeFlags)
 
 	for name, opt := range cmd.Options {
-		if opt.Validates() {
-			if err := cc.RegisterFlagCompletionFunc(name, opt.ValidationFunction); err != nil {
-				return cc, err
-			}
+		if err := cc.RegisterFlagCompletionFunc(name, opt.CompletionFunction); err != nil {
+			return cc, err
 		}
 	}
 
@@ -124,7 +124,7 @@ func RootCommand(commands []*Command, version string) (*cobra.Command, error) {
 				for _, l := range cmd.SuggestionsFor(args[len(args)-1]) {
 					suggestions = append(suggestions, bold.Sprint(l))
 				}
-				errMessage := fmt.Sprintf("Unknown subcommand %s", args[len(args)-1])
+				errMessage := fmt.Sprintf("Unknown subcommand %s", bold.Sprint(strings.Join(args, " ")))
 				if len(suggestions) > 0 {
 					errMessage += ". Perhaps you meant " + strings.Join(suggestions, ", ") + "?"
 				}
@@ -202,7 +202,9 @@ func populateRoot(root *cobra.Command, commands []*Command) error {
 							for _, l := range cmd.SuggestionsFor(args[len(args)-1]) {
 								suggestions = append(suggestions, bold.Sprint(l))
 							}
-							errMessage := fmt.Sprintf("Unknown subcommand %s", args[len(args)-1])
+							last := len(args) - 1
+							parent := cmd.CommandPath()
+							errMessage := fmt.Sprintf("Unknown subcommand %s of known command %s", bold.Sprint(args[last]), bold.Sprint(parent))
 							if len(suggestions) > 0 {
 								errMessage += ". Perhaps you meant " + strings.Join(suggestions, ", ") + "?"
 							}
