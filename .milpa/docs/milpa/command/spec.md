@@ -34,12 +34,26 @@ arguments:
   - name: increment
     # arguments require a description
     descrption: the increment to apply to the last git version
-    # arguments can be validated to be part of a static set of values
-    values: [micro, patch, minor, major]
-    # commands may request values for validation dynamically by reading the
-    # lines printed by running another milpa subcommand.
-    # arguments may have `values` or `values-subcommand`, but not both.
-    values-subcommand: scm versions
+    # argument values can come from many sources:
+    # dirs, files, milpa, script and static
+    values:
+      # autocompletes directory names only, if a prefix is passed
+      # then it'll be used as a prefix to search from
+      dirs: "prefix"
+      # autocompletes files with the given extensions, if any
+      files: [yaml, json, hcl]
+      # milpa runs the subcommand and returns an option for every line of stdout
+      milpa: "itself repo list"
+      # script runs the provided command with `bash -c "$script"` and returns an
+      # option for every line of stdout
+      script: "git tag -l"
+      # arguments can be validated to be part of a static set of values
+      static: [micro, patch, minor, major]
+      # when using script or milpa values, wait at most this
+      # amount of seconds before giving up
+      timeout: 10
+      # only suggest these as autocompletions but don't validate them before running
+      suggest-only: true
     # arguments can have a default
     default: patch
     # or be required, but not have a default and be required at the same time.
@@ -61,8 +75,25 @@ options:
     # Sometimes, very commonly used flags might benefit from setting a short name
     # in this case, users would be able to use `-s calver`
     short-name: s
-    # options can also be validated against a set of values
-    values: [semver, calver]
+    # option values can come from many sources as well!
+    values:
+      # autocompletes directory names only, if a prefix is passed
+      # then it'll be used as a prefix to search from
+      dirs: "prefix"
+      # autocompletes files with the given extensions, if any
+      files: [yaml, json, hcl]
+      # milpa runs the subcommand and returns an option for every line of stdout
+      milpa: "itself repo list"
+      # script runs the provided command with `bash -c "$script"` and returns an
+      # option for every line of stdout
+      script: "git tag -l"
+      # arguments can be validated to be part of a static set of values
+      static: [micro, patch, minor, major]
+      # when using script or milpa values, wait at most this
+      # amount of seconds before giving up
+      timeout: 10
+      # only suggest these as autocompletions but don't validate them before running
+      suggest-only: true
     # and they may have defaults
     default: semver
     # or be required, but not have a default and be required at the same time.

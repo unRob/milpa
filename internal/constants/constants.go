@@ -1,0 +1,69 @@
+// Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+package constants
+
+import (
+	"regexp"
+)
+
+const Milpa = "milpa"
+const HelpCommandName = "help"
+
+// Environment Variables.
+const EnvVarHelpUnstyled = "MILPA_PLAIN_HELP"
+const EnvVarHelpStyle = "MILPA_HELP_STYLE"
+const EnvVarMilpaRoot = "MILPA_ROOT"
+const EnvVarMilpaPath = "MILPA_PATH"
+const EnvVarMilpaVerbose = "MILPA_VERBOSE"
+const EnvVarMilpaUnstyled = "NO_COLOR"
+const EnvVarCompaOut = "COMPA_OUT"
+const EnvVarDebug = "DEBUG"
+const EnvVarValidationDisabled = "MILPA_SKIP_VALIDATION"
+
+var EnvFlagNames = map[string]string{"no-color": "NO_COLOR", "silent": "MILPA_SILENT", "verbose": "MILPA_VERBOSE"}
+
+// Folder structure.
+const RepoRoot = ".milpa"
+const RepoCommandFolderName = "commands"
+const RepoCommands = ".milpa/commands"
+const RepoDocsFolderName = "docs"
+const RepoDocsTemplateFolderName = ".template"
+const RepoDocs = ".milpa/docs"
+
+// Output variable prefixes.
+const OutputPrefixArg = "MILPA_ARG_"
+const OutputPrefixOpt = "MILPA_OPT_"
+const OutputCommandName = "MILPA_COMMAND_NAME"
+const OutputCommandKind = "MILPA_COMMAND_KIND"
+const OutputCommandRepo = "MILPA_COMMAND_REPO"
+const OutputCommandPath = "MILPA_COMMAND_PATH"
+
+var OutputPrefixPattern = regexp.MustCompile(`\$\{?[#!]?MILPA_((OPT|ARG)_([0-9a-zA-Z_]+))`)
+
+// Exit statuses
+// see man sysexits || grep "#define EX" /usr/include/sysexits.h
+// and https://tldp.org/LDP/abs/html/exitcodes.html
+
+// 0 means everything is fine.
+const ExitStatusOk = 0
+
+// 42 provides answers to life, the universe and everything; also, renders help.
+const ExitStatusRenderHelp = 42
+
+// 64 bad arguments
+// EX_USAGE The command was used incorrectly, e.g., with the wrong number of arguments, a bad flag, a bad syntax in a parameter, or whatever.
+const ExitStatusUsage = 64
+
+// EX_SOFTWARE An internal software error has been detected. This should be limited to non-operating system related errors as possible.
+const ExitStatusProgrammerError = 70
+const ExitStatusNotFound = 127

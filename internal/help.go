@@ -26,6 +26,8 @@ import (
 	"github.com/charmbracelet/glamour"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	_c "github.com/unrob/milpa/internal/constants"
+	runtime "github.com/unrob/milpa/internal/runtime"
 	"golang.org/x/term"
 )
 
@@ -37,8 +39,8 @@ func addBackticks(str []byte) []byte {
 }
 
 func readDoc(query []string) ([]byte, error) {
-	if len(MilpaPath) == 0 {
-		return nil, fmt.Errorf("no MILPA_PATH set on the environment")
+	if err := runtime.CheckMilpaPathSet(); err != nil {
+		return []byte{}, err
 	}
 
 	if len(query) == 0 {
@@ -47,7 +49,7 @@ func readDoc(query []string) ([]byte, error) {
 
 	queryString := strings.Join(query, "/")
 
-	for _, path := range MilpaPath {
+	for _, path := range runtime.MilpaPath {
 		candidate := path + "/docs/" + queryString
 		logrus.Debugf("looking for doc named %s", candidate)
 		_, err := os.Lstat(candidate + ".md")
@@ -69,7 +71,7 @@ func readDoc(query []string) ([]byte, error) {
 
 var Docs *Command = &Command{
 	Summary:     "Dislplays docs on TOPIC",
-	Description: "Shows markdown-formatted documentation from milpa repos. See `milpa help docs milpa repo docs` for more information on how to write your own.",
+	Description: "Shows markdown-formatted documentation from milpa repos. See `" + _c.Milpa + " " + _c.HelpCommandName + " docs milpa repo docs` for more information on how to write your own.",
 	Arguments: Arguments{
 		Argument{
 			Name:        "topic",
@@ -79,9 +81,9 @@ var Docs *Command = &Command{
 		},
 	},
 	Meta: Meta{
-		Path: os.Getenv("MILPA_ROOT") + "/milpa/docs",
-		Name: []string{"help", "docs"},
-		Repo: os.Getenv("MILPA_ROOT"),
+		Path: os.Getenv(_c.EnvVarMilpaRoot) + "/milpa/docs",
+		Name: []string{_c.HelpCommandName, "docs"},
+		Repo: os.Getenv(_c.EnvVarMilpaRoot),
 		Kind: "internal",
 	},
 	helpFunc: func(printLinks bool) string {
@@ -162,7 +164,7 @@ var DocsCommand *cobra.Command = &cobra.Command{
 }
 
 var HelpCommand *cobra.Command = &cobra.Command{
-	Use:   "help [command]",
+	Use:   _c.HelpCommandName + " [command]",
 	Short: "Display usage information on any **COMMAND...**",
 	Long:  `Help provides the valid arguments and options for any command known to milpa. By default, ﹅milpa help﹅ will query the environment variable ﹅COLORFGBG﹅ to decide which style to use when rendering help, except if ﹅MILPA_HELP_STYLE﹅ is set. Valid styles are: **light**, **dark**, and **auto**.`,
 	ValidArgsFunction: func(c *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
@@ -176,7 +178,7 @@ var HelpCommand *cobra.Command = &cobra.Command{
 			cmd = c.Root()
 		}
 		for _, subCmd := range cmd.Commands() {
-			if subCmd.IsAvailableCommand() || subCmd.Name() == "help" {
+			if subCmd.IsAvailableCommand() || subCmd.Name() == _c.HelpCommandName {
 				if strings.HasPrefix(subCmd.Name(), toComplete) {
 					completions = append(completions, fmt.Sprintf("%s\t%s", subCmd.Name(), subCmd.Short))
 				}
@@ -253,7 +255,7 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 		Spec:          cmd,
 		Command:       cc,
 		GlobalOptions: Root.Options,
-		HTMLOutput:    os.Getenv("MILPA_PLAIN_HELP") == "enabled",
+		HTMLOutput:    runtime.UnstyledHelpEnabled(),
 	}
 	err = tmpl.Execute(&buf, c)
 	if err != nil {
@@ -274,7 +276,7 @@ func (cmd *Command) ShowHelp(cc *cobra.Command, args []string) {
 func renderMD(content []byte, cc *cobra.Command) ([]byte, error) {
 	content = addBackticks(content)
 
-	if os.Getenv("MILPA_PLAIN_HELP") == "enabled" {
+	if runtime.UnstyledHelpEnabled() {
 		return content, nil
 	}
 
@@ -289,7 +291,7 @@ func renderMD(content []byte, cc *cobra.Command) ([]byte, error) {
 	if err == nil && ok {
 		styleFunc = glamour.WithStandardStyle("notty")
 	} else {
-		style := os.Getenv("MILPA_HELP_STYLE")
+		style := os.Getenv(_c.EnvVarHelpStyle)
 		switch style {
 		case "dark":
 			styleFunc = glamour.WithStandardStyle("dark")

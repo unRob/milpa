@@ -20,6 +20,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	. "github.com/unrob/milpa/internal"
+	"github.com/unrob/milpa/internal/runtime"
 )
 
 var fsBase = "usr/local/milpa"
@@ -87,7 +88,7 @@ func setupFS(filenames []string, pool map[string]*fstest.MapFile) *fstest.MapFS 
 		fs[fsBase+"/.milpa/commands/"+name] = pool[name]
 	}
 
-	MilpaPath = []string{fsBase + "/.milpa"}
+	runtime.MilpaPath = []string{fsBase + "/.milpa"}
 	DefaultFS = &fs
 	return &fs
 }

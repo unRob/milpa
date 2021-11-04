@@ -15,11 +15,12 @@ package internal
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/spf13/pflag"
+	_c "github.com/unrob/milpa/internal/constants"
+	runtime "github.com/unrob/milpa/internal/runtime"
 	"gopkg.in/yaml.v2"
 )
 
@@ -37,18 +38,18 @@ type Command struct {
 }
 
 var Root = &Command{
-	Summary: "Runs commands found in .milpa folders",
+	Summary: "Runs commands found in " + _c.RepoRoot + " folders",
 	Description: `﹅milpa﹅ is a command-line tool to care for one's own garden of scripts, its name comes from "milpa", an agricultural method that combines multiple crops in close proximity. You and your team write scripts and a little spec for each command -use bash, or any other language-, and ﹅milpa﹅ provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.
 
   See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more information about ﹅milpa﹅`,
 	Meta: Meta{
-		Path: os.Getenv("MILPA_ROOT") + "/milpa",
-		Name: []string{"milpa"},
-		Repo: os.Getenv("MILPA_ROOT"),
+		Path: _c.EnvVarMilpaRoot + "/" + _c.Milpa,
+		Name: []string{_c.Milpa},
+		Repo: _c.EnvVarMilpaRoot,
 		Kind: "root",
 	},
 	Options: Options{
-		"help": &Option{
+		_c.HelpCommandName: &Option{
 			ShortName:   "h",
 			Type:        "bool",
 			Description: "Display help for any command",
@@ -56,7 +57,7 @@ var Root = &Command{
 		"verbose": &Option{
 			ShortName:   "v",
 			Type:        "bool",
-			Default:     os.Getenv("MILPA_VERBOSE") != "",
+			Default:     runtime.VerboseEnabled(),
 			Description: "Log verbose output to stderr",
 		},
 		"no-color": &Option{
@@ -121,25 +122,6 @@ func New(path string, repo string, strict bool) (cmd *Command, err error) {
 	return
 }
 
-func (cmd *Command) Validate() (report map[string]bool) {
-	report = map[string]bool{}
-
-	for _, issue := range cmd.issues {
-		report[issue] = false
-	}
-
-	validate := validator.New()
-	err := validate.Struct(cmd)
-	if err != nil {
-		verrs := err.(validator.ValidationErrors)
-		for _, issue := range verrs {
-			report[fmt.Sprint(issue)] = false
-		}
-	}
-
-	return
-}
-
 func (cmd *Command) FullName() string {
 	return strings.Join(cmd.Meta.Name, " ")
 }
@@ -175,4 +157,89 @@ func (cmd *Command) CreateFlagSet() error {
 
 	cmd.runtimeFlags = fs
 	return nil
+}
+
+type varSearchMap struct {
+	Status int
+	Name   string
+	Usage  string
+}
+
+func (cmd *Command) Validate() (report map[string]int) {
+	report = map[string]int{}
+
+	for _, issue := range cmd.issues {
+		report[issue] = 1
+	}
+
+	validate := validator.New()
+	err := validate.Struct(cmd)
+	if err != nil {
+		verrs := err.(validator.ValidationErrors)
+		for _, issue := range verrs {
+			report[fmt.Sprint(issue)] = 1
+		}
+	}
+
+	if cmd.Meta.Kind == "source" {
+		contents, err := ioutil.ReadFile(cmd.Meta.Path)
+		if err != nil {
+			report["Could not read source"] = 1
+			return
+		}
+
+		vars := map[string]map[string]*varSearchMap{
+			"argument": {},
+			"option":   {},
+		}
+
+		for _, arg := range cmd.Arguments {
+			vars["argument"][strings.ToUpper(strings.ReplaceAll(arg.Name, "-", "_"))] = &varSearchMap{2, arg.Name, ""}
+		}
+
+		for name := range cmd.Options {
+			vars["option"][strings.ToUpper(strings.ReplaceAll(name, "-", "_"))] = &varSearchMap{2, name, ""}
+		}
+
+		matches := _c.OutputPrefixPattern.FindAllStringSubmatch(string(contents), -1)
+		for _, match := range matches {
+			varName := match[len(match)-1]
+			varKind := match[len(match)-2]
+
+			kind := ""
+			if varKind == "OPT" {
+				kind = "option"
+			} else if varKind == "ARG" {
+				kind = "argument"
+			}
+			haystack := vars[kind]
+
+			_, scriptVarIsValid := haystack[varName]
+			if !scriptVarIsValid {
+				haystack[varName] = &varSearchMap{Status: 1, Name: varName, Usage: match[0]}
+			} else {
+				haystack[varName].Status = 0
+			}
+		}
+
+		for kind, col := range vars {
+			for _, thisVar := range col {
+				message := ""
+				switch thisVar.Status {
+				case 0:
+					message = fmt.Sprintf("%s '%s' is used", kind, thisVar.Name)
+				case 1:
+					message = fmt.Sprintf("%s '%s' is used but not defined, declared as '%s'", kind, thisVar.Name, thisVar.Usage)
+				case 2:
+					message = fmt.Sprintf("%s '%s' is not used but defined", kind, thisVar.Name)
+				default:
+					message = fmt.Sprintf("Unknown status %d for %s '%s'", thisVar.Status, kind, thisVar.Name)
+				}
+
+				report[message] = thisVar.Status
+			}
+		}
+	}
+
+	return report
 }

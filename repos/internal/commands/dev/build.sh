@@ -13,7 +13,7 @@
 # limitations under the License.
 
 if [[ "$MILPA_ARG_VERSION" == "auto" ]]; then
-  VERSION="$(git describe)"
+  VERSION="$(git describe --long)"
 else
   VERSION="$MILPA_ARG_VERSION"
 fi

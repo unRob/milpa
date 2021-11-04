@@ -6,8 +6,5 @@ arguments:
     description: the version to generate release notes for
     default: HEAD
 options:
-  header:
-    type: bool
-    description: Print a markdown header
   header-offset:
     description: Increase header levels by this offset
