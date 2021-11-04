@@ -65,7 +65,7 @@ Specs must be written in YAML, have a yaml extension, and be named exactly like 
       <guid>https://milpa.dev/help/docs/milpa/repo/docs/</guid>
       <description>milpa can render any markdown-formatted documents stored at .milpa/docs to the terminal and browser. Files must be named with an / extension and may exist at any folder depth. Files named .milpa/docs/whatever/ may be displayed by running either milpa help docs whatever or milpa help docs whatever index
 Same docs are rendered to HTML, using the milpa itself docs html command.
-These docs are brought to you courtesy of the recursive department of departamental recursiveness.</description>
+These docs are brought to you courtesy of the Recursive Department of Departamental Recursiveness.</description>
     </item>
     
     <item>
@@ -226,9 +226,9 @@ Description #  Generates a shell completion script for the current $SHELL. It cu
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://milpa.dev/itself/upgrade/</guid>
-      <description>Does a thing
+      <description>Upgrades milpa to the latest available version
 Usage #  milpa itself upgrade [options]
-Description #  Longer description of how it does the thing
+Description #  If a new version is available, this command will download and install it.
 Global Options #   --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --verbose (bool): Log verbose output to stderr.  </description>
     </item>
     

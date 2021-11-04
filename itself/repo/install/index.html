@@ -389,13 +389,14 @@
 <li>In the <code>$MILPA_ROOT</code> (by default, /usr/local/lib/milpa), if <code>--global</code> is specified, or</li>
 <li>In <code>$XDG_DATA_HOME/milpa</code> folder, if <code>--user</code> is specified.</li>
 </ul>
-<p>Repos will be fetched from the <code>.milpa</code> subdirectory of <code>SOURCE</code>, which must be an URL as specified by <a href="https://github.com/hashicorp/go-getter#url-format">go-getter</a>. Basically, an https, git, hg, s3 or gcs URL.</p>
+<p>Repos will be fetched from the <code>.milpa</code> subdirectory of <code>SOURCE</code>, which must be an URL as specified by <a href="https://github.com/hashicorp/go-getter#url-format">go-getter</a>. Basically, an https, git, hg, s3 or gcs URL. If <code>SOURCE</code> is a path to a local directory on the system, it&rsquo;ll be symlinked to the <code>TARGET</code> accordingly.</p>
 <div class="content-header-wrapper">
 <h3 class="content-header" id="examples">Examples</h3> <a aria-hidden="true" class="heading-anchor" href="#examples" tabindex="-1">#</a>
 </div>
 <ul>
 <li><code>github.com/unRob/milpa</code> would download the <code>.milpa</code> folder from the <code>unRob/milpa</code> github repo, using <strong>http</strong>, and prompting for credentials for private repos.</li>
 <li><code>git::ssh://git@github.com/unRob/milpa.git//internal</code> would download the <code>internal/.milpa</code> folder from the <code>unRob/milpa</code> github repo using <strong>ssh credentials</strong>, useful for skipping credential prompts for private repos</li>
+<li><code>~/.dotfiles</code> would symlink <code>$HOME/.dotfiles/.milpa</code> to the target. An alternative to this is to set <code>MILPA_PATH</code> to <code>$HOME/.dotfiles</code> (see <a href="/help/docs/milpa/environment/"><code>milpa help docs milpa environment</code></a>)</li>
 </ul>
 <div class="content-header-wrapper">
 <h2 class="content-header" id="global-options">Global Options</h2> <a aria-hidden="true" class="heading-anchor" href="#global-options" tabindex="-1">#</a>
