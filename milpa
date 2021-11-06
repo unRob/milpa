@@ -64,7 +64,7 @@ function @milpa.load_util () {
     fi
 
     libpath=( "$MILPA_ROOT/.milpa" )
-    if [[ -z "${MILPA_COMMAND_REPO+x}" ]]; then
+    if [[ "$MILPA_COMMAND_REPO" != "" ]]; then
       libpath+=( "$MILPA_COMMAND_REPO" )
     fi
 
@@ -147,11 +147,15 @@ _milpa_check_for_updates_automagically
 rm -rf "$compaOut" "$compaErr"
 
 # Run hooks if available
-if [[ -f "$MILPA_COMMAND_REPO/hooks/before-run.sh" ]]; then
+_bh="$MILPA_COMMAND_REPO/hooks/before-run.sh"
+if [[ -f "$_bh" ]]; then
+  @milpa.log debug "Running before-run hook"
   set -o allexport
   # shellcheck disable=1091 source=/dev/null
-  source "$MILPA_COMMAND_REPO/hooks/before-run.sh"
+  source "$_bh" || @milpa.fail "could not run before-hook at $_bh"
   set +o allexport
+  set +o errexit
+  @milpa.log debug "Ran before-run hook"
 fi
 
 # Run the subcommand

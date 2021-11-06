@@ -27,13 +27,43 @@ import (
 // Options is a map of name to Option.
 type Options map[string]*Option
 
+func (opts *Options) AllKnown(flags *pflag.FlagSet) map[string]string {
+	col := map[string]string{}
+	for name, opt := range *opts {
+		col[name] = fmt.Sprintf("%v", opt.Default)
+	}
+
+	flags.VisitAll(func(f *pflag.Flag) {
+		name := f.Name
+		if name == _c.HelpCommandName {
+			return
+		}
+
+		value := f.Value.String()
+
+		if _, ok := _c.EnvFlagNames[name]; ok {
+			return
+		}
+
+		if f.Value.Type() == "bool" {
+			if val, err := flags.GetBool(f.Name); err == nil && !val {
+				value = "false"
+			} else {
+				value = "true" // nolint:goconst
+			}
+		}
+
+		col[name] = shellescape.Quote(value)
+	})
+	return col
+}
+
 // ToEnv writes shell variables to dst.
-func (opts *Options) ToEnv(dst *[]string, flags *pflag.FlagSet) (err error) {
+func (opts *Options) ToEnv(command *Command, dst *[]string, args []string, flags *pflag.FlagSet) (err error) {
 	errors := []string{}
 	flags.VisitAll(func(f *pflag.Flag) {
 		name := f.Name
-		//nolint:goconst
-		if name == "help" {
+		if name == _c.HelpCommandName {
 			return
 		}
 		envName := ""
@@ -60,7 +90,7 @@ func (opts *Options) ToEnv(dst *[]string, flags *pflag.FlagSet) (err error) {
 			opt, ok := oopts[name]
 			if value != "" && ok && opt.Validates() && runtime.ValidationEnabled() {
 				logrus.Debugf("Validating option %s", name)
-				values, _, verr := opt.Resolve()
+				values, _, verr := opt.Resolve(command, args, flags)
 				if verr != nil {
 					errors = append(errors, err.Error())
 					return
@@ -105,36 +135,39 @@ func (opt *Option) providesAutocomplete() bool {
 }
 
 // Resolve returns autocomplete values for an option.
-func (opt *Option) Resolve() (values []string, flag cobra.ShellCompDirective, err error) {
+func (opt *Option) Resolve(command *Command, args []string, flags *pflag.FlagSet) (values []string, flag cobra.ShellCompDirective, err error) {
 	if opt.Values != nil {
-		return opt.Values.Resolve()
+		return opt.Values.Resolve(command, args, flags)
 	}
 
 	return
 }
 
 // CompletionFunction is called by cobra when asked to complete an option.
-func (opt *Option) CompletionFunction(cmd *cobra.Command, args []string, toComplete string) (values []string, flag cobra.ShellCompDirective) {
-
-	if !opt.providesAutocomplete() {
-		flag = cobra.ShellCompDirectiveError
-		return
-	}
-
-	var err error
-	values, flag, err = opt.Resolve()
-	if err != nil {
-		return values, cobra.ShellCompDirectiveError
-	}
-
-	if toComplete != "" {
-		filtered := []string{}
-		for _, value := range values {
-			if strings.HasPrefix(value, toComplete) {
-				filtered = append(filtered, value)
-			}
+func (opt *Option) CompletionFunction(command *Command) func(cmd *cobra.Command, args []string, toComplete string) (values []string, flag cobra.ShellCompDirective) {
+	self := *opt
+	return func(cmd *cobra.Command, args []string, toComplete string) (values []string, flag cobra.ShellCompDirective) {
+		if !opt.providesAutocomplete() {
+			flag = cobra.ShellCompDirectiveError
+			return
 		}
-		values = filtered
+
+		var err error
+		values, flag, err = self.Resolve(command, args, cmd.Flags())
+		if err != nil {
+			return values, cobra.ShellCompDirectiveError
+		}
+
+		if toComplete != "" {
+			filtered := []string{}
+			for _, value := range values {
+				if strings.HasPrefix(value, toComplete) {
+					filtered = append(filtered, value)
+				}
+			}
+			values = filtered
+		}
+		return values, flag
 	}
-	return values, flag
+
 }

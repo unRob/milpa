@@ -13,9 +13,15 @@
 package internal
 
 import (
+	"bytes"
+	"fmt"
+	"strings"
+	"text/template"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 )
 
 // ValueType represent the kinds of values for an argument or option.
@@ -60,7 +66,7 @@ func (vs *ValueSource) Validates() bool {
 }
 
 // Resolve returns the values for autocomplete and validation.
-func (vs *ValueSource) Resolve() (values []string, flag cobra.ShellCompDirective, err error) {
+func (vs *ValueSource) Resolve(command *Command, args []string, flags *pflag.FlagSet) (values []string, flag cobra.ShellCompDirective, err error) {
 	if vs.computed != nil {
 		return *vs.computed, vs.flag, nil
 	}
@@ -74,7 +80,18 @@ func (vs *ValueSource) Resolve() (values []string, flag cobra.ShellCompDirective
 
 	switch {
 	case vs.Milpa != "":
-		values, flag, err = exec("unknown", vs.Milpa, timeout)
+		cmd, err := ResolveTemplate(command, vs.Milpa, args, flags)
+		if err != nil {
+			logrus.Debugf("Could not resolve template: %s", err)
+			return nil, cobra.ShellCompDirectiveError, err
+		}
+
+		args := append([]string{"milpa"}, strings.Split(cmd, " ")...)
+		values, flag, err = Exec(command.FullName(), args, timeout*time.Second)
+
+		if err != nil {
+			return values, flag, err
+		}
 	case vs.Static != nil:
 		values = *vs.Static
 	case vs.Files != nil:
@@ -84,14 +101,58 @@ func (vs *ValueSource) Resolve() (values []string, flag cobra.ShellCompDirective
 		flag = cobra.ShellCompDirectiveFilterDirs
 		values = []string{*vs.Directories}
 	case vs.Script != "":
-		values, flag, err = exec("@bash", vs.Script, timeout)
+		cmd, err := ResolveTemplate(command, vs.Milpa, args, flags)
+		if err != nil {
+			return nil, cobra.ShellCompDirectiveError, err
+		}
+		args := append([]string{"/bin/bash", "-c"}, strings.Split(cmd, " ")...)
+		values, flag, err = Exec(command.FullName(), args, timeout*time.Second)
+		if err != nil {
+			return nil, flag, err
+		}
 	}
 
-	if err != nil {
-		return
-	}
 	vs.computed = &values
 	vs.flag = flag
 
 	return values, flag, err
+}
+
+type AutocompleteTemplate struct {
+	Args map[string]string
+	Opts map[string]string
+}
+
+func (tpl *AutocompleteTemplate) Opt(name string) string {
+	if val, ok := tpl.Opts[name]; ok {
+		return fmt.Sprintf("--%s %s", name, val)
+	}
+
+	return ""
+}
+
+func (tpl *AutocompleteTemplate) Arg(name string) string {
+	return tpl.Args[name]
+}
+
+func ResolveTemplate(command *Command, raw string, values []string, flags *pflag.FlagSet) (string, error) {
+	var buf bytes.Buffer
+	tplData := &AutocompleteTemplate{
+		Args: command.Arguments.AllKnown(values),
+		Opts: command.Options.AllKnown(flags),
+	}
+	tpl, err := template.New("subcommand").Funcs(template.FuncMap{
+		"Opt": tplData.Opt,
+		"Arg": tplData.Arg,
+	}).Parse(raw)
+	if err != nil {
+		return "", err
+	}
+
+	err = tpl.Execute(&buf, tplData)
+	if err != nil {
+		return "", err
+	}
+
+	return buf.String(), nil
 }

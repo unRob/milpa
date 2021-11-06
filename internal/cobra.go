@@ -75,15 +75,17 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 		DisableAutoGenTag: true,
 		SilenceUsage:      true,
 		SilenceErrors:     true,
-		Args:              cmd.Arguments.Validate,
-		RunE:              cmd.Run,
+		Args: func(cc *cobra.Command, supplied []string) error {
+			return cmd.Arguments.Validate(cmd, cc, supplied)
+		},
+		RunE: cmd.Run,
 	}
 
 	cc.SetFlagErrorFunc(func(c *cobra.Command, e error) error {
 		return BadArguments{e.Error()}
 	})
 
-	cc.ValidArgsFunction = cmd.Arguments.CompletionFunction()
+	cc.ValidArgsFunction = cmd.Arguments.CompletionFunction(cmd)
 
 	err := cmd.CreateFlagSet()
 	if err != nil {
@@ -93,7 +95,7 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 	cc.Flags().AddFlagSet(cmd.runtimeFlags)
 
 	for name, opt := range cmd.Options {
-		if err := cc.RegisterFlagCompletionFunc(name, opt.CompletionFunction); err != nil {
+		if err := cc.RegisterFlagCompletionFunc(name, opt.CompletionFunction(cmd)); err != nil {
 			return cc, err
 		}
 	}
