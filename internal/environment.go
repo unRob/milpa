@@ -30,14 +30,14 @@ func (cmd *Command) ToEval(args []string, flags *pflag.FlagSet) (string, error) 
 		fmt.Sprintf("export %s=%s", _c.OutputCommandPath, shellescape.Quote(cmd.Meta.Path)),
 	}
 
-	err := cmd.Options.ToEnv(&output, flags)
+	err := cmd.Options.ToEnv(cmd, &output, args, flags)
 	if err != nil {
 		return "", err
 	}
 
 	logrus.Debugf("Printing environment for args: %v", args)
 
-	err = cmd.Arguments.ToEnv(&output, args)
+	err = cmd.Arguments.ToEnv(cmd, &output, args, flags)
 	if err != nil {
 		return "", err
 	}

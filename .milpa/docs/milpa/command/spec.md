@@ -43,10 +43,13 @@ arguments:
       # autocompletes files with the given extensions, if any
       files: [yaml, json, hcl]
       # milpa runs the subcommand and returns an option for every line of stdout
-      milpa: "itself repo list"
+      # values for options and other arguments may be used within go templates
+      # the following would execute `milpa itself increments --scheme semver` for example
+      milpa: itself increments {{ Opt "scheme" }}
       # script runs the provided command with `bash -c "$script"` and returns an
       # option for every line of stdout
-      script: "git tag -l"
+      # go templates can be used in scripts as well
+      script: git tag -l {{ Opt "prefix" }}
       # arguments can be validated to be part of a static set of values
       static: [micro, patch, minor, major]
       # when using script or milpa values, wait at most this

@@ -19,6 +19,7 @@ import (
 	"github.com/alessio/shellescape"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	_c "github.com/unrob/milpa/internal/constants"
 	runtime "github.com/unrob/milpa/internal/runtime"
 )
@@ -35,8 +36,32 @@ func contains(haystack []string, needle string) bool {
 // Arguments is an ordered list of Argument.
 type Arguments []Argument
 
+func (args *Arguments) AllKnown(actual []string) map[string]string {
+	col := map[string]string{}
+	for idx, arg := range *args {
+		value := ""
+		if idx >= len(actual) {
+
+			if arg.Default != "" {
+				value = arg.Default
+			}
+			col[arg.Name] = value
+			continue
+		}
+
+		if arg.Variadic {
+			values := append([]string{}, actual[idx:]...)
+			value = strings.Join(values, " ")
+		} else {
+			value = shellescape.Quote(actual[idx])
+		}
+		col[arg.Name] = value
+	}
+	return col
+}
+
 // ToEnv writes shell variables to dst.
-func (args *Arguments) ToEnv(dst *[]string, actual []string) error {
+func (args *Arguments) ToEnv(cmd *Command, dst *[]string, actual []string, flags *pflag.FlagSet) error {
 	for idx, arg := range *args {
 		envName := fmt.Sprintf("%s%s", _c.OutputPrefixArg, strings.ToUpper(strings.ReplaceAll(arg.Name, "-", "_")))
 
@@ -66,7 +91,7 @@ func (args *Arguments) ToEnv(dst *[]string, actual []string) error {
 		}
 
 		if arg.Validates() && runtime.ValidationEnabled() {
-			values, _, err := arg.Resolve()
+			values, _, err := arg.Resolve(cmd, actual, flags)
 			if err != nil {
 				return err
 			}
@@ -93,7 +118,7 @@ func (args *Arguments) ToEnv(dst *[]string, actual []string) error {
 }
 
 // Validate runs validation on provided arguments.
-func (args *Arguments) Validate(cc *cobra.Command, supplied []string) error {
+func (args *Arguments) Validate(cmd *Command, cc *cobra.Command, supplied []string) error {
 	for idx, arg := range *args {
 		argumentProvided := idx < len(supplied)
 		if arg.Required && !argumentProvided {
@@ -107,7 +132,7 @@ func (args *Arguments) Validate(cc *cobra.Command, supplied []string) error {
 
 		if arg.Validates() && runtime.ValidationEnabled() {
 			logrus.Debugf("Validating argument %s", arg.Name)
-			values, _, err := arg.Resolve()
+			values, _, err := arg.Resolve(cmd, supplied, cc.Flags())
 			if err != nil {
 				return err
 			}
@@ -122,7 +147,7 @@ func (args *Arguments) Validate(cc *cobra.Command, supplied []string) error {
 }
 
 // CompletionFunction is called by cobra when asked to complete arguments.
-func (args *Arguments) CompletionFunction() func(cc *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+func (args *Arguments) CompletionFunction(command *Command) func(cc *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 	self := *args
 	expectedArgLen := len(self)
 	hasVariadicArg := expectedArgLen > 0 && self[len(self)-1].Variadic
@@ -142,7 +167,7 @@ func (args *Arguments) CompletionFunction() func(cc *cobra.Command, args []strin
 					arg = self[argsCompleted]
 				}
 				if arg.providesAutocomplete() {
-					values, directive, _ = arg.Resolve()
+					values, directive, _ = arg.Resolve(command, args, cc.Flags())
 				} else {
 					directive = cobra.ShellCompDirectiveError
 				}
@@ -205,9 +230,9 @@ func (arg *Argument) ToDesc() string {
 }
 
 // Resolve returns autocomplete values for an argument.
-func (arg *Argument) Resolve() (values []string, flag cobra.ShellCompDirective, err error) {
+func (arg *Argument) Resolve(command *Command, args []string, flags *pflag.FlagSet) (values []string, flag cobra.ShellCompDirective, err error) {
 	if arg.Values != nil {
-		values, flag, err = arg.Values.Resolve()
+		values, flag, err = arg.Values.Resolve(command, args, flags)
 		if err != nil {
 			flag = cobra.ShellCompDirectiveError
 			return
