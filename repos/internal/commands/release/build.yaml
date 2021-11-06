@@ -37,3 +37,6 @@ options:
   output:
     description: the path where to put built assets in
     default: ""
+  parallel:
+    description: how many compilations to run at the same time
+    default: "-1"

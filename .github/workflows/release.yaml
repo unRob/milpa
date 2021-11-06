@@ -80,7 +80,7 @@ jobs:
           echo "::set-output name=prerelease::$prerelease"
 
           echo "::group::building release"
-          $(pwd)/milpa release build "${version}"
+          $(pwd)/milpa release build --parallel 2 "${version}"
           echo "::endgroup::"
 
       - name: Release

@@ -32,6 +32,9 @@ function @milpa.ask () {
 function @milpa.confirm () {
   read -r -p "$1${1:+ }Enter 'y' to continue: " -n 1
   [[ $REPLY =~ ^[Yy]$ ]]
+  ret="$?"
+  >&2 echo
+  return "$ret"
 }
 
 function @milpa.select () {
