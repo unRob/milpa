@@ -26,9 +26,10 @@ import (
 )
 
 // ExecFunc is replaced in tests.
-var ExecFunc = subshell
+var ExecFunc = ExecSubshell
 
-func subshell(ctx context.Context, env []string, executable string, args ...string) (bytes.Buffer, bytes.Buffer, error) {
+// ExecSubshell executes a command using os/exec.
+func ExecSubshell(ctx context.Context, env []string, executable string, args ...string) (bytes.Buffer, bytes.Buffer, error) {
 	cmd := os_exec.CommandContext(ctx, executable, args...) // #nosec G204
 	var stdout bytes.Buffer
 	cmd.Stdout = &stdout
@@ -57,7 +58,7 @@ func Exec(name string, args []string, timeout time.Duration) ([]string, cobra.Sh
 
 	if err != nil {
 		logrus.Debugf("error running %s %s: %s", executable, args, err)
-		return []string{}, cobra.ShellCompDirectiveError, BadArguments{fmt.Sprintf("could not validate argument %s, sub-command <%s> failed: %s", name, args, err)}
+		return []string{}, cobra.ShellCompDirectiveError, BadArguments{fmt.Sprintf("could not validate argument for command %s, ran <%s %s> failed: %s", name, executable, strings.Join(args, " "), err)}
 	}
 
 	logrus.Debugf("done running %s %s: %s", executable, args, stdout.String())

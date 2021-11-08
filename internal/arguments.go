@@ -17,11 +17,8 @@ import (
 	"strings"
 
 	"github.com/alessio/shellescape"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 	_c "github.com/unrob/milpa/internal/constants"
-	runtime "github.com/unrob/milpa/internal/runtime"
 )
 
 func contains(haystack []string, needle string) bool {
@@ -34,112 +31,52 @@ func contains(haystack []string, needle string) bool {
 }
 
 // Arguments is an ordered list of Argument.
-type Arguments []Argument
+type Arguments []*Argument
 
-func (args *Arguments) AllKnown(actual []string) map[string]string {
+func (args *Arguments) AllKnown() map[string]string {
 	col := map[string]string{}
-	for idx, arg := range *args {
-		value := ""
-		if idx >= len(actual) {
-
-			if arg.Default != "" {
-				value = arg.Default
-			}
-			col[arg.Name] = value
-			continue
-		}
-
-		if arg.Variadic {
-			values := append([]string{}, actual[idx:]...)
-			value = strings.Join(values, " ")
-		} else {
-			value = shellescape.Quote(actual[idx])
-		}
-		col[arg.Name] = value
+	for _, arg := range *args {
+		col[arg.Name] = arg.ToString(false)
 	}
 	return col
 }
 
 // ToEnv writes shell variables to dst.
-func (args *Arguments) ToEnv(cmd *Command, dst *[]string, actual []string, flags *pflag.FlagSet) error {
-	for idx, arg := range *args {
-		envName := fmt.Sprintf("%s%s", _c.OutputPrefixArg, strings.ToUpper(strings.ReplaceAll(arg.Name, "-", "_")))
+func (args *Arguments) ToEnv(cmd *Command, dst *[]string) {
+	for _, arg := range *args {
+		envName := fmt.Sprintf("%s%s", _c.OutputPrefixArg, arg.EnvName())
 
-		if idx >= len(actual) {
-			if arg.Required {
-				return fmt.Errorf("missing argument: %s", strings.ToUpper(arg.Name))
-			}
-			logrus.Debugf("Skipping arg parsing for %s", arg.Name)
-			value := ""
-			if arg.Default != "" {
-				value = arg.Default
-			}
-			*dst = append(*dst, fmt.Sprintf("export %s=%s", envName, value))
-			continue
-		}
-
-		var value string
-		if arg.Variadic {
-			values := []string{}
-			for _, va := range actual[idx:] {
-				values = append(values, shellescape.Quote(va))
-			}
-			value = fmt.Sprintf("( %s )", strings.Join(values, " "))
-
-		} else {
-			value = shellescape.Quote(actual[idx])
-		}
-
-		if arg.Validates() && runtime.ValidationEnabled() {
-			values, _, err := arg.Resolve(cmd, actual, flags)
-			if err != nil {
-				return err
-			}
-			found := false
-			for _, validValue := range values {
-				if value == validValue {
-					found = true
-					break
-				}
-			}
-
-			if !found {
-				return BadArguments{
-					fmt.Sprintf("invalid value for %s: %s. Valid values are %s", arg.Name, value, strings.Join(values, ", ")),
-				}
-			}
-		}
-		logrus.Debugf("arg parsing for %s, %d, %s", arg.Name, idx, value)
-
-		*dst = append(*dst, fmt.Sprintf("export %s=%s", envName, value))
+		*dst = append(*dst, fmt.Sprintf("export %s=%s", envName, arg.ToString(true)))
 	}
-
-	return nil
 }
 
-// Validate runs validation on provided arguments.
-func (args *Arguments) Validate(cmd *Command, cc *cobra.Command, supplied []string) error {
+func (args *Arguments) Parse(supplied []string) {
 	for idx, arg := range *args {
 		argumentProvided := idx < len(supplied)
-		if arg.Required && !argumentProvided {
-			return BadArguments{fmt.Sprintf("Missing argument for %s", strings.ToUpper(arg.Name))}
-		}
 
 		if !argumentProvided {
+			if arg.Default != "" {
+				arg.provided = &[]string{arg.Default}
+			}
 			continue
 		}
-		current := supplied[idx]
 
-		if arg.Validates() && runtime.ValidationEnabled() {
-			logrus.Debugf("Validating argument %s", arg.Name)
-			values, _, err := arg.Resolve(cmd, supplied, cc.Flags())
-			if err != nil {
-				return err
+		if arg.Variadic {
+			values := []string{}
+			for _, va := range supplied[idx:] {
+				values = append(values, shellescape.Quote(va))
 			}
+			arg.SetValue(values)
+		} else {
+			arg.SetValue([]string{supplied[idx]})
+		}
+	}
+}
 
-			if !contains(values, current) {
-				return BadArguments{fmt.Sprintf("%s is not a valid value for argument <%s>. Valid options are: %s", current, arg.Name, strings.Join(values, ", "))}
-			}
+func (args *Arguments) AreValid(cmd *Command) error {
+	for _, arg := range *args {
+		if err := arg.Validate(cmd); err != nil {
+			return err
 		}
 	}
 
@@ -158,7 +95,7 @@ func (args *Arguments) CompletionFunction(command *Command) func(cc *cobra.Comma
 			values := []string{}
 			directive := cobra.ShellCompDirectiveDefault
 			if argsCompleted < expectedArgLen || hasVariadicArg {
-				var arg Argument
+				var arg *Argument
 				if hasVariadicArg && argsCompleted >= expectedArgLen {
 					// completing a variadic argument
 					arg = self[len(self)-1]
@@ -166,8 +103,9 @@ func (args *Arguments) CompletionFunction(command *Command) func(cc *cobra.Comma
 					// completing regular argument (maybe variadic!)
 					arg = self[argsCompleted]
 				}
-				if arg.providesAutocomplete() {
-					values, directive, _ = arg.Resolve(command, args, cc.Flags())
+
+				if arg.Values != nil {
+					values, directive, _ = arg.Resolve(command)
 				} else {
 					directive = cobra.ShellCompDirectiveError
 				}
@@ -202,7 +140,77 @@ type Argument struct {
 	// Required raises an error if an argument is not provided.
 	Required bool `yaml:"required" validate:"excluded_with=Default"`
 	// Values (DEPRECATED, renaming to Values) describes autocompletion and validation for an argument
-	Values *ValueSource `yaml:"values" validate:"omitempty"`
+	Values   *ValueSource `yaml:"values" validate:"omitempty"`
+	provided *[]string
+}
+
+func (arg *Argument) EnvName() string {
+	return strings.ToUpper(strings.ReplaceAll(arg.Name, "-", "_"))
+}
+
+func (arg *Argument) SetValue(value []string) {
+	arg.provided = &value
+}
+
+func (arg *Argument) IsKnown() bool {
+	return arg.provided != nil
+}
+
+func (arg *Argument) ToString(asShell bool) string {
+	value := arg.Default
+	if arg.IsKnown() {
+		if arg.Variadic {
+			if asShell {
+				values := []string{}
+				for _, va := range *arg.provided {
+					values = append(values, shellescape.Quote(va))
+				}
+				value = fmt.Sprintf("( %s )", strings.Join(values, " "))
+			} else {
+				value = strings.Join(*arg.provided, " ")
+			}
+		} else {
+			vals := *arg.provided
+			value = vals[0]
+		}
+	}
+
+	if !arg.Variadic && asShell {
+		value = shellescape.Quote(value)
+	}
+
+	return value
+}
+
+func (arg *Argument) Validate(cmd *Command) error {
+
+	if arg.Required && !arg.IsKnown() {
+		return BadArguments{fmt.Sprintf("Missing argument for %s", strings.ToUpper(arg.Name))}
+	}
+
+	if !arg.Validates() {
+		return nil
+	}
+
+	validValues, _, err := arg.Resolve(cmd)
+	if err != nil {
+		return err
+	}
+
+	if arg.Variadic {
+		for _, current := range *arg.provided {
+			if !contains(validValues, current) {
+				return BadArguments{fmt.Sprintf("%s is not a valid value for argument <%s>. Valid options are: %s", current, arg.Name, strings.Join(validValues, ", "))}
+			}
+		}
+	} else {
+		current := arg.ToString(false)
+		if !contains(validValues, current) {
+			return BadArguments{fmt.Sprintf("%s is not a valid value for argument <%s>. Valid options are: %s", current, arg.Name, strings.Join(validValues, ", "))}
+		}
+	}
+
+	return nil
 }
 
 // Validates tells if the user-supplied value needs validation.
@@ -210,29 +218,24 @@ func (arg *Argument) Validates() bool {
 	return arg.Values != nil && arg.Values.Validates()
 }
 
-// providesAutocomplete tells if this option provides autocomplete values.
-func (arg *Argument) providesAutocomplete() bool {
-	return arg.Values != nil
-}
-
 // ToDesc prints out the description of an argument for help and docs.
 func (arg *Argument) ToDesc() string {
-	spec := strings.ToUpper(arg.Name)
+	spec := arg.EnvName()
+	if arg.Variadic {
+		spec = fmt.Sprintf("%s...", spec)
+	}
 
 	if !arg.Required {
 		spec = fmt.Sprintf("[%s]", spec)
 	}
 
-	if arg.Variadic {
-		spec = fmt.Sprintf("%s...", spec)
-	}
 	return spec
 }
 
 // Resolve returns autocomplete values for an argument.
-func (arg *Argument) Resolve(command *Command, args []string, flags *pflag.FlagSet) (values []string, flag cobra.ShellCompDirective, err error) {
+func (arg *Argument) Resolve(command *Command) (values []string, flag cobra.ShellCompDirective, err error) {
 	if arg.Values != nil {
-		values, flag, err = arg.Values.Resolve(command, args, flags)
+		values, flag, err = arg.Values.Resolve(command)
 		if err != nil {
 			flag = cobra.ShellCompDirectiveError
 			return

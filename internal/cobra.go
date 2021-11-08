@@ -35,9 +35,10 @@ func RootFlagset() *pflag.FlagSet {
 
 		rootFlagset = pflag.NewFlagSet("compa", pflag.ContinueOnError)
 		rootFlagset.BoolP("verbose", "v", verboseDefault, "Log verbose output to stderr")
+		rootFlagset.Bool("silent", false, "Do not print any logs to stderr")
 		rootFlagset.BoolP("help", "h", false, "Display help for any command")
 		rootFlagset.Bool("no-color", noColor, "Do not print any formatting codes")
-		rootFlagset.Bool("silent", false, "Do not print any logs to stderr")
+		rootFlagset.Bool("skip-validation", false, "Do not validate any arguments or options")
 		rootFlagset.Usage = func() {}
 		rootFlagset.SortFlags = false
 	}
@@ -46,11 +47,20 @@ func RootFlagset() *pflag.FlagSet {
 }
 
 func (cmd *Command) Run(cc *cobra.Command, args []string) error {
-	flags := cc.Flags()
-	env, err := cmd.ToEval(args, flags)
-	if err != nil {
-		return err
+	cmd.Arguments.Parse(args)
+	if runtime.ValidationEnabled() {
+		if err := cmd.Arguments.AreValid(cmd); err != nil {
+			return err
+		}
 	}
+	cmd.Options.Parse(cc.Flags())
+	if runtime.ValidationEnabled() {
+		if err := cmd.Options.AreValid(cmd); err != nil {
+			return err
+		}
+	}
+
+	env := cmd.ToEval(args)
 
 	if os.Getenv(_c.EnvVarCompaOut) != "" {
 		return os.WriteFile(os.Getenv(_c.EnvVarCompaOut), []byte(env), 0600)
@@ -61,22 +71,28 @@ func (cmd *Command) Run(cc *cobra.Command, args []string) error {
 }
 
 func (cmd *Command) ToCobra() (*cobra.Command, error) {
+	if cmd.cc != nil {
+		return cmd.cc, nil
+	}
+
 	localName := cmd.Meta.Name[len(cmd.Meta.Name)-1]
 	useSpec := []string{localName, "[options]"}
 	for _, arg := range cmd.Arguments {
 		useSpec = append(useSpec, arg.ToDesc())
 	}
 
-	// logrus.Debugf("Cobraizing %s", strings.Join(useSpec, " "))
 	cc := &cobra.Command{
-		Use:   strings.Join(useSpec, " "),
-		Short: cmd.Summary,
-		// Long:              color.New(color.Bold).Sprintf(strings.Join(useSpec, " ")) + "\n\n" + cmd.Summary + "\n\n" + cmd.Description,
+		Use:               strings.Join(useSpec, " "),
+		Short:             cmd.Summary,
 		DisableAutoGenTag: true,
 		SilenceUsage:      true,
 		SilenceErrors:     true,
 		Args: func(cc *cobra.Command, supplied []string) error {
-			return cmd.Arguments.Validate(cmd, cc, supplied)
+			if runtime.ValidationEnabled() {
+				cmd.Arguments.Parse(supplied)
+				return cmd.Arguments.AreValid(cmd)
+			}
+			return nil
 		},
 		RunE: cmd.Run,
 	}
@@ -101,7 +117,7 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 	}
 
 	cc.SetHelpFunc(cmd.ShowHelp)
-
+	cmd.cc = cc
 	return cc, nil
 }
 

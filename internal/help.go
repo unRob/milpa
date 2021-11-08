@@ -73,7 +73,7 @@ var Docs *Command = &Command{
 	Summary:     "Dislplays docs on TOPIC",
 	Description: "Shows markdown-formatted documentation from milpa repos. See `" + _c.Milpa + " " + _c.HelpCommandName + " docs milpa repo docs` for more information on how to write your own.",
 	Arguments: Arguments{
-		Argument{
+		&Argument{
 			Name:        "topic",
 			Description: "The topic to show docs for",
 			Variadic:    true,
