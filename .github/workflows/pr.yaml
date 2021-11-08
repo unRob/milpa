@@ -40,7 +40,7 @@ jobs:
       - name: Unit tests
         run: |
           go get gotest.tools/gotestsum
-          gotestsum --format testname -coverprofile=test/coverage.cov --coverpkg=./...
+          gotestsum --format testname -- ./... -coverprofile=test/coverage.cov --coverpkg=./...
 
       - name: Send coverage
         uses: shogo82148/actions-goveralls@v1
