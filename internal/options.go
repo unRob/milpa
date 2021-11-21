@@ -134,12 +134,17 @@ func (opt *Option) Validate(name string, cmd *Command) error {
 		return nil
 	}
 
+	current := opt.ToString(false)
+
+	if current == "" {
+		return nil
+	}
+
 	validValues, _, err := opt.Resolve(cmd)
 	if err != nil {
 		return err
 	}
 
-	current := opt.ToString(false)
 	if !contains(validValues, current) {
 		return BadArguments{fmt.Sprintf("%s is not a valid value for option <%s>. Valid options are: %s", current, name, strings.Join(validValues, ", "))}
 	}
