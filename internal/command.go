@@ -18,6 +18,7 @@ import (
 	"strings"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	_c "github.com/unrob/milpa/internal/constants"
 	runtime "github.com/unrob/milpa/internal/runtime"
@@ -35,6 +36,7 @@ type Command struct {
 	runtimeFlags *pflag.FlagSet
 	issues       []string
 	helpFunc     func(printLinks bool) string
+	cc           *cobra.Command
 }
 
 var Root = &Command{
@@ -68,6 +70,10 @@ var Root = &Command{
 			Type:        "bool",
 			Description: "Silence non-error logging",
 		},
+		"skip-validation": &Option{
+			Type:        "bool",
+			Description: "Do not validate any arguments or options",
+		},
 	},
 }
 
@@ -97,7 +103,7 @@ func metaForPath(path string, repo string) (meta Meta) {
 func New(path string, repo string, strict bool) (cmd *Command, err error) {
 	cmd = &Command{}
 	cmd.Meta = metaForPath(path, repo)
-	cmd.Arguments = []Argument{}
+	cmd.Arguments = []*Argument{}
 	cmd.Options = Options{}
 	cmd.issues = []string{}
 

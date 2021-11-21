@@ -20,35 +20,14 @@ import (
 )
 
 func TestResolveTemplate(t *testing.T) {
-	cmd := &Command{
-		Arguments: []Argument{
-			{
-				Name:    "argument_0",
-				Default: "default",
-			},
-			{
-				Name:     "argument_n",
-				Variadic: true,
-			},
-		},
-		Options: Options{
-			"option": {
-				Default: "default",
-				Type:    "string",
-			},
-			"bool": {
-				Type:    "bool",
-				Default: false,
-			},
-		},
-	}
 
 	overrideFlags := &pflag.FlagSet{}
 	overrideFlags.String("option", "override", "stuff")
 	overrideFlags.Bool("bool", false, "stuff")
 	overrideFlags.Bool("help", false, "stuff")
 	overrideFlags.Bool("no-color", false, "stuff")
-	err := overrideFlags.Parse([]string{"--option", "override", "--bool", "--help", "--no-color"})
+	overrideFlags.Bool("skip-validation", false, "stuff")
+	err := overrideFlags.Parse([]string{"--option", "override", "--bool", "--help", "--no-color", "--skip-validation"})
 	if err != nil {
 		t.Fatalf("Could not parse test flags")
 	}
@@ -148,7 +127,31 @@ func TestResolveTemplate(t *testing.T) {
 	for _, test := range cases {
 		test := test
 		t.Run(test.Expected, func(t *testing.T) {
-			res, err := ResolveTemplate(cmd, test.Tpl, test.Args, test.Flags)
+			cmd := &Command{
+				Arguments: []*Argument{
+					{
+						Name:    "argument_0",
+						Default: "default",
+					},
+					{
+						Name:     "argument_n",
+						Variadic: true,
+					},
+				},
+				Options: Options{
+					"option": {
+						Default: "default",
+						Type:    "string",
+					},
+					"bool": {
+						Type:    "bool",
+						Default: false,
+					},
+				},
+			}
+			cmd.Arguments.Parse(test.Args)
+			cmd.Options.Parse(test.Flags)
+			res, err := ResolveTemplate(cmd, test.Tpl)
 
 			if err != nil && !test.Errors {
 				t.Fatalf("good template failed: %s", err)

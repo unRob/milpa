@@ -17,12 +17,10 @@ import (
 	"strings"
 
 	"github.com/alessio/shellescape"
-	"github.com/sirupsen/logrus"
-	"github.com/spf13/pflag"
 	_c "github.com/unrob/milpa/internal/constants"
 )
 
-func (cmd *Command) ToEval(args []string, flags *pflag.FlagSet) (string, error) {
+func (cmd *Command) ToEval(args []string) string {
 	output := []string{
 		fmt.Sprintf("export %s=%s", _c.OutputCommandName, shellescape.Quote(cmd.FullName())),
 		fmt.Sprintf("export %s=%s", _c.OutputCommandKind, shellescape.Quote(cmd.Meta.Kind)),
@@ -30,22 +28,13 @@ func (cmd *Command) ToEval(args []string, flags *pflag.FlagSet) (string, error) 
 		fmt.Sprintf("export %s=%s", _c.OutputCommandPath, shellescape.Quote(cmd.Meta.Path)),
 	}
 
-	err := cmd.Options.ToEnv(cmd, &output, args, flags)
-	if err != nil {
-		return "", err
-	}
-
-	logrus.Debugf("Printing environment for args: %v", args)
-
-	err = cmd.Arguments.ToEnv(cmd, &output, args, flags)
-	if err != nil {
-		return "", err
-	}
+	cmd.Options.ToEnv(cmd, &output)
+	cmd.Arguments.ToEnv(cmd, &output)
 
 	for idx, arg := range args {
 		args[idx] = shellescape.Quote(arg)
 	}
 	output = append(output, "set -- "+strings.Join(args, " "))
 
-	return strings.Join(output, "\n"), nil
+	return strings.Join(output, "\n")
 }
