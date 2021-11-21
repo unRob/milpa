@@ -37,7 +37,13 @@ for pair in "${MILPA_ARG_TARGETS[@]//\//-}"; do
   package="$output/milpa-$pair.tgz"
 
   mkdir -p "$dist_dir"
-  upx --no-progress -9 -o "$dist_dir/compa" "$output/$pair" || @milpa.fail "Could not compress $dist_dir/compa"
+  if [[ "$pair" != "darwin/arm64" ]]; then
+    upx --no-progress -9 -o "$dist_dir/compa" "$output/$pair" || @milpa.fail "Could not compress $dist_dir/compa"
+  else
+    @milpa.warning "UPX produces botched arm64 builds :/"
+    @milpa.warning https://github.com/upx/upx/issues/446
+    cp "$output/$pair" "$dist_dir/compa"
+  fi
   rm -rf "${output:?}/$pair"
 
   cp -rv ./milpa ./.milpa LICENSE.txt README.md CHANGELOG.md "$dist_dir/"
