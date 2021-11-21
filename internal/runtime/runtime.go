@@ -20,27 +20,53 @@ import (
 	_c "github.com/unrob/milpa/internal/constants"
 )
 
+var MilpaPath = strings.Split(os.Getenv(_c.EnvVarMilpaPath), ":")
+
+var falseIshValues = []string{
+	"",
+	"0",
+	"no",
+	"false",
+	"disable",
+	"disabled",
+}
+
+func isFalseIsh(val string) bool {
+	for _, negative := range falseIshValues {
+		if val == negative {
+			return true
+		}
+	}
+
+	return false
+}
+
 func DoctorModeEnabled() bool {
-	return len(os.Args) >= 2 && (os.Args[1] == "__doctor" || (len(os.Args) > 2 && (os.Args[1] == "itself" && os.Args[2] == "doctor")))
+	count := len(os.Args)
+	if count < 2 {
+		return false
+	}
+	first := os.Args[1]
+
+	return first == "__doctor" || count >= 2 && (first == "itself" && os.Args[2] == "doctor")
+	// return len(os.Args) >= 2 && (os.Args[1] == "__doctor" || (len(os.Args) > 2 && (os.Args[1] == "itself" && os.Args[2] == "doctor")))
 }
 
 func ValidationEnabled() bool {
-	return os.Getenv(_c.EnvVarValidationDisabled) != "1"
+	return isFalseIsh(os.Getenv(_c.EnvVarValidationDisabled))
 }
 
 func VerboseEnabled() bool {
-	return os.Getenv(_c.EnvVarMilpaVerbose) != ""
+	return !isFalseIsh(os.Getenv(_c.EnvVarMilpaVerbose))
 }
 
 func ColorEnabled() bool {
-	return os.Getenv(_c.EnvVarMilpaUnstyled) == "" && os.Getenv(_c.EnvVarHelpUnstyled) == ""
+	return isFalseIsh(os.Getenv(_c.EnvVarMilpaUnstyled)) && isFalseIsh(os.Getenv(_c.EnvVarHelpUnstyled))
 }
 
 func UnstyledHelpEnabled() bool {
-	return os.Getenv(_c.EnvVarHelpUnstyled) == "enabled"
+	return !isFalseIsh(os.Getenv(_c.EnvVarHelpUnstyled))
 }
-
-var MilpaPath = strings.Split(os.Getenv(_c.EnvVarMilpaPath), ":")
 
 func CheckMilpaPathSet() error {
 	if len(MilpaPath) == 0 {

@@ -47,11 +47,19 @@ Enabled by the `--verbose` option. It shows information about what `milpa` is do
 
 ### `MILPA_SILENT`
 
-Enabled by the `--silent` option, to hide `@milpa.log` messages completely
+Enabled by the `--silent` option, to hide `@milpa.log` messages completely. If `DEBUG` or `MILPA_VERBOSE` are enabled, these will override `MILPA_SILENT`.
 
 ### `NO_COLOR`
 
 Also enabled by the `--no-color` option to disable printing of formatting escape codes from `compa` and `@milpa.log`.
+
+---
+
+## Input
+
+### `MILPA_SKIP_VALIDATION`
+
+If enabled, validation will be skipped for arguments and options. Also enabled with `--skip-validation`. **Skipping validation may be unsafe**, but may be useful when validation depends on unavailable data or services.
 
 ---
 

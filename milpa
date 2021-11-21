@@ -68,7 +68,7 @@ function @milpa.load_util () {
       libpath+=( "$MILPA_COMMAND_REPO" )
     fi
 
-    for pkg in ${libpath[*]} ; do
+    for pkg in "${libpath[@]}" ; do
       util_path="${pkg}/util/$util_name.sh"
       if [[ -f "$util_path" ]]; then
         set -o allexport

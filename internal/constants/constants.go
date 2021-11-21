@@ -25,12 +25,19 @@ const EnvVarHelpStyle = "MILPA_HELP_STYLE"
 const EnvVarMilpaRoot = "MILPA_ROOT"
 const EnvVarMilpaPath = "MILPA_PATH"
 const EnvVarMilpaVerbose = "MILPA_VERBOSE"
+const EnvVarMilpaSilent = "MILPA_SILENT"
 const EnvVarMilpaUnstyled = "NO_COLOR"
+const EnvVarValidationDisabled = "MILPA_SKIP_VALIDATION"
 const EnvVarCompaOut = "COMPA_OUT"
 const EnvVarDebug = "DEBUG"
-const EnvVarValidationDisabled = "MILPA_SKIP_VALIDATION"
 
-var EnvFlagNames = map[string]string{"no-color": "NO_COLOR", "silent": "MILPA_SILENT", "verbose": "MILPA_VERBOSE"}
+// EnvFlagNames are flags also available as environment variables.
+var EnvFlagNames = map[string]string{
+	"no-color":        EnvVarMilpaUnstyled,
+	"silent":          EnvVarMilpaSilent,
+	"verbose":         EnvVarMilpaVerbose,
+	"skip-validation": EnvVarValidationDisabled,
+}
 
 // Folder structure.
 const RepoRoot = ".milpa"
