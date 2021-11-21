@@ -134,7 +134,7 @@ func (opt *Option) Validate(name string, cmd *Command) error {
 		return nil
 	}
 
-	current := opt.ToString(false)
+	current := opt.ToString(false) // nolint:ifshort
 
 	if current == "" {
 		return nil
