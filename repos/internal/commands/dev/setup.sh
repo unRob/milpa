@@ -59,4 +59,6 @@ done
 
 [[ -d "$ASDF_DIR" ]] && asdf reshim golang
 
-go mod tidy
+go mod tidy || @milpa.fail "go mod tidy failed"
+
+exec milpa dev build
