@@ -91,6 +91,7 @@ func (args *Arguments) CompletionFunction(command *Command) func(cc *cobra.Comma
 	if expectedArgLen > 0 {
 		return func(cc *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			argsCompleted := len(args)
+			command.Options.Parse(cc.Flags())
 
 			values := []string{}
 			directive := cobra.ShellCompDirectiveDefault
