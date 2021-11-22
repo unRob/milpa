@@ -12,10 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cd "$(git rev-parse --show-toplevel)" || @milpa.fail "could not cd into root directory"
+base="$(git rev-parse --show-toplevel)"
+cd "$base" || @milpa.fail "could not cd into root directory"
 
 @milpa.log info "Configuring git hooks"
-git config core.hooksPath "$(git rev-parse --show-toplevel)/internal/bin/hooks"
+git config core.hooksPath "$base/internal/bin/hooks"
 
 @milpa.log info "Making sure submodules are here"
 git submodule update --init --recursive
@@ -35,9 +36,25 @@ if [[ "$ASDF_DIR" ]]; then
 fi
 
 @milpa.log info "Installing go packages"
-cd || @milpa.fail "could not cd into home"
-command -v gotestsum >/dev/null || go get -u gotest.tools/gotestsum
-command -v gox >/dev/null || go get -u github.com/mitchellh/gox
-command -v golangci-lint >/dev/null || go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
-popd || @milpa.fail "could not return to previous dir"
+packages=(
+  gotest.tools/gotestsum@v1.7.0
+  github.com/mitchellh/gox@v1.0.1
+  github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
+)
+
+for package in "${packages[@]}"; do
+  name="$(basename "$package")"
+  bin="${name##@*}"
+  if command -v "$bin" >/dev/null; then
+    @milpa.log success "$package already installed"
+    continue
+  fi
+
+  @milpa.log info "Installing $package"
+  go install "$package" || @milpa.fail "Could not install $package"
+  @milpa.log success "Installed $package"
+done
+
+[[ -d "$ASDF_DIR" ]] && asdf reshim golang
+
 go mod tidy
