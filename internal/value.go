@@ -133,6 +133,7 @@ func ResolveTemplate(command *Command, raw string) (string, error) {
 		Args: command.Arguments.AllKnown(),
 		Opts: command.Options.AllKnown(),
 	}
+
 	tpl, err := template.New("subcommand").Funcs(template.FuncMap{
 		"Opt": tplData.Opt,
 		"Arg": tplData.Arg,

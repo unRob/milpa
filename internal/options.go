@@ -18,6 +18,7 @@ import (
 	"strings"
 
 	"github.com/alessio/shellescape"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	_c "github.com/unrob/milpa/internal/constants"
@@ -66,6 +67,7 @@ func (opts *Options) ToEnv(command *Command, dst *[]string) {
 }
 
 func (opts *Options) Parse(supplied *pflag.FlagSet) {
+	logrus.Debugf("Parsing supplied flags, %v", supplied)
 	for name, opt := range *opts {
 		switch opt.Type {
 		case ValueTypeBoolean:
@@ -179,6 +181,8 @@ func (opt *Option) CompletionFunction(command *Command) func(cmd *cobra.Command,
 			flag = cobra.ShellCompDirectiveNoFileComp
 			return
 		}
+
+		command.Options.Parse(cmd.Flags())
 
 		var err error
 		values, flag, err = self.Resolve(command)
