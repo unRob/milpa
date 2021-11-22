@@ -390,10 +390,13 @@
 </span><span class="w">      </span><span class="c"># autocompletes files with the given extensions, if any</span><span class="w">
 </span><span class="w">      </span><span class="nt">files</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">yaml, json, hcl]</span><span class="w">
 </span><span class="w">      </span><span class="c"># milpa runs the subcommand and returns an option for every line of stdout</span><span class="w">
-</span><span class="w">      </span><span class="nt">milpa</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;itself repo list&#34;</span><span class="w">
+</span><span class="w">      </span><span class="c"># values for options and other arguments may be used within go templates</span><span class="w">
+</span><span class="w">      </span><span class="c"># the following would execute `milpa itself increments --scheme semver` for example</span><span class="w">
+</span><span class="w">      </span><span class="nt">milpa</span><span class="p">:</span><span class="w"> </span><span class="l">itself increments {{ Opt &#34;scheme&#34; }}</span><span class="w">
 </span><span class="w">      </span><span class="c"># script runs the provided command with `bash -c &#34;$script&#34;` and returns an</span><span class="w">
 </span><span class="w">      </span><span class="c"># option for every line of stdout</span><span class="w">
-</span><span class="w">      </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;git tag -l&#34;</span><span class="w">
+</span><span class="w">      </span><span class="c"># go templates can be used in scripts as well</span><span class="w">
+</span><span class="w">      </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l">git tag -l {{ Opt &#34;prefix&#34; }}</span><span class="w">
 </span><span class="w">      </span><span class="c"># arguments can be validated to be part of a static set of values</span><span class="w">
 </span><span class="w">      </span><span class="nt">static</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">micro, patch, minor, major]</span><span class="w">
 </span><span class="w">      </span><span class="c"># when using script or milpa values, wait at most this</span><span class="w">

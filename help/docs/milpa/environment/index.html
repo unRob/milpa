@@ -87,6 +87,11 @@
         <li><a href="#no_color"><code>NO_COLOR</code></a></li>
       </ul>
     </li>
+    <li><a href="#input">Input</a>
+      <ul>
+        <li><a href="#milpa_skip_validation"><code>MILPA_SKIP_VALIDATION</code></a></li>
+      </ul>
+    </li>
     <li><a href="#command-environment">Command Environment</a></li>
   </ul>
 </nav>
@@ -407,11 +412,19 @@
 <div class="content-header-wrapper">
 <h3 class="content-header" id="milpa_silent"><code>MILPA_SILENT</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpa_silent" tabindex="-1">#</a>
 </div>
-<p>Enabled by the <code>--silent</code> option, to hide <code>@milpa.log</code> messages completely</p>
+<p>Enabled by the <code>--silent</code> option, to hide <code>@milpa.log</code> messages completely. If <code>DEBUG</code> or <code>MILPA_VERBOSE</code> are enabled, these will override <code>MILPA_SILENT</code>.</p>
 <div class="content-header-wrapper">
 <h3 class="content-header" id="no_color"><code>NO_COLOR</code></h3> <a aria-hidden="true" class="heading-anchor" href="#no_color" tabindex="-1">#</a>
 </div>
 <p>Also enabled by the <code>--no-color</code> option to disable printing of formatting escape codes from <code>compa</code> and <code>@milpa.log</code>.</p>
+<hr>
+<div class="content-header-wrapper">
+<h2 class="content-header" id="input">Input</h2> <a aria-hidden="true" class="heading-anchor" href="#input" tabindex="-1">#</a>
+</div>
+<div class="content-header-wrapper">
+<h3 class="content-header" id="milpa_skip_validation"><code>MILPA_SKIP_VALIDATION</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpa_skip_validation" tabindex="-1">#</a>
+</div>
+<p>If enabled, validation will be skipped for arguments and options. Also enabled with <code>--skip-validation</code>. <strong>Skipping validation may be unsafe</strong>, but may be useful when validation depends on unavailable data or services.</p>
 <hr>
 <div class="content-header-wrapper">
 <h2 class="content-header" id="command-environment">Command Environment</h2> <a aria-hidden="true" class="heading-anchor" href="#command-environment" tabindex="-1">#</a>

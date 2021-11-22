@@ -158,7 +158,7 @@ Arguments #   ACTION - the action to take with documentation  Options #   --host
       <description>Validates all commands found on the MILPA_PATH
 Usage #  milpa itself doctor [options]
 Description #  This command will run checks on all known commands, parsing specs and validating their values.
-Global Options #   --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --verbose (bool): Log verbose output to stderr.  </description>
+Global Options #   --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --skip-validation (bool): Do not validate any arguments or options. --verbose (bool): Log verbose output to stderr.</description>
     </item>
     
     <item>
@@ -229,7 +229,7 @@ Description #  Generates a shell completion script for the current $SHELL. It cu
       <description>Upgrades milpa to the latest available version
 Usage #  milpa itself upgrade [options]
 Description #  If a new version is available, this command will download and install it.
-Global Options #   --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --verbose (bool): Log verbose output to stderr.  </description>
+Global Options #   --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --skip-validation (bool): Do not validate any arguments or options. --verbose (bool): Log verbose output to stderr.</description>
     </item>
     
     <item>
@@ -241,7 +241,7 @@ Global Options #   --help (bool): Display help for any command. --no-color (bool
       <description>Displays the version of milpa
 Usage #  milpa itself version [options]
 Description #  Outputs the version of milpa to stdout, printing a new line if the output is a TTY. Also available as milpa --version
-Global Options #   --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --verbose (bool): Log verbose output to stderr.  </description>
+Global Options #   --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --skip-validation (bool): Do not validate any arguments or options.</description>
     </item>
     
   </channel>
