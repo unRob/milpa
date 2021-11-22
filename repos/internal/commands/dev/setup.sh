@@ -17,6 +17,8 @@ cd "$base" || @milpa.fail "could not cd into root directory"
 
 @milpa.log info "Configuring git hooks"
 git config core.hooksPath "$base/internal/bin/hooks"
+@milpa.log info "Fetching notes"
+git fetch origin refs/notes/*:refs/notes/*
 
 @milpa.log info "Making sure submodules are here"
 git submodule update --init --recursive
