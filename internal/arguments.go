@@ -184,8 +184,12 @@ func (arg *Argument) ToString(asShell bool) string {
 
 func (arg *Argument) Validate(cmd *Command) error {
 
-	if arg.Required && !arg.IsKnown() {
-		return BadArguments{fmt.Sprintf("Missing argument for %s", strings.ToUpper(arg.Name))}
+	if !arg.IsKnown() {
+		if arg.Required {
+			return BadArguments{fmt.Sprintf("Missing argument for %s", strings.ToUpper(arg.Name))}
+		}
+
+		return nil
 	}
 
 	if !arg.Validates() {
