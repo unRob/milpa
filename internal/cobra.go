@@ -48,12 +48,12 @@ func RootFlagset() *pflag.FlagSet {
 
 func (cmd *Command) Run(cc *cobra.Command, args []string) error {
 	cmd.Arguments.Parse(args)
+	cmd.Options.Parse(cc.Flags())
 	if runtime.ValidationEnabled() {
 		if err := cmd.Arguments.AreValid(cmd); err != nil {
 			return err
 		}
 	}
-	cmd.Options.Parse(cc.Flags())
 	if runtime.ValidationEnabled() {
 		if err := cmd.Options.AreValid(cmd); err != nil {
 			return err
