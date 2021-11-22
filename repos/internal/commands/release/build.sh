@@ -37,7 +37,7 @@ for pair in "${MILPA_ARG_TARGETS[@]//\//-}"; do
   package="$output/milpa-$pair.tgz"
 
   mkdir -p "$dist_dir"
-  if [[ "$pair" != "darwin/arm64" ]]; then
+  if [[ "$pair" != "darwin-arm64" ]]; then
     upx --no-progress -9 -o "$dist_dir/compa" "$output/$pair" || @milpa.fail "Could not compress $dist_dir/compa"
   else
     @milpa.warning "UPX produces botched arm64 builds :/"
