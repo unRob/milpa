@@ -119,7 +119,11 @@ func (opt *Option) ToString(asShell bool) string {
 	stringValue := ""
 	switch opt.Type {
 	case "bool":
-		stringValue = strconv.FormatBool(value.(bool))
+		if value == nil {
+			stringValue = ""
+		} else {
+			stringValue = strconv.FormatBool(value.(bool))
+		}
 	case "string":
 		stringValue = value.(string)
 	}
