@@ -125,7 +125,9 @@ func (opt *Option) ToString(asShell bool) string {
 			stringValue = strconv.FormatBool(value.(bool))
 		}
 	case "string":
-		stringValue = value.(string)
+		if value != nil {
+			stringValue = value.(string)
+		}
 	}
 
 	if asShell {
