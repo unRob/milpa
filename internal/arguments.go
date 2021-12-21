@@ -55,8 +55,19 @@ func (args *Arguments) Parse(supplied []string) {
 		argumentProvided := idx < len(supplied)
 
 		if !argumentProvided {
-			if arg.Default != "" {
-				arg.provided = &[]string{arg.Default}
+			if arg.Default != nil {
+				if arg.Variadic {
+					defaultSlice := []string{}
+					for _, valI := range arg.Default.([]interface{}) {
+						defaultSlice = append(defaultSlice, valI.(string))
+					}
+					arg.provided = &defaultSlice
+				} else {
+					defaultString := arg.Default.(string)
+					if defaultString != "" {
+						arg.provided = &[]string{defaultString}
+					}
+				}
 			}
 			continue
 		}
@@ -136,7 +147,7 @@ type Argument struct {
 	// Description is what this argument is for.
 	Description string `yaml:"description" validate:"required"`
 	// Default is the default value for this argument if none is provided.
-	Default string `yaml:"default" validate:"excluded_with=Required"`
+	Default interface{} `yaml:"default" validate:"excluded_with=Required"`
 	// Variadic makes an argument a list of all values from this one on.
 	Variadic bool `yaml:"variadic"`
 	// Required raises an error if an argument is not provided.
@@ -159,7 +170,7 @@ func (arg *Argument) IsKnown() bool {
 }
 
 func (arg *Argument) ToString(asShell bool) string {
-	value := arg.Default
+	var value string
 	if arg.IsKnown() {
 		if arg.Variadic {
 			if asShell {
@@ -174,6 +185,20 @@ func (arg *Argument) ToString(asShell bool) string {
 		} else {
 			vals := *arg.provided
 			value = vals[0]
+		}
+	} else {
+		if arg.Default != nil {
+			if arg.Variadic {
+				values := []string{}
+				for _, va := range arg.Default.([]interface{}) {
+					values = append(values, shellescape.Quote(va.(string)))
+				}
+				value = fmt.Sprintf("( %s )", strings.Join(values, " "))
+			} else {
+				value = arg.Default.(string)
+			}
+		} else {
+			value = ""
 		}
 	}
 
