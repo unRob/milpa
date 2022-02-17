@@ -97,7 +97,7 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
 
       - name: update github pages
-        uses: JamesIves/github-pages-deploy-action@4.1.7
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
         # re-enable when we only wanna build for stable releases
         # if: ${{ steps.build.outputs.prerelease == "false" }}
         with:
