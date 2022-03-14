@@ -17,9 +17,9 @@ There's [a few reasons why](/.milpa/docs/milpa/alternatives.md) you and your tea
 
 ## Concepts
 
-Commands are grouped into one or more "**repos**". These are folders that contain a `.milpa` folder within. Check out [`milpa help docs milpa repo`](/.milpa/docs/milpa/repo/index.md) for more details about repos.
+**Commands** are bash scripts or executables written in your language of choice, and their corresponding specs. Get the full story with [milpa help docs milpa command](/.milpa/docs/milpa/command/index.md)
 
-Your milpa repos will contain **commands** and their corresponding specs, among other things. These can be executables written in whatever language you want, or bash shell scripts. Get the full story with [milpa help docs milpa command](/.milpa/docs/milpa/command/index.md)
+Commands are grouped into one or more **repos**. These are folders that contain a `.milpa` folder within. Check out [`milpa help docs milpa repo`](/.milpa/docs/milpa/repo/index.md) for more details about repos.
 
 ## Enough words, show me some code
 

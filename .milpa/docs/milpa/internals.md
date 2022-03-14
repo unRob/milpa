@@ -5,6 +5,11 @@ weight: 50
 
 `milpa` is a bash script in charge of setting environment variables and handing off to the user-requested script. Most of the heavy lifting, including argument/option parsing and validation, as well as finding commands, is done by a companion binary named `compa` (a slang term for friend).
 
+Milpa is built with, and thanks to:
+
+- [bash](https://www.gnu.org/software/bash/)
+- [spf13/cobra](https://cobra.dev)
+
 ### `milpa` sets the stage
 
 1. As it starts running, milpa will set `MILPA_ROOT`, exit unless it points to an existing directory, or proceed to set `MILPA_PATH` (unless `MILPA_PATH_PARSED` is already set to make it simpler upon recursion).
@@ -41,3 +46,4 @@ Mostly based on Bash's [Appendix E](https://tldp.org/LDP/abs/html/exitcodes.html
 - 70: a spec could not be parsed or help failed rendering
 - 78: `MILPA_ROOT` points to something that's not a directory
 - 127: sub-command not found
+
