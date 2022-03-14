@@ -10,7 +10,7 @@ require (
 	github.com/go-playground/validator/v10 v10.9.0
 	github.com/hashicorp/go-getter v1.5.9
 	github.com/sirupsen/logrus v1.8.1
-	github.com/spf13/cobra v1.2.1
+	github.com/spf13/cobra v1.4.0
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1
 	gopkg.in/yaml.v2 v2.4.0
