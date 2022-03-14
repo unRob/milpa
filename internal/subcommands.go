@@ -49,7 +49,7 @@ var versionCommand *cobra.Command = &cobra.Command{
 			return err
 		}
 
-		os.Exit(42)
+		os.Exit(_c.ExitStatusRenderHelp)
 		return nil
 	},
 }

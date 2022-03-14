@@ -89,11 +89,7 @@ func main() {
 		logrus.Fatal(err)
 	}
 
-	root, err := internal.RootCommand(subcommands, version)
-	if err != nil {
-		logrus.Errorf("failed to get cobra command for %s: %v", os.Args, err)
-		os.Exit(64)
-	}
+	root := internal.RootCommand(subcommands, version)
 
 	initialArgs := []string{"milpa"}
 	os.Args = append(initialArgs, os.Args[1:]...) //nolint:gocritic

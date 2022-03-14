@@ -18,6 +18,7 @@ import (
 	"strings"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	_c "github.com/unrob/milpa/internal/constants"
@@ -132,9 +133,9 @@ func (cmd *Command) FullName() string {
 	return strings.Join(cmd.Meta.Name, " ")
 }
 
-func (cmd *Command) CreateFlagSet() error {
+func (cmd *Command) CreateFlagSet() {
 	if cmd.runtimeFlags != nil {
-		return nil
+		return
 	}
 	fs := pflag.NewFlagSet(strings.Join(cmd.Meta.Name, " "), pflag.ContinueOnError)
 	fs.SortFlags = false
@@ -156,13 +157,13 @@ func (cmd *Command) CreateFlagSet() error {
 			}
 			fs.String(name, def, opt.Description)
 		default:
+			// ignore flag
+			logrus.Warnf("Ignoring unknown option type <%s> for option <%s>", opt.Type, name)
 			continue
-			// return fmt.Errorf("unknown option type: <%s> for option: <%s>", opt.Type, name)
 		}
 	}
 
 	cmd.runtimeFlags = fs
-	return nil
 }
 
 type varSearchMap struct {

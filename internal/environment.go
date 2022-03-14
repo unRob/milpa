@@ -20,12 +20,19 @@ import (
 	_c "github.com/unrob/milpa/internal/constants"
 )
 
+func CommandEnvironment(cmd *Command) map[string]string {
+	return map[string]string{
+		_c.OutputCommandName: cmd.FullName(),
+		_c.OutputCommandKind: cmd.Meta.Kind,
+		_c.OutputCommandRepo: cmd.Meta.Repo,
+		_c.OutputCommandPath: cmd.Meta.Path,
+	}
+}
+
 func (cmd *Command) ToEval(args []string) string {
-	output := []string{
-		fmt.Sprintf("export %s=%s", _c.OutputCommandName, shellescape.Quote(cmd.FullName())),
-		fmt.Sprintf("export %s=%s", _c.OutputCommandKind, shellescape.Quote(cmd.Meta.Kind)),
-		fmt.Sprintf("export %s=%s", _c.OutputCommandRepo, shellescape.Quote(cmd.Meta.Repo)),
-		fmt.Sprintf("export %s=%s", _c.OutputCommandPath, shellescape.Quote(cmd.Meta.Path)),
+	output := []string{}
+	for name, value := range CommandEnvironment(cmd) {
+		output = append(output, fmt.Sprintf("export %s=%s", name, shellescape.Quote(value)))
 	}
 
 	cmd.Options.ToEnv(cmd, &output)

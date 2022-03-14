@@ -130,7 +130,7 @@ set +o allexport
   @milpa.log info "lookup stdout: $(cat "$compaOut")"
   @milpa.log info "milpa environment:"
   env | grep ^MILPA | sort | @milpa.log info
-  @milpa.fail "Command lookup exited cleanly, but no command provided for execution"
+  @milpa.fail "Command lookup succeeded, but command environment is incomplete"
 }
 
 @milpa.load_util milpa-version

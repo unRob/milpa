@@ -16,7 +16,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"os"
 	os_exec "os/exec"
 	"strings"
 	"time"
@@ -35,12 +34,12 @@ func ExecSubshell(ctx context.Context, env []string, executable string, args ...
 	cmd.Stdout = &stdout
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
-	cmd.Env = os.Environ()
+	cmd.Env = env
 	return stdout, stderr, cmd.Run()
 }
 
 // Exec runs a subprocess and returns a list of lines from stdout.
-func Exec(name string, args []string, timeout time.Duration) ([]string, cobra.ShellCompDirective, error) {
+func Exec(name string, args []string, env []string, timeout time.Duration) ([]string, cobra.ShellCompDirective, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel() // The cancel should be deferred so resources are cleaned up
 
@@ -48,7 +47,7 @@ func Exec(name string, args []string, timeout time.Duration) ([]string, cobra.Sh
 	executable := args[0]
 	args = args[1:]
 
-	stdout, _, err := ExecFunc(ctx, os.Environ(), executable, args...)
+	stdout, _, err := ExecFunc(ctx, env, executable, args...)
 
 	if ctx.Err() == context.DeadlineExceeded {
 		fmt.Println("Sub-command timed out")

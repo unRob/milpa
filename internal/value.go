@@ -15,6 +15,7 @@ package internal
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"strings"
 	"text/template"
 	"time"
@@ -98,7 +99,12 @@ func (vs *ValueSource) Resolve(command *Command) (values []string, flag cobra.Sh
 			args = append([]string{"milpa"}, strings.Split(cmd, " ")...)
 
 		}
-		values, flag, err = Exec(command.FullName(), args, timeout*time.Second)
+		envMap := CommandEnvironment(command)
+		env := os.Environ()
+		for k, v := range envMap {
+			env = append(env, fmt.Sprintf("%s=%s", k, v))
+		}
+		values, flag, err = Exec(command.FullName(), args, env, timeout*time.Second)
 		if err != nil {
 			return nil, flag, err
 		}

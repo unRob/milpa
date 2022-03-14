@@ -154,7 +154,7 @@ var DocsCommand *cobra.Command = &cobra.Command{
 		if _, err := c.OutOrStderr().Write(doc); err != nil {
 			return err
 		}
-		os.Exit(42)
+		os.Exit(_c.ExitStatusRenderHelp)
 
 		return nil
 	},
@@ -193,16 +193,16 @@ var HelpCommand *cobra.Command = &cobra.Command{
 				err := c.Root().Help()
 				if err != nil {
 					logrus.Error(err)
-					os.Exit(70)
+					os.Exit(_c.ExitStatusProgrammerError)
 				}
 				logrus.Errorf("Unknown help topic %s", args)
-				os.Exit(127)
+				os.Exit(_c.ExitStatusNotFound)
 			} else {
 				err := cmd.Help()
 
 				if err != nil {
 					logrus.Error(err)
-					os.Exit(70)
+					os.Exit(_c.ExitStatusProgrammerError)
 				}
 
 				if len(args) > 1 {
@@ -210,14 +210,14 @@ var HelpCommand *cobra.Command = &cobra.Command{
 				} else {
 					logrus.Errorf("Unknown help topic %s for milpa", args[0])
 				}
-				os.Exit(127)
+				os.Exit(_c.ExitStatusNotFound)
 			}
 		} else {
 			cmd.InitDefaultHelpFlag() // make possible 'help' flag to be shown
 			cobra.CheckErr(cmd.Help())
 		}
 
-		os.Exit(42)
+		os.Exit(_c.ExitStatusRenderHelp)
 	},
 }
 

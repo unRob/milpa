@@ -70,9 +70,9 @@ func (cmd *Command) Run(cc *cobra.Command, args []string) error {
 	return nil
 }
 
-func (cmd *Command) ToCobra() (*cobra.Command, error) {
+func (cmd *Command) ToCobra() *cobra.Command {
 	if cmd.cc != nil {
-		return cmd.cc, nil
+		return cmd.cc
 	}
 
 	localName := cmd.Meta.Name[len(cmd.Meta.Name)-1]
@@ -103,25 +103,21 @@ func (cmd *Command) ToCobra() (*cobra.Command, error) {
 
 	cc.ValidArgsFunction = cmd.Arguments.CompletionFunction(cmd)
 
-	err := cmd.CreateFlagSet()
-	if err != nil {
-		return cc, err
-	}
-
+	cmd.CreateFlagSet()
 	cc.Flags().AddFlagSet(cmd.runtimeFlags)
 
 	for name, opt := range cmd.Options {
 		if err := cc.RegisterFlagCompletionFunc(name, opt.CompletionFunction(cmd)); err != nil {
-			return cc, err
+			logrus.Errorf("Failed setting up autocompletion for option <%s> of command <%s>", name, cmd.FullName())
 		}
 	}
 
 	cc.SetHelpFunc(cmd.ShowHelp)
 	cmd.cc = cc
-	return cc, nil
+	return cc
 }
 
-func RootCommand(commands []*Command, version string) (*cobra.Command, error) {
+func RootCommand(commands []*Command, version string) *cobra.Command {
 	root := &cobra.Command{
 		Use:         "milpa [--silent|-v|--verbose] [--no-color] [-h|-help] [--version]",
 		Annotations: map[string]string{"version": version},
@@ -180,15 +176,13 @@ func RootCommand(commands []*Command, version string) (*cobra.Command, error) {
 	DocsCommand.SetHelpFunc(Docs.ShowHelp)
 	root.SetHelpFunc(Root.ShowHelp)
 
-	return root, populateRoot(root, commands)
+	populateRoot(root, commands)
+	return root
 }
 
-func populateRoot(root *cobra.Command, commands []*Command) error {
+func populateRoot(root *cobra.Command, commands []*Command) {
 	for _, cmd := range commands {
-		leaf, err := cmd.ToCobra()
-		if err != nil {
-			return err
-		}
+		leaf := cmd.ToCobra()
 
 		container := root
 		for idx, cp := range cmd.Meta.Name {
@@ -235,11 +229,11 @@ func populateRoot(root *cobra.Command, commands []*Command) error {
 						if len(args) == 0 {
 							return NotFound{"No subcommand provided", []string{}}
 						}
-						os.Exit(127)
+						os.Exit(_c.ExitStatusNotFound)
 						return nil
 					},
 				}
-				ccmd := &Command{
+				groupParent := &Command{
 					Summary:     fmt.Sprintf("%s subcommands", strings.Join(query, " ")),
 					Description: fmt.Sprintf("Runs subcommands within %s", strings.Join(query, " ")),
 					Arguments:   Arguments{},
@@ -248,12 +242,10 @@ func populateRoot(root *cobra.Command, commands []*Command) error {
 						Name: cmd.Meta.Name[0 : idx+1],
 					},
 				}
-				cc.SetHelpFunc(ccmd.ShowHelp)
+				cc.SetHelpFunc(groupParent.ShowHelp)
 				container.AddCommand(cc)
 				container = cc
 			}
 		}
 	}
-
-	return nil
 }

@@ -1,6 +1,6 @@
 # milpa
 
-[`milpa`](https://milpa.dev) is a command-line tool to care for one's own garden of scripts, its name comes from "milpa", an agricultural method that combines multiple crops in close proximity
+[`milpa`](https://milpa.dev) is a command-line tool to care for one's own garden of scripts, its name comes from ["milpa"](https://en.wikipedia.org/wiki/Milpa), an agricultural method that combines multiple crops in close proximity
 
 For a brief intro to get started, check out [milpa help docs milpa quick-guide](/.milpa/docs/milpa/quick-guide.md).
 
@@ -17,7 +17,7 @@ There's [a few reasons why](/.milpa/docs/milpa/alternatives.md) you and your tea
 
 ## Concepts
 
-`milpa` let's you have one or more "**repos**", or collections of commands. These are folders that contain a `.milpa` folder within. Check out [`milpa help docs milpa repo`](/.milpa/docs/milpa/repo/index.md) for more details about repositories.
+Commands are grouped into one or more "**repos**". These are folders that contain a `.milpa` folder within. Check out [`milpa help docs milpa repo`](/.milpa/docs/milpa/repo/index.md) for more details about repos.
 
 Your milpa repos will contain **commands** and their corresponding specs, among other things. These can be executables written in whatever language you want, or bash shell scripts. Get the full story with [milpa help docs milpa command](/.milpa/docs/milpa/command/index.md)
 
@@ -39,12 +39,3 @@ milpa itself doctor
 # add new commands to milpa written by strangers on the internet!
 milpa itself repo install github.com/nidito/unRob
 ```
-
-See [unRob/nidito](https://github.com/unRob/nidito/tree/master/.milpa) for a working example, and/or the drop that that spilled the cup and got me to work on `milpa`.
-
-## Internals
-
-Milpa is built with, and thanks to:
-
-- [bash](https://www.gnu.org/software/bash/)
-- [spf13/cobra](https://cobra.dev)
