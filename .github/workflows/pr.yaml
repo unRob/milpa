@@ -39,7 +39,7 @@ jobs:
 
       - name: Unit tests
         run: |
-          go get gotest.tools/gotestsum
+          go install gotest.tools/gotestsum@latest
           gotestsum --format testname -- ./... -coverprofile=test/coverage.cov --coverpkg=./...
 
       - name: Send coverage
