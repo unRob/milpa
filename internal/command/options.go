@@ -10,7 +10,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package internal
+package command
 
 import (
 	"fmt"
@@ -22,6 +22,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	_c "github.com/unrob/milpa/internal/constants"
+	"github.com/unrob/milpa/internal/errors"
 )
 
 // Options is a map of name to Option.
@@ -35,34 +36,50 @@ func (opts *Options) AllKnown() map[string]string {
 	return col
 }
 
+func envValue(opts Options, f *pflag.Flag) (*string, *string) {
+	name := f.Name
+	if name == _c.HelpCommandName {
+		return nil, nil
+	}
+	envName := ""
+	value := f.Value.String()
+
+	if cname, ok := _c.EnvFlagNames[name]; ok {
+		if value == "false" {
+			return nil, nil
+		}
+		envName = cname
+		value = shellescape.Quote(value)
+	} else {
+		envName = fmt.Sprintf("%s%s", _c.OutputPrefixOpt, strings.ToUpper(strings.ReplaceAll(name, "-", "_")))
+		opt := opts[name]
+		value = opt.ToString(true)
+
+		if value == "false" && opt.Type == ValueTypeBoolean {
+			// makes dealing with false flags in shell easier
+			value = ""
+		}
+	}
+
+	return &envName, &value
+}
+
 // ToEnv writes shell variables to dst.
-func (opts *Options) ToEnv(command *Command, dst *[]string) {
+func (opts *Options) ToEnv(command *Command, dst *[]string, prefix string) {
 	command.cc.Flags().VisitAll(func(f *pflag.Flag) {
-		name := f.Name
-		if name == _c.HelpCommandName {
-			return
+		envName, value := envValue(*opts, f)
+		if envName != nil && value != nil {
+			*dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, *envName, *value))
 		}
-		envName := ""
-		value := f.Value.String()
+	})
+}
 
-		if cname, ok := _c.EnvFlagNames[name]; ok {
-			if value == "false" {
-				return
-			}
-			envName = cname
-			value = shellescape.Quote(value)
-		} else {
-			envName = fmt.Sprintf("%s%s", _c.OutputPrefixOpt, strings.ToUpper(strings.ReplaceAll(name, "-", "_")))
-			oopts := *opts
-			opt := oopts[name]
-			value = opt.ToString(true)
-
-			if value == "false" && opt.Type == ValueTypeBoolean {
-				// makes dealing with false flags in shell easier
-				value = ""
-			}
+func (opts *Options) EnvMap(command *Command, dst *map[string]string) {
+	command.cc.Flags().VisitAll(func(f *pflag.Flag) {
+		envName, value := envValue(*opts, f)
+		if envName != nil && value != nil {
+			(*dst)[*envName] = *value
 		}
-		*dst = append(*dst, fmt.Sprintf("export %s=%s", envName, value))
 	})
 }
 
@@ -85,9 +102,9 @@ func (opts *Options) Parse(supplied *pflag.FlagSet) {
 	}
 }
 
-func (opts *Options) AreValid(cmd *Command) error {
+func (opts *Options) AreValid() error {
 	for name, opt := range *opts {
-		if err := opt.Validate(name, cmd); err != nil {
+		if err := opt.Validate(name); err != nil {
 			return err
 		}
 	}
@@ -103,6 +120,7 @@ type Option struct {
 	Default     interface{}  `yaml:"default"`
 	Values      *ValueSource `yaml:"values" validate:"omitempty"`
 	Repeated    bool         `yaml:"repeated" validate:"omitempty"`
+	Command     *Command     `json:"-" validate:"-"`
 	provided    interface{}
 }
 
@@ -137,7 +155,7 @@ func (opt *Option) ToString(asShell bool) string {
 	return stringValue
 }
 
-func (opt *Option) Validate(name string, cmd *Command) error {
+func (opt *Option) Validate(name string) error {
 	if !opt.Validates() {
 		return nil
 	}
@@ -148,13 +166,13 @@ func (opt *Option) Validate(name string, cmd *Command) error {
 		return nil
 	}
 
-	validValues, _, err := opt.Resolve(cmd)
+	validValues, _, err := opt.Resolve()
 	if err != nil {
 		return err
 	}
 
 	if !contains(validValues, current) {
-		return BadArguments{fmt.Sprintf("%s is not a valid value for option <%s>. Valid options are: %s", current, name, strings.Join(validValues, ", "))}
+		return errors.BadArguments{Msg: fmt.Sprintf("%s is not a valid value for option <%s>. Valid options are: %s", current, name, strings.Join(validValues, ", "))}
 	}
 
 	return nil
@@ -171,41 +189,38 @@ func (opt *Option) providesAutocomplete() bool {
 }
 
 // Resolve returns autocomplete values for an option.
-func (opt *Option) Resolve(command *Command) (values []string, flag cobra.ShellCompDirective, err error) {
+func (opt *Option) Resolve() (values []string, flag cobra.ShellCompDirective, err error) {
 	if opt.Values != nil {
-		return opt.Values.Resolve(command)
+		return opt.Values.Resolve()
 	}
 
 	return
 }
 
 // CompletionFunction is called by cobra when asked to complete an option.
-func (opt *Option) CompletionFunction(command *Command) func(cmd *cobra.Command, args []string, toComplete string) (values []string, flag cobra.ShellCompDirective) {
-	self := *opt
-	return func(cmd *cobra.Command, args []string, toComplete string) (values []string, flag cobra.ShellCompDirective) {
-		if !opt.providesAutocomplete() {
-			flag = cobra.ShellCompDirectiveNoFileComp
-			return
-		}
-
-		command.Options.Parse(cmd.Flags())
-
-		var err error
-		values, flag, err = self.Resolve(command)
-		if err != nil {
-			return values, cobra.ShellCompDirectiveError
-		}
-
-		if toComplete != "" {
-			filtered := []string{}
-			for _, value := range values {
-				if strings.HasPrefix(value, toComplete) {
-					filtered = append(filtered, value)
-				}
-			}
-			values = filtered
-		}
-		return values, flag
+func (opt *Option) CompletionFunction(cmd *cobra.Command, args []string, toComplete string) (values []string, flag cobra.ShellCompDirective) {
+	if !opt.providesAutocomplete() {
+		flag = cobra.ShellCompDirectiveNoFileComp
+		return
 	}
+
+	opt.Command.Options.Parse(cmd.Flags())
+
+	var err error
+	values, flag, err = opt.Resolve()
+	if err != nil {
+		return values, cobra.ShellCompDirectiveError
+	}
+
+	if toComplete != "" {
+		filtered := []string{}
+		for _, value := range values {
+			if strings.HasPrefix(value, toComplete) {
+				filtered = append(filtered, value)
+			}
+		}
+		values = filtered
+	}
+	return values, flag
 
 }

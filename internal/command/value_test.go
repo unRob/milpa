@@ -10,13 +10,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package internal_test
+package command_test
 
 import (
 	"testing"
 
 	"github.com/spf13/pflag"
-	. "github.com/unrob/milpa/internal"
+	. "github.com/unrob/milpa/internal/command"
 )
 
 func TestResolveTemplate(t *testing.T) {
@@ -127,7 +127,7 @@ func TestResolveTemplate(t *testing.T) {
 	for _, test := range cases {
 		test := test
 		t.Run(test.Expected, func(t *testing.T) {
-			cmd := &Command{
+			cmd := (&Command{
 				Arguments: []*Argument{
 					{
 						Name:    "argument_0",
@@ -148,10 +148,10 @@ func TestResolveTemplate(t *testing.T) {
 						Default: false,
 					},
 				},
-			}
+			}).SetBindings()
 			cmd.Arguments.Parse(test.Args)
 			cmd.Options.Parse(test.Flags)
-			res, err := ResolveTemplate(cmd, test.Tpl)
+			res, err := cmd.ResolveTemplate(test.Tpl)
 
 			if err != nil && !test.Errors {
 				t.Fatalf("good template failed: %s", err)

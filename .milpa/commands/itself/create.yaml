@@ -6,6 +6,9 @@ arguments:
     description: the name you'd like for your command
     required: true
     variadic: true
+    values:
+      suggest-only: true
+      script: compa __inspect --format autocomplete{{ if (index .Args "name") }} {{ Arg "name" }}{{ end }}
 options:
   open:
     type: bool

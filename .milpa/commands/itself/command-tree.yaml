@@ -1,0 +1,19 @@
+summary: Prints a tree of known commands
+description: |
+  Prints out a dash delimited list of indented command names and descriptions
+arguments:
+  - name: prefix
+    description: Sets the name prefix to list from
+    required: false
+    variadic: true
+    values:
+      suggest-only: true
+      script: compa __inspect --format autocomplete{{ if (index .Args "prefix") }} {{ Arg "prefix" }}{{ end }}
+options:
+  depth:
+    default: "15"
+    description: The maximum depth to search for commands
+  name-only:
+    default: false
+    description: only print a list of command names
+    type: bool

@@ -14,6 +14,11 @@ package constants
 
 import (
 	"regexp"
+	"strings"
+	"text/template"
+
+	// Embed requires an import so the compiler knows what's up. Golint requires a comment. Gotta please em both.
+	_ "embed"
 )
 
 const Milpa = "milpa"
@@ -73,4 +78,31 @@ const ExitStatusUsage = 64
 
 // EX_SOFTWARE An internal software error has been detected. This should be limited to non-operating system related errors as possible.
 const ExitStatusProgrammerError = 70
+
+// EX_CONFIG Something was found in an unconfigured or misconfigured state.
+const ExitStatusConfigError = 70
+
+// 127 command not found.
 const ExitStatusNotFound = 127
+
+// ContextKeyRuntimeIndex is the string key used to store context in a cobra Command.
+const ContextKeyRuntimeIndex = "x-milpa-runtime-index"
+
+//go:embed help.md
+var helpTemplateText string
+
+// TemplateCommandHelp holds a template for rendering command help.
+var TemplateCommandHelp *template.Template
+
+func init() {
+	tmpl := template.New("help").Funcs(template.FuncMap{
+		"trim":       strings.TrimSpace,
+		"toUpper":    strings.ToUpper,
+		"trimSuffix": strings.TrimSuffix,
+	})
+	var err error
+	if TemplateCommandHelp, err = tmpl.Parse(helpTemplateText); err != nil {
+		panic(err)
+	}
+
+}
