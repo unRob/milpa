@@ -94,6 +94,16 @@ func setupFS(filenames []string, pool map[string]*fstest.MapFile) *fstest.MapFS 
 }
 
 func TestFindScripts(t *testing.T) {
+
+	t.Run("errors without milpa_path set", func(t *testing.T) {
+		mp := runtime.MilpaPath
+		defer func() { runtime.MilpaPath = mp }()
+		runtime.MilpaPath = []string{}
+		if _, err := FindScripts([]string{"**"}); err == nil {
+			t.Fatalf("did not error as expected")
+		}
+	})
+
 	selected := []string{
 		"shell-script.sh",
 		"shell-script.yaml",

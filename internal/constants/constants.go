@@ -92,17 +92,8 @@ const ContextKeyRuntimeIndex = "x-milpa-runtime-index"
 var helpTemplateText string
 
 // TemplateCommandHelp holds a template for rendering command help.
-var TemplateCommandHelp *template.Template
-
-func init() {
-	tmpl := template.New("help").Funcs(template.FuncMap{
-		"trim":       strings.TrimSpace,
-		"toUpper":    strings.ToUpper,
-		"trimSuffix": strings.TrimSuffix,
-	})
-	var err error
-	if TemplateCommandHelp, err = tmpl.Parse(helpTemplateText); err != nil {
-		panic(err)
-	}
-
-}
+var TemplateCommandHelp = template.Must(template.New("help").Funcs(template.FuncMap{
+	"trim":       strings.TrimSpace,
+	"toUpper":    strings.ToUpper,
+	"trimSuffix": strings.TrimSuffix,
+}).Parse(helpTemplateText))
