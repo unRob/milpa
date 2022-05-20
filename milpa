@@ -51,7 +51,6 @@ export MILPA_PATH
 # bail early if we're autocompleting
 [[ $1 == "__complete" ]] && exec "$MILPA_COMPA" "$@"
 
-
 function @milpa.load_util () {
   # shell scripts can call @milpa.load_util to load utils from MILPA_ROOT
   # or the current MILPA_COMMAND_REPO
@@ -135,6 +134,8 @@ set +o allexport
 
 @milpa.load_util milpa-version
 _milpa_check_for_updates_automagically
+# don't check again on recursive milpa calls from this point forward
+export MILPA_DISABLE_UPDATE_CHECKS=1
 
 # normalize verbose flag
 [[ "${MILPA_VERBOSE:-$MILPA_OPT_VERBOSE}" == "true" ]] && export MILPA_VERBOSE="true"

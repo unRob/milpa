@@ -10,7 +10,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package internal
+package exec
 
 import (
 	"bytes"
@@ -22,13 +22,13 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/unrob/milpa/internal/errors"
 )
 
 // ExecFunc is replaced in tests.
-var ExecFunc = ExecSubshell
+var ExecFunc = WithSubshell
 
-// ExecSubshell executes a command using os/exec.
-func ExecSubshell(ctx context.Context, env []string, executable string, args ...string) (bytes.Buffer, bytes.Buffer, error) {
+func WithSubshell(ctx context.Context, env []string, executable string, args ...string) (bytes.Buffer, bytes.Buffer, error) {
 	cmd := os_exec.CommandContext(ctx, executable, args...) // #nosec G204
 	var stdout bytes.Buffer
 	cmd.Stdout = &stdout
@@ -57,7 +57,7 @@ func Exec(name string, args []string, env []string, timeout time.Duration) ([]st
 
 	if err != nil {
 		logrus.Debugf("error running %s %s: %s", executable, args, err)
-		return []string{}, cobra.ShellCompDirectiveError, BadArguments{fmt.Sprintf("could not validate argument for command %s, ran <%s %s> failed: %s", name, executable, strings.Join(args, " "), err)}
+		return []string{}, cobra.ShellCompDirectiveError, errors.BadArguments{Msg: fmt.Sprintf("could not validate argument for command %s, ran <%s %s> failed: %s", name, executable, strings.Join(args, " "), err)}
 	}
 
 	logrus.Debugf("done running %s %s: %s", executable, args, stdout.String())

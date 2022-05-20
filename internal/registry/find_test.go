@@ -10,7 +10,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package internal_test
+package registry_test
 
 import (
 	"io/fs"
@@ -19,7 +19,7 @@ import (
 	"testing/fstest"
 
 	"github.com/sirupsen/logrus"
-	. "github.com/unrob/milpa/internal"
+	. "github.com/unrob/milpa/internal/registry"
 	"github.com/unrob/milpa/internal/runtime"
 )
 

@@ -35,7 +35,7 @@ jobs:
         uses: ludeeus/action-shellcheck@master
         with:
           check_together: 'yes'
-          ignore: test/_helpers/bats-assert test/_helpers/bats-file test/_helpers/bats-support
+          ignore_paths: test/_helpers/bats-assert test/_helpers/bats-file test/_helpers/bats-support
 
       - name: Unit tests
         run: |

@@ -10,7 +10,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package internal
+package errors
 
 import "fmt"
 
@@ -32,6 +32,11 @@ type ConfigError struct {
 	Config string
 }
 
+type SubCommandExit struct {
+	Err      error
+	ExitCode int
+}
+
 func (err NotFound) Error() string {
 	return err.Msg
 }
@@ -42,6 +47,14 @@ func (err BadArguments) Error() string {
 
 func (err NotExecutable) Error() string {
 	return err.Msg
+}
+
+func (err SubCommandExit) Error() string {
+	if err.Err != nil {
+		return err.Err.Error()
+	}
+
+	return ""
 }
 
 func (err ConfigError) Error() string {

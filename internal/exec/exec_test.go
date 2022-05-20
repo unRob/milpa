@@ -10,7 +10,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package internal_test
+package exec_test
 
 import (
 	"bytes"
@@ -21,11 +21,11 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	. "github.com/unrob/milpa/internal"
+	. "github.com/unrob/milpa/internal/exec"
 )
 
 func TestSubshellExec(t *testing.T) {
-	ExecFunc = ExecSubshell
+	ExecFunc = WithSubshell
 	stdout, directive, err := Exec("test-command", []string{"bash", "-c", `echo "stdout"; echo "stderr" >&2;`}, []string{}, 1*time.Second)
 	if err != nil {
 		t.Fatalf("good subshell errored: %v", err)
