@@ -49,7 +49,10 @@ func DoctorModeEnabled() bool {
 	first := os.Args[1]
 
 	return first == "__doctor" || count >= 2 && (first == "itself" && os.Args[2] == "doctor")
-	// return len(os.Args) >= 2 && (os.Args[1] == "__doctor" || (len(os.Args) > 2 && (os.Args[1] == "itself" && os.Args[2] == "doctor")))
+}
+
+func DebugEnabled() bool {
+	return !isFalseIsh(os.Getenv(_c.EnvVarDebug))
 }
 
 func ValidationEnabled() bool {
@@ -61,7 +64,7 @@ func VerboseEnabled() bool {
 }
 
 func ColorEnabled() bool {
-	return isFalseIsh(os.Getenv(_c.EnvVarMilpaUnstyled)) && isFalseIsh(os.Getenv(_c.EnvVarHelpUnstyled))
+	return isFalseIsh(os.Getenv(_c.EnvVarMilpaUnstyled)) && !UnstyledHelpEnabled()
 }
 
 func UnstyledHelpEnabled() bool {

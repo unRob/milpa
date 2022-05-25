@@ -10,16 +10,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package internal
+package command
 
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"strings"
 	"text/template"
 	"time"
 
 	"github.com/spf13/cobra"
+	"github.com/unrob/milpa/internal/exec"
 )
 
 // ValueType represent the kinds of or option.
@@ -49,7 +51,8 @@ type ValueSource struct {
 	// Timeout is the maximum amount of time milpa will wait for a Script or Milpa command before giving up on completions/validations.
 	Timeout int `yaml:"timeout" validate:"omitempty,excluded_with=Directories Files Static"`
 	// Suggestion if provided will only suggest autocomplete values but will not perform validation of a given value
-	Suggestion bool `yaml:"suggest-only" validate:"omitempty"`
+	Suggestion bool     `yaml:"suggest-only" validate:"omitempty"`
+	Command    *Command `json:"-" validate:"-"`
 	computed   *[]string
 	flag       cobra.ShellCompDirective
 }
@@ -64,7 +67,7 @@ func (vs *ValueSource) Validates() bool {
 }
 
 // Resolve returns the values for autocomplete and validation.
-func (vs *ValueSource) Resolve(command *Command) (values []string, flag cobra.ShellCompDirective, err error) {
+func (vs *ValueSource) Resolve() (values []string, flag cobra.ShellCompDirective, err error) {
 	if vs.computed != nil {
 		return *vs.computed, vs.flag, nil
 	}
@@ -86,7 +89,10 @@ func (vs *ValueSource) Resolve(command *Command) (values []string, flag cobra.Sh
 		flag = cobra.ShellCompDirectiveFilterDirs
 		values = []string{*vs.Directories}
 	case vs.Milpa != "" || vs.Script != "":
-		cmd, err := ResolveTemplate(command, vs.Milpa+vs.Script)
+		if vs.Command == nil {
+			return nil, cobra.ShellCompDirectiveError, fmt.Errorf("bug: command is nil")
+		}
+		cmd, err := vs.Command.ResolveTemplate(vs.Milpa + vs.Script)
 		if err != nil {
 			return nil, cobra.ShellCompDirectiveError, err
 		}
@@ -98,7 +104,12 @@ func (vs *ValueSource) Resolve(command *Command) (values []string, flag cobra.Sh
 			args = append([]string{"milpa"}, strings.Split(cmd, " ")...)
 
 		}
-		values, flag, err = Exec(command.FullName(), args, timeout*time.Second)
+		envMap := vs.Command.EnvironmentMap()
+		env := os.Environ()
+		for k, v := range envMap {
+			env = append(env, fmt.Sprintf("%s=%s", k, v))
+		}
+		values, flag, err = exec.Exec(vs.Command.FullName(), args, env, timeout*time.Second)
 		if err != nil {
 			return nil, flag, err
 		}
@@ -127,17 +138,19 @@ func (tpl *AutocompleteTemplate) Arg(name string) string {
 	return tpl.Args[name]
 }
 
-func ResolveTemplate(command *Command, raw string) (string, error) {
+func (cmd *Command) ResolveTemplate(templateString string) (string, error) {
 	var buf bytes.Buffer
+
 	tplData := &AutocompleteTemplate{
-		Args: command.Arguments.AllKnown(),
-		Opts: command.Options.AllKnown(),
+		Args: cmd.Arguments.AllKnown(),
+		Opts: cmd.Options.AllKnown(),
 	}
 
 	tpl, err := template.New("subcommand").Funcs(template.FuncMap{
 		"Opt": tplData.Opt,
 		"Arg": tplData.Arg,
-	}).Parse(raw)
+	}).Parse(templateString)
+
 	if err != nil {
 		return "", err
 	}

@@ -10,7 +10,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package internal
+package command
 
 import (
 	"fmt"
@@ -20,16 +20,23 @@ import (
 	_c "github.com/unrob/milpa/internal/constants"
 )
 
+func (cmd *Command) EnvironmentMap() map[string]string {
+	return map[string]string{
+		_c.OutputCommandName: cmd.FullName(),
+		_c.OutputCommandKind: string(cmd.Meta.Kind),
+		_c.OutputCommandRepo: cmd.Meta.Repo,
+		_c.OutputCommandPath: cmd.Meta.Path,
+	}
+}
+
 func (cmd *Command) ToEval(args []string) string {
-	output := []string{
-		fmt.Sprintf("export %s=%s", _c.OutputCommandName, shellescape.Quote(cmd.FullName())),
-		fmt.Sprintf("export %s=%s", _c.OutputCommandKind, shellescape.Quote(cmd.Meta.Kind)),
-		fmt.Sprintf("export %s=%s", _c.OutputCommandRepo, shellescape.Quote(cmd.Meta.Repo)),
-		fmt.Sprintf("export %s=%s", _c.OutputCommandPath, shellescape.Quote(cmd.Meta.Path)),
+	output := []string{}
+	for name, value := range cmd.EnvironmentMap() {
+		output = append(output, fmt.Sprintf("export %s=%s", name, shellescape.Quote(value)))
 	}
 
-	cmd.Options.ToEnv(cmd, &output)
-	cmd.Arguments.ToEnv(cmd, &output)
+	cmd.Options.ToEnv(cmd, &output, "export ")
+	cmd.Arguments.ToEnv(cmd, &output, "export ")
 
 	for idx, arg := range args {
 		args[idx] = shellescape.Quote(arg)
@@ -37,4 +44,15 @@ func (cmd *Command) ToEval(args []string) string {
 	output = append(output, "set -- "+strings.Join(args, " "))
 
 	return strings.Join(output, "\n")
+}
+
+func (cmd *Command) Env(seed []string) []string {
+	for name, value := range cmd.EnvironmentMap() {
+		seed = append(seed, fmt.Sprintf("%s=%s", name, shellescape.Quote(value)))
+	}
+
+	cmd.Options.ToEnv(cmd, &seed, "")
+	cmd.Arguments.ToEnv(cmd, &seed, "")
+
+	return seed
 }

@@ -63,6 +63,11 @@ func TestEnabled(t *testing.T) {
 			Func: ColorEnabled,
 		},
 		{
+			Name:    _c.EnvVarDebug,
+			Func:    DebugEnabled,
+			Expects: true,
+		},
+		{
 			Name:    _c.EnvVarHelpUnstyled,
 			Func:    UnstyledHelpEnabled,
 			Expects: true,

@@ -15,5 +15,6 @@
 cd "$MILPA_ROOT" || @milpa.fail "could not cd into $MILPA_ROOT"
 
 @milpa.log info "Linting shell scripts"
-shellcheck milpa bootstrap.sh .milpa/**/*.sh repos/internal/commands/**/*.sh test/_helpers/*.bash || exit 2
+find .milpa repos/internal/commands -name '*.sh' -exec shellcheck {} \+  || @milpa.fail "could not lint commands"
+shellcheck milpa bootstrap.sh test/_helpers/*.bash || @milpa.fail "could not lint helper files"
 @milpa.log complete "Shell files are up to spec"

@@ -35,6 +35,12 @@ fi
 
 
 function @milpa.fmt() {
+  if [[ "${NO_COLOR}" ]]; then
+    shift
+    echo -e "$*"
+    return
+  fi
+
   local code;
   case $1 in
     bold) code="$_FMT_BOLD" ;;

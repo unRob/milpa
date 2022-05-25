@@ -10,7 +10,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package internal_test
+package exec_test
 
 import (
 	"bytes"
@@ -21,12 +21,12 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	. "github.com/unrob/milpa/internal"
+	. "github.com/unrob/milpa/internal/exec"
 )
 
 func TestSubshellExec(t *testing.T) {
-	ExecFunc = ExecSubshell
-	stdout, directive, err := Exec("test-command", []string{"bash", "-c", `echo "stdout"; echo "stderr" >&2;`}, 1*time.Second)
+	ExecFunc = WithSubshell
+	stdout, directive, err := Exec("test-command", []string{"bash", "-c", `echo "stdout"; echo "stderr" >&2;`}, []string{}, 1*time.Second)
 	if err != nil {
 		t.Fatalf("good subshell errored: %v", err)
 	}
@@ -39,7 +39,7 @@ func TestSubshellExec(t *testing.T) {
 		t.Fatalf("good subshell returned wrong directive: %v", directive)
 	}
 
-	stdout, directive, err = Exec("test-command", []string{"bash", "-c", `echo "stdout"; echo "stderr" >&2; exit 2`}, 1*time.Second)
+	stdout, directive, err = Exec("test-command", []string{"bash", "-c", `echo "stdout"; echo "stderr" >&2; exit 2`}, []string{}, 1*time.Second)
 	if err == nil {
 		t.Fatalf("bad subshell did not error; stdout: %v", stdout)
 	}
@@ -58,7 +58,7 @@ func TestExecTimesOut(t *testing.T) {
 		time.Sleep(100 * time.Nanosecond)
 		return bytes.Buffer{}, bytes.Buffer{}, context.DeadlineExceeded
 	}
-	_, _, err := Exec("test-command", []string{"bash", "-c", "sleep", "2"}, 10*time.Nanosecond)
+	_, _, err := Exec("test-command", []string{"bash", "-c", "sleep", "2"}, []string{}, 10*time.Nanosecond)
 	if err == nil {
 		t.Fatalf("timeout didn't happen after 10ms: %v", err)
 	}
@@ -75,7 +75,7 @@ func TestExecWorksFine(t *testing.T) {
 		return out, bytes.Buffer{}, nil
 	}
 	args := []string{"a", "b", "c"}
-	res, directive, err := Exec("test-command", append([]string{"bash", "-c", "echo"}, args...), 1*time.Second)
+	res, directive, err := Exec("test-command", append([]string{"bash", "-c", "echo"}, args...), []string{}, 1*time.Second)
 	if err != nil {
 		t.Fatalf("good command failed: %v", err)
 	}
@@ -93,7 +93,7 @@ func TestExecErrors(t *testing.T) {
 	ExecFunc = func(ctx context.Context, env []string, executable string, args ...string) (bytes.Buffer, bytes.Buffer, error) {
 		return bytes.Buffer{}, bytes.Buffer{}, fmt.Errorf("bad command is bad")
 	}
-	res, directive, err := Exec("test-command", []string{"bash", "-c", "bad-command"}, 1*time.Second)
+	res, directive, err := Exec("test-command", []string{"bash", "-c", "bad-command"}, []string{}, 1*time.Second)
 	if err == fmt.Errorf("bad command is bad") {
 		t.Fatalf("bad command didn't fail: %v", res)
 	}

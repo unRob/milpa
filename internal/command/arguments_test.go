@@ -10,17 +10,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package internal_test
+package command_test
 
 import (
 	"strings"
 	"testing"
 
-	. "github.com/unrob/milpa/internal"
+	. "github.com/unrob/milpa/internal/command"
 )
 
 func testCommand() *Command {
-	return &Command{
+	return (&Command{
 		Arguments: []*Argument{
 			{
 				Name:    "first",
@@ -28,6 +28,7 @@ func testCommand() *Command {
 			},
 			{
 				Name:     "variadic",
+				Default:  []interface{}{"defaultVariadic0", "defaultVariadic1"},
 				Variadic: true,
 			},
 		},
@@ -41,7 +42,7 @@ func testCommand() *Command {
 				Default: false,
 			},
 		},
-	}
+	}).SetBindings()
 }
 
 func TestParse(t *testing.T) {
@@ -72,6 +73,59 @@ func TestParse(t *testing.T) {
 	if val != "one two three" {
 		t.Fatalf("Known argument does not match. expected: %s, got %s", "one two three", val)
 	}
+
+	cmd = testCommand()
+	cmd.Arguments.Parse([]string{"asdf"})
+	known = cmd.Arguments.AllKnown()
+
+	if !cmd.Arguments[0].IsKnown() {
+		t.Fatalf("first argument is not known")
+	}
+
+	val, exists = known["first"]
+	if !exists {
+		t.Fatalf("first argument isn't on AllKnown map: %v", known)
+	}
+
+	if val != "asdf" {
+		t.Fatalf("first argument does not match. expected: %s, got %s", "asdf", val)
+	}
+
+	val, exists = known["variadic"]
+	if !exists {
+		t.Fatalf("variadic argument isn't on AllKnown map: %v", known)
+	}
+
+	if val != "defaultVariadic0 defaultVariadic1" {
+		t.Fatalf("variadic argument does not match. expected: %s, got %s", "defaultVariadic0 defaultVariadic1", val)
+	}
+}
+
+func TestBeforeParse(t *testing.T) {
+	cmd := testCommand()
+	known := cmd.Arguments.AllKnown()
+
+	if cmd.Arguments[0].IsKnown() {
+		t.Fatalf("first argument is known")
+	}
+
+	val, exists := known["first"]
+	if !exists {
+		t.Fatalf("first argument isn't on AllKnown map: %v", known)
+	}
+
+	if val != "default" {
+		t.Fatalf("first argument does not match. expected: %s, got %s", "asdf", val)
+	}
+
+	val, exists = known["variadic"]
+	if !exists {
+		t.Fatalf("variadic argument isn't on AllKnown map: %v", known)
+	}
+
+	if val != "defaultVariadic0 defaultVariadic1" {
+		t.Fatalf("variadic argument does not match. expected: %s, got %s", "defaultVariadic0 defaultVariadic1", val)
+	}
 }
 
 func TestArgumentsValidate(t *testing.T) {
@@ -95,7 +149,7 @@ func TestArgumentsValidate(t *testing.T) {
 		Env         []string
 	}{
 		{
-			Command: &Command{
+			Command: (&Command{
 				Meta: Meta{
 					Name: []string{"test", "required", "failure"},
 				},
@@ -105,13 +159,13 @@ func TestArgumentsValidate(t *testing.T) {
 						Required: true,
 					},
 				},
-			},
+			}).SetBindings(),
 			ErrorSuffix: "Missing argument for FIRST",
 		},
 		{
 			Args:        []string{"bad"},
 			ErrorSuffix: "bad is not a valid value for argument <first>. Valid options are: good, default",
-			Command: &Command{
+			Command: (&Command{
 				Meta: Meta{
 					Name: []string{"test", "script", "bad"},
 				},
@@ -124,32 +178,32 @@ func TestArgumentsValidate(t *testing.T) {
 						},
 					},
 				},
-			},
+			}).SetBindings(),
 		},
 		{
 			Args:        []string{"bad"},
 			ErrorSuffix: "bad is not a valid value for argument <first>. Valid options are: default, good",
-			Command: &Command{
+			Command: (&Command{
 				Meta: Meta{
 					Name: []string{"test", "static", "errors"},
 				},
 				Arguments: []*Argument{staticArgument("first", "default", []string{"default", "good"}, false)},
-			},
+			}).SetBindings(),
 		},
 		{
 			Args:        []string{"default", "good", "bad"},
 			ErrorSuffix: "bad is not a valid value for argument <first>. Valid options are: default, good",
-			Command: &Command{
+			Command: (&Command{
 				Meta: Meta{
 					Name: []string{"test", "static", "errors"},
 				},
 				Arguments: []*Argument{staticArgument("first", "default", []string{"default", "good"}, true)},
-			},
+			}).SetBindings(),
 		},
 		{
 			Args:        []string{"good"},
 			ErrorSuffix: "could not validate argument for command test script bad-exit, ran",
-			Command: &Command{
+			Command: (&Command{
 				Meta: Meta{
 					Name: []string{"test", "script", "bad-exit"},
 				},
@@ -162,7 +216,7 @@ func TestArgumentsValidate(t *testing.T) {
 						},
 					},
 				},
-			},
+			}).SetBindings(),
 		},
 	}
 
@@ -170,10 +224,11 @@ func TestArgumentsValidate(t *testing.T) {
 		cmd := testCommand()
 		cmd.Arguments[0] = staticArgument("first", "default", []string{"default", "good"}, false)
 		cmd.Arguments[1] = staticArgument("second", "", []string{"one", "two", "three"}, true)
+		cmd.SetBindings()
 
 		cmd.Arguments.Parse([]string{"first", "one", "three", "two"})
 
-		err := cmd.Arguments.AreValid(cmd)
+		err := cmd.Arguments.AreValid()
 		if err == nil {
 			t.Fatalf("Unexpected failure validating: %s", err)
 		}
@@ -183,7 +238,7 @@ func TestArgumentsValidate(t *testing.T) {
 		t.Run(c.Command.FullName(), func(t *testing.T) {
 			c.Command.Arguments.Parse(c.Args)
 
-			err := c.Command.Arguments.AreValid(c.Command)
+			err := c.Command.Arguments.AreValid()
 			if err == nil {
 				t.Fatalf("Expected failure but got none")
 			}
@@ -318,10 +373,11 @@ func TestArgumentsToEnv(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.Command.FullName(), func(t *testing.T) {
 			dst := []string{}
+			c.Command.SetBindings()
 			c.Command.Arguments.Parse(c.Args)
-			c.Command.Arguments.ToEnv(c.Command, &dst)
+			c.Command.Arguments.ToEnv(c.Command, &dst, "export ")
 
-			err := c.Command.Arguments.AreValid(c.Command)
+			err := c.Command.Arguments.AreValid()
 			if err != nil {
 				t.Fatalf("Unexpected failure validating: %s", err)
 			}
