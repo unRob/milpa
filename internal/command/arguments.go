@@ -10,7 +10,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package internal
+package command
 
 import (
 	"fmt"
@@ -19,6 +19,7 @@ import (
 	"github.com/alessio/shellescape"
 	"github.com/spf13/cobra"
 	_c "github.com/unrob/milpa/internal/constants"
+	"github.com/unrob/milpa/internal/errors"
 )
 
 func contains(haystack []string, needle string) bool {
@@ -42,11 +43,11 @@ func (args *Arguments) AllKnown() map[string]string {
 }
 
 // ToEnv writes shell variables to dst.
-func (args *Arguments) ToEnv(cmd *Command, dst *[]string) {
+func (args *Arguments) ToEnv(cmd *Command, dst *[]string, prefix string) {
 	for _, arg := range *args {
 		envName := fmt.Sprintf("%s%s", _c.OutputPrefixArg, arg.EnvName())
 
-		*dst = append(*dst, fmt.Sprintf("export %s=%s", envName, arg.ToString(true)))
+		*dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, envName, arg.ToString(true)))
 	}
 }
 
@@ -84,9 +85,9 @@ func (args *Arguments) Parse(supplied []string) {
 	}
 }
 
-func (args *Arguments) AreValid(cmd *Command) error {
+func (args *Arguments) AreValid() error {
 	for _, arg := range *args {
-		if err := arg.Validate(cmd); err != nil {
+		if err := arg.Validate(); err != nil {
 			return err
 		}
 	}
@@ -95,49 +96,54 @@ func (args *Arguments) AreValid(cmd *Command) error {
 }
 
 // CompletionFunction is called by cobra when asked to complete arguments.
-func (args *Arguments) CompletionFunction(command *Command) func(cc *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	self := *args
-	expectedArgLen := len(self)
-	hasVariadicArg := expectedArgLen > 0 && self[len(self)-1].Variadic
+func (args *Arguments) CompletionFunction(cc *cobra.Command, provided []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	expectedArgLen := len(*args)
+	values := []string{}
+	directive := cobra.ShellCompDirectiveError
+
 	if expectedArgLen > 0 {
-		return func(cc *cobra.Command, provided []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			argsCompleted := len(provided)
-			command.Options.Parse(cc.Flags())
-			args.Parse(provided)
+		argsCompleted := len(provided)
+		lastArg := (*args)[len(*args)-1]
+		hasVariadicArg := expectedArgLen > 0 && lastArg.Variadic
+		lastArg.Command.Options.Parse(cc.Flags())
+		args.Parse(provided)
 
-			values := []string{}
-			directive := cobra.ShellCompDirectiveDefault
-			if argsCompleted < expectedArgLen || hasVariadicArg {
-				var arg *Argument
-				if hasVariadicArg && argsCompleted >= expectedArgLen {
-					// completing a variadic argument
-					arg = self[len(self)-1]
-				} else {
-					// completing regular argument (maybe variadic!)
-					arg = self[argsCompleted]
-				}
-
-				if arg.Values != nil {
-					values, directive, _ = arg.Resolve(command)
-				} else {
-					directive = cobra.ShellCompDirectiveError
-				}
+		directive = cobra.ShellCompDirectiveDefault
+		if argsCompleted < expectedArgLen || hasVariadicArg {
+			var arg *Argument
+			if hasVariadicArg && argsCompleted >= expectedArgLen {
+				// completing a variadic argument
+				arg = lastArg
+			} else {
+				// completing regular argument (maybe variadic!)
+				arg = (*args)[argsCompleted]
 			}
 
-			if toComplete != "" {
-				filtered := []string{}
-				for _, value := range values {
-					if strings.HasPrefix(value, toComplete) {
-						filtered = append(filtered, value)
-					}
+			if arg.Values != nil {
+				var err error
+				arg.Values.Command = lastArg.Command
+				arg.Command = lastArg.Command
+				values, directive, err = arg.Resolve()
+				if err != nil {
+					return []string{err.Error()}, cobra.ShellCompDirectiveDefault
 				}
-				values = filtered
+			} else {
+				directive = cobra.ShellCompDirectiveError
 			}
+		}
 
-			return values, directive
+		if toComplete != "" {
+			filtered := []string{}
+			for _, value := range values {
+				if strings.HasPrefix(value, toComplete) {
+					filtered = append(filtered, value)
+				}
+			}
+			values = filtered
 		}
 	}
-	return nil
+
+	return values, directive
 }
 
 // Argument represents a single command-line argument.
@@ -152,8 +158,9 @@ type Argument struct {
 	Variadic bool `yaml:"variadic"`
 	// Required raises an error if an argument is not provided.
 	Required bool `yaml:"required" validate:"excluded_with=Default"`
-	// Values (DEPRECATED, renaming to Values) describes autocompletion and validation for an argument
+	// Values describes autocompletion and validation for an argument
 	Values   *ValueSource `yaml:"values" validate:"omitempty"`
+	Command  *Command     `json:"-" validate:"-"`
 	provided *[]string
 }
 
@@ -189,11 +196,19 @@ func (arg *Argument) ToString(asShell bool) string {
 	} else {
 		if arg.Default != nil {
 			if arg.Variadic {
-				values := []string{}
-				for _, va := range arg.Default.([]interface{}) {
-					values = append(values, shellescape.Quote(va.(string)))
+				defaultSlice := []string{}
+				for _, valI := range arg.Default.([]interface{}) {
+					valStr := valI.(string)
+					if asShell {
+						valStr = shellescape.Quote(valStr)
+					}
+					defaultSlice = append(defaultSlice, valStr)
 				}
-				value = fmt.Sprintf("( %s )", strings.Join(values, " "))
+
+				value = strings.Join(defaultSlice, " ")
+				if asShell {
+					value = fmt.Sprintf("( %s )", value)
+				}
 			} else {
 				value = arg.Default.(string)
 			}
@@ -209,11 +224,11 @@ func (arg *Argument) ToString(asShell bool) string {
 	return value
 }
 
-func (arg *Argument) Validate(cmd *Command) error {
+func (arg *Argument) Validate() error {
 
 	if !arg.IsKnown() {
 		if arg.Required {
-			return BadArguments{fmt.Sprintf("Missing argument for %s", strings.ToUpper(arg.Name))}
+			return errors.BadArguments{Msg: fmt.Sprintf("Missing argument for %s", strings.ToUpper(arg.Name))}
 		}
 
 		return nil
@@ -223,7 +238,7 @@ func (arg *Argument) Validate(cmd *Command) error {
 		return nil
 	}
 
-	validValues, _, err := arg.Resolve(cmd)
+	validValues, _, err := arg.Resolve()
 	if err != nil {
 		return err
 	}
@@ -231,13 +246,13 @@ func (arg *Argument) Validate(cmd *Command) error {
 	if arg.Variadic {
 		for _, current := range *arg.provided {
 			if !contains(validValues, current) {
-				return BadArguments{fmt.Sprintf("%s is not a valid value for argument <%s>. Valid options are: %s", current, arg.Name, strings.Join(validValues, ", "))}
+				return errors.BadArguments{Msg: fmt.Sprintf("%s is not a valid value for argument <%s>. Valid options are: %s", current, arg.Name, strings.Join(validValues, ", "))}
 			}
 		}
 	} else {
 		current := arg.ToString(false)
 		if !contains(validValues, current) {
-			return BadArguments{fmt.Sprintf("%s is not a valid value for argument <%s>. Valid options are: %s", current, arg.Name, strings.Join(validValues, ", "))}
+			return errors.BadArguments{Msg: fmt.Sprintf("%s is not a valid value for argument <%s>. Valid options are: %s", current, arg.Name, strings.Join(validValues, ", "))}
 		}
 	}
 
@@ -264,9 +279,9 @@ func (arg *Argument) ToDesc() string {
 }
 
 // Resolve returns autocomplete values for an argument.
-func (arg *Argument) Resolve(command *Command) (values []string, flag cobra.ShellCompDirective, err error) {
+func (arg *Argument) Resolve() (values []string, flag cobra.ShellCompDirective, err error) {
 	if arg.Values != nil {
-		values, flag, err = arg.Values.Resolve(command)
+		values, flag, err = arg.Values.Resolve()
 		if err != nil {
 			flag = cobra.ShellCompDirectiveError
 			return

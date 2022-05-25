@@ -41,7 +41,7 @@ fi
 packages=(
   gotest.tools/gotestsum@v1.7.0
   github.com/mitchellh/gox@v1.0.1
-  github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
+  github.com/golangci/golangci-lint/cmd/golangci-lint@v1.46.2
 )
 
 for package in "${packages[@]}"; do

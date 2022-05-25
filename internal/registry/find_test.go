@@ -10,7 +10,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package internal_test
+package registry_test
 
 import (
 	"io/fs"
@@ -19,7 +19,7 @@ import (
 	"testing/fstest"
 
 	"github.com/sirupsen/logrus"
-	. "github.com/unrob/milpa/internal"
+	. "github.com/unrob/milpa/internal/registry"
 	"github.com/unrob/milpa/internal/runtime"
 )
 
@@ -94,6 +94,16 @@ func setupFS(filenames []string, pool map[string]*fstest.MapFile) *fstest.MapFS 
 }
 
 func TestFindScripts(t *testing.T) {
+
+	t.Run("errors without milpa_path set", func(t *testing.T) {
+		mp := runtime.MilpaPath
+		defer func() { runtime.MilpaPath = mp }()
+		runtime.MilpaPath = []string{}
+		if _, err := FindScripts([]string{"**"}); err == nil {
+			t.Fatalf("did not error as expected")
+		}
+	})
+
 	selected := []string{
 		"shell-script.sh",
 		"shell-script.yaml",

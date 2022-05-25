@@ -10,7 +10,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package internal
+package registry
 
 import (
 	"fmt"
@@ -22,8 +22,9 @@ import (
 
 	doublestar "github.com/bmatcuk/doublestar/v4"
 	"github.com/sirupsen/logrus"
+	"github.com/unrob/milpa/internal/command"
 	_c "github.com/unrob/milpa/internal/constants"
-	runtime "github.com/unrob/milpa/internal/runtime"
+	"github.com/unrob/milpa/internal/runtime"
 )
 
 var DefaultFS = os.DirFS("/")
@@ -44,7 +45,7 @@ func FindScripts(query []string) (results map[string]struct {
 		Repo string
 	}{}
 	for _, path := range runtime.MilpaPath {
-		queryBase := strings.Join(append([]string{strings.TrimPrefix(path, "/"), cmdPath}, query...), "/")
+		queryBase := strings.Join(append([]string{strings.TrimPrefix(path, "/"), _c.RepoCommandFolderName}, query...), "/")
 		matches, err := doublestar.Glob(DefaultFS, fmt.Sprintf("%s/*", queryBase))
 
 		if err != nil {
@@ -78,21 +79,10 @@ func FindScripts(query []string) (results map[string]struct {
 	return results, err
 }
 
-type ByPath []*Command
-
-func (cmds ByPath) Len() int      { return len(cmds) }
-func (cmds ByPath) Swap(i, j int) { cmds[i], cmds[j] = cmds[j], cmds[i] }
-func (cmds ByPath) Less(i, j int) bool {
-	if cmds[i].Meta.Path == cmds[j].Meta.Path {
-		return cmds[i].FullName() < cmds[j].FullName()
-	}
-	return cmds[i].Meta.Path < cmds[j].Meta.Path
-}
-
-func FindAllSubCommands(returnOnError bool) (cmds []*Command, err error) {
+func FindAllSubCommands(returnOnError bool) error {
 	files, err := FindScripts([]string{"**"})
 	if err != nil {
-		return cmds, err
+		return err
 	}
 
 	logrus.Debugf("Found %d files", len(files))
@@ -107,25 +97,23 @@ func FindAllSubCommands(returnOnError bool) (cmds []*Command, err error) {
 
 	for _, path := range keys {
 		data := files[path]
-		var cmd *Command
-		cmd, err = New(path, data.Repo, !returnOnError)
+		cmd, err := command.New(path, data.Repo, !returnOnError)
 		if err != nil {
 			if returnOnError {
 				logrus.Warnf("Could not initialize command %s, run `%s itself doctor` to find out more", path, _c.Milpa)
-				return
+				return err
 			}
 		} else {
 			logrus.Debugf("Initialized %s", cmd.FullName())
 		}
 
-		cmds = append(cmds, cmd)
+		Register(cmd)
 	}
 
-	sort.Sort(ByPath(cmds))
-	return cmds, err
+	return err
 }
 
-func findAllDocs() ([]string, error) {
+func FindAllDocs() ([]string, error) {
 	results := []string{}
 	if err := runtime.CheckMilpaPathSet(); err != nil {
 		return results, err
@@ -159,7 +147,7 @@ func findAllDocs() ([]string, error) {
 	return results, nil
 }
 
-func findDocs(query []string, needle string, returnPaths bool) ([]string, error) {
+func FindDocs(query []string, needle string, returnPaths bool) ([]string, error) {
 	results := []string{}
 	found := map[string]bool{}
 	if err := runtime.CheckMilpaPathSet(); err != nil {
