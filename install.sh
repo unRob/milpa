@@ -58,6 +58,7 @@ machine="$(uname -m)"
 case "$machine" in
   x86_64) ARCH="amd64" ;;
   armv7l) ARCH="arm" ;;
+  aarch64) ARCH="arm64" ;;
   *) ARCH="$machine"
 esac
 
