@@ -28,7 +28,7 @@ var completionCommand *cobra.Command = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) (err error) {
 		switch args[0] {
 		case "bash":
-			err = cmd.Root().GenBashCompletion(os.Stdout)
+			err = cmd.Root().GenBashCompletionV2(os.Stdout, true)
 		case "zsh":
 			err = cmd.Root().GenZshCompletion(os.Stdout)
 		case "fish":
