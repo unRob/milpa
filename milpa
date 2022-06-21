@@ -49,7 +49,7 @@ fi
 export MILPA_COMPA="${MILPA_COMPA:-$MILPA_ROOT/compa}"
 export MILPA_PATH
 # bail early if we're autocompleting
-[[ $1 == "__complete" ]] && exec "$MILPA_COMPA" "$@"
+[[ $1 == "__complete"* ]] && exec "$MILPA_COMPA" "$@"
 
 function @milpa.load_util () {
   # shell scripts can call @milpa.load_util to load utils from MILPA_ROOT
