@@ -29,14 +29,16 @@ var falseIshValues = []string{
 	"false",
 	"disable",
 	"disabled",
+	"off",
 }
 
 var trueIshValues = []string{
-	"true",
-	"yes",
 	"1",
+	"yes",
+	"true",
 	"enable",
 	"enabled",
+	"on",
 }
 
 func isFalseIsh(val string) bool {
@@ -70,7 +72,7 @@ func DoctorModeEnabled() bool {
 }
 
 func DebugEnabled() bool {
-	return !isFalseIsh(os.Getenv(_c.EnvVarDebug))
+	return isTrueIsh(os.Getenv(_c.EnvVarDebug))
 }
 
 func ValidationEnabled() bool {
@@ -78,7 +80,7 @@ func ValidationEnabled() bool {
 }
 
 func VerboseEnabled() bool {
-	return !isFalseIsh(os.Getenv(_c.EnvVarMilpaVerbose))
+	return isTrueIsh(os.Getenv(_c.EnvVarMilpaVerbose))
 }
 
 func ColorEnabled() bool {
@@ -86,7 +88,7 @@ func ColorEnabled() bool {
 }
 
 func UnstyledHelpEnabled() bool {
-	return !isFalseIsh(os.Getenv(_c.EnvVarHelpUnstyled))
+	return isTrueIsh(os.Getenv(_c.EnvVarHelpUnstyled))
 }
 
 func CheckMilpaPathSet() error {

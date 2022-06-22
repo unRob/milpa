@@ -63,7 +63,7 @@ function _print_message () {
   fi
   command_name=${MILPA_COMMAND_NAME:-milpa}
 
-  [[ "$level" == "debug" ]] && [[ -z "${MILPA_VERBOSE+x}" ]] && return
+  [[ "$level" == "debug" ]] && [[ -z "${MILPA_VERBOSE+x}${DEBUG+x}" ]] && return
   >&2 echo "${_C_GRAY}[${level}:${command_name// /:}${date}]${_FMT_RESET} $*"
 }
 

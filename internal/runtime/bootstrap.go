@@ -118,7 +118,7 @@ func Bootstrap() error {
 	}
 
 	if len(MilpaPath) != 0 && MilpaPath[0] != "" {
-		if os.Getenv(_c.EnvVarMilpaPathParsed) != "" {
+		if isTrueIsh(os.Getenv(_c.EnvVarMilpaPathParsed)) {
 			logrus.Debugf("%s already parsed upstream. %d items found", _c.EnvVarMilpaPath, len(MilpaPath))
 			return nil
 		}

@@ -73,6 +73,7 @@ compaOut=$(mktemp -t "compaOut.XXX")
 compaErr=$(mktemp -t "compaErr.XXX")
 trap 'rm -rf $compaOut $compaErr' ERR EXIT TERM
 
+@milpa.log debug "Calling out compa with ${*}"
 # figure out what the user is asking for
 COMPA_OUT="$compaOut" "$MILPA_COMPA" "$@" 2>"$compaErr" || {
   exitCode=$?
@@ -114,7 +115,7 @@ export MILPA_DISABLE_UPDATE_CHECKS=1
 # normalize verbose flag
 [[ "${MILPA_VERBOSE:-$MILPA_OPT_VERBOSE}" == "true" ]] && export MILPA_VERBOSE="true"
 # print debugging output if requested
-[[ "$DEBUG" == 1 ]] && @milpa.log debug "lookup output: $(cat "$compaErr")"
+@milpa.log debug "lookup output: $(cat "$compaErr")"
 @milpa.log debug "running <$MILPA_COMMAND_NAME> from <$MILPA_COMMAND_PATH> with arguments <${*}>"
 @milpa.log debug "milpa environment:"$'\n'"$(env | grep ^MILPA | sort)"
 
