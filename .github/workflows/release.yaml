@@ -58,6 +58,7 @@ jobs:
           echo "::endgroup::"
 
           go get -u github.com/mitchellh/gox
+          go install github.com/mitchellh/gox
 
       - name: create release
         id: build
