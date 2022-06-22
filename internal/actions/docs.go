@@ -185,13 +185,13 @@ func writeDocs(dst string) error {
 
 		components := strings.Split(name, "/")
 		last := len(components) - 1
-		dir := fmt.Sprintf("%s/help/docs/%s", dst, strings.Join(components[0:last], "/"))
+		dir := fmt.Sprintf("%s/help%s", dst, strings.Join(components[0:last], "/"))
 
 		if components[last] == "index" {
 			components[last] = "_index"
 		}
 
-		fname := fmt.Sprintf("%s/help/docs/%s.md", dst, strings.Join(components, "/"))
+		fname := fmt.Sprintf("%s/help%s.md", dst, strings.Join(components, "/"))
 		logrus.Debugf("Creating dir %s", dir)
 		if err := os.MkdirAll(dir, 0760); err != nil {
 			return err
