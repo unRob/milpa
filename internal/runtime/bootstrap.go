@@ -117,7 +117,7 @@ func Bootstrap() error {
 		return errors.ConfigError{Err: fmt.Errorf("%s (%s) is not a directory", _c.EnvVarMilpaRoot, MilpaRoot)}
 	}
 
-	if len(MilpaPath) != 0 {
+	if len(MilpaPath) != 0 && MilpaPath[0] != "" {
 		if os.Getenv(_c.EnvVarMilpaPathParsed) != "" {
 			logrus.Debugf("%s already parsed upstream. %d items found", _c.EnvVarMilpaPath, len(MilpaPath))
 			return nil
