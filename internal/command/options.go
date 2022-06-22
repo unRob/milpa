@@ -204,6 +204,7 @@ func (opt *Option) CompletionFunction(cmd *cobra.Command, args []string, toCompl
 		return
 	}
 
+	opt.Command.Arguments.Parse(args)
 	opt.Command.Options.Parse(cmd.Flags())
 
 	var err error
