@@ -23,11 +23,12 @@ import (
 
 func (cmd *Command) EnvironmentMap() map[string]string {
 	return map[string]string{
-		_c.EnvVarMilpaPath:   strings.Join(runtime.MilpaPath, ":"),
-		_c.OutputCommandName: cmd.FullName(),
-		_c.OutputCommandKind: string(cmd.Meta.Kind),
-		_c.OutputCommandRepo: cmd.Meta.Repo,
-		_c.OutputCommandPath: cmd.Meta.Path,
+		_c.EnvVarMilpaPath:       strings.Join(runtime.MilpaPath, ":"),
+		_c.EnvVarMilpaPathParsed: "true",
+		_c.OutputCommandName:     cmd.FullName(),
+		_c.OutputCommandKind:     string(cmd.Meta.Kind),
+		_c.OutputCommandRepo:     cmd.Meta.Repo,
+		_c.OutputCommandPath:     cmd.Meta.Path,
 	}
 }
 

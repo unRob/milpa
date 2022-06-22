@@ -55,8 +55,11 @@ func FindScripts(query []string) (results map[string]struct {
 
 		logrus.Debugf("found %d potential matches in %s", len(matches), path)
 		for _, match := range matches {
-			if !(strings.HasSuffix(match, ".sh") || filepath.Ext(match) == "") {
-				logrus.Debugf("ignoring %s, unknown extension", match)
+			extension := filepath.Ext(match)
+			if extension != "" && extension != ".sh" {
+				if extension != ".yaml" {
+					logrus.Debugf("ignoring %s, unknown extension", match)
+				}
 				continue
 			}
 
@@ -65,7 +68,7 @@ func FindScripts(query []string) (results map[string]struct {
 				logrus.Debugf("ignoring %s, failed to stat: %v", match, err)
 				continue
 			} else if fileInfo.IsDir() {
-				logrus.Debugf("ignoring %s, not a directory", match)
+				logrus.Debugf("ignoring directory %s", match)
 				continue
 			}
 

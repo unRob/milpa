@@ -38,7 +38,7 @@ func isDir(path string, warn bool) bool {
 	}
 
 	if warn {
-		logrus.Warnf("Discarding path <%s> since its not a directory", path)
+		logrus.Warnf("Discarding non-directory <%s> from MILPA_PATH", path)
 	}
 	return false
 }
@@ -59,7 +59,7 @@ type pathBuilder struct {
 	mutex  sync.Mutex
 }
 
-func (pb *pathBuilder) add(layerID int, path string, verifyDirectory bool) {
+func (pb *pathBuilder) add(layerID int, path string, verify bool) {
 	if pb.unique == nil {
 		pb.unique = map[string]bool{}
 	}
@@ -68,7 +68,7 @@ func (pb *pathBuilder) add(layerID int, path string, verifyDirectory bool) {
 	}
 	pb.unique[path] = true
 
-	if verifyDirectory && !isDir(path, true) {
+	if verify && !isDir(path, verify) {
 		return
 	}
 
@@ -114,10 +114,15 @@ func Bootstrap() error {
 	}
 
 	if !isDir(MilpaRoot, false) {
-		return errors.ConfigError{Err: fmt.Errorf("%s is not a directory", _c.EnvVarMilpaRoot)}
+		return errors.ConfigError{Err: fmt.Errorf("%s (%s) is not a directory", _c.EnvVarMilpaRoot, MilpaRoot)}
 	}
 
 	if len(MilpaPath) != 0 {
+		if os.Getenv(_c.EnvVarMilpaPathParsed) != "" {
+			logrus.Debugf("%s already parsed upstream. %d items found", _c.EnvVarMilpaPath, len(MilpaPath))
+			return nil
+		}
+
 		logrus.Debugf("%s is has %d items, parsing", _c.EnvVarMilpaPath, len(MilpaPath))
 		for idx, p := range MilpaPath {
 			if p == "" || !isDir(p, true) {
@@ -133,12 +138,16 @@ func Bootstrap() error {
 		}
 	}
 
-	pathMap.add(1, filepath.Join(MilpaRoot, _c.RepoRoot), true)
+	rootRepo := filepath.Join(MilpaRoot, _c.RepoRoot)
+	if !isDir(rootRepo, false) {
+		return errors.ConfigError{Err: fmt.Errorf("milpa's built-in repo at %s is not a directory", rootRepo)}
+	}
+	pathMap.add(1, rootRepo, false)
 	if pwd, err := os.Getwd(); err == nil {
 		pwdRepo := filepath.Join(pwd, _c.RepoRoot)
 		if isDir(pwdRepo, false) {
 			logrus.Debugf("Adding pwd repo %s", pwdRepo)
-			pathMap.add(2, pwdRepo, true)
+			pathMap.add(2, pwdRepo, false)
 		}
 	}
 
@@ -188,12 +197,11 @@ func lookupGitRepo(pathMap *pathBuilder, layer int) {
 	if ctx.Err() == nil && err == nil {
 		repoRoot := strings.TrimSuffix(stdout.String(), "\n")
 		gitRepo := filepath.Join(repoRoot, _c.RepoRoot)
-		logrus.Debugf("Adding git repo %s", gitRepo)
-		pathMap.add(layer, gitRepo, true)
-	} // else {
-	// logrus.Debugf(ctx.Err())
-	// logrus.Error(err)
-	// }
+		if isDir(gitRepo, false) {
+			logrus.Debugf("Adding git repo %s", gitRepo)
+			pathMap.add(layer, gitRepo, false)
+		}
+	}
 }
 
 func lookupUserRepos(pathMap *pathBuilder, layer int) {
@@ -211,7 +219,7 @@ func lookupUserRepos(pathMap *pathBuilder, layer int) {
 		for _, file := range files {
 			userRepo := filepath.Join(userRepos, file.Name())
 			logrus.Debugf("Adding user repo %s", userRepo)
-			pathMap.add(layer, userRepo, false)
+			pathMap.add(layer, userRepo, true)
 		}
 	}
 }
@@ -222,7 +230,7 @@ func lookupGlobalRepos(pathMap *pathBuilder, layer int) {
 		for _, file := range files {
 			globalRepo := filepath.Join(globalRepos, file.Name())
 			logrus.Debugf("Adding global repo %s", globalRepo)
-			pathMap.add(layer, globalRepo, false)
+			pathMap.add(layer, globalRepo, true)
 		}
 	}
 }
