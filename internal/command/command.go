@@ -158,14 +158,16 @@ func (cmd *Command) FlagSet() *pflag.FlagSet {
 }
 
 func (cmd *Command) Run(cc *cobra.Command, args []string) error {
+	logrus.Debugf("running command %s", cmd.FullName())
 	cmd.Arguments.Parse(args)
 	cmd.Options.Parse(cc.Flags())
 	if runtime.ValidationEnabled() {
+		logrus.Debug("Validating arguments")
 		if err := cmd.Arguments.AreValid(); err != nil {
 			return err
 		}
-	}
-	if runtime.ValidationEnabled() {
+
+		logrus.Debug("Validating flags")
 		if err := cmd.Options.AreValid(); err != nil {
 			return err
 		}
@@ -188,8 +190,6 @@ func (cmd *Command) RunStandAlone(cc *cobra.Command, args []string) error {
 		if err := cmd.Arguments.AreValid(); err != nil {
 			return err
 		}
-	}
-	if runtime.ValidationEnabled() {
 		if err := cmd.Options.AreValid(); err != nil {
 			return err
 		}

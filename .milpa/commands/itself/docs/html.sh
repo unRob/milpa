@@ -17,7 +17,8 @@ content="$tmpdir/html"
 
 function generate_content_folder() {
   @milpa.log info "generating command docs"
-  MILPA_PLAIN_HELP=enabled "$MILPA_COMPA" __generate_documentation "$content" || @milpa.fail "Could not generate command documentation"
+  MILPA_PLAIN_HELP=enabled \
+    "$MILPA_COMPA" __generate_documentation "$content" || @milpa.fail "Could not generate command documentation"
 
   mv -v "$content/help/docs.md" "$content/help/docs/_index.md"
 

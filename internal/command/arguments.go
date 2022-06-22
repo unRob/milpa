@@ -173,7 +173,7 @@ func (arg *Argument) SetValue(value []string) {
 }
 
 func (arg *Argument) IsKnown() bool {
-	return arg.provided != nil
+	return arg.provided != nil && len(*arg.provided) > 0
 }
 
 func (arg *Argument) ToString(asShell bool) string {

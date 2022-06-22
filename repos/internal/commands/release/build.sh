@@ -56,7 +56,7 @@ done
 # create docs
 milpa release docs-image --skip-publish "$MILPA_VERSION" || @milpa.fail "Could not build docs image"
 @milpa.log info "Generating html docs"
-MILPA_PATH="$MILPA_ROOT/.milpa" milpa itself docs html write \
+MILPA_DISABLE_USER_REPOS=true MILPA_DISABLE_GLOBAL_REPOS=true milpa itself docs html write \
   --to "$output" \
   --image milpa-docs \
   --hostname "$MILPA_ARG_HOSTNAME" || @milpa.fail "Could not generate docs"

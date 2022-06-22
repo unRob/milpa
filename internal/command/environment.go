@@ -18,10 +18,12 @@ import (
 
 	"github.com/alessio/shellescape"
 	_c "github.com/unrob/milpa/internal/constants"
+	"github.com/unrob/milpa/internal/runtime"
 )
 
 func (cmd *Command) EnvironmentMap() map[string]string {
 	return map[string]string{
+		_c.EnvVarMilpaPath:   strings.Join(runtime.MilpaPath, ":"),
 		_c.OutputCommandName: cmd.FullName(),
 		_c.OutputCommandKind: string(cmd.Meta.Kind),
 		_c.OutputCommandRepo: cmd.Meta.Repo,

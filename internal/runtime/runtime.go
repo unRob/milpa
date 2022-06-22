@@ -31,9 +31,27 @@ var falseIshValues = []string{
 	"disabled",
 }
 
+var trueIshValues = []string{
+	"true",
+	"yes",
+	"1",
+	"enable",
+	"enabled",
+}
+
 func isFalseIsh(val string) bool {
 	for _, negative := range falseIshValues {
 		if val == negative {
+			return true
+		}
+	}
+
+	return false
+}
+
+func isTrueIsh(val string) bool {
+	for _, positive := range trueIshValues {
+		if val == positive {
 			return true
 		}
 	}

@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 load 'test/_helpers/setup.bash'
-export LOCAL_REPO="$XDG_DATA_HOME/home/.milpa"
 _suite_setup
+export LOCAL_REPO="$XDG_DATA_HOME/.milpa"
 
 setup() {
   load 'test/_helpers/bats-support/load.bash'
@@ -23,18 +23,21 @@ setup() {
   mkdir -p .milpa/commands
 }
 
-
 @test "itself create" {
   run milpa itself create
   assert_failure 64
 }
 
 @test "itself create something" {
-  run milpa itself create something
+  run milpa --verbose itself create something
   assert_success
+  assert_output --partial "$LOCAL_REPO/commands/something.sh"
   assert_file_exist "$LOCAL_REPO/commands/something.sh"
   assert_file_exist "$LOCAL_REPO/commands/something.yaml"
   assert_file_not_executable "$LOCAL_REPO/commands/something.sh"
+
+  run milpa itself command-tree
+  assert_output --partial "something"
 
   run milpa something
   assert_success
@@ -70,6 +73,7 @@ setup() {
   assert_file_exist "$BATS_TEST_TMPDIR/somewhere-else/.milpa/commands/something-elsewhere.sh"
   assert_file_exist "$BATS_TEST_TMPDIR/somewhere-else/.milpa/commands/something-elsewhere.yaml"
 
+  mkdir -p "$BATS_TEST_TMPDIR/somewhere-else/.milpa"
   cd "$BATS_TEST_TMPDIR/somewhere-else"
   run milpa something-elsewhere
   assert_success

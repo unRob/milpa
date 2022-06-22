@@ -50,8 +50,10 @@ setup () {
 }
 
 @test "milpa prepends user-supplied MILPA_PATH" {
+  # path must have a milpa repo or it will be ignored!
+  mkdir -pv "$BATS_SUITE_TMPDIR/somewhere/.milpa"
   export MILPA_PATH="$BATS_SUITE_TMPDIR/somewhere"
   run milpa debug-env MILPA_PATH
   assert_success
-  assert_output "${BATS_SUITE_TMPDIR}/somewhere/.milpa:$MILPA_ROOT/.milpa:$MILPA_ROOT/repos/test-suite"
+  assert_output "${BATS_SUITE_TMPDIR}/somewhere:$MILPA_ROOT/.milpa:$MILPA_ROOT/repos/test-suite"
 }
