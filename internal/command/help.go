@@ -42,6 +42,9 @@ func (cmd *Command) AdditionalHelp(printLinks bool) *string {
 
 func (cmd *Command) HelpRenderer(globalOptions Options) func(cc *cobra.Command, args []string) {
 	return func(cc *cobra.Command, args []string) {
+		// some commands don't have a binding until help is rendered
+		// like virtual ones (sub command groups)
+		cmd.SetCobra(cc)
 		content, err := cmd.ShowHelp(globalOptions, args)
 		if err != nil {
 			panic(err)
