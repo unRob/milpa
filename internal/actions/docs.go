@@ -178,7 +178,11 @@ func writeDocs(dst string) error {
 			return err
 		}
 
-		name := strings.TrimSuffix(strings.SplitN(doc, _c.RepoDocs+"/", 2)[1], ".md")
+		name := strings.TrimSuffix(doc, ".md")
+		for _, p := range runtime.MilpaPath {
+			name = strings.Replace(name, p, "", 1)
+		}
+
 		components := strings.Split(name, "/")
 		last := len(components) - 1
 		dir := fmt.Sprintf("%s/help/docs/%s", dst, strings.Join(components[0:last], "/"))
@@ -253,7 +257,7 @@ var docsCommand *cobra.Command = &cobra.Command{
 
 		withColor, _ := c.Flags().GetBool("no-color")
 
-		doc, err := render.Markdown(contents, withColor)
+		doc, err := render.Markdown(contents, !withColor)
 		if err != nil {
 			return err
 		}
