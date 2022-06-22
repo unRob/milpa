@@ -12,7 +12,7 @@ Milpa is built with, and thanks to:
 
 ### `milpa` sets the stage
 
-1. As it starts running, milpa will set `MILPA_ROOT`, exit unless it points to an existing directory, or proceed to set `MILPA_PATH` (unless `MILPA_PATH_PARSED` is already set to make it simpler upon recursion).
+1. As it starts running, milpa will set `MILPA_ROOT`, exit unless it points to an existing directory,
 2. We'll bail after setting the global environment if the user requested a completion (with the hidden `__complete` command).
 3. `@milpa.load_util` is defined otherwise, and we'll immediately use it to load logging-related functions.
 4. `@milpa.fail` is defined.
@@ -21,7 +21,7 @@ Milpa is built with, and thanks to:
 
 ### `compa` resolves intentions
 
-1. After setting up logging, `compa` looks for commands at `commands/` on every directory of `MILPA_PATH` and builds a command tree; it can error out here if any command has an invalid spec (unless running `milpa itself doctor`).
+1. After setting up logging, `compa` builds and processes `MILPA_PATH` (unless `MILPA_PATH_PARSED` is already set), then looks for commands at `commands/` on every directory of `MILPA_PATH` and builds a command tree; it can error out here if any command has an invalid spec (unless running `milpa itself doctor`).
 2. A `spf13/cobra.Command` is created and the known command tree is mapped into child commands.
 3. `cobra` takes over, handling help, argument/flag parsing, and invoking validation.
 4. Any errors are communicated back to milpa over the temporary pipes (`COMPA_OUT` and `COMPA_ERR`).
@@ -44,6 +44,6 @@ Mostly based on Bash's [Appendix E](https://tldp.org/LDP/abs/html/exitcodes.html
 - 42: compa is requesting pretty printing and a clean `milpa` exit
 - 64: arguments/flags could not be parsed or failed validation
 - 70: a spec could not be parsed or help failed rendering
-- 78: `MILPA_ROOT` points to something that's not a directory
+- 78: `MILPA_ROOT` points to something that's not a directory, or `MILPA_PATH` has an incorrect path set
 - 127: sub-command not found
 

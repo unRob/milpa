@@ -29,6 +29,7 @@ const EnvVarHelpUnstyled = "MILPA_PLAIN_HELP"
 const EnvVarHelpStyle = "MILPA_HELP_STYLE"
 const EnvVarMilpaRoot = "MILPA_ROOT"
 const EnvVarMilpaPath = "MILPA_PATH"
+const EnvVarMilpaPathParsed = "MILPA_PATH_PARSED"
 const EnvVarMilpaVerbose = "MILPA_VERBOSE"
 const EnvVarMilpaSilent = "MILPA_SILENT"
 const EnvVarMilpaUnstyled = "NO_COLOR"
@@ -83,7 +84,7 @@ const ExitStatusUsage = 64
 const ExitStatusProgrammerError = 70
 
 // EX_CONFIG Something was found in an unconfigured or misconfigured state.
-const ExitStatusConfigError = 70
+const ExitStatusConfigError = 78
 
 // 127 command not found.
 const ExitStatusNotFound = 127
