@@ -37,14 +37,16 @@ for pair in "${MILPA_ARG_TARGETS[@]//\//-}"; do
   package="$output/milpa-$pair.tgz"
 
   mkdir -p "$dist_dir"
-  if [[ "$pair" != "darwin-arm64" ]]; then
-    upx --no-progress -9 -o "$dist_dir/compa" "$output/$pair" || @milpa.fail "Could not compress $dist_dir/compa"
-  else
-    @milpa.warning "UPX produces botched arm64 builds :/"
-    @milpa.warning https://github.com/upx/upx/issues/446
-    cp "$output/$pair" "$dist_dir/compa"
+  if [[ ! -f "$dist_dir/compa" ]]; then
+    if [[ "$pair" != "darwin-arm64" ]]; then
+      upx --no-progress -9 -o "$dist_dir/compa" "$output/$pair" || @milpa.fail "Could not compress $dist_dir/compa"
+    else
+      @milpa.warning "UPX produces botched arm64 builds :/"
+      @milpa.warning https://github.com/upx/upx/issues/446
+      cp "$output/$pair" "$dist_dir/compa"
+    fi
+    rm -rf "${output:?}/$pair"
   fi
-  rm -rf "${output:?}/$pair"
 
   cp -rv ./milpa ./.milpa LICENSE.txt README.md CHANGELOG.md "$dist_dir/"
   rm -rf "$package"
@@ -56,10 +58,15 @@ done
 # create docs
 milpa release docs-image --skip-publish "$MILPA_VERSION" || @milpa.fail "Could not build docs image"
 @milpa.log info "Generating html docs"
-MILPA_DISABLE_USER_REPOS=true MILPA_DISABLE_GLOBAL_REPOS=true milpa itself docs html write \
+mp="$MILPA_PATH"
+export MILPA_DISABLE_USER_REPOS=true
+export MILPA_DISABLE_GLOBAL_REPOS=true
+MILPA_PATH="" DEBUG=1 milpa itself docs html write \
   --to "$output" \
   --image milpa-docs \
   --hostname "$MILPA_ARG_HOSTNAME" || @milpa.fail "Could not generate docs"
+unset MILPA_DISABLE_USER_REPOS MILPA_DISABLE_GLOBAL_REPOS
+export MILPA_PATH="$mp"
 @milpa.log success "Docs exported"
 
 @milpa.log info "Copying website assets"

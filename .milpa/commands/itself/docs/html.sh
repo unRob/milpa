@@ -17,11 +17,11 @@ content="$tmpdir/html"
 
 function generate_content_folder() {
   @milpa.log info "generating command docs"
-  MILPA_PLAIN_HELP=enabled \
-    "$MILPA_COMPA" __generate_documentation "$content" || @milpa.fail "Could not generate command documentation"
+  MILPA_PLAIN_HELP=enabled "$MILPA_COMPA" __generate_documentation "$content" || @milpa.fail "Could not generate command documentation"
 
   mv -v "$content/help/docs.md" "$content/help/docs/_index.md"
 
+  mkdir -p "$content/help/docs/milpa"
   cat - <(tail -n +2 "$MILPA_ROOT/CHANGELOG.md") > "$content/help/docs/milpa/changelog.md" <<YAML
 ---
 description: "Changelog entries for every released version"
