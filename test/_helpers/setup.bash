@@ -13,12 +13,12 @@
 # limitations under the License.
 
 function _common_setup () {
-  cd "$XDG_DATA_HOME/home" || exit 2
+  cd "$XDG_DATA_HOME" || exit 2
 }
 
 function _suite_setup() {
   unset XDG_DATA_HOME MILPA_ROOT MILPA_PATH MILPA_PATH_PARSED DEBUG
-  export XDG_DATA_HOME="${BATS_SUITE_TMPDIR//\/\///}/home"
+  export XDG_DATA_HOME="${BATS_SUITE_TMPDIR//\/\///}"
   # shellcheck disable=2155
   export PROJECT_ROOT="$( cd "${BATS_TEST_FILENAME%%/test/*}" >/dev/null 2>&1 && pwd )"
   # make executables in src/ visible to PATH
@@ -28,7 +28,7 @@ function _suite_setup() {
   export NO_COLOR=1
   export MILPA_PLAIN_HELP=enabled
   export milpa="$MILPA_ROOT/milpa"
-  mkdir -p "$XDG_DATA_HOME/home"
+  mkdir -p "$XDG_DATA_HOME"
   [[ -f "$XDG_DATA_HOME/setup-complete" ]] && return 0
   mkdir -pv "$MILPA_ROOT/repos"
   ln -sf "$PROJECT_ROOT/milpa" "$MILPA_ROOT/milpaa"

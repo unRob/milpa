@@ -35,6 +35,9 @@ const EnvVarMilpaUnstyled = "NO_COLOR"
 const EnvVarValidationDisabled = "MILPA_SKIP_VALIDATION"
 const EnvVarCompaOut = "COMPA_OUT"
 const EnvVarDebug = "DEBUG"
+const EnvVarLookupGitDisabled = "MILPA_DISABLE_GIT"
+const EnvVarLookupUserReposDisabled = "MILPA_DISABLE_USER_REPOS"
+const EnvVarLookupGlobalReposDisabled = "MILPA_DISABLE_GLOBAL_REPOS"
 
 // EnvFlagNames are flags also available as environment variables.
 var EnvFlagNames = map[string]string{

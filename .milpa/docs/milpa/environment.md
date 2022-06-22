@@ -33,6 +33,8 @@ Additional repositories can be added as colon (`:`) delimited paths, pointing to
 
 If desired, you may set a `MILPA_PATH` for all shells by adding it to your shell's profile.
 
+`MILPA_DISABLE_GIT`, `MILPA_DISABLE_USER_REPOS` and `MILPA_DISABLE_GLOBAL_REPOS` each disable the corresponding command lookups.
+
 ---
 
 ## Output

@@ -23,5 +23,7 @@ options:
   repo:
     type: string
     description: a path to the milpa repo to create this command in. By default, the nearest .milpa directory from `pwd` and up.
-    values: {dirs: ""}
+    values:
+      suggest-only: true
+      dirs: ""
 

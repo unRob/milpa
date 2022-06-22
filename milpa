@@ -20,34 +20,8 @@ if [[ ! -d "$MILPA_ROOT" ]]; then
   exit 78
 fi
 
-# ignore some stuff if being called from within a command
-if [[ "$MILPA_PATH_PARSED" == "" ]]; then
-  # MILPA_PATH contains all known milpa repositories
-  # Repositories are folders that contain a .milpa directory within and will look for comands
-  # in the order directories appear there. Only run this loop on the parent
-  # If MILPA_PATH is set, it'll start its search there
-  _PATH="${MILPA_PATH//:/\/.milpa:}${MILPA_PATH:+/.milpa}"
-  # then, we'll look at MILPA_ROOT/.milpa
-  _PATH="${_PATH}${_PATH:+:}${MILPA_ROOT}/.milpa"
-  # if the current working dir contains a .milpa folder, search that next
-  _pwd="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-  [[ -d "$_pwd/.milpa" ]] && [[ ! "$_PATH" =~ :?$_pwd/.milpa:? ]] && _PATH="$_PATH:$_pwd/.milpa"
-  # from there, it'll look for user repos at $XDG_DATA_HOME/milpa/repos
-  # followed by global repos at ${MILPA_ROOT}/repos
-  MILPA_REPOS_USER="${XDG_DATA_HOME:-$HOME}/.local/share/milpa/repos"
-  MILPA_REPOS_GLOBAL="${MILPA_ROOT}/repos"
-  MILPA_REPOS="$(find -L "$MILPA_REPOS_USER" "$MILPA_REPOS_GLOBAL" -maxdepth 1 -mindepth 1 -type d -print 2>/dev/null)"
-  if [[ "$MILPA_REPOS" != "" ]]; then
-    nb=$'\n'
-    MILPA_PATH="$_PATH:${MILPA_REPOS//$nb/:}"
-  else
-    MILPA_PATH="$_PATH"
-  fi
-  export MILPA_PATH_PARSED=1
-fi
 # bash is fine and all, but we need a little helper to run parsing for us
 export MILPA_COMPA="${MILPA_COMPA:-$MILPA_ROOT/compa}"
-export MILPA_PATH
 # bail early if we're autocompleting
 [[ $1 == "__complete"* ]] && exec "$MILPA_COMPA" "$@"
 
@@ -141,7 +115,7 @@ export MILPA_DISABLE_UPDATE_CHECKS=1
 [[ "${MILPA_VERBOSE:-$MILPA_OPT_VERBOSE}" == "true" ]] && export MILPA_VERBOSE="true"
 # print debugging output if requested
 [[ "$DEBUG" == 1 ]] && @milpa.log debug "lookup output: $(cat "$compaErr")"
-@milpa.log debug "running <$MILPA_COMMAND_NAME from> <$MILPA_COMMAND_PATH> with arguments <${*}>"
+@milpa.log debug "running <$MILPA_COMMAND_NAME> from <$MILPA_COMMAND_PATH> with arguments <${*}>"
 @milpa.log debug "milpa environment:"$'\n'"$(env | grep ^MILPA | sort)"
 
 # thanks compa, good bye

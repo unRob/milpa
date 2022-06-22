@@ -30,13 +30,16 @@ import (
 	"github.com/unrob/milpa/internal/errors"
 )
 
-func isDir(path string) bool {
+func isDir(path string, warn bool) bool {
 	if fi, err := os.Stat(path); err == nil {
 		if fi.Mode().IsDir() {
 			return true
 		}
 	}
-	logrus.Warnf("Discarding path <%s> since its not a directory", path)
+
+	if warn {
+		logrus.Warnf("Discarding path <%s> since its not a directory", path)
+	}
 	return false
 }
 
@@ -65,8 +68,7 @@ func (pb *pathBuilder) add(layerID int, path string, verifyDirectory bool) {
 	}
 	pb.unique[path] = true
 
-	if verifyDirectory && !isDir(path) {
-		logrus.Warnf("Discarding path <%s> since its not a directory", path)
+	if verifyDirectory && !isDir(path, true) {
 		return
 	}
 
@@ -111,15 +113,14 @@ func Bootstrap() error {
 		logrus.Debugf("%s is not set, using default %s", _c.EnvVarMilpaRoot, envRoot)
 	}
 
-	if !isDir(MilpaRoot) {
+	if !isDir(MilpaRoot, false) {
 		return errors.ConfigError{Err: fmt.Errorf("%s is not a directory", _c.EnvVarMilpaRoot)}
 	}
 
 	if len(MilpaPath) != 0 {
 		logrus.Debugf("%s is has %d items, parsing", _c.EnvVarMilpaPath, len(MilpaPath))
 		for idx, p := range MilpaPath {
-			if p == "" || !isDir(p) {
-				logrus.Debugf("Dropping item <%s>", p)
+			if p == "" || !isDir(p, true) {
 				MilpaPath = append(MilpaPath[:idx], MilpaPath[idx+1:]...)
 				continue
 			}
@@ -133,18 +134,26 @@ func Bootstrap() error {
 	}
 
 	pathMap.add(1, filepath.Join(MilpaRoot, _c.RepoRoot), true)
-	if pwd, err := os.Getwd(); err != nil {
+	if pwd, err := os.Getwd(); err == nil {
 		pwdRepo := filepath.Join(pwd, _c.RepoRoot)
-		logrus.Debugf("Adding pwd repo %s", pwdRepo)
-		pathMap.add(2, pwdRepo, true)
+		if isDir(pwdRepo, false) {
+			logrus.Debugf("Adding pwd repo %s", pwdRepo)
+			pathMap.add(2, pwdRepo, true)
+		}
 	}
 
 	lookups := []func(pm *pathBuilder, layer int){}
-	if os.Getenv("MILPA_DISABLE_GIT") != "true" {
+	if !isTrueIsh(os.Getenv("MILPA_DISABLE_GIT")) {
 		lookups = append(lookups, lookupGitRepo)
-		// lookupGitRepo(pathMap)
 	}
-	lookups = append(lookups, lookupUserRepos, lookupGlobalRepos)
+
+	if !isTrueIsh(os.Getenv("MILPA_DISABLE_USER_REPOS")) {
+		lookups = append(lookups, lookupUserRepos)
+	}
+
+	if !isTrueIsh(os.Getenv("MILPA_DISABLE_GLOBAL_REPOS")) {
+		lookups = append(lookups, lookupGlobalRepos)
+	}
 
 	var wg sync.WaitGroup
 	for idx, lookup := range lookups {
