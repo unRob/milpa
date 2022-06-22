@@ -25,15 +25,16 @@ import (
 var version = "beta"
 
 func main() {
-	if runtime.DebugEnabled() {
-		logrus.SetLevel(logrus.DebugLevel)
-	}
-
 	logrus.SetFormatter(&logrus.TextFormatter{
 		DisableLevelTruncation: true,
 		DisableTimestamp:       true,
 		ForceColors:            runtime.ColorEnabled(),
 	})
+
+	if runtime.DebugEnabled() {
+		logrus.SetLevel(logrus.DebugLevel)
+		logrus.Info("debug information enabled")
+	}
 
 	isDoctor := runtime.DoctorModeEnabled()
 	logrus.Debugf("doctor mode enabled: %v", isDoctor)

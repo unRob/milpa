@@ -18,7 +18,6 @@ import (
 	"strings"
 
 	"github.com/alessio/shellescape"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	_c "github.com/unrob/milpa/internal/constants"
@@ -84,7 +83,7 @@ func (opts *Options) EnvMap(command *Command, dst *map[string]string) {
 }
 
 func (opts *Options) Parse(supplied *pflag.FlagSet) {
-	logrus.Debugf("Parsing supplied flags, %v", supplied)
+	// logrus.Debugf("Parsing supplied flags, %v", supplied)
 	for name, opt := range *opts {
 		switch opt.Type {
 		case ValueTypeBoolean:

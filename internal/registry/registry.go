@@ -138,10 +138,10 @@ func SetRoot(ccRoot *cobra.Command, cmdRoot *command.Command) {
 
 			query := []string{cp}
 			if cc, _, err := container.Find(query); err == nil && cc != container {
-				logrus.Debugf("found %s in %s", query, cc.Name())
+				// logrus.Debugf("found %s in %s", query, cc.Name())
 				container = cc
 			} else {
-				logrus.Debugf("creating %s in %s", query, container.Name())
+				// logrus.Debugf("creating %s in %s", query, container.Name())
 				groupName := strings.Join(query, " ")
 				cc := &cobra.Command{
 					Use:                        cp,
