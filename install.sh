@@ -64,8 +64,8 @@ esac
 
 
 globalRepos="${PREFIX}/repos"
-milpaLocal="${XDG_HOME_DATA:-$HOME/.local/share}"
-localRepos="${milpaLocal}/milpa/repos"
+milpaLocal="${XDG_HOME_DATA:-"$HOME/.local/share"}/milpa"
+localRepos="${milpaLocal}/repos"
 package="milpa-$OS-$ARCH.tgz"
 
 # Get the package
@@ -75,6 +75,8 @@ if [[ ! -f "$package" ]]; then
 else
   >&2 echo "${_FMT_BOLD}Using downloaded package at $package${_FMT_RESET}"
 fi
+
+>&2 echo "Downloaded $ASSET_BASE/download/$VERSION/$package"
 
 # Find some nice spot in the ground
 if [[ ! -d "$PREFIX" ]]; then
