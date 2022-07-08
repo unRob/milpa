@@ -114,16 +114,17 @@ else
 [[ -d "$globalRepos" ]] || sudo mkdir -pv "$globalRepos"
 fi
 
-# update version so milpa doesn't look for updates innecessarily
-date "+%s" > "$milpaLocal/last-update-check"
-
 # recycle the bag
 rm -rf "$package"
 
 [[ -d "$localRepos" ]] || mkdir -pv "$localRepos"
+# update version so milpa doesn't look for updates innecessarily
+date "+%s" > "$milpaLocal/last-update-check"
+
+"$TARGET/milpa" --verbose
 
 # Test we can run milpa
-installed_version=$("$TARGET/milpa" --version) || @fail "Could not get the installed version"
+installed_version="$("$TARGET/milpa" --version)" || @fail "Could not get the installed version"
 
 header="🌽 Installed milpa version $installed_version 🌽"
 hlen="$(( ${#header} + 3 ))"
