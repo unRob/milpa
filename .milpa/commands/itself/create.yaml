@@ -10,20 +10,22 @@ arguments:
       suggest-only: true
       script: compa __inspect --format autocomplete{{ if (index .Args "name") }} {{ Arg "name" }}{{ end }}
 options:
+  summary:
+    description: a short summary of what this command does
+    default: Does a thing
+  description:
+    description: a longer description of how this command works
+    default: Works by doing a thing with another thing until the first thing looks about right
   open:
     type: bool
     description: Open the script file in your current $EDITOR after creation
   executable:
     type: bool
     description: Create an empty, executable command. Useful when you'd like using something other than bash.
-  config-format:
-    description: The configuration format to use to describe this command
-    values: {static: [yaml] }
-    default: yaml
   repo:
     type: string
     description: a path to the milpa repo to create this command in. By default, the nearest .milpa directory from `pwd` and up.
     values:
       suggest-only: true
-      dirs: ""
+      script: find . -type d -maxdepth 1 && milpa itself repo list --paths-only
 

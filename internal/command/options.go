@@ -113,13 +113,13 @@ func (opts *Options) AreValid() error {
 
 // Option represents a command line flag.
 type Option struct {
-	ShortName   string       `yaml:"short-name"`
-	Type        ValueType    `yaml:"type" validate:"omitempty,oneof=string bool"`
-	Description string       `yaml:"description" validate:"required"`
-	Default     interface{}  `yaml:"default"`
-	Values      *ValueSource `yaml:"values" validate:"omitempty"`
-	Repeated    bool         `yaml:"repeated" validate:"omitempty"`
-	Command     *Command     `json:"-" validate:"-"`
+	ShortName   string       `json:"short-name,omitempty" yaml:"short-name,omitempty"` // nolint:tagliatelle
+	Type        ValueType    `json:"type" yaml:"type" validate:"omitempty,oneof=string bool"`
+	Description string       `json:"description" yaml:"description" validate:"required"`
+	Default     interface{}  `json:"default,omitempty" yaml:"default,omitempty"`
+	Values      *ValueSource `json:"values,omitempty" yaml:"values,omitempty" validate:"omitempty"`
+	Repeated    bool         `json:"repeated" yaml:"repeated" validate:"omitempty"`
+	Command     *Command     `json:"-" yaml:"-" validate:"-"`
 	provided    interface{}
 }
 
@@ -190,6 +190,9 @@ func (opt *Option) providesAutocomplete() bool {
 // Resolve returns autocomplete values for an option.
 func (opt *Option) Resolve() (values []string, flag cobra.ShellCompDirective, err error) {
 	if opt.Values != nil {
+		if opt.Values.Command == nil {
+			opt.Values.Command = opt.Command
+		}
 		return opt.Values.Resolve()
 	}
 
@@ -221,6 +224,6 @@ func (opt *Option) CompletionFunction(cmd *cobra.Command, args []string, toCompl
 		}
 		values = filtered
 	}
-	return values, flag
 
+	return cobra.AppendActiveHelp(values, opt.Description), flag
 }

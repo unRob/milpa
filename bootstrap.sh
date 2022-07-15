@@ -39,19 +39,28 @@ function @fail () {
   exit 2
 }
 
-META_BASE="${META_BASE:-https://milpa.dev/}/.well-known/milpa/"
-ASSET_BASE="${GITHUB_REPO:-"https://github.com/unRob/milpa"}/releases" #/latest/download/ASSET.ext
-if [[ "${VERSION}" == "" ]]; then
+function @info () {
+  >&2 echo "${@}"
+}
+
+# a place to look for a well-known latest version
+MILPA_META_BASE="${MILPA_META_BASE:-https://milpa.dev/}/.well-known/milpa/"
+# a github repo to pull assets from
+ASSET_BASE="${MILPA_GITHUB_REPO:-"https://github.com/unRob/milpa"}/releases" #/latest/download/ASSET.ext
+# version can be set by specifying MILPA_VERSION, otherwise we'll find out from the internet
+if [[ "${MILPA_VERSION}" == "" ]]; then
   >&2 echo "${_FMT_GRAY}No VERSION provided, querying for default${_FMT_RESET}"
-  VERSION=$(curl --silent --fail --show-error -L "$META_BASE/latest-version") || @fail "Could not fetch latest version!"
+  MILPA_VERSION=$(curl --silent --fail --show-error -L "$MILPA_META_BASE/latest-version") || @fail "Could not fetch latest version!"
 fi
+# Where the package gets installed to
 PREFIX="${PREFIX:-/usr/local/lib}/milpa"
+# Where we drop links to binaries at
 TARGET="${TARGET:-/usr/local/bin}"
 
 case "$(uname -s)" in
   Darwin) OS="darwin";;
   Linux) OS="linux";;
-  *) @fail "unsupported OS: $OS"
+  *) @fail "No builds available for $OS, only darwin and linux"
 esac
 
 machine="$(uname -m)"
@@ -62,30 +71,39 @@ case "$machine" in
   *) ARCH="$machine"
 esac
 
+case "$machine" in
+  amd64|arm|arm64|mips) @info "Detected system: $OS/$ARCH";;
+  *) @fail "No builds available for $OS/$ARCH"
+esac
 
+# where system-level repos live
 globalRepos="${PREFIX}/repos"
-milpaLocal="${XDG_HOME_DATA:-$HOME/.local/share}"
-localRepos="${milpaLocal}/milpa/repos"
+default_data_home="$HOME/.local/share"
+# user-specific milpa-related files go here
+milpaLocal="${XDG_DATA_HOME:-$default_data_home}/milpa"
+localRepos="${milpaLocal}/repos"
 package="milpa-$OS-$ARCH.tgz"
 
 # Get the package
 if [[ ! -f "$package" ]]; then
-  >&2 echo "${_FMT_BOLD}Downloading milpa version $VERSION to $PREFIX${_FMT_RESET}"
+  @info "${_FMT_BOLD}Downloading milpa version $VERSION to $PREFIX${_FMT_RESET}"
   curl --silent --fail --show-error -LO "$ASSET_BASE/download/$VERSION/$package" || @fail "Could not download milpa package from $ASSET_BASE/download/$VERSION/$package"
 else
-  >&2 echo "${_FMT_BOLD}Using downloaded package at $package${_FMT_RESET}"
+  @info "${_FMT_BOLD}Using downloaded package at $package${_FMT_RESET}"
 fi
+
+@info "Downloaded $ASSET_BASE/download/$VERSION/$package"
 
 # Find some nice spot in the ground
 if [[ ! -d "$PREFIX" ]]; then
-  >&2 echo "${_FMT_BOLD}Creating $PREFIX, enter your password if prompted${_FMT_RESET}"
+  @info "${_FMT_BOLD}Creating $PREFIX, enter your password if prompted${_FMT_RESET}"
   if [[ -w "$(dirname "$PREFIX")" ]]; then
     mkdir -pv "$PREFIX"
   else
     sudo mkdir -pv "$PREFIX"
   fi || @fail "Could not create $PREFIX directory"
 else
-  >&2 echo "${_FMT_WARNING}$PREFIX already exists, deleting previous installation...${_FMT_RESET}"
+  @info "${_FMT_WARNING}$PREFIX already exists, deleting previous installation...${_FMT_RESET}"
   if [[ -w "$PREFIX" ]]; then
     find "$PREFIX" -maxdepth 1 -mindepth 1 \! -name repos -exec rm -rf {} \;
   else
@@ -101,7 +119,7 @@ else
 fi
 
 # get ready for growing some scripts
->&2 echo "Installing symbolic links to $TARGET"
+@info "Installing symbolic links to $TARGET"
 if [[ -w "$PREFIX" ]]; then
   ln -sfv "$PREFIX/milpa" "$TARGET/milpa"
   ln -sfv "$PREFIX/compa" "$TARGET/compa"
@@ -112,21 +130,22 @@ else
 [[ -d "$globalRepos" ]] || sudo mkdir -pv "$globalRepos"
 fi
 
-# update version so milpa doesn't look for updates innecessarily
-date "+%s" > "$milpaLocal/last-update-check"
-
 # recycle the bag
 rm -rf "$package"
 
 [[ -d "$localRepos" ]] || mkdir -pv "$localRepos"
+# update version so milpa doesn't look for updates innecessarily
+date "+%s" > "$milpaLocal/last-update-check"
+
+"$TARGET/milpa" --verbose
 
 # Test we can run milpa
-installed_version=$("$TARGET/milpa" --version) || @fail "Could not get the installed version"
+installed_version="$("$TARGET/milpa" --version)" || @fail "Could not get the installed version"
 
 header="🌽 Installed milpa version $installed_version 🌽"
 hlen="$(( ${#header} + 3 ))"
 line="$(printf -- "-%.0s" $(seq 1 "$hlen"))"
->&2 echo "$line"
->&2 echo "${_FMT_INVERTED}$header$_FMT_RESET"
->&2 echo "$line"
->&2 echo "${_FMT_WARNING}Run 'milpa itself shell install-autocomplete' to install shell completions${_FMT_RESET}"
+@info "$line"
+@info "${_FMT_INVERTED}$header$_FMT_RESET"
+@info "$line"
+@info "${_FMT_WARNING}Run 'milpa itself shell install-autocomplete' to install shell completions${_FMT_RESET}"

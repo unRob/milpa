@@ -46,7 +46,7 @@ setup () {
 @test "milpa includes global repos in MILPA_PATH" {
   run milpa debug-env MILPA_PATH
   assert_success
-  assert_output "$MILPA_ROOT/.milpa:$MILPA_ROOT/repos/test-suite"
+  assert_output "$(readlink -f "$MILPA_ROOT/.milpa"):$(readlink -f "$MILPA_ROOT/repos/test-suite")"
 }
 
 @test "milpa prepends user-supplied MILPA_PATH" {
@@ -55,5 +55,5 @@ setup () {
   export MILPA_PATH="$BATS_SUITE_TMPDIR/somewhere"
   run milpa debug-env MILPA_PATH
   assert_success
-  assert_output "${BATS_SUITE_TMPDIR}/somewhere:$MILPA_ROOT/.milpa:$MILPA_ROOT/repos/test-suite"
+  assert_output "${BATS_SUITE_TMPDIR}/somewhere:$(readlink -f $MILPA_ROOT/.milpa):$(readlink -f $MILPA_ROOT/repos/test-suite)"
 }

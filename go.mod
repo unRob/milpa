@@ -4,13 +4,13 @@ go 1.18
 
 require (
 	github.com/alessio/shellescape v1.4.1
-	github.com/bmatcuk/doublestar/v4 v4.0.2
+	github.com/bmatcuk/doublestar/v4 v4.2.0
 	github.com/charmbracelet/glamour v0.5.0
 	github.com/fatih/color v1.13.0
 	github.com/go-playground/validator/v10 v10.11.0
 	github.com/hashicorp/go-getter v1.6.2
 	github.com/sirupsen/logrus v1.8.1
-	github.com/spf13/cobra v1.4.0
+	github.com/spf13/cobra v1.5.0
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/term v0.0.0-20220411215600-e5f449aeb171
 	gopkg.in/yaml.v2 v2.4.0

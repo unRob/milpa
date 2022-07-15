@@ -13,7 +13,6 @@
 package registry
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"sort"
@@ -47,6 +46,19 @@ type CommandTree struct {
 	Children []*CommandTree   `json:"children"`
 }
 
+func (t *CommandTree) Traverse(fn func(cmd *command.Command) error) error {
+	for _, child := range t.Children {
+		if err := fn(child.Command); err != nil {
+			return err
+		}
+
+		if err := child.Traverse(fn); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 type CommandRegistry struct {
 	kv     map[string]*command.Command
 	byPath []*command.Command
@@ -54,6 +66,7 @@ type CommandRegistry struct {
 }
 
 func Register(cmd *command.Command) {
+	logrus.Debugf("Registering %s", cmd.FullName())
 	registry.kv[cmd.FullName()] = cmd
 }
 
@@ -104,8 +117,8 @@ func BuildTree(cc *cobra.Command, depth int) {
 	registry.tree = tree
 }
 
-func AsJSONTree() (string, error) {
-	bytes, err := json.Marshal(registry.tree)
+func SerializeTree(serializationFn func(interface{}) ([]byte, error)) (string, error) {
+	bytes, err := serializationFn(registry.tree)
 	if err != nil {
 		return "", err
 	}
@@ -131,7 +144,7 @@ func SetRoot(ccRoot *cobra.Command, cmdRoot *command.Command) {
 		container := ccRoot
 		for idx, cp := range cmd.Meta.Name {
 			if idx == len(cmd.Meta.Name)-1 {
-				logrus.Debugf("adding command %s to %s", leaf.Name(), container.Name())
+				logrus.Debugf("adding command %s to %s", leaf.Name(), cmd.Meta.Name[0:idx])
 				container.AddCommand(leaf)
 				break
 			}
@@ -141,8 +154,9 @@ func SetRoot(ccRoot *cobra.Command, cmdRoot *command.Command) {
 				// logrus.Debugf("found %s in %s", query, cc.Name())
 				container = cc
 			} else {
-				// logrus.Debugf("creating %s in %s", query, container.Name())
+				// logrus.Debugf("creating %s in %s", query, cmd.Meta.Name[0:idx])
 				groupName := strings.Join(query, " ")
+				groupPath := append(cmd.Meta.Name[0:idx], query...) // nolint:gocritic
 				cc := &cobra.Command{
 					Use:                        cp,
 					Short:                      fmt.Sprintf("%s subcommands", groupName),
@@ -151,7 +165,7 @@ func SetRoot(ccRoot *cobra.Command, cmdRoot *command.Command) {
 					SilenceUsage:               true,
 					SilenceErrors:              true,
 					Annotations: map[string]string{
-						_c.ContextKeyRuntimeIndex: groupName,
+						_c.ContextKeyRuntimeIndex: strings.Join(groupPath, " "),
 					},
 					Args: func(cmd *cobra.Command, args []string) error {
 						err := cobra.OnlyValidArgs(cmd, args)
@@ -189,14 +203,14 @@ func SetRoot(ccRoot *cobra.Command, cmdRoot *command.Command) {
 					Arguments:   command.Arguments{},
 					Options:     command.Options{},
 					Meta: command.Meta{
-						Name: query,
+						Name: groupPath,
 						Path: strings.Join(pathComps[0:len(pathComps)-1], "/"),
 						Repo: cmd.Meta.Repo,
 						Kind: "virtual",
 					},
 				}
 				Register(groupParent)
-				cc.SetHelpFunc(groupParent.HelpRenderer(cmd.Options))
+				cc.SetHelpFunc(groupParent.HelpRenderer(command.Options{}))
 				container.AddCommand(cc)
 				container = cc
 			}

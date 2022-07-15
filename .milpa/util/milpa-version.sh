@@ -59,8 +59,8 @@ function @milpa.version.is_latest () {
     return 0
   fi
 
-  if [[ "$installed" == "$latest" ]]; then
-    # keep bugging until this is true, i guess
+  # keep bugging until either the installed version is later or equal to latest
+  if [[ "$installed" == "$latest" ]] || [[ "$installed" > "$latest" ]]; then
     date "+%s" > "$_milpa_last_checked_path"
     return 0
   fi

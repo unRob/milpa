@@ -134,6 +134,7 @@ func RootCommand(version string) *cobra.Command {
 	rootcc.AddCommand(introspectCommand)
 	introspectCommand.Flags().Int32("depth", 15, "")
 	introspectCommand.Flags().String("format", "json", "")
+	introspectCommand.Flags().String("template", "{{ indent . }}{{ .Name }} - {{ .Summary }}\n", "")
 	rootcc.SetHelpCommand(helpCommand)
 	helpCommand.AddCommand(docsCommand)
 	docsCommand.SetHelpFunc(docs.HelpRenderer(root.Options))

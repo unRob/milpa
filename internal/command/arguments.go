@@ -47,7 +47,11 @@ func (args *Arguments) ToEnv(cmd *Command, dst *[]string, prefix string) {
 	for _, arg := range *args {
 		envName := fmt.Sprintf("%s%s", _c.OutputPrefixArg, arg.EnvName())
 
-		*dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, envName, arg.ToString(true)))
+		if arg.Variadic {
+			*dst = append(*dst, fmt.Sprintf("declare -a %s=%s", envName, shellescape.Quote(arg.ToString(true))))
+		} else {
+			*dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, envName, arg.ToString(true)))
+		}
 	}
 }
 
@@ -74,10 +78,7 @@ func (args *Arguments) Parse(supplied []string) {
 		}
 
 		if arg.Variadic {
-			values := []string{}
-			for _, va := range supplied[idx:] {
-				values = append(values, shellescape.Quote(va))
-			}
+			values := append([]string{}, supplied[idx:]...)
 			arg.SetValue(values)
 		} else {
 			arg.SetValue([]string{supplied[idx]})
@@ -130,6 +131,7 @@ func (args *Arguments) CompletionFunction(cc *cobra.Command, provided []string, 
 			} else {
 				directive = cobra.ShellCompDirectiveError
 			}
+			values = cobra.AppendActiveHelp(values, arg.Description)
 		}
 
 		if toComplete != "" {
@@ -149,18 +151,18 @@ func (args *Arguments) CompletionFunction(cc *cobra.Command, provided []string, 
 // Argument represents a single command-line argument.
 type Argument struct {
 	// Name is how this variable will be exposed to the underlying command.
-	Name string `yaml:"name" validate:"required,excludesall=!$\\/%^@#?:'\""`
+	Name string `json:"name" yaml:"name" validate:"required,excludesall=!$\\/%^@#?:'\""`
 	// Description is what this argument is for.
-	Description string `yaml:"description" validate:"required"`
+	Description string `json:"description" yaml:"description" validate:"required"`
 	// Default is the default value for this argument if none is provided.
-	Default interface{} `yaml:"default" validate:"excluded_with=Required"`
+	Default interface{} `json:"default,omitempty" yaml:"default,omitempty" validate:"excluded_with=Required"`
 	// Variadic makes an argument a list of all values from this one on.
-	Variadic bool `yaml:"variadic"`
+	Variadic bool `json:"variadic" yaml:"variadic"`
 	// Required raises an error if an argument is not provided.
-	Required bool `yaml:"required" validate:"excluded_with=Default"`
+	Required bool `json:"required" yaml:"required" validate:"excluded_with=Default"`
 	// Values describes autocompletion and validation for an argument
-	Values   *ValueSource `yaml:"values" validate:"omitempty"`
-	Command  *Command     `json:"-" validate:"-"`
+	Values   *ValueSource `json:"values,omitempty" yaml:"values" validate:"omitempty"`
+	Command  *Command     `json:"-" yaml:"-" validate:"-"`
 	provided *[]string
 }
 
@@ -213,7 +215,11 @@ func (arg *Argument) ToString(asShell bool) string {
 				value = arg.Default.(string)
 			}
 		} else {
-			value = ""
+			if arg.Variadic && asShell {
+				value = "()"
+			} else {
+				value = ""
+			}
 		}
 	}
 

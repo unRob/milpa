@@ -97,7 +97,8 @@ COMPA_OUT="$compaOut" "$MILPA_COMPA" "$@" 2>"$compaErr" || {
 
 # load parsed arguments and MILPA_ environment variables
 set -o allexport
-eval "$(cat "$compaOut")" || @milpa.fail "Failed setting command environment"
+# shellcheck disable=1090
+source "$compaOut" || @milpa.fail "Failed setting command environment"
 set +o allexport
 [[ -z "$MILPA_COMMAND_KIND" ]] && {
   @milpa.log info "lookup stderr: $(cat "$compaErr")"

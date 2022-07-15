@@ -63,6 +63,11 @@ func (pb *pathBuilder) add(layerID int, path string, verify bool) {
 	if pb.unique == nil {
 		pb.unique = map[string]bool{}
 	}
+
+	if pathR, err := os.Readlink(path); err == nil {
+		path = pathR
+	}
+
 	if _, exists := pb.unique[path]; exists {
 		return
 	}

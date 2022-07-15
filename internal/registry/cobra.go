@@ -40,7 +40,8 @@ func toCobra(cmd *command.Command, globalOptions command.Options) *cobra.Command
 			_c.ContextKeyRuntimeIndex: cmd.FullName(),
 		},
 		Args: func(cc *cobra.Command, supplied []string) error {
-			if runtime.ValidationEnabled() {
+			skipValidation, _ := cc.Flags().GetBool("skip-validation")
+			if !skipValidation && runtime.ValidationEnabled() {
 				cmd.Arguments.Parse(supplied)
 				return cmd.Arguments.AreValid()
 			}
