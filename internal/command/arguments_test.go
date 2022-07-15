@@ -290,7 +290,7 @@ func TestArgumentsToEnv(t *testing.T) {
 			Args: []string{"zero", "one", "two", "three"},
 			Expect: []string{
 				"export MILPA_ARG_FIRST=zero",
-				"export MILPA_ARG_VARIADIC=( one two three )",
+				"declare -a MILPA_ARG_VARIADIC='( one two three )'",
 			},
 			Command: &Command{
 				Meta: Meta{

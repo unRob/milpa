@@ -15,23 +15,31 @@
 set -o pipefail
 
 @milpa.log info "looking for commands with prefix <$MILPA_ARG_PREFIX>"
-# shellcheck disable=2048,2086
-"$MILPA_COMPA" __inspect ${MILPA_ARG_PREFIX[*]} |
-  jq -r 'def toIndentedTree($indent):
-    reduce .[] as $leaf ([];
-      . + [ ([$indent, ($leaf.command.Meta.Name | last), $leaf.command.Summary] | join("¬")) ] + (if $leaf.children then ($leaf.children | toIndentedTree($indent + "  ")) else [] end)
-    );
-  .children | toIndentedTree("")[]' |
-  while IFS="¬" read -r offset name description; do
-    prefix="$offset"
-    suffix=" - $description"
-    if [[ "$MILPA_OPT_NAME_ONLY" ]]; then
-      prefix=""
-      suffix=""
-    fi
 
-    if [[ "$(( ${#offset} / 2 ))" -lt "$MILPA_OPT_DEPTH" ]]; then
-      echo "${prefix}$(@milpa.fmt bold "$name")$suffix"
-    fi
-  done
+function get_tree () {
+  "$MILPA_COMPA" __inspect \
+    --depth "$MILPA_OPT_DEPTH" \
+    --format "$1" \
+    "${2+--template=}${2:-}" \
+    "${MILPA_ARG_PREFIX[@]}"
+}
 
+if [[ "$MILPA_OPT_OUTPUT" =~ ^(yaml|json)$ ]]; then
+  get_tree "$MILPA_OPT_OUTPUT" || @milpa.fail "Could not load tree"
+  exit
+fi
+
+if [[ "$MILPA_OPT_TEMPLATE" != "" ]]; then
+  get_tree text "$MILPA_OPT_TEMPLATE" || @milpa.fail "Could not load tree"
+  exit
+fi
+
+initialDepth="${#MILPA_ARG_PREFIX[@]}"
+while IFS='¬' read -r depth name description; do
+  depth=$(( depth - 1 - initialDepth ))
+  indent=""
+  if [[ "$depth" -gt 0 ]]; then
+    indent="$(printf -- ' %.0s' $(seq 0 $depth))"
+  fi
+  echo "$indent$(@milpa.fmt bold "$name") - $description"
+done < <(get_tree text "{{ len .Meta.Name }}¬{{ .Name }}¬{{ .Summary }}"$'\n')

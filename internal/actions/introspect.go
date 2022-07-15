@@ -13,11 +13,18 @@
 package actions
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"html/template"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	command "github.com/unrob/milpa/internal/command"
+	"github.com/unrob/milpa/internal/errors"
 	"github.com/unrob/milpa/internal/registry"
+	"gopkg.in/yaml.v2"
 )
 
 var introspectCommand *cobra.Command = &cobra.Command{
@@ -27,6 +34,9 @@ var introspectCommand *cobra.Command = &cobra.Command{
 	DisableAutoGenTag: true,
 	SilenceUsage:      true,
 	RunE: func(cmd *cobra.Command, args []string) (err error) {
+		if len(args) == 1 && args[0] == "" {
+			args = []string{}
+		}
 		base, remainingArgs, err := cmd.Root().Find(args)
 
 		if err != nil {
@@ -45,22 +55,42 @@ var introspectCommand *cobra.Command = &cobra.Command{
 		logrus.Debugf("looking for commands at %s depth: %d", base.Name(), depth)
 		registry.BuildTree(base, depth)
 		format, err := cmd.Flags().GetString("format")
+		if err != nil {
+			format = "json"
+		}
 
-		if err == nil {
-			switch format {
-			case "json":
-				json, err := registry.AsJSONTree()
-				if err != nil {
-					return err
-				}
-				fmt.Print(json)
-			case "autocomplete":
-				for _, name := range registry.ChildrenNames() {
-					fmt.Println(name)
-				}
+		var serializationFn func(interface{}) ([]byte, error)
+		switch format {
+		case "yaml":
+			serializationFn = yaml.Marshal
+		case "json":
+			serializationFn = func(t interface{}) ([]byte, error) { return json.MarshalIndent(t, "", "  ") }
+		case "text":
+			outputTpl, err := cmd.Flags().GetString("template")
+			if err != nil {
+				outputTpl = "{{ .Name }} - {{ .Summary }}\n"
 			}
 
+			tpl := template.Must(template.New("treeItem").Parse(outputTpl))
+			serializationFn = func(t interface{}) ([]byte, error) {
+				tree := t.(*registry.CommandTree)
+				var output bytes.Buffer
+				err := tree.Traverse(func(cmd *command.Command) error { return tpl.Execute(&output, cmd) })
+				return output.Bytes(), err
+			}
+		case "autocomplete":
+			serializationFn = func(interface{}) ([]byte, error) {
+				return []byte(strings.Join(registry.ChildrenNames(), "\n") + "\n"), nil
+			}
+		default:
+			return errors.BadArguments{Msg: fmt.Sprintf("Unknown format <%s> for command tree serialization", format)}
 		}
+
+		serialized, err := registry.SerializeTree(serializationFn)
+		if err != nil {
+			return err
+		}
+		fmt.Print(serialized)
 
 		return nil
 	},

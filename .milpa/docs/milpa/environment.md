@@ -63,6 +63,15 @@ Also enabled by the `--no-color` option to disable printing of formatting escape
 
 If enabled, validation will be skipped for arguments and options. Also enabled with `--skip-validation`. **Skipping validation may be unsafe**, but may be useful when validation depends on unavailable data or services.
 
+
+---
+
+## Auto-updates
+
+### `MILPA_DISABLE_UPDATE_CHECKS`
+
+If set to a non-empty string, update checks will not be performed periodically before running commands.
+
 ---
 
 ## Command Environment

@@ -15,7 +15,10 @@
 @milpa.load_util repo
 
 if [[ "$MILPA_OPT_REPO" == "" ]]; then
-  repo_path="$(@milpa.repo.current_path)/.milpa"
+  if ! repo_path="$(@milpa.repo.current_path)/.milpa"; then
+    @milpa.log warning "No milpa repo detected, creating one at $(pwd)"
+    repo_path="$(pwd)/.milpa"
+  fi
 else
   repo_path="$MILPA_OPT_REPO"
 fi
@@ -37,23 +40,25 @@ else
   echo "#!/usr/bin/env bash" >> "$command_path" || @milpa.fail "could not create $command_path"
 fi
 
-cat > "${command_path%.sh}.${MILPA_OPT_CONFIG_FORMAT}" <<'YAML'
-summary: Does a thing
+# shellcheck disable=2001
+cat > "${command_path%.sh}.yaml" <<YAML
+# see \`milpa help docs command spec\` for all the options
+summary: ${MILPA_OPT_SUMMARY}
 description: |
-  Longer description of how it does the thing
-# see `milpa help docs command spec` for all the options
+$(sed 's/^/  /' <<<"${MILPA_OPT_DESCRIPTION}")
 # arguments:
 #   - name: something
 #     description: Sets SOMETHING
 #     required: true
 #     variadic: false
-#     values-subcommand: list things
-#     values: []
+#     values:
+#       script: whoami
 # options:
 #   option:
 #     description: sets OPTION
 #     default: fourty-two
-#     values: [one, two, fourty-two]
+#     values:
+#       static: [one, two, fourty-two]
 YAML
 
 @milpa.log complete "$(@milpa.fmt bold "${command_name}") created"

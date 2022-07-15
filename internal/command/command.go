@@ -40,22 +40,22 @@ const (
 )
 
 type Command struct {
-	Meta         Meta
-	Summary      string    `yaml:"summary" validate:"required"`
-	Description  string    `yaml:"description" validate:"required"`
-	Arguments    Arguments `yaml:"arguments" validate:"dive"`
-	Options      Options   `yaml:"options" validate:"dive"`
+	Meta         Meta      `json:"meta" yaml:"meta"`
+	Summary      string    `json:"summary" yaml:"summary" validate:"required"`
+	Description  string    `json:"description" yaml:"description" validate:"required"`
+	Arguments    Arguments `json:"arguments" yaml:"arguments" validate:"dive"`
+	Options      Options   `json:"options" yaml:"options" validate:"dive"`
 	runtimeFlags *pflag.FlagSet
 	issues       []string
-	HelpFunc     func(printLinks bool) string `json:"-"`
+	HelpFunc     func(printLinks bool) string `json:"-" yaml:"-"`
 	cc           *cobra.Command
 }
 
 type Meta struct {
-	Path string
-	Repo string
-	Name []string
-	Kind Kind
+	Path string   `json:"path" yaml:"path"`
+	Repo string   `json:"repo" yaml:"repo"`
+	Name []string `json:"name" yaml:"name"`
+	Kind Kind     `json:"kind" yaml:"kind"`
 }
 
 func metaForPath(path string, repo string) (meta Meta) {
@@ -120,6 +120,10 @@ func (cmd *Command) SetBindings() *Command {
 	return ptr
 }
 
+func (cmd *Command) Name() string {
+	return cmd.Meta.Name[len(cmd.Meta.Name)-1]
+}
+
 func (cmd *Command) FullName() string {
 	return strings.Join(cmd.Meta.Name, " ")
 }
@@ -160,8 +164,9 @@ func (cmd *Command) FlagSet() *pflag.FlagSet {
 func (cmd *Command) Run(cc *cobra.Command, args []string) error {
 	logrus.Debugf("running command %s", cmd.FullName())
 	cmd.Arguments.Parse(args)
+	skipValidation, _ := cc.Flags().GetBool("skip-validation")
 	cmd.Options.Parse(cc.Flags())
-	if runtime.ValidationEnabled() {
+	if !skipValidation && runtime.ValidationEnabled() {
 		logrus.Debug("Validating arguments")
 		if err := cmd.Arguments.AreValid(); err != nil {
 			return err
@@ -185,8 +190,9 @@ func (cmd *Command) Run(cc *cobra.Command, args []string) error {
 
 func (cmd *Command) RunStandAlone(cc *cobra.Command, args []string) error {
 	cmd.Arguments.Parse(args)
+	skipValidation, _ := cc.Flags().GetBool("skip-validation")
 	cmd.Options.Parse(cc.Flags())
-	if runtime.ValidationEnabled() {
+	if !skipValidation && runtime.ValidationEnabled() {
 		if err := cmd.Arguments.AreValid(); err != nil {
 			return err
 		}

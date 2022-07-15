@@ -39,20 +39,20 @@ const (
 // ValueSource represents the source for an auto-completed and/or validated option/argument.
 type ValueSource struct {
 	// Directories prompts for directories with the given prefix.
-	Directories *string `yaml:"dirs" validate:"omitempty,excluded_with=Files Script Static Milpa"`
+	Directories *string `json:"dirs,omitempty" yaml:"dirs,omitempty" validate:"omitempty,excluded_with=Files Script Static Milpa"`
 	// Files prompts for files with the given extensions
-	Files *[]string `yaml:"files" validate:"omitempty,excluded_with=Directories Script Static Milpa"`
+	Files *[]string `json:"files,omitempty" yaml:"files,omitempty" validate:"omitempty,excluded_with=Directories Script Static Milpa"`
 	// Script runs the provided command with `bash -c "$script"` and returns an option for every line of stdout.
-	Script string `yaml:"script" validate:"omitempty,excluded_with=Directories Files Static Milpa"`
+	Script string `json:"script,omitempty" yaml:"script,omitempty" validate:"omitempty,excluded_with=Directories Files Static Milpa"`
 	// Static returns the given list.
-	Static *[]string `yaml:"static" validate:"omitempty,excluded_with=Directories Files Script Milpa"`
+	Static *[]string `json:"static,omitempty" yaml:"static,omitempty" validate:"omitempty,excluded_with=Directories Files Script Milpa"`
 	// Milpa runs a subcommand and returns an option for every line of stdout.
-	Milpa string `yaml:"milpa" validate:"omitempty,excluded_with=Directories Files Script Static"`
+	Milpa string `json:"milpa,omitempty" yaml:"milpa,omitempty" validate:"omitempty,excluded_with=Directories Files Script Static"`
 	// Timeout is the maximum amount of time milpa will wait for a Script or Milpa command before giving up on completions/validations.
-	Timeout int `yaml:"timeout" validate:"omitempty,excluded_with=Directories Files Static"`
+	Timeout int `json:"timeout,omitempty" yaml:"timeout,omitempty" validate:"omitempty,excluded_with=Directories Files Static"`
 	// Suggestion if provided will only suggest autocomplete values but will not perform validation of a given value
-	Suggestion bool     `yaml:"suggest-only" validate:"omitempty"`
-	Command    *Command `json:"-" validate:"-"`
+	Suggestion bool     `json:"suggest-only" yaml:"suggest-only" validate:"omitempty"` // nolint:tagliatelle
+	Command    *Command `json:"-" yaml:"-" validate:"-"`
 	computed   *[]string
 	flag       cobra.ShellCompDirective
 }

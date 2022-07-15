@@ -41,7 +41,7 @@ Milpa is built with, and thanks to:
 Mostly based on Bash's [Appendix E](https://tldp.org/LDP/abs/html/exitcodes.html) and FreeBSD's [`sysexits`](https://www.freebsd.org/cgi/man.cgi?query=sysexits&apropos=0&sektion=0&manpath=FreeBSD+4.3-RELEASE&format=html)
 
 - 2: `@milpa.fail` was called
-- 42: compa is requesting pretty printing and a clean `milpa` exit
+- 42: `compa` is requesting pretty printing and a clean `milpa` exit
 - 64: arguments/flags could not be parsed or failed validation
 - 70: a spec could not be parsed or help failed rendering
 - 78: `MILPA_ROOT` points to something that's not a directory, or `MILPA_PATH` has an incorrect path set
