@@ -50,8 +50,10 @@
 <option value="help docs milpa util log" />
 <option value="help docs milpa util repo" />
 <option value="help docs milpa util shell" />
+<option value="help docs milpa internals" />
 <option value="help docs milpa changelog" />
 <option value="itself" />
+<option value="itself command-tree" />
 <option value="itself create" />
 <option value="itself docs" />
 <option value="itself docs create" />
@@ -207,6 +209,12 @@
   
   
 <li >
+  <a href="https://milpa.dev/help/docs/milpa/internals/">internals</a>
+
+
+  
+  
+<li >
   <a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
 
 
@@ -233,6 +241,12 @@
   class="sub-menu"
   aria-label="itself subcommands"
 >
+  
+  
+<li >
+  <a href="https://milpa.dev/itself/command-tree/">command-tree</a>
+
+
   
   
 <li >
@@ -361,36 +375,36 @@
 <h2 class="content-header" id="example-repository-layout">Example repository layout</h2> <a aria-hidden="true" class="heading-anchor" href="#example-repository-layout" tabindex="-1">#</a>
 </div>
 <p>Let&rsquo;s say you have this in your repo:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="l">.milpa/</span><span class="w">
-</span><span class="w">  </span><span class="l">commands/</span><span class="w">
-</span><span class="w">    </span><span class="l">vault/</span><span class="w">
-</span><span class="w">      </span><span class="l">cloud-provider/</span><span class="w">
-</span><span class="w">        </span><span class="l">login</span><span class="w">
-</span><span class="w">        </span><span class="l">login.yaml</span><span class="w">
-</span><span class="w">      </span><span class="l">db/</span><span class="w">
-</span><span class="w">        </span><span class="l">connect.sh</span><span class="w">
-</span><span class="w">        </span><span class="l">connect.yaml</span><span class="w">
-</span><span class="w">        </span><span class="l">list.sh</span><span class="w">
-</span><span class="w">        </span><span class="l">list.yaml</span><span class="w">
-</span><span class="w">    </span><span class="l">vpn/</span><span class="w">
-</span><span class="w">      </span><span class="l">connect</span><span class="w">
-</span><span class="w">      </span><span class="l">connect.yaml</span><span class="w">
-</span><span class="w">    </span><span class="l">onboard.sh</span><span class="w">
-</span><span class="w">    </span><span class="l">onboard.yaml</span><span class="w">
-</span><span class="w">    </span><span class="l">release.sh</span><span class="w">
-</span><span class="w">    </span><span class="l">release.yaml</span><span class="w">
-</span><span class="w">  </span><span class="l">docs/</span><span class="w">
-</span><span class="w">    </span><span class="l">welcome/</span><span class="w">
-</span><span class="w">    </span><span class="l">sdlc/</span><span class="w">
-</span><span class="w">      </span><span class="l">releasing/</span><span class="w">
-</span><span class="w">  </span><span class="l">hooks/</span><span class="w">
-</span><span class="w">    </span><span class="l">before-run.sh</span><span class="w">
-</span><span class="w">    </span><span class="l">shell-init.sh</span><span class="w">
-</span><span class="w">  </span><span class="l">util/</span><span class="w">
-</span><span class="w">    </span><span class="l">date.sh</span><span class="w">
-</span><span class="w">    </span><span class="l">etc.sh</span><span class="w">
-</span><span class="w">    </span><span class="l">github.sh</span><span class="w">
-</span></code></pre></div><p>Then, <code>milpa</code> would allow you to run <code>milpa vault cloud-provider login</code> and <code>milpa onboard</code>, as well as <code>milpa vault db connect api --environment production --verbose</code>, or even <code>milpa help vault db list</code> and so on and so forth. You choose how to organize your milpa commands under <code>.milpa/commands</code>, and <code>milpa</code> figures out the rest. Reading your welcome docs is as easy as <code>milpa help docs welcome</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">.milpa/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">commands/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">vault/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="l">cloud-provider/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="l">login</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="l">login.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="l">db/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="l">connect.sh</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="l">connect.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="l">list.sh</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="l">list.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">vpn/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="l">connect</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="l">connect.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">onboard.sh</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">onboard.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">release.sh</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">release.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">docs/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">welcome/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">sdlc/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="l">releasing/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">hooks/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">before-run.sh</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">shell-init.sh</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">util/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">date.sh</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">etc.sh</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">github.sh</span><span class="w">
+</span></span></span></code></pre></div><p>Then, <code>milpa</code> would allow you to run <code>milpa vault cloud-provider login</code> and <code>milpa onboard</code>, as well as <code>milpa vault db connect api --environment production --verbose</code>, or even <code>milpa help vault db list</code> and so on and so forth. You choose how to organize your milpa commands under <code>.milpa/commands</code>, and <code>milpa</code> figures out the rest. Reading your welcome docs is as easy as <code>milpa help docs welcome</code>.</p>
 <p>Using <code>@milpa.load_util</code> your posix-compliant shell scripts will be able to use any utils anywhere in the <code>MILPA_PATH</code>, for example, you could <code>@milpa.load_util github</code> and use any github-related functions in any of your repo&rsquo;s milpa commands.</p>
 <p>Before any command runs, <code>.milpa/hooks/before-run.sh</code> would be called, and <code>.milpa/hooks/shell-init.sh</code> would be ran by <code>milpa itself shell init</code> during your shell&rsquo;s initialization process. See <a href="/help/docs/milpa/repo/hooks/">hooks</a>.</p>
 <p>Ideally, you&rsquo;ll only store milpa-related files in your <code>.milpa</code> repo, as adding more files (specifically to the <code>commands</code> folder, will impact performance).</p>
@@ -398,6 +412,6 @@
 </div>
 
     </main>
-<script src="https://milpa.dev/js/index.min.c23ded03377b9b7f9a9ddcf0d496c3f2053edb162c919e520ab621fc19a4e882.js"></script>
+<script src="https://milpa.dev/js/index.min.a5506f189383980f5c23031e721a22c7b0d860428a98abd5acab1bb2dd83c7f5.js"></script>
 </body>
 </html>

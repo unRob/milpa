@@ -50,8 +50,10 @@
 <option value="help docs milpa util log" />
 <option value="help docs milpa util repo" />
 <option value="help docs milpa util shell" />
+<option value="help docs milpa internals" />
 <option value="help docs milpa changelog" />
 <option value="itself" />
+<option value="itself command-tree" />
 <option value="itself create" />
 <option value="itself docs" />
 <option value="itself docs create" />
@@ -90,6 +92,11 @@
     <li><a href="#input">Input</a>
       <ul>
         <li><a href="#milpa_skip_validation"><code>MILPA_SKIP_VALIDATION</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#auto-updates">Auto-updates</a>
+      <ul>
+        <li><a href="#milpa_disable_update_checks"><code>MILPA_DISABLE_UPDATE_CHECKS</code></a></li>
       </ul>
     </li>
     <li><a href="#command-environment">Command Environment</a></li>
@@ -226,6 +233,12 @@
   
   
 <li >
+  <a href="https://milpa.dev/help/docs/milpa/internals/">internals</a>
+
+
+  
+  
+<li >
   <a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
 
 
@@ -252,6 +265,12 @@
   class="sub-menu"
   aria-label="itself subcommands"
 >
+  
+  
+<li >
+  <a href="https://milpa.dev/itself/command-tree/">command-tree</a>
+
+
   
   
 <li >
@@ -397,6 +416,7 @@
 <p>Commands with the same name will be silently ignored.</p>
 <p>Additional repositories can be added as colon (<code>:</code>) delimited paths, pointing to the directory containing a <code>/.milpa</code> folder within. For example, setting <code>MILPA_PATH=$HOME/code/my-repo:/opt/milpa</code> would prepend the <code>$HOME/code/my-repo</code> and <code>/opt/milpa</code> folders to the command search path.</p>
 <p>If desired, you may set a <code>MILPA_PATH</code> for all shells by adding it to your shell&rsquo;s profile.</p>
+<p><code>MILPA_DISABLE_GIT</code>, <code>MILPA_DISABLE_USER_REPOS</code> and <code>MILPA_DISABLE_GLOBAL_REPOS</code> each disable the corresponding command lookups.</p>
 <hr>
 <div class="content-header-wrapper">
 <h2 class="content-header" id="output">Output</h2> <a aria-hidden="true" class="heading-anchor" href="#output" tabindex="-1">#</a>
@@ -427,12 +447,20 @@
 <p>If enabled, validation will be skipped for arguments and options. Also enabled with <code>--skip-validation</code>. <strong>Skipping validation may be unsafe</strong>, but may be useful when validation depends on unavailable data or services.</p>
 <hr>
 <div class="content-header-wrapper">
+<h2 class="content-header" id="auto-updates">Auto-updates</h2> <a aria-hidden="true" class="heading-anchor" href="#auto-updates" tabindex="-1">#</a>
+</div>
+<div class="content-header-wrapper">
+<h3 class="content-header" id="milpa_disable_update_checks"><code>MILPA_DISABLE_UPDATE_CHECKS</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpa_disable_update_checks" tabindex="-1">#</a>
+</div>
+<p>If set to a non-empty string, update checks will not be performed periodically before running commands.</p>
+<hr>
+<div class="content-header-wrapper">
 <h2 class="content-header" id="command-environment">Command Environment</h2> <a aria-hidden="true" class="heading-anchor" href="#command-environment" tabindex="-1">#</a>
 </div>
 <p>Your commands will also have specific environment variables available, check out <a href="/help/docs/milpa/command/#environment-variables">milpa help docs milpa command</a></p>
 
 
     </main>
-<script src="https://milpa.dev/js/index.min.c23ded03377b9b7f9a9ddcf0d496c3f2053edb162c919e520ab621fc19a4e882.js"></script>
+<script src="https://milpa.dev/js/index.min.a5506f189383980f5c23031e721a22c7b0d860428a98abd5acab1bb2dd83c7f5.js"></script>
 </body>
 </html>

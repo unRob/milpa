@@ -14,6 +14,8 @@
   </url><url>
     <loc>https://milpa.dev/help/docs/milpa/util/</loc>
   </url><url>
+    <loc>https://milpa.dev/help/docs/milpa/internals/</loc>
+  </url><url>
     <loc>https://milpa.dev/help/docs/milpa/changelog/</loc>
   </url><url>
     <loc>https://milpa.dev/</loc>
@@ -37,6 +39,8 @@
     <loc>https://milpa.dev/help/docs/milpa/util/shell/</loc>
   </url><url>
     <loc>https://milpa.dev/itself/</loc>
+  </url><url>
+    <loc>https://milpa.dev/itself/command-tree/</loc>
   </url><url>
     <loc>https://milpa.dev/itself/create/</loc>
   </url><url>

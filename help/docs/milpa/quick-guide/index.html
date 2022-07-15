@@ -50,8 +50,10 @@
 <option value="help docs milpa util log" />
 <option value="help docs milpa util repo" />
 <option value="help docs milpa util shell" />
+<option value="help docs milpa internals" />
 <option value="help docs milpa changelog" />
 <option value="itself" />
+<option value="itself command-tree" />
 <option value="itself create" />
 <option value="itself docs" />
 <option value="itself docs create" />
@@ -211,6 +213,12 @@
   
   
 <li >
+  <a href="https://milpa.dev/help/docs/milpa/internals/">internals</a>
+
+
+  
+  
+<li >
   <a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
 
 
@@ -237,6 +245,12 @@
   class="sub-menu"
   aria-label="itself subcommands"
 >
+  
+  
+<li >
+  <a href="https://milpa.dev/itself/command-tree/">command-tree</a>
+
+
   
   
 <li >
@@ -370,97 +384,97 @@
 <h2 class="content-header" id="installing-milpa">installing <code>milpa</code></h2> <a aria-hidden="true" class="heading-anchor" href="#installing-milpa" tabindex="-1">#</a>
 </div>
 <p>Running the following command will install the latest version of <code>milpa</code></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">curl -L https://milpa.dev/install.sh <span class="p">|</span> bash -
-</code></pre></div><div class="content-header-wrapper">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl -L https://milpa.dev/install.sh <span class="p">|</span> bash -
+</span></span></code></pre></div><div class="content-header-wrapper">
 <h2 class="content-header" id="installing-autocomplete">installing autocomplete</h2> <a aria-hidden="true" class="heading-anchor" href="#installing-autocomplete" tabindex="-1">#</a>
 </div>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># one of the best things about milpa is it&#39;s built-in support for shell completion</span>
-<span class="c1"># this happens after you type &#34;milpa &#34; at the prompt and press the `tab` key</span>
-<span class="c1"># milpa will offer suggestions on commands, arguments and options based on your</span>
-<span class="c1"># commmands&#39;s spec. We&#39;ll install the required scripts by running:</span>
-milpa itself shell install-autocomplete
-
-<span class="c1"># After this is done, you&#39;ll likely need to reload your shell or open a new session/tab.</span>
-</code></pre></div><div class="content-header-wrapper">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># one of the best things about milpa is it&#39;s built-in support for shell completion</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># this happens after you type &#34;milpa &#34; at the prompt and press the `tab` key</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># milpa will offer suggestions on commands, arguments and options based on your</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># commmands&#39;s spec. We&#39;ll install the required scripts by running:</span>
+</span></span><span class="line"><span class="cl">milpa itself shell install-autocomplete
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># After this is done, you&#39;ll likely need to reload your shell or open a new session/tab.</span>
+</span></span></code></pre></div><div class="content-header-wrapper">
 <h2 class="content-header" id="creating-a-new-command">Creating a new command</h2> <a aria-hidden="true" class="heading-anchor" href="#creating-a-new-command" tabindex="-1">#</a>
 </div>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># Start by heading to your project&#39;s git repo</span>
-<span class="nb">cd</span> ~/src/my-teams-app
-
-<span class="c1"># let&#39;s say we wanna share a script that every new hire runs to setup their system.</span>
-<span class="c1"># milpa helps you get started by running `milpa itself create` to create a new command</span>
-<span class="c1"># Check out how to use it by running</span>
-milpa itself create --help
-
-<span class="c1"># Now we&#39;ve seen the help page for the `itself create` command, let&#39;s go ahead and create our &#34;developer-setup&#34; command:</span>
-milpa itself create developer-setup
-
-<span class="c1"># A couple of new files will be created:</span>
-ls -lah .milpa/commands
-<span class="c1"># you&#39;ll see output like:</span>
-<span class="c1"># -rw-r--r--  1 ada  staff  3141 Mar  14 15:09 developer-setup.sh</span>
-<span class="c1"># -rw-r--r--  1 ada  staff   314 Mar  14 15:09 developer-setup.yaml</span>
-</code></pre></div><div class="content-header-wrapper">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># Start by heading to your project&#39;s git repo</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ~/src/my-teams-app
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># let&#39;s say we wanna share a script that every new hire runs to setup their system.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># milpa helps you get started by running `milpa itself create` to create a new command</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Check out how to use it by running</span>
+</span></span><span class="line"><span class="cl">milpa itself create --help
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Now we&#39;ve seen the help page for the `itself create` command, let&#39;s go ahead and create our &#34;developer-setup&#34; command:</span>
+</span></span><span class="line"><span class="cl">milpa itself create developer-setup
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># A couple of new files will be created:</span>
+</span></span><span class="line"><span class="cl">ls -lah .milpa/commands
+</span></span><span class="line"><span class="cl"><span class="c1"># you&#39;ll see output like:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -rw-r--r--  1 ada  staff  3141 Mar  14 15:09 developer-setup.sh</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -rw-r--r--  1 ada  staff   314 Mar  14 15:09 developer-setup.yaml</span>
+</span></span></code></pre></div><div class="content-header-wrapper">
 <h2 class="content-header" id="actually-writing-a-command">Actually writing a command</h2> <a aria-hidden="true" class="heading-anchor" href="#actually-writing-a-command" tabindex="-1">#</a>
 </div>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># now, we&#39;ll begin by editing our spec</span>
-<span class="s2">&#34;</span><span class="nv">$EDITOR</span><span class="s2">&#34;</span> .milpa/commands/developer-setup.yaml
-</code></pre></div><p>Our <a href="./milpa/docs/command/spec/">spec</a> should look like this:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># .milpa/commands/developer-setup.yaml</span><span class="w">
-</span><span class="w"></span><span class="c"># We&#39;ll set a one-line `summary` and a more elaborated `description`</span><span class="w">
-</span><span class="w"></span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l">Bootstrap a developer&#39;s machine</span><span class="w">
-</span><span class="w"></span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
-</span><span class="sd">  </span><span class="w">  </span><span class="l">Installs all the fun stuff required for doing your dev job.</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="c"># We&#39;ll add a --kind option to specify which kind of work the user will be doing</span><span class="w">
-</span><span class="w"></span><span class="nt">options</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l">fullstack</span><span class="w">
-</span><span class="w">    </span><span class="nt">values</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">fullstack, data]</span><span class="w">
-</span><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">What kind of work will you be doing primarily?</span><span class="w">
-</span></code></pre></div><p>Now, we can begin writing our <a href="./milpa/docs/command/">command</a>:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/usr/bin/env bash
-</span><span class="cp"></span><span class="c1"># .milpa/commands/developer-setup.sh</span>
-
-@milpa.log info <span class="s2">&#34;🚀 getting your computer ready for your </span><span class="si">${</span><span class="nv">MILPA_OPT_KIND</span><span class="p">:</span><span class="si">}</span><span class="s2"> exploits 🚀&#34;</span>
-
-@milpa.log info <span class="s2">&#34;installing some packages...&#34;</span>
-@milpa.log info <span class="s2">&#34;configuring credentials sources&#34;</span>
-@milpa.log info <span class="s2">&#34;pleasing the compliance overlords, overladies, and overfolks&#34;</span>
-
-@milpa log <span class="nb">complete</span> <span class="s2">&#34;Your system is ready to roll, </span><span class="k">$(</span>whoami<span class="k">)</span><span class="s2">!&#34;</span>
-</code></pre></div><p>Once we&rsquo;re done, we can check milpa recognizes the command and can parse it&rsquo;s spec:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">milpa itself doctor
-<span class="c1"># output will look like:</span>
-<span class="c1"># MILPA_ROOT is: /usr/local/lib/milpa</span>
-<span class="c1"># MILPA_PATH is:</span>
-<span class="c1"># /usr/local/lib/milpa</span>
-<span class="c1"># /home/ada/src/my-teams-app</span>
-<span class="c1">#</span>
-<span class="c1"># Runnable commands:</span>
-<span class="c1"># -----------</span>
-<span class="c1"># ✅ developer-setup — /home/ada/my-teams-app/.milpa/commands/developer-setup.sh</span>
-<span class="c1"># -----------</span>
-<span class="c1"># ✅ itself create — /usr/local/lib/milpa/.milpa/commands/itself/create.sh</span>
-<span class="c1"># -----------</span>
-<span class="c1"># .. and so on</span>
-<span class="c1"># -----------</span>
-
-<span class="c1"># if you don&#39;t see a checkmark next to your command&#39;s name, you&#39;ll get some</span>
-<span class="c1"># feedback on what went wrong, check out `milpa help docs spec` for more info on</span>
-<span class="c1"># how to write a command spec</span>
-</code></pre></div><div class="content-header-wrapper">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># now, we&#39;ll begin by editing our spec</span>
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;</span><span class="nv">$EDITOR</span><span class="s2">&#34;</span> .milpa/commands/developer-setup.yaml
+</span></span></code></pre></div><p>Our <a href="./milpa/docs/command/spec/">spec</a> should look like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># .milpa/commands/developer-setup.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># We&#39;ll set a one-line `summary` and a more elaborated `description`</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l">Bootstrap a developer&#39;s machine</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">  </span><span class="w">  </span><span class="l">Installs all the fun stuff required for doing your dev job.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># We&#39;ll add a --kind option to specify which kind of work the user will be doing</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">options</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l">fullstack</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">values</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">fullstack, data]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">What kind of work will you be doing primarily?</span><span class="w">
+</span></span></span></code></pre></div><p>Now, we can begin writing our <a href="./milpa/docs/command/">command</a>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="c1"># .milpa/commands/developer-setup.sh</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">@milpa.log info <span class="s2">&#34;🚀 getting your computer ready for your </span><span class="si">${</span><span class="nv">MILPA_OPT_KIND</span><span class="p">:</span><span class="si">}</span><span class="s2"> exploits 🚀&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">@milpa.log info <span class="s2">&#34;installing some packages...&#34;</span>
+</span></span><span class="line"><span class="cl">@milpa.log info <span class="s2">&#34;configuring credentials sources&#34;</span>
+</span></span><span class="line"><span class="cl">@milpa.log info <span class="s2">&#34;pleasing the compliance overlords, overladies, and overfolks&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">@milpa log <span class="nb">complete</span> <span class="s2">&#34;Your system is ready to roll, </span><span class="k">$(</span>whoami<span class="k">)</span><span class="s2">!&#34;</span>
+</span></span></code></pre></div><p>Once we&rsquo;re done, we can check milpa recognizes the command and can parse it&rsquo;s spec:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">milpa itself doctor
+</span></span><span class="line"><span class="cl"><span class="c1"># output will look like:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># MILPA_ROOT is: /usr/local/lib/milpa</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># MILPA_PATH is:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># /usr/local/lib/milpa</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># /home/ada/src/my-teams-app</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Runnable commands:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -----------</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ✅ developer-setup — /home/ada/my-teams-app/.milpa/commands/developer-setup.sh</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -----------</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ✅ itself create — /usr/local/lib/milpa/.milpa/commands/itself/create.sh</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -----------</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># .. and so on</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -----------</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># if you don&#39;t see a checkmark next to your command&#39;s name, you&#39;ll get some</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># feedback on what went wrong, check out `milpa help docs spec` for more info on</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># how to write a command spec</span>
+</span></span></code></pre></div><div class="content-header-wrapper">
 <h2 class="content-header" id="running-your-new-command">Running your new command</h2> <a aria-hidden="true" class="heading-anchor" href="#running-your-new-command" tabindex="-1">#</a>
 </div>
 <p>Once everything looks good, we should be ready to test our command out!</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">milpa developer-setup
-<span class="c1"># you&#39;ll see output like:</span>
-<span class="c1"># [info:developer-setup] 🚀 getting your computer ready for your fullstack exploits 🚀</span>
-<span class="c1"># ...</span>
-<span class="c1"># [info:developer-setup] ✅ Your system is ready to roll, Ada!</span>
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">milpa developer-setup
+</span></span><span class="line"><span class="cl"><span class="c1"># you&#39;ll see output like:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># [info:developer-setup] 🚀 getting your computer ready for your fullstack exploits 🚀</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ...</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># [info:developer-setup] ✅ Your system is ready to roll, Ada!</span>
+</span></span></code></pre></div>
 
     </main>
-<script src="https://milpa.dev/js/index.min.c23ded03377b9b7f9a9ddcf0d496c3f2053edb162c919e520ab621fc19a4e882.js"></script>
+<script src="https://milpa.dev/js/index.min.a5506f189383980f5c23031e721a22c7b0d860428a98abd5acab1bb2dd83c7f5.js"></script>
 </body>
 </html>

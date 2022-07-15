@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en" />
-  <meta property="og:title" content="help docs milpa util log" />
+  <meta property="og:title" content="itself command-tree" />
   <meta property="og:site_name" content="🌽 milpa" />
-  <meta property="og:description" content="Functions related to output" />
-  <meta name="description" content="Functions related to output" />
-  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/util/log/" />
-  <title>milpa help docs milpa util log</title>
+  <meta property="og:description" content="Prints a tree of known commands" />
+  <meta name="description" content="Prints a tree of known commands" />
+  <meta property="og:url" content="https://milpa.dev/itself/command-tree/" />
+  <title>milpa itself command-tree</title>
   <link rel="stylesheet" href="/css/bundle.min.ede1eef6269c98894bb1d97136560b8364cb9d02c32b628bfd58bd5aaaf24d68.css"/>
 
-  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/util/log/">
+  <link rel="canonical" href="https://milpa.dev/itself/command-tree/">
 
   
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -33,7 +33,7 @@
     type="text"
     aria-label="milpa command selector"
     id="command-selector"
-    value="help docs milpa util log" />
+    value="itself command-tree" />
   <datalist id="milpa-commands">
     <option value="help" />
 <option value="help docs" />
@@ -75,12 +75,15 @@
 <div id="sidebar" aria-hidden="false">
   <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
   <ul>
-    <li><a href="#functions">Functions</a>
-      <ul>
-        <li><a href="#milpafmt"><code>@milpa.fmt</code></a></li>
-        <li><a href="#milpalog"><code>@milpa.log</code></a></li>
-      </ul>
-    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#arguments">Arguments</a></li>
+    <li><a href="#options">Options</a></li>
+    <li><a href="#description">Description</a></li>
+    <li><a href="#examples">Examples</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#global-options">Global Options</a></li>
   </ul>
 </nav>
   
@@ -371,29 +374,62 @@
 
 
 <main id="content">
-<h1 id="command-name-header" class="sr-only">milpa help docs milpa util log</h1>
-<p>The <code>log</code> util contains shell functions related to output of informational messages. This utility is <strong>loaded by default</strong>.</p>
-<p>If <a href="https://linux.die.net/man/7/term"><code>TERM</code></a> is not set, then it&rsquo;ll default to <code>xterm-color</code>.</p>
+<h1 id="command-name-header" class="sr-only">milpa itself command-tree</h1>
+<p>Prints a tree of known commands</p>
 <div class="content-header-wrapper">
-<h2 class="content-header" id="functions">Functions</h2> <a aria-hidden="true" class="heading-anchor" href="#functions" tabindex="-1">#</a>
+<h2 class="content-header" id="usage">Usage</h2> <a aria-hidden="true" class="heading-anchor" href="#usage" tabindex="-1">#</a>
 </div>
+<p><code>milpa itself command-tree [options] [PREFIX...] [flags]</code></p>
 <div class="content-header-wrapper">
-<h3 class="content-header" id="milpafmt"><code>@milpa.fmt</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpafmt" tabindex="-1">#</a>
+<h2 class="content-header" id="arguments">Arguments</h2> <a aria-hidden="true" class="heading-anchor" href="#arguments" tabindex="-1">#</a>
 </div>
-<p><code>@milpa.fmt CODE MESSAGE</code></p>
-<p>Returns <code>MESSAGE</code> formatted with <code>CODE</code> and does not print a new line. Code can be any of <code>bold</code>, <code>warning</code>, <code>error</code> and <code>inverted</code>.</p>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="milpalog"><code>@milpa.log</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpalog" tabindex="-1">#</a>
-</div>
-<p><code>@milpa.log LEVEL [MESSAGE]</code></p>
-<p>Prints <code>MESSAGE</code> with a log prefix, unless <code>--silent</code> is specified or <code>LEVEL</code> is error. Level may be one of:</p>
 <ul>
-<li><code>complete</code>: prefixes ✅ to your message and prints in bold,</li>
-<li><code>success</code>: prefixes ✔ to your message,</li>
-<li><code>error</code>: prints your message in red,</li>
-<li><code>warning</code>: prints your message in yellow,</li>
-<li><code>info</code>: just prints your message, and</li>
-<li><code>debug</code>: if <code>--verbose</code> is specified, prints your message in gray.</li>
+<li><code>PREFIX...</code> - Sets the name prefix to list from</li>
+</ul>
+<div class="content-header-wrapper">
+<h2 class="content-header" id="options">Options</h2> <a aria-hidden="true" class="heading-anchor" href="#options" tabindex="-1">#</a>
+</div>
+<ul>
+<li><code>--depth</code> (<em>string</em>): The maximum depth to search for commands. Default: <em>15</em>.</li>
+<li><code>--output</code> (<em>string</em>): the format to output results in. Default: <em>text</em>.</li>
+<li><code>--template</code> (<em>string</em>): with <code>--output text</code>, a go template to apply to every command.</li>
+</ul>
+<div class="content-header-wrapper">
+<h2 class="content-header" id="description">Description</h2> <a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a>
+</div>
+<p>Prints out command names and descriptions, or optionally all properties as <code>json</code> or <code>yaml</code>.</p>
+<div class="content-header-wrapper">
+<h2 class="content-header" id="examples">Examples</h2> <a aria-hidden="true" class="heading-anchor" href="#examples" tabindex="-1">#</a>
+</div>
+<div class="content-header-wrapper">
+<h1 class="content-header" id="print-all-known-subcommands">print all known subcommands</h1> <a aria-hidden="true" class="heading-anchor" href="#print-all-known-subcommands" tabindex="-1">#</a>
+</div>
+<p>milpa itself command-tree</p>
+<div class="content-header-wrapper">
+<h1 class="content-header" id="print-a-tree-of-milpa-itself-sub-commands">print a tree of milpa itself sub-commands</h1> <a aria-hidden="true" class="heading-anchor" href="#print-a-tree-of-milpa-itself-sub-commands" tabindex="-1">#</a>
+</div>
+<p>milpa itself command-tree itself</p>
+<div class="content-header-wrapper">
+<h1 class="content-header" id="print-out-all-commands-skipping-groups">print out all commands, skipping groups</h1> <a aria-hidden="true" class="heading-anchor" href="#print-out-all-commands-skipping-groups" tabindex="-1">#</a>
+</div>
+<p>milpa itself command-tree &ndash;template &lsquo;{{ if (not (eq .Meta.Kind &ldquo;virtual&rdquo;)) }}{{ .FullName }}&rsquo;$&rsquo;\n&rsquo;&rsquo;{{ end }}&rsquo;</p>
+<div class="content-header-wrapper">
+<h1 class="content-header" id="get-all-commands-as-a-json-tree">get all commands as a json tree</h1> <a aria-hidden="true" class="heading-anchor" href="#get-all-commands-as-a-json-tree" tabindex="-1">#</a>
+</div>
+<p>milpa itself command-tree &ndash;output json</p>
+<div class="content-header-wrapper">
+<h1 class="content-header" id="same-but-as-the-yaml-representation-of-this-command-itself">same, but as the yaml representation of this command itself</h1> <a aria-hidden="true" class="heading-anchor" href="#same-but-as-the-yaml-representation-of-this-command-itself" tabindex="-1">#</a>
+</div>
+<p>milpa itself command-tree &ndash;output json itself command-tree</p>
+<div class="content-header-wrapper">
+<h2 class="content-header" id="global-options">Global Options</h2> <a aria-hidden="true" class="heading-anchor" href="#global-options" tabindex="-1">#</a>
+</div>
+<ul>
+<li><code>--help</code> (<em>bool</em>): Display help for any command.</li>
+<li><code>--no-color</code> (<em>bool</em>): Print to stderr without any formatting codes.</li>
+<li><code>--silent</code> (<em>bool</em>): Silence non-error logging.</li>
+<li><code>--skip-validation</code> (<em>bool</em>): Do not validate any arguments or options.</li>
+<li><code>--verbose</code> (<em>bool</em>): Log verbose output to stderr.</li>
 </ul>
 
 

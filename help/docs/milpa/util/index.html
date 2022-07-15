@@ -50,8 +50,10 @@
 <option value="help docs milpa util log" />
 <option value="help docs milpa util repo" />
 <option value="help docs milpa util shell" />
+<option value="help docs milpa internals" />
 <option value="help docs milpa changelog" />
 <option value="itself" />
+<option value="itself command-tree" />
 <option value="itself create" />
 <option value="itself docs" />
 <option value="itself docs create" />
@@ -209,6 +211,12 @@
   
   
 <li >
+  <a href="https://milpa.dev/help/docs/milpa/internals/">internals</a>
+
+
+  
+  
+<li >
   <a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
 
 
@@ -235,6 +243,12 @@
   class="sub-menu"
   aria-label="itself subcommands"
 >
+  
+  
+<li >
+  <a href="https://milpa.dev/itself/command-tree/">command-tree</a>
+
+
   
   
 <li >
@@ -362,16 +376,16 @@
 </div>
 <p><code>@milpa.load_util UTIL_NAME...</code></p>
 <p>In your scripts, you may load utilities like so:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/usr/bin/env bash
-</span><span class="cp"></span>
-<span class="c1"># loads the repo util</span>
-@milpa.load_util repo
-
-@milpa.log info <span class="s2">&#34;Current repo path is: </span><span class="k">$(</span>@milpa.repo.current_path<span class="k">)</span><span class="s2">&#34;</span>
-
-<span class="c1"># loads shell, as well as repo</span>
-@milpa.load_util repo shell
-</code></pre></div><div class="content-header-wrapper">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="c1"># loads the repo util</span>
+</span></span><span class="line"><span class="cl">@milpa.load_util repo
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">@milpa.log info <span class="s2">&#34;Current repo path is: </span><span class="k">$(</span>@milpa.repo.current_path<span class="k">)</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># loads shell, as well as repo</span>
+</span></span><span class="line"><span class="cl">@milpa.load_util repo shell
+</span></span></code></pre></div><div class="content-header-wrapper">
 <h2 class="content-header" id="utilities">Utilities</h2> <a aria-hidden="true" class="heading-anchor" href="#utilities" tabindex="-1">#</a>
 </div>
 <p>There&rsquo;s a few built-in utilities:</p>
@@ -385,14 +399,14 @@
 </div>
 <p>To add your own to your repo, create a <code>util</code> folder and add <code>your-util-name.sh</code> under it. You may put in there whatever you want available for your shell scripts. Ideally, you&rsquo;d put in there a few functions, whose name may start with <code>@milpa</code>, but are not required to be named in any particular way.</p>
 <p>Then, you can:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">@milpa.load_util your-util-name
-
-<span class="c1"># and use whatever functions you put in there</span>
-do_some_cool_stuff <span class="s2">&#34;</span><span class="nv">$SHELL</span><span class="s2">&#34;</span>
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">@milpa.load_util your-util-name
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># and use whatever functions you put in there</span>
+</span></span><span class="line"><span class="cl">do_some_cool_stuff <span class="s2">&#34;</span><span class="nv">$SHELL</span><span class="s2">&#34;</span>
+</span></span></code></pre></div>
 </div>
 
     </main>
-<script src="https://milpa.dev/js/index.min.c23ded03377b9b7f9a9ddcf0d496c3f2053edb162c919e520ab621fc19a4e882.js"></script>
+<script src="https://milpa.dev/js/index.min.a5506f189383980f5c23031e721a22c7b0d860428a98abd5acab1bb2dd83c7f5.js"></script>
 </body>
 </html>
