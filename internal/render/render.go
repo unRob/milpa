@@ -17,6 +17,7 @@ import (
 	"os"
 
 	"github.com/charmbracelet/glamour"
+	"github.com/sirupsen/logrus"
 	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/unrob/milpa/internal/runtime"
 	"golang.org/x/term"
@@ -35,7 +36,8 @@ func Markdown(content []byte, withColor bool) ([]byte, error) {
 
 	width, _, err := term.GetSize(0)
 	if err != nil {
-		return content, err
+		logrus.Debugf("Could not get terminal width")
+		width = 80
 	}
 
 	var styleFunc glamour.TermRendererOption

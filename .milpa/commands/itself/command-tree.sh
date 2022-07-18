@@ -14,7 +14,11 @@
 
 set -o pipefail
 
-@milpa.log info "looking for commands with prefix <$MILPA_ARG_PREFIX>"
+if [[ "$MILPA_ARG_PREFIX" ]]; then
+  @milpa.log info "looking for commands with prefix <$MILPA_ARG_PREFIX>"
+else
+  @milpa.log info "looking for all known commands"
+fi
 
 function get_tree () {
   "$MILPA_COMPA" __inspect \
