@@ -130,6 +130,7 @@ func RootCommand(version string) *cobra.Command {
 	rootcc.AddCommand(completionCommand)
 	rootcc.AddCommand(generateDocumentationCommand)
 	rootcc.AddCommand(doctorCommand)
+	doctorCommand.Flags().Bool("summary", false, "")
 	rootcc.AddCommand(fetchCommand)
 	rootcc.AddCommand(introspectCommand)
 	introspectCommand.Flags().Int32("depth", 15, "")

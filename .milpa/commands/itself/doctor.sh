@@ -12,4 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-exec "$MILPA_COMPA" __doctor
+exec "$MILPA_COMPA" __doctor "${MILPA_OPT_SUMMARY:+--summary}"

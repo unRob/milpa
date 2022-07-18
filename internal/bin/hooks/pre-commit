@@ -47,7 +47,7 @@ if files_touched "${GO_DEPS[@]}"; then
 fi
 
 files_touched "${INTEGRATION_DEPS[@]}" && "$MILPA_ROOT/milpa" dev test integration
-files_touched "${DOCTOR_DEPS[@]}" && "$MILPA_ROOT/milpa" itself doctor
+files_touched "${DOCTOR_DEPS[@]}" && MILPA_PATH="" MILPA_DISABLE_USER_REPOS="true" "$MILPA_ROOT/milpa" itself doctor --summary
 
 "$MILPA_ROOT/milpa" cl update >/dev/null 2>&1
 

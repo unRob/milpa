@@ -24,4 +24,7 @@ if [[ "$goOk" -eq 0 ]]; then
   integrationOk="$?"
 fi
 
-[[ "${shellOk}${goOk}${integrationOk}" == "000" ]]
+MILPA_PATH="" MILPA_DISABLE_USER_REPOS="true" milpa itself doctor --summary
+doctorOk="$?"
+
+[[ "${shellOk}${goOk}${integrationOk}${doctorOk}" == "0000" ]]

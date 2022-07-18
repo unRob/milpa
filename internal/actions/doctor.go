@@ -31,12 +31,18 @@ var doctorCommand *cobra.Command = &cobra.Command{
 	Hidden:            true,
 	DisableAutoGenTag: true,
 	SilenceUsage:      true,
-	RunE: func(_ *cobra.Command, args []string) (err error) {
+	RunE: func(cmd *cobra.Command, args []string) (err error) {
 		bold := color.New(color.Bold)
 		warn := color.New(color.FgYellow)
 		fail := color.New(color.FgRed)
 		success := color.New(color.FgGreen)
 		failedOverall := false
+		failures := []string{}
+
+		summarize, err := cmd.Flags().GetBool("summary")
+		if err != nil {
+			summarize = false
+		}
 
 		var milpaRoot string
 		if mp := os.Getenv(_c.EnvVarMilpaRoot); mp != "" {
@@ -67,6 +73,7 @@ var doctorCommand *cobra.Command = &cobra.Command{
 				formatter := success
 				if status == 1 {
 					hasFailures = true
+					failures = append(failures, cmd.FullName())
 					formatter = fail
 				} else if status == 2 {
 					formatter = warn
@@ -81,14 +88,16 @@ var doctorCommand *cobra.Command = &cobra.Command{
 			}
 
 			fmt.Println(bold.Sprintf("%s %s", prefix, cmd.FullName()), "—", cmd.Meta.Path)
-			if message != "" {
-				fmt.Println(message)
+			if !summarize || hasFailures {
+				if message != "" {
+					fmt.Println(message)
+				}
+				fmt.Println("-----------")
 			}
-			fmt.Println("-----------")
 		}
 
 		if failedOverall {
-			return fmt.Errorf("your milpa could use some help, check out errors above")
+			return fmt.Errorf("your milpa could use some help, found errors in:\n%s", strings.Join(failures, "\n"))
 		}
 
 		return
