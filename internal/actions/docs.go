@@ -15,7 +15,6 @@ package actions
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"regexp"
 	"strings"
@@ -46,11 +45,11 @@ func readDoc(query []string) ([]byte, error) {
 		logrus.Debugf("looking for doc named %s", candidate)
 		_, err := os.Lstat(candidate + ".md")
 		if err == nil {
-			return ioutil.ReadFile(candidate + ".md")
+			return os.ReadFile(candidate + ".md")
 		}
 
 		if _, err := os.Lstat(candidate + "/index.md"); err == nil {
-			return ioutil.ReadFile(candidate + "/index.md")
+			return os.ReadFile(candidate + "/index.md")
 		}
 
 		if _, err := os.Stat(candidate); err == nil {
@@ -173,7 +172,7 @@ func writeDocs(dst string) error {
 	}
 
 	for _, doc := range allDocs {
-		contents, err := ioutil.ReadFile(doc)
+		contents, err := os.ReadFile(doc)
 		if err != nil {
 			return err
 		}
@@ -208,7 +207,6 @@ func writeDocs(dst string) error {
 		if err != nil {
 			return err
 		}
-
 	}
 
 	return nil

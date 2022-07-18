@@ -103,8 +103,8 @@ func (vs *ValueSource) Resolve() (values []string, flag cobra.ShellCompDirective
 			args = append([]string{"/bin/bash", "-c"}, cmd)
 		} else {
 			args = append([]string{"milpa"}, strings.Split(cmd, " ")...)
-
 		}
+
 		envMap := vs.Command.EnvironmentMap()
 		env := os.Environ()
 		for k, v := range envMap {

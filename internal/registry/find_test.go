@@ -94,7 +94,6 @@ func setupFS(filenames []string, pool map[string]*fstest.MapFile) *fstest.MapFS 
 }
 
 func TestFindScripts(t *testing.T) {
-
 	t.Run("errors without milpa_path set", func(t *testing.T) {
 		mp := runtime.MilpaPath
 		defer func() { runtime.MilpaPath = mp }()

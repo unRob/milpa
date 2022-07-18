@@ -168,23 +168,22 @@ func SetRoot(ccRoot *cobra.Command, cmdRoot *command.Command) {
 						_c.ContextKeyRuntimeIndex: strings.Join(groupPath, " "),
 					},
 					Args: func(cmd *cobra.Command, args []string) error {
-						err := cobra.OnlyValidArgs(cmd, args)
-						if err != nil {
-
-							suggestions := []string{}
-							bold := color.New(color.Bold)
-							for _, l := range cmd.SuggestionsFor(args[len(args)-1]) {
-								suggestions = append(suggestions, bold.Sprint(l))
-							}
-							last := len(args) - 1
-							parent := cmd.CommandPath()
-							errMessage := fmt.Sprintf("Unknown subcommand %s of known command %s", bold.Sprint(args[last]), bold.Sprint(parent))
-							if len(suggestions) > 0 {
-								errMessage += ". Perhaps you meant " + strings.Join(suggestions, ", ") + "?"
-							}
-							return errors.NotFound{Msg: errMessage, Group: []string{}}
+						if err := cobra.OnlyValidArgs(cmd, args); err == nil {
+							return nil
 						}
-						return nil
+
+						suggestions := []string{}
+						bold := color.New(color.Bold)
+						for _, l := range cmd.SuggestionsFor(args[len(args)-1]) {
+							suggestions = append(suggestions, bold.Sprint(l))
+						}
+						last := len(args) - 1
+						parent := cmd.CommandPath()
+						errMessage := fmt.Sprintf("Unknown subcommand %s of known command %s", bold.Sprint(args[last]), bold.Sprint(parent))
+						if len(suggestions) > 0 {
+							errMessage += ". Perhaps you meant " + strings.Join(suggestions, ", ") + "?"
+						}
+						return errors.NotFound{Msg: errMessage, Group: []string{}}
 					},
 					ValidArgs: []string{""},
 					RunE: func(cc *cobra.Command, args []string) error {
