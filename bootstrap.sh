@@ -71,7 +71,7 @@ case "$machine" in
   *) ARCH="$machine"
 esac
 
-case "$machine" in
+case "$ARCH" in
   amd64|arm|arm64|mips) @info "Detected system: $OS/$ARCH";;
   *) @fail "No builds available for $OS/$ARCH"
 esac

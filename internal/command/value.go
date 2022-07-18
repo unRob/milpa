@@ -21,6 +21,7 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
+	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/unrob/milpa/internal/exec"
 )
 
@@ -146,10 +147,16 @@ func (cmd *Command) ResolveTemplate(templateString string) (string, error) {
 		Opts: cmd.Options.AllKnown(),
 	}
 
-	tpl, err := template.New("subcommand").Funcs(template.FuncMap{
+	fnMap := template.FuncMap{
 		"Opt": tplData.Opt,
 		"Arg": tplData.Arg,
-	}).Parse(templateString)
+	}
+
+	for k, v := range _c.TemplateFuncs {
+		fnMap[k] = v
+	}
+
+	tpl, err := template.New("subcommand").Funcs(fnMap).Parse(templateString)
 
 	if err != nil {
 		return "", err
