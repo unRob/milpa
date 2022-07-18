@@ -137,8 +137,6 @@ rm -rf "$package"
 # update version so milpa doesn't look for updates innecessarily
 date "+%s" > "$milpaLocal/last-update-check"
 
-"$TARGET/milpa" --verbose
-
 # Test we can run milpa
 installed_version="$("$TARGET/milpa" --version)" || @fail "Could not get the installed version"
 
