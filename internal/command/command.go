@@ -14,12 +14,9 @@ package command
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
-	"os/exec"
 	"strings"
 
-	"github.com/alessio/shellescape"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -40,11 +37,16 @@ const (
 )
 
 type Command struct {
-	Meta         Meta      `json:"meta" yaml:"meta"`
-	Summary      string    `json:"summary" yaml:"summary" validate:"required"`
-	Description  string    `json:"description" yaml:"description" validate:"required"`
-	Arguments    Arguments `json:"arguments" yaml:"arguments" validate:"dive"`
-	Options      Options   `json:"options" yaml:"options" validate:"dive"`
+	// Meta holds information about this command
+	Meta Meta `json:"meta" yaml:"meta"`
+	// Summary is a short description of a command, on supported shells this is part of the autocomplete prompt
+	Summary string `json:"summary" yaml:"summary" validate:"required"`
+	// Description is a long form explanation of how a command works its magic. Markdown is supported
+	Description string `json:"description" yaml:"description" validate:"required"`
+	// A list of arguments for a command
+	Arguments Arguments `json:"arguments" yaml:"arguments" validate:"dive"`
+	// A map of option names to option definitions
+	Options      Options `json:"options" yaml:"options" validate:"dive"`
 	runtimeFlags *pflag.FlagSet
 	issues       []string
 	HelpFunc     func(printLinks bool) string `json:"-" yaml:"-"`
@@ -52,10 +54,14 @@ type Command struct {
 }
 
 type Meta struct {
-	Path string   `json:"path" yaml:"path"`
-	Repo string   `json:"repo" yaml:"repo"`
+	// Path is the filesystem path to this command
+	Path string `json:"path" yaml:"path"`
+	// Repo is the filesystem path to this repo, including /.milpa
+	Repo string `json:"repo" yaml:"repo"`
+	// Name is a list of words naming this command
 	Name []string `json:"name" yaml:"name"`
-	Kind Kind     `json:"kind" yaml:"kind"`
+	// Kind can be executable (a binary or executable file), source (.sh file), or virtual (a sub-command group)
+	Kind Kind `json:"kind" yaml:"kind"`
 }
 
 func metaForPath(path string, repo string) (meta Meta) {
@@ -83,7 +89,7 @@ func New(path string, repo string, strict bool) (cmd *Command, err error) {
 
 	spec := strings.TrimSuffix(path, ".sh") + ".yaml"
 	var contents []byte
-	if contents, err = ioutil.ReadFile(spec); err == nil {
+	if contents, err = os.ReadFile(spec); err == nil {
 		if strict {
 			err = yaml.UnmarshalStrict(contents, cmd)
 		} else {
@@ -185,46 +191,6 @@ func (cmd *Command) Run(cc *cobra.Command, args []string) error {
 	}
 
 	fmt.Println(env)
-	return nil
-}
-
-func (cmd *Command) RunStandAlone(cc *cobra.Command, args []string) error {
-	cmd.Arguments.Parse(args)
-	skipValidation, _ := cc.Flags().GetBool("skip-validation")
-	cmd.Options.Parse(cc.Flags())
-	if !skipValidation && runtime.ValidationEnabled() {
-		if err := cmd.Arguments.AreValid(); err != nil {
-			return err
-		}
-		if err := cmd.Options.AreValid(); err != nil {
-			return err
-		}
-	}
-
-	env := cmd.Env(os.Environ())
-
-	entrypoint := ""
-	for idx, arg := range args {
-		args[idx] = shellescape.Quote(arg)
-	}
-
-	if cmd.Meta.Kind == KindSource {
-		entrypoint = fmt.Sprintf("%s/%s", runtime.MilpaRoot, "milpa")
-	}
-
-	child := exec.Command(entrypoint, args...)
-	child.Env = env
-	child.Stderr = os.Stderr
-	child.Stdout = os.Stdout
-	child.Stdin = os.Stdin
-
-	logrus.Debugf("Found command of kind %s at %s", cmd.Meta.Kind, entrypoint)
-
-	if err := child.Run(); err != nil {
-		exitCode := child.ProcessState.ExitCode()
-		return errors.SubCommandExit{Err: err, ExitCode: exitCode}
-	}
-
 	return nil
 }
 

@@ -4,6 +4,7 @@ description: |
 
   ## Examples
 
+  ```sh
   # print all known subcommands
   milpa itself command-tree
 
@@ -18,6 +19,7 @@ description: |
 
   # same, but as the yaml representation of this command itself
   milpa itself command-tree --output json itself command-tree
+  ```
 arguments:
   - name: prefix
     description: Sets the name prefix to list from

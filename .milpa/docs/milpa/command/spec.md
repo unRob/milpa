@@ -34,29 +34,6 @@ arguments:
   - name: increment
     # arguments require a description
     descrption: the increment to apply to the last git version
-    # argument values can come from many sources:
-    # dirs, files, milpa, script and static
-    values:
-      # autocompletes directory names only, if a prefix is passed
-      # then it'll be used as a prefix to search from
-      dirs: "prefix"
-      # autocompletes files with the given extensions, if any
-      files: [yaml, json, hcl]
-      # milpa runs the subcommand and returns an option for every line of stdout
-      # values for options and other arguments may be used within go templates
-      # the following would execute `milpa itself increments --scheme semver` for example
-      milpa: itself increments {{ Opt "scheme" }}
-      # script runs the provided command with `bash -c "$script"` and returns an
-      # option for every line of stdout
-      # go templates can be used in scripts as well
-      script: git tag -l {{ Opt "prefix" }}
-      # arguments can be validated to be part of a static set of values
-      static: [micro, patch, minor, major]
-      # when using script or milpa values, wait at most this
-      # amount of seconds before giving up
-      timeout: 10
-      # only suggest these as autocompletions but don't validate them before running
-      suggest-only: true
     # arguments can have a default
     default: patch
     # or be required, but not have a default and be required at the same time.
@@ -66,6 +43,31 @@ arguments:
     # there's only one argument, it would mean all arguments after the command name
     # (not including options)
     variadic: true
+    # argument values can come from many sources:
+    # dirs, files, milpa, script or static can be used for any argument
+    # if specified, arguments will be validated by default before running the command
+    values:
+      # autocompletes directory names only, if a prefix is passed
+      # then it'll be used as a prefix to search from
+      dirs: "prefix"
+      # autocompletes files with the given extensions, if any
+      files: [yaml, json, hcl]
+      # milpa runs the subcommand and offers an option for every line of stdout
+      # Options and arguments may be used within go templates. For example,
+      # the following would execute `milpa itself increments --scheme semver`
+      milpa: itself increments {{ Opt "scheme" }}
+      # script runs the provided command with `bash -c "$script"` and offers
+      # each line of stdout as an option during autocomplete
+      # go templates can be used in `script` as well
+      script: git tag -l {{ Opt "prefix" }}
+      # arguments can be validated to be part of a static set of values
+      static: [micro, patch, minor, major]
+      # when using script or milpa values, wait at most this
+      # amount of seconds before giving up during autocomplete or validation
+      timeout: 10
+      # only suggest these as autocompletions but don't validate them before running
+      suggest-only: true
+
 
 # options, also known as flags, are specified as a map
 options:
@@ -78,7 +80,13 @@ options:
     # Sometimes, very commonly used flags might benefit from setting a short name
     # in this case, users would be able to use `-s calver`
     short-name: s
-    # option values can come from many sources as well!
+    # and they may have defaults
+    default: semver
+    # or be required, but not have a default and be required at the same time.
+    required: true
+    # as well as arguments, flags can be specified multiple times and be passed as a list to your script
+    repeated: false
+    # option values can come from/be validated against many sources as well!
     values:
       # autocompletes directory names only, if a prefix is passed
       # then it'll be used as a prefix to search from
@@ -93,14 +101,11 @@ options:
       # arguments can be validated to be part of a static set of values
       static: [micro, patch, minor, major]
       # when using script or milpa values, wait at most this
-      # amount of seconds before giving up
+      # amount of seconds before giving up during autocomplete or validation
       timeout: 10
       # only suggest these as autocompletions but don't validate them before running
       suggest-only: true
-    # and they may have defaults
-    default: semver
-    # or be required, but not have a default and be required at the same time.
-    required: true
+
   prefix: # becomes MILPA_OPT_PREFIX
     description: |
       An optional prefix to prepend to release identifiers. If `calver` is chosen as `scheme`, you may specify a combination of `YY`, `YYYY`, `MM`, and `DD` to be replaced with the corresponding values of the local date. The default in that case is `YY`.
@@ -114,13 +119,4 @@ options:
     type: bool
     default: false
 
-# you may specify related commands, help topics, and websites that are related to this command
-# these will be suggested to the user on help screens
-see-also:
-  # the user will be suggested to look at `milpa help scm versions`
-  - scm versions
-  # the user will be suggested to look at `milpa help docs sdlc releasing`
-  - help docs sdlc releasing
-  - https://docs.github.com/en/rest/reference/repos#create-a-release
-  - https://semver.org/
 ```

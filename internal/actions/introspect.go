@@ -16,12 +16,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"html/template"
 	"strings"
+	"text/template"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	command "github.com/unrob/milpa/internal/command"
+	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/unrob/milpa/internal/errors"
 	"github.com/unrob/milpa/internal/registry"
 	"gopkg.in/yaml.v2"
@@ -71,7 +72,7 @@ var introspectCommand *cobra.Command = &cobra.Command{
 				outputTpl = "{{ .Name }} - {{ .Summary }}\n"
 			}
 
-			tpl := template.Must(template.New("treeItem").Parse(outputTpl))
+			tpl := template.Must(template.New("treeItem").Funcs(_c.TemplateFuncs).Parse(outputTpl))
 			serializationFn = func(t interface{}) ([]byte, error) {
 				tree := t.(*registry.CommandTree)
 				var output bytes.Buffer

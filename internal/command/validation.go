@@ -43,63 +43,65 @@ func (cmd *Command) Validate() (report map[string]int) {
 		}
 	}
 
-	if cmd.Meta.Kind == "source" {
-		contents, err := ioutil.ReadFile(cmd.Meta.Path)
-		if err != nil {
-			report["Could not read source"] = 1
-			return
+	if cmd.Meta.Kind != "source" {
+		return report
+	}
+
+	contents, err := ioutil.ReadFile(cmd.Meta.Path)
+	if err != nil {
+		report["Could not read script source"] = 1
+		return
+	}
+
+	vars := map[string]map[string]*varSearchMap{
+		"argument": {},
+		"option":   {},
+	}
+
+	for _, arg := range cmd.Arguments {
+		vars["argument"][strings.ToUpper(strings.ReplaceAll(arg.Name, "-", "_"))] = &varSearchMap{2, arg.Name, ""}
+	}
+
+	for name := range cmd.Options {
+		vars["option"][strings.ToUpper(strings.ReplaceAll(name, "-", "_"))] = &varSearchMap{2, name, ""}
+	}
+
+	matches := _c.OutputPrefixPattern.FindAllStringSubmatch(string(contents), -1)
+	for _, match := range matches {
+		varName := match[len(match)-1]
+		varKind := match[len(match)-2]
+
+		kind := ""
+		if varKind == "OPT" {
+			kind = "option"
+		} else if varKind == "ARG" {
+			kind = "argument"
 		}
+		haystack := vars[kind]
 
-		vars := map[string]map[string]*varSearchMap{
-			"argument": {},
-			"option":   {},
+		_, scriptVarIsValid := haystack[varName]
+		if !scriptVarIsValid {
+			haystack[varName] = &varSearchMap{Status: 1, Name: varName, Usage: match[0]}
+		} else {
+			haystack[varName].Status = 0
 		}
+	}
 
-		for _, arg := range cmd.Arguments {
-			vars["argument"][strings.ToUpper(strings.ReplaceAll(arg.Name, "-", "_"))] = &varSearchMap{2, arg.Name, ""}
-		}
-
-		for name := range cmd.Options {
-			vars["option"][strings.ToUpper(strings.ReplaceAll(name, "-", "_"))] = &varSearchMap{2, name, ""}
-		}
-
-		matches := _c.OutputPrefixPattern.FindAllStringSubmatch(string(contents), -1)
-		for _, match := range matches {
-			varName := match[len(match)-1]
-			varKind := match[len(match)-2]
-
-			kind := ""
-			if varKind == "OPT" {
-				kind = "option"
-			} else if varKind == "ARG" {
-				kind = "argument"
+	for kind, col := range vars {
+		for _, thisVar := range col {
+			message := ""
+			switch thisVar.Status {
+			case 0:
+				message = fmt.Sprintf("%s '%s' is used", kind, thisVar.Name)
+			case 1:
+				message = fmt.Sprintf("%s '%s' is not present in the spec, but used in the script as '%s'", kind, thisVar.Name, thisVar.Usage)
+			case 2:
+				message = fmt.Sprintf("%s '%s' is present in the spec, but not used by the script", kind, thisVar.Name)
+			default:
+				message = fmt.Sprintf("Unknown status %d for %s '%s'", thisVar.Status, kind, thisVar.Name)
 			}
-			haystack := vars[kind]
 
-			_, scriptVarIsValid := haystack[varName]
-			if !scriptVarIsValid {
-				haystack[varName] = &varSearchMap{Status: 1, Name: varName, Usage: match[0]}
-			} else {
-				haystack[varName].Status = 0
-			}
-		}
-
-		for kind, col := range vars {
-			for _, thisVar := range col {
-				message := ""
-				switch thisVar.Status {
-				case 0:
-					message = fmt.Sprintf("%s '%s' is used", kind, thisVar.Name)
-				case 1:
-					message = fmt.Sprintf("%s '%s' is used but not defined, declared as '%s'", kind, thisVar.Name, thisVar.Usage)
-				case 2:
-					message = fmt.Sprintf("%s '%s' is not used but defined", kind, thisVar.Name)
-				default:
-					message = fmt.Sprintf("Unknown status %d for %s '%s'", thisVar.Status, kind, thisVar.Name)
-				}
-
-				report[message] = thisVar.Status
-			}
+			report[message] = thisVar.Status
 		}
 	}
 

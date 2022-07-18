@@ -95,9 +95,18 @@ const ContextKeyRuntimeIndex = "x-milpa-runtime-index"
 //go:embed help.md
 var helpTemplateText string
 
-// TemplateCommandHelp holds a template for rendering command help.
-var TemplateCommandHelp = template.Must(template.New("help").Funcs(template.FuncMap{
-	"trim":       strings.TrimSpace,
+// TemplateFuncs is a FuncMap with aliases to the strings package.
+var TemplateFuncs = template.FuncMap{
+	"contains":   strings.Contains,
+	"hasSuffix":  strings.HasSuffix,
+	"hasPrefix":  strings.HasPrefix,
+	"replace":    strings.ReplaceAll,
 	"toUpper":    strings.ToUpper,
+	"toLower":    strings.ToLower,
+	"trim":       strings.TrimSpace,
 	"trimSuffix": strings.TrimSuffix,
-}).Parse(helpTemplateText))
+	"trimPrefix": strings.TrimPrefix,
+}
+
+// TemplateCommandHelp holds a template for rendering command help.
+var TemplateCommandHelp = template.Must(template.New("help").Funcs(TemplateFuncs).Parse(helpTemplateText))
