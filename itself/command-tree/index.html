@@ -80,9 +80,6 @@
     <li><a href="#options">Options</a></li>
     <li><a href="#description">Description</a></li>
     <li><a href="#examples">Examples</a></li>
-  </ul>
-
-  <ul>
     <li><a href="#global-options">Global Options</a></li>
   </ul>
 </nav>
@@ -401,27 +398,21 @@
 <div class="content-header-wrapper">
 <h2 class="content-header" id="examples">Examples</h2> <a aria-hidden="true" class="heading-anchor" href="#examples" tabindex="-1">#</a>
 </div>
-<div class="content-header-wrapper">
-<h1 class="content-header" id="print-all-known-subcommands">print all known subcommands</h1> <a aria-hidden="true" class="heading-anchor" href="#print-all-known-subcommands" tabindex="-1">#</a>
-</div>
-<p>milpa itself command-tree</p>
-<div class="content-header-wrapper">
-<h1 class="content-header" id="print-a-tree-of-milpa-itself-sub-commands">print a tree of milpa itself sub-commands</h1> <a aria-hidden="true" class="heading-anchor" href="#print-a-tree-of-milpa-itself-sub-commands" tabindex="-1">#</a>
-</div>
-<p>milpa itself command-tree itself</p>
-<div class="content-header-wrapper">
-<h1 class="content-header" id="print-out-all-commands-skipping-groups">print out all commands, skipping groups</h1> <a aria-hidden="true" class="heading-anchor" href="#print-out-all-commands-skipping-groups" tabindex="-1">#</a>
-</div>
-<p>milpa itself command-tree &ndash;template &lsquo;{{ if (not (eq .Meta.Kind &ldquo;virtual&rdquo;)) }}{{ .FullName }}&rsquo;$&rsquo;\n&rsquo;&rsquo;{{ end }}&rsquo;</p>
-<div class="content-header-wrapper">
-<h1 class="content-header" id="get-all-commands-as-a-json-tree">get all commands as a json tree</h1> <a aria-hidden="true" class="heading-anchor" href="#get-all-commands-as-a-json-tree" tabindex="-1">#</a>
-</div>
-<p>milpa itself command-tree &ndash;output json</p>
-<div class="content-header-wrapper">
-<h1 class="content-header" id="same-but-as-the-yaml-representation-of-this-command-itself">same, but as the yaml representation of this command itself</h1> <a aria-hidden="true" class="heading-anchor" href="#same-but-as-the-yaml-representation-of-this-command-itself" tabindex="-1">#</a>
-</div>
-<p>milpa itself command-tree &ndash;output json itself command-tree</p>
-<div class="content-header-wrapper">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># print all known subcommands</span>
+</span></span><span class="line"><span class="cl">milpa itself command-tree
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># print a tree of milpa itself sub-commands</span>
+</span></span><span class="line"><span class="cl">milpa itself command-tree itself
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># print out all commands, skipping groups</span>
+</span></span><span class="line"><span class="cl">milpa itself command-tree --template <span class="s1">&#39;{{ if (not (eq .Meta.Kind &#34;virtual&#34;)) }}{{ .FullName }}&#39;$&#39;\n&#39;&#39;{{ end }}&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># get all commands as a json tree</span>
+</span></span><span class="line"><span class="cl">milpa itself command-tree --output json
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># same, but as the yaml representation of this command itself</span>
+</span></span><span class="line"><span class="cl">milpa itself command-tree --output json itself command-tree
+</span></span></code></pre></div><div class="content-header-wrapper">
 <h2 class="content-header" id="global-options">Global Options</h2> <a aria-hidden="true" class="heading-anchor" href="#global-options" tabindex="-1">#</a>
 </div>
 <ul>

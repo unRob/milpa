@@ -178,9 +178,9 @@ Arguments # ACTION - the action to take with documentation Options # --hostname 
       
       <guid>https://milpa.dev/itself/doctor/</guid>
       <description>Validates all commands found on the MILPA_PATH
-Usage # milpa itself doctor [options]
-Description # This command will run checks on all known commands, parsing specs and validating their values.
-Global Options # --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --skip-validation (bool): Do not validate any arguments or options. --verbose (bool): Log verbose output to stderr. </description>
+Usage # milpa itself doctor [options] [flags]
+Options # --summary (bool): only print errors, if any. Description # This command will run checks on all known commands, parsing specs and validating their values.
+Global Options # --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --skip-validation (bool): Do not validate any arguments or options.</description>
     </item>
     
     <item>
