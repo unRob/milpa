@@ -61,7 +61,7 @@ milpa release docs-image --skip-publish "$MILPA_VERSION" || @milpa.fail "Could n
 mp="$MILPA_PATH"
 export MILPA_DISABLE_USER_REPOS=true
 export MILPA_DISABLE_GLOBAL_REPOS=true
-MILPA_PATH="" DEBUG=1 milpa itself docs html write \
+MILPA_PATH="" milpa itself docs html write \
   --to "$output" \
   --image milpa-docs \
   --hostname "$MILPA_ARG_HOSTNAME" || @milpa.fail "Could not generate docs"

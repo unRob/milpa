@@ -33,7 +33,6 @@ func FindScripts(query []string) (results map[string]struct {
 	Info os.FileInfo
 	Repo string
 }, err error) {
-
 	if len(runtime.MilpaPath) == 0 {
 		err = fmt.Errorf("no %s set on the environment", _c.EnvVarMilpaPath)
 		return
@@ -144,7 +143,6 @@ func FindAllDocs() ([]string, error) {
 			}
 			results = append(results, basepath+"/"+doc)
 		}
-
 	}
 
 	return results, nil
@@ -197,7 +195,6 @@ func FindDocs(query []string, needle string, returnPaths bool) ([]string, error)
 				found[name] = true
 			}
 		}
-
 	}
 
 	return results, nil

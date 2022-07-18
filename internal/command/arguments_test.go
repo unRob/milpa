@@ -129,7 +129,6 @@ func TestBeforeParse(t *testing.T) {
 }
 
 func TestArgumentsValidate(t *testing.T) {
-
 	staticArgument := func(name string, def string, values []string, variadic bool) *Argument {
 		return &Argument{
 			Name:     name,
@@ -395,7 +394,6 @@ func TestArgumentsToEnv(t *testing.T) {
 					t.Fatalf("Expected line %v not found in %v", expected, dst)
 				}
 			}
-
 		})
 	}
 }

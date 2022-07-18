@@ -20,7 +20,6 @@ import (
 )
 
 func TestResolveTemplate(t *testing.T) {
-
 	overrideFlags := &pflag.FlagSet{}
 	overrideFlags.String("option", "override", "stuff")
 	overrideFlags.Bool("bool", false, "stuff")
@@ -162,5 +161,4 @@ func TestResolveTemplate(t *testing.T) {
 			}
 		})
 	}
-
 }

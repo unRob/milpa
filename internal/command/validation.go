@@ -14,7 +14,7 @@ package command
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
@@ -35,8 +35,7 @@ func (cmd *Command) Validate() (report map[string]int) {
 	}
 
 	validate := validator.New()
-	err := validate.Struct(cmd)
-	if err != nil {
+	if err := validate.Struct(cmd); err != nil {
 		verrs := err.(validator.ValidationErrors)
 		for _, issue := range verrs {
 			report[fmt.Sprint(issue)] = 1
@@ -45,12 +44,6 @@ func (cmd *Command) Validate() (report map[string]int) {
 
 	if cmd.Meta.Kind != "source" {
 		return report
-	}
-
-	contents, err := ioutil.ReadFile(cmd.Meta.Path)
-	if err != nil {
-		report["Could not read script source"] = 1
-		return
 	}
 
 	vars := map[string]map[string]*varSearchMap{
@@ -64,6 +57,12 @@ func (cmd *Command) Validate() (report map[string]int) {
 
 	for name := range cmd.Options {
 		vars["option"][strings.ToUpper(strings.ReplaceAll(name, "-", "_"))] = &varSearchMap{2, name, ""}
+	}
+
+	contents, err := os.ReadFile(cmd.Meta.Path)
+	if err != nil {
+		report["Could not read script source"] = 1
+		return
 	}
 
 	matches := _c.OutputPrefixPattern.FindAllStringSubmatch(string(contents), -1)

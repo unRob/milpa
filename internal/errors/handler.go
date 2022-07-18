@@ -63,7 +63,7 @@ func HandleCobraExit(cmd *cobra.Command, err error) {
 			os.Exit(_c.ExitStatusUsage)
 		}
 	}
+
 	logrus.Errorf("Unknown error: %s", err)
 	os.Exit(2)
-
 }

@@ -231,7 +231,6 @@ func (arg *Argument) ToString(asShell bool) string {
 }
 
 func (arg *Argument) Validate() error {
-
 	if !arg.IsKnown() {
 		if arg.Required {
 			return errors.BadArguments{Msg: fmt.Sprintf("Missing argument for %s", strings.ToUpper(arg.Name))}
