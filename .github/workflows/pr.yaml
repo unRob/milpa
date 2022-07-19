@@ -12,15 +12,12 @@ jobs:
       - name: Setup BATS
         uses: mig4/setup-bats@v1
         with:
-          bats-version: 1.5.0
+          bats-version: 1.7.0
 
       - name: Checkout source
         uses: actions/checkout@v3
         with:
           submodules: true
-
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3.2.0
 
       - name: Cache go modules
         uses: actions/cache@v3
@@ -30,6 +27,11 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-go-${{ env.cache-name }}-
             ${{ runner.OS }}-go-
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3.2.0
+        with:
+          skip-pkg-cache: true
 
       - name: shellcheck
         uses: ludeeus/action-shellcheck@master
@@ -54,6 +56,7 @@ jobs:
           echo "MILPA_ROOT=$(pwd)" >> $GITHUB_ENV
           echo "MILPA_PATH=$(pwd)/internal" >> $GITHUB_ENV
           echo "MILPA_DISABLE_UPDATE_CHECKS=1" >> $GITHUB_ENV
+          echo "BATS_LIB_PATH=$(pwd)/test/_helpers" >> $GITHUB_ENV
           go build -ldflags "-s -w -X main.version=${version}" -o compa
 
       - name: Integration tests
