@@ -11,19 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-load 'test/_helpers/setup.bash'
+bats_load_library 'milpa'
 _suite_setup
 
-
 setup () {
-  load 'test/_helpers/bats-support/load.bash'
-  load 'test/_helpers/bats-assert/load.bash'
   _common_setup
 }
 
 @test "milpa with no arguments shows help" {
-  run milpa
-  assert_failure 127
+  run -127 milpa
   assert_output --regexp "## Usage"
 }
 
@@ -39,8 +35,7 @@ setup () {
 
 @test "milpa with bad MILPA_ROOT" {
   MILPA_ROOT="$BATS_TEST_FILENAME"
-  run milpa
-  assert_failure 78
+  run -78 milpa
 }
 
 @test "milpa includes global repos in MILPA_PATH" {

@@ -11,12 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-load 'test/_helpers/setup.bash'
+bats_load_library 'milpa'
 _suite_setup
 
 setup () {
-  load 'test/_helpers/bats-support/load.bash'
-  load 'test/_helpers/bats-assert/load.bash'
   _common_setup
 }
 
