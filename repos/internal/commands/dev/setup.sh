@@ -39,9 +39,9 @@ fi
 
 @milpa.log info "Installing go packages"
 packages=(
-  gotest.tools/gotestsum@v1.7.0
+  gotest.tools/gotestsum@v1.8.1
   github.com/mitchellh/gox@v1.0.1
-  github.com/golangci/golangci-lint/cmd/golangci-lint@v1.46.2
+  github.com/golangci/golangci-lint/cmd/golangci-lint@v1.47.2
 )
 
 for package in "${packages[@]}"; do

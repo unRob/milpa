@@ -17,6 +17,10 @@ function _common_setup () {
 }
 
 function _suite_setup() {
+  bats_require_minimum_version 1.5.0
+  bats_load_library 'bats-support'
+  bats_load_library 'bats-assert'
+
   unset XDG_DATA_HOME MILPA_ROOT MILPA_PATH MILPA_PATH_PARSED DEBUG
   export XDG_DATA_HOME="${BATS_SUITE_TMPDIR//\/\///}"
   # shellcheck disable=2155

@@ -29,5 +29,6 @@ cd "$MILPA_ROOT" || @milpa.fail "could not cd into $MILPA_ROOT"
 # shellcheck disable=2155
 export TEST_MILPA_VERSION="$("$MILPA_ROOT/compa" __version 2>&1)"
 @milpa.log info "Running integration tests"
-env bats --formatter "$formatter" "${MILPA_ARG_PATHS[@]}" || exit 2
+export BATS_LIB_PATH="$MILPA_ROOT/test/_helpers"
+env bats --timing --formatter "$formatter" "${MILPA_ARG_PATHS[@]}" || exit 2
 @milpa.log complete "Integration tests passed"
