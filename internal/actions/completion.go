@@ -18,7 +18,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var completionCommand *cobra.Command = &cobra.Command{
+var completionCommand = &cobra.Command{
 	Use:               "__generate_completions [bash|zsh|fish]",
 	Short:             "Outputs a shell-specific script for autocompletions. See milpa help itself shell install-autocomplete",
 	Hidden:            true,

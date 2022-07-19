@@ -23,7 +23,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var fetchCommand *cobra.Command = &cobra.Command{
+var fetchCommand = &cobra.Command{
 	Use:               "__fetch [dst] [src]",
 	Short:             "Fetches stuff using go-getter",
 	Hidden:            true,
