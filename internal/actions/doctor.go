@@ -25,7 +25,7 @@ import (
 	"github.com/unrob/milpa/internal/runtime"
 )
 
-var doctorCommand *cobra.Command = &cobra.Command{
+var doctorCommand = &cobra.Command{
 	Use:               "__doctor",
 	Short:             "Outputs information about milpa and known repos. See milpa help itself doctor",
 	Hidden:            true,

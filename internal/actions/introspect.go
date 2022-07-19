@@ -28,7 +28,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-var introspectCommand *cobra.Command = &cobra.Command{
+var introspectCommand = &cobra.Command{
 	Use:               "__inspect [prefix...]",
 	Short:             "Inspects the command tree at a given PREFIX",
 	Hidden:            true,

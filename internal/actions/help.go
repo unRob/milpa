@@ -22,7 +22,7 @@ import (
 	_c "github.com/unrob/milpa/internal/constants"
 )
 
-var helpCommand *cobra.Command = &cobra.Command{
+var helpCommand = &cobra.Command{
 	Use:   _c.HelpCommandName + " [command]",
 	Short: "Display usage information on any **COMMAND...**",
 	Long:  `Help provides the valid arguments and options for any command known to milpa. By default, ﹅milpa help﹅ will query the environment variable ﹅COLORFGBG﹅ to decide which style to use when rendering help, except if ﹅MILPA_HELP_STYLE﹅ is set. Valid styles are: **light**, **dark**, and **auto**.`,

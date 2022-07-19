@@ -20,7 +20,7 @@ import (
 	_c "github.com/unrob/milpa/internal/constants"
 )
 
-var versionCommand *cobra.Command = &cobra.Command{
+var versionCommand = &cobra.Command{
 	Use:               "__version",
 	Short:             "Display the version of milpa",
 	Hidden:            true,

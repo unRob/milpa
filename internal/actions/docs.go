@@ -122,7 +122,7 @@ func writeCommandDocs(dst string, path []string, cmd *cobra.Command) error {
 	return nil
 }
 
-var docs *command.Command = &command.Command{
+var docs = &command.Command{
 	Summary:     "Dislplays docs on TOPIC",
 	Description: "Shows markdown-formatted documentation from milpa repos. See `" + _c.Milpa + " " + _c.HelpCommandName + " docs milpa repo docs` for more information on how to write your own.",
 	Arguments: command.Arguments{
@@ -212,7 +212,7 @@ func writeDocs(dst string) error {
 	return nil
 }
 
-var docsCommand *cobra.Command = &cobra.Command{
+var docsCommand = &cobra.Command{
 	Use:   "docs [TOPIC]",
 	Short: docs.Summary,
 	Long:  docs.Description,
@@ -272,7 +272,7 @@ var docsCommand *cobra.Command = &cobra.Command{
 	},
 }
 
-var generateDocumentationCommand *cobra.Command = &cobra.Command{
+var generateDocumentationCommand = &cobra.Command{
 	Use:               "__generate_documentation [DST]",
 	Short:             "Outputs markdown documentation for all known commands",
 	Hidden:            true,
