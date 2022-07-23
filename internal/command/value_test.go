@@ -150,7 +150,7 @@ func TestResolveTemplate(t *testing.T) {
 			}).SetBindings()
 			cmd.Arguments.Parse(test.Args)
 			cmd.Options.Parse(test.Flags)
-			res, err := cmd.ResolveTemplate(test.Tpl)
+			res, err := cmd.ResolveTemplate(test.Tpl, "")
 
 			if err != nil && !test.Errors {
 				t.Fatalf("good template failed: %s", err)

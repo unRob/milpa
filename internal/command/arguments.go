@@ -124,7 +124,7 @@ func (args *Arguments) CompletionFunction(cc *cobra.Command, provided []string, 
 				var err error
 				arg.Values.Command = lastArg.Command
 				arg.Command = lastArg.Command
-				values, directive, err = arg.Resolve()
+				values, directive, err = arg.Resolve(toComplete)
 				if err != nil {
 					return []string{err.Error()}, cobra.ShellCompDirectiveDefault
 				}
@@ -243,7 +243,7 @@ func (arg *Argument) Validate() error {
 		return nil
 	}
 
-	validValues, _, err := arg.Resolve()
+	validValues, _, err := arg.Resolve(strings.Join(*arg.provided, " "))
 	if err != nil {
 		return err
 	}
@@ -284,9 +284,9 @@ func (arg *Argument) ToDesc() string {
 }
 
 // Resolve returns autocomplete values for an argument.
-func (arg *Argument) Resolve() (values []string, flag cobra.ShellCompDirective, err error) {
+func (arg *Argument) Resolve(current string) (values []string, flag cobra.ShellCompDirective, err error) {
 	if arg.Values != nil {
-		values, flag, err = arg.Values.Resolve()
+		values, flag, err = arg.Values.Resolve(current)
 		if err != nil {
 			flag = cobra.ShellCompDirectiveError
 			return
