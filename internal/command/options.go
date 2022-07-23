@@ -165,7 +165,7 @@ func (opt *Option) Validate(name string) error {
 		return nil
 	}
 
-	validValues, _, err := opt.Resolve()
+	validValues, _, err := opt.Resolve(current)
 	if err != nil {
 		return err
 	}
@@ -188,12 +188,12 @@ func (opt *Option) providesAutocomplete() bool {
 }
 
 // Resolve returns autocomplete values for an option.
-func (opt *Option) Resolve() (values []string, flag cobra.ShellCompDirective, err error) {
+func (opt *Option) Resolve(currentValue string) (values []string, flag cobra.ShellCompDirective, err error) {
 	if opt.Values != nil {
 		if opt.Values.Command == nil {
 			opt.Values.Command = opt.Command
 		}
-		return opt.Values.Resolve()
+		return opt.Values.Resolve(currentValue)
 	}
 
 	return
@@ -210,7 +210,7 @@ func (opt *Option) CompletionFunction(cmd *cobra.Command, args []string, toCompl
 	opt.Command.Options.Parse(cmd.Flags())
 
 	var err error
-	values, flag, err = opt.Resolve()
+	values, flag, err = opt.Resolve(toComplete)
 	if err != nil {
 		return values, cobra.ShellCompDirectiveError
 	}

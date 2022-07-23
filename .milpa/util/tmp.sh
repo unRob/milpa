@@ -6,16 +6,14 @@ function @tmp.file () {
   local prefix; prefix="${1}"
   fname=$(mktemp "/tmp/$prefix.XXXXXX")
   _files_created=( "$fname" )
-  # shellcheck disable=2059
-  printf -v "$1" -- "$fname"
+  printf -v "$1" -- '%s' "$fname"
 }
 
 function @tmp.dir () {
   local prefix; prefix="${1}"
   fname=$(mktemp -d "/tmp/$prefix.XXXXXX")
   _files_created+=( "$fname" )
-  # shellcheck disable=2059
-  printf -v "$1" -- "$fname"
+  printf -v "$1" -- '%s' "$fname"
 }
 
 function @tmp.cleanup () {

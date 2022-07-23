@@ -52,7 +52,9 @@ type ValueSource struct {
 	// Timeout is the maximum amount of time milpa will wait for a Script or Milpa command before giving up on completions/validations.
 	Timeout int `json:"timeout,omitempty" yaml:"timeout,omitempty" validate:"omitempty,excluded_with=Directories Files Static"`
 	// Suggestion if provided will only suggest autocomplete values but will not perform validation of a given value
-	Suggestion bool     `json:"suggest-only" yaml:"suggest-only" validate:"omitempty"` // nolint:tagliatelle
+	Suggestion bool `json:"suggest-only" yaml:"suggest-only" validate:"omitempty"` // nolint:tagliatelle
+	// SuggestRaw if provided the shell will not add a space after autocompleting
+	SuggestRaw bool     `json:"suggest-raw" yaml:"suggest-raw" validate:"omitempty"` // nolint:tagliatelle
 	Command    *Command `json:"-" yaml:"-" validate:"-"`
 	computed   *[]string
 	flag       cobra.ShellCompDirective
@@ -68,7 +70,7 @@ func (vs *ValueSource) Validates() bool {
 }
 
 // Resolve returns the values for autocomplete and validation.
-func (vs *ValueSource) Resolve() (values []string, flag cobra.ShellCompDirective, err error) {
+func (vs *ValueSource) Resolve(currentValue string) (values []string, flag cobra.ShellCompDirective, err error) {
 	if vs.computed != nil {
 		return *vs.computed, vs.flag, nil
 	}
@@ -93,7 +95,7 @@ func (vs *ValueSource) Resolve() (values []string, flag cobra.ShellCompDirective
 		if vs.Command == nil {
 			return nil, cobra.ShellCompDirectiveError, fmt.Errorf("bug: command is nil")
 		}
-		cmd, err := vs.Command.ResolveTemplate(vs.Milpa + vs.Script)
+		cmd, err := vs.Command.ResolveTemplate(vs.Milpa+vs.Script, currentValue)
 		if err != nil {
 			return nil, cobra.ShellCompDirectiveError, err
 		}
@@ -117,8 +119,12 @@ func (vs *ValueSource) Resolve() (values []string, flag cobra.ShellCompDirective
 	}
 
 	vs.computed = &values
-	vs.flag = flag
 
+	if vs.SuggestRaw {
+		flag = cobra.ShellCompDirectiveNoSpace
+	}
+
+	vs.flag = flag
 	return values, flag, err
 }
 
@@ -139,7 +145,7 @@ func (tpl *AutocompleteTemplate) Arg(name string) string {
 	return tpl.Args[name]
 }
 
-func (cmd *Command) ResolveTemplate(templateString string) (string, error) {
+func (cmd *Command) ResolveTemplate(templateString string, currentValue string) (string, error) {
 	var buf bytes.Buffer
 
 	tplData := &AutocompleteTemplate{
@@ -148,8 +154,9 @@ func (cmd *Command) ResolveTemplate(templateString string) (string, error) {
 	}
 
 	fnMap := template.FuncMap{
-		"Opt": tplData.Opt,
-		"Arg": tplData.Arg,
+		"Opt":     tplData.Opt,
+		"Arg":     tplData.Arg,
+		"Current": func() string { return currentValue },
 	}
 
 	for k, v := range _c.TemplateFuncs {

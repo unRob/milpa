@@ -55,6 +55,7 @@ arguments:
       # milpa runs the subcommand and offers an option for every line of stdout
       # Options and arguments may be used within go templates. For example,
       # the following would execute `milpa itself increments --scheme semver`
+      # {{ Current }} will insert the argument's current value durint autocompletion
       milpa: itself increments {{ Opt "scheme" }}
       # script runs the provided command with `bash -c "$script"` and offers
       # each line of stdout as an option during autocomplete
@@ -67,6 +68,8 @@ arguments:
       timeout: 10
       # only suggest these as autocompletions but don't validate them before running
       suggest-only: true
+      # if enabled, will not add a space after a suggestion
+      suggest-raw: false
 
 
 # options, also known as flags, are specified as a map
@@ -105,6 +108,8 @@ options:
       timeout: 10
       # only suggest these as autocompletions but don't validate them before running
       suggest-only: true
+      # if enabled, will not add a space after a suggestion
+      suggest-raw: false
 
   prefix: # becomes MILPA_OPT_PREFIX
     description: |
