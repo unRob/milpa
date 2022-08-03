@@ -33,7 +33,7 @@ Additional repositories can be added as colon (`:`) delimited paths, pointing to
 
 If desired, you may set a `MILPA_PATH` for all shells by adding it to your shell's profile.
 
-`MILPA_DISABLE_GIT`, `MILPA_DISABLE_USER_REPOS` and `MILPA_DISABLE_GLOBAL_REPOS` each disable the corresponding command lookups.
+`MILPA_DISABLE_GIT`, `MILPA_DISABLE_USER_REPOS` and `MILPA_DISABLE_GLOBAL_REPOS` each disable the corresponding command lookups when set to `true`.
 
 ---
 
@@ -51,9 +51,11 @@ Enabled by the `--verbose` option. It shows information about what `milpa` is do
 
 Enabled by the `--silent` option, to hide `@milpa.log` messages completely. If `DEBUG` or `MILPA_VERBOSE` are enabled, these will override `MILPA_SILENT`.
 
-### `NO_COLOR`
+### `NO_COLOR` / `COLOR`
 
-Also enabled by the `--no-color` option to disable printing of formatting escape codes from `compa` and `@milpa.log`.
+By default, when stdout is a TTY, `milpa` will output color escape characters. If `NO_COLOR` is set to any non-empty string, then no color will be output. If not connected to a TTY, and `COLOR=always` is set, then color escape characters will be printed.
+
+If either `--no-color` or `--color` options are provided, these will override both `COLOR` and `NO_COLOR` environment variables.
 
 ---
 

@@ -99,16 +99,14 @@ func FindAllSubCommands(returnOnError bool) error {
 
 	for _, path := range keys {
 		data := files[path]
-		cmd, err := command.New(path, data.Repo, !returnOnError)
-		if err != nil {
+		cmd, specErr := command.New(path, data.Repo)
+		if specErr != nil {
 			if returnOnError {
-				logrus.Warnf("Could not initialize command %s, run `%s itself doctor` to find out more", path, _c.Milpa)
-				return err
+				return specErr
 			}
-		} else {
-			logrus.Debugf("Initialized %s", cmd.FullName())
 		}
 
+		logrus.Debugf("Initialized %s", cmd.FullName())
 		Register(cmd)
 	}
 

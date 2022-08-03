@@ -52,7 +52,9 @@ func envValue(opts Options, f *pflag.Flag) (*string, *string) {
 	} else {
 		envName = fmt.Sprintf("%s%s", _c.OutputPrefixOpt, strings.ToUpper(strings.ReplaceAll(name, "-", "_")))
 		opt := opts[name]
-		value = opt.ToString(true)
+		if opt != nil {
+			value = opt.ToString(true)
+		}
 
 		if value == "false" && opt.Type == ValueTypeBoolean {
 			// makes dealing with false flags in shell easier

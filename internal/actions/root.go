@@ -22,19 +22,18 @@ import (
 	"github.com/unrob/milpa/internal/command"
 	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/unrob/milpa/internal/errors"
-	"github.com/unrob/milpa/internal/registry"
 	"github.com/unrob/milpa/internal/runtime"
 )
 
 var rootcc = &cobra.Command{
-	Use: "milpa [--silent|-v|--verbose] [--no-color] [-h|-help] [--version]",
+	Use: "milpa [--silent|-v|--verbose] [--no-color|--color] [-h|-help] [--version]",
 	Annotations: map[string]string{
 		_c.ContextKeyRuntimeIndex: "milpa",
 	},
-	Short: root.Summary,
+	Short: Root.Summary,
 	Long: `milpa runs commands from .milpa folders
 
-` + root.Description,
+` + Root.Description,
 	DisableAutoGenTag: true,
 	SilenceUsage:      true,
 	SilenceErrors:     true,
@@ -73,7 +72,7 @@ var rootcc = &cobra.Command{
 	},
 }
 
-var root = &command.Command{
+var Root = &command.Command{
 	Summary: "Runs commands found in " + _c.RepoRoot + " folders",
 	Description: `﹅milpa﹅ is a command-line tool to care for one's own garden of scripts, its name comes from "milpa", an agricultural method that combines multiple crops in close proximity. You and your team write scripts and a little spec for each command -use bash, or any other language-, and ﹅milpa﹅ provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.
 
@@ -100,6 +99,10 @@ var root = &command.Command{
 			Type:        "bool",
 			Description: "Print to stderr without any formatting codes",
 		},
+		"color": &command.Option{
+			Type:        "bool",
+			Description: "Print to stderr without any formatting codes",
+		},
 		"silent": &command.Option{
 			Type:        "bool",
 			Description: "Silence non-error logging",
@@ -118,6 +121,7 @@ func RootCommand(version string) *cobra.Command {
 	rootFlagset.Bool("silent", false, "Do not print any logs to stderr")
 	rootFlagset.BoolP("help", "h", false, "Display help for any command")
 	rootFlagset.Bool("no-color", !runtime.ColorEnabled(), "Do not print any formatting codes")
+	rootFlagset.Bool("color", runtime.ColorEnabled(), "Do not print any formatting codes")
 	rootFlagset.Bool("skip-validation", false, "Do not validate any arguments or options")
 	rootFlagset.Usage = func() {}
 	rootFlagset.SortFlags = false
@@ -131,16 +135,15 @@ func RootCommand(version string) *cobra.Command {
 	rootcc.AddCommand(generateDocumentationCommand)
 	rootcc.AddCommand(doctorCommand)
 	doctorCommand.Flags().Bool("summary", false, "")
-	rootcc.AddCommand(fetchCommand)
+	rootcc.AddCommand(fetchRemoteRepo)
 	rootcc.AddCommand(introspectCommand)
 	introspectCommand.Flags().Int32("depth", 15, "")
 	introspectCommand.Flags().String("format", "json", "")
 	introspectCommand.Flags().String("template", "{{ indent . }}{{ .Name }} - {{ .Summary }}\n", "")
 	rootcc.SetHelpCommand(helpCommand)
 	helpCommand.AddCommand(docsCommand)
-	docsCommand.SetHelpFunc(docs.HelpRenderer(root.Options))
-	rootcc.SetHelpFunc(root.HelpRenderer(root.Options))
+	docsCommand.SetHelpFunc(docs.HelpRenderer(Root.Options))
+	rootcc.SetHelpFunc(Root.HelpRenderer(Root.Options))
 
-	registry.SetRoot(rootcc, root)
 	return rootcc
 }
