@@ -86,7 +86,7 @@
         <li><a href="#debug"><code>DEBUG</code></a></li>
         <li><a href="#milpa_verbose"><code>MILPA_VERBOSE</code></a></li>
         <li><a href="#milpa_silent"><code>MILPA_SILENT</code></a></li>
-        <li><a href="#no_color"><code>NO_COLOR</code></a></li>
+        <li><a href="#no_color--color"><code>NO_COLOR</code> / <code>COLOR</code></a></li>
       </ul>
     </li>
     <li><a href="#input">Input</a>
@@ -416,7 +416,7 @@
 <p>Commands with the same name will be silently ignored.</p>
 <p>Additional repositories can be added as colon (<code>:</code>) delimited paths, pointing to the directory containing a <code>/.milpa</code> folder within. For example, setting <code>MILPA_PATH=$HOME/code/my-repo:/opt/milpa</code> would prepend the <code>$HOME/code/my-repo</code> and <code>/opt/milpa</code> folders to the command search path.</p>
 <p>If desired, you may set a <code>MILPA_PATH</code> for all shells by adding it to your shell&rsquo;s profile.</p>
-<p><code>MILPA_DISABLE_GIT</code>, <code>MILPA_DISABLE_USER_REPOS</code> and <code>MILPA_DISABLE_GLOBAL_REPOS</code> each disable the corresponding command lookups.</p>
+<p><code>MILPA_DISABLE_GIT</code>, <code>MILPA_DISABLE_USER_REPOS</code> and <code>MILPA_DISABLE_GLOBAL_REPOS</code> each disable the corresponding command lookups when set to <code>true</code>.</p>
 <hr>
 <div class="content-header-wrapper">
 <h2 class="content-header" id="output">Output</h2> <a aria-hidden="true" class="heading-anchor" href="#output" tabindex="-1">#</a>
@@ -434,9 +434,10 @@
 </div>
 <p>Enabled by the <code>--silent</code> option, to hide <code>@milpa.log</code> messages completely. If <code>DEBUG</code> or <code>MILPA_VERBOSE</code> are enabled, these will override <code>MILPA_SILENT</code>.</p>
 <div class="content-header-wrapper">
-<h3 class="content-header" id="no_color"><code>NO_COLOR</code></h3> <a aria-hidden="true" class="heading-anchor" href="#no_color" tabindex="-1">#</a>
+<h3 class="content-header" id="no_color--color"><code>NO_COLOR</code> / <code>COLOR</code></h3> <a aria-hidden="true" class="heading-anchor" href="#no_color--color" tabindex="-1">#</a>
 </div>
-<p>Also enabled by the <code>--no-color</code> option to disable printing of formatting escape codes from <code>compa</code> and <code>@milpa.log</code>.</p>
+<p>By default, when stdout is a TTY, <code>milpa</code> will output color escape characters. If <code>NO_COLOR</code> is set to any non-empty string, then no color will be output. If not connected to a TTY, and <code>COLOR=always</code> is set, then color escape characters will be printed.</p>
+<p>If either <code>--no-color</code> or <code>--color</code> options are provided, these will override both <code>COLOR</code> and <code>NO_COLOR</code> environment variables.</p>
 <hr>
 <div class="content-header-wrapper">
 <h2 class="content-header" id="input">Input</h2> <a aria-hidden="true" class="heading-anchor" href="#input" tabindex="-1">#</a>
