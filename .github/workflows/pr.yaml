@@ -32,7 +32,7 @@ jobs:
         uses: golangci/golangci-lint-action@v3.2.0
         with:
           skip-pkg-cache: true
-          version: 1.47.3
+          version: v1.47.3
           args: --timeout 3m --verbose
 
       - name: shellcheck
