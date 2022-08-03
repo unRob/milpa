@@ -16,24 +16,27 @@ if  [[ "$MILPA_ARG_TARGET" != "" ]]; then
   target="$MILPA_ARG_TARGET"
 else
   user_target="${XDG_DATA_HOME:-$HOME/.local/share}/milpa"
+  target="${user_target}/repos"
   if [[ "$MILPA_OPT_GLOBAL" ]]; then
    target="${MILPA_ROOT}/repos"
-  elif [[ "$MILPA_OPT_USER" ]]; then
-   target="${user_target}/repos"
-  else
-   target="${user_target}/repos"
   fi
 fi
 
 base="${MILPA_ARG_SOURCE%%/.milpa/*}"
-if [[ -d "$base/.milpa" ]]; then
-  base="$(cd "$base" && pwd)"
+
+function symlink_local () {
+  local base repo_name dst;
+  base="$(cd "$1" && pwd)" || @milpa.fail "Could not "
   repo_name="${base##*/}"
   repo_name="${repo_name#.}"
   dst="$target/$repo_name"
-  @milpa.log info "Local repository detected, symlinking..."
   [[ -d "$dst" ]] && @milpa.fail "A repo named $repo_name already exists at $dst"
   ln -sfv "$base/.milpa" "$dst"
+}
+
+if [[ -d "$base/.milpa" ]]; then
+  @milpa.log info "Local repository detected, symlinking..."
+  symlink_local "$base" || @milpa.fail
   @milpa.log success "Symlink created"
 else
   @milpa.log info "Downloading repo..."
@@ -41,7 +44,7 @@ else
   @milpa.log success "Repo dowloaded"
   echo -n "$MILPA_ARG_SOURCE" > "$new_repo/downloaded-from"
 fi
-exit
+
 
 @milpa.log info "Running repo setup tasks"
 if [[ -f "$new_repo/hooks/post-install.sh" ]]; then

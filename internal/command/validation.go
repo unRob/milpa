@@ -31,13 +31,14 @@ func (cmd *Command) Validate() (report map[string]int) {
 	report = map[string]int{}
 
 	for _, issue := range cmd.issues {
-		report[issue] = 1
+		report[issue.Error()] = 1
 	}
 
 	validate := validator.New()
 	if err := validate.Struct(cmd); err != nil {
 		verrs := err.(validator.ValidationErrors)
 		for _, issue := range verrs {
+			// todo: output better errors, see validator.FieldError
 			report[fmt.Sprint(issue)] = 1
 		}
 	}

@@ -31,9 +31,15 @@ func main() {
 		ForceColors:            runtime.ColorEnabled(),
 	})
 
-	if runtime.DebugEnabled() {
+	root := actions.RootCommand(version)
+	f := root.PersistentFlags()
+	silent := false
+	if err := f.Parse(os.Args); err != nil {
+		silent, _ = f.GetBool("silent")
+	}
+
+	if !silent && runtime.DebugEnabled() {
 		logrus.SetLevel(logrus.DebugLevel)
-		logrus.Info("debug information enabled")
 	}
 
 	isDoctor := runtime.DoctorModeEnabled()
@@ -49,8 +55,9 @@ func main() {
 		logrus.Fatalf("Could not find subcommands: %s", err)
 	}
 
+	registry.SetRoot(root, actions.Root)
 	initialArgs := []string{"milpa"}
 	os.Args = append(initialArgs, os.Args[1:]...) //nolint:gocritic
 
-	errors.HandleCobraExit(actions.RootCommand(version).ExecuteC())
+	errors.HandleCobraExit(root.ExecuteC())
 }

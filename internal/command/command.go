@@ -48,7 +48,7 @@ type Command struct {
 	// A map of option names to option definitions
 	Options      Options `json:"options" yaml:"options" validate:"dive"`
 	runtimeFlags *pflag.FlagSet
-	issues       []string
+	issues       []error
 	HelpFunc     func(printLinks bool) string `json:"-" yaml:"-"`
 	cc           *cobra.Command
 }
@@ -80,29 +80,30 @@ func metaForPath(path string, repo string) (meta Meta) {
 	return
 }
 
-func New(path string, repo string, strict bool) (cmd *Command, err error) {
+func New(path string, repo string) (cmd *Command, err error) {
 	cmd = &Command{}
 	cmd.Meta = metaForPath(path, repo)
 	cmd.Arguments = []*Argument{}
 	cmd.Options = Options{}
-	cmd.issues = []string{}
+	cmd.issues = []error{}
 
 	spec := strings.TrimSuffix(path, ".sh") + ".yaml"
 	var contents []byte
 	if contents, err = os.ReadFile(spec); err == nil {
-		if strict {
-			err = yaml.UnmarshalStrict(contents, cmd)
-		} else {
-			err = yaml.Unmarshal(contents, cmd)
-		}
+		err = yaml.UnmarshalStrict(contents, cmd)
+		// if strict {
+		// } else {
+		// 	err = yaml.Unmarshal(contents, cmd)
+		// }
 	}
 
 	if err != nil {
+		// todo: output better errors, decode yaml.TypeError
 		err = errors.ConfigError{
 			Err:    err,
 			Config: spec,
 		}
-		cmd.issues = append(cmd.issues, err.Error())
+		cmd.issues = append(cmd.issues, err)
 	}
 
 	return cmd.SetBindings(), nil
@@ -167,8 +168,19 @@ func (cmd *Command) FlagSet() *pflag.FlagSet {
 	return cmd.runtimeFlags
 }
 
-func (cmd *Command) Run(cc *cobra.Command, args []string) error {
-	logrus.Debugf("running command %s", cmd.FullName())
+func (cmd *Command) CanRun() error {
+	if len(cmd.issues) > 0 {
+		issues := []string{}
+		for _, i := range cmd.issues {
+			issues = append(issues, i.Error())
+		}
+
+		return fmt.Errorf("refusing to run <%s>: %s", cmd.FullName(), strings.Join(issues, "\n"))
+	}
+	return nil
+}
+
+func (cmd *Command) ParseInput(cc *cobra.Command, args []string) error {
 	cmd.Arguments.Parse(args)
 	skipValidation, _ := cc.Flags().GetBool("skip-validation")
 	cmd.Options.Parse(cc.Flags())
@@ -184,6 +196,18 @@ func (cmd *Command) Run(cc *cobra.Command, args []string) error {
 		}
 	}
 
+	return nil
+}
+
+func (cmd *Command) Run(cc *cobra.Command, args []string) error {
+	if err := cmd.CanRun(); err != nil {
+		return err
+	}
+	logrus.Debugf("running command %s", cmd.FullName())
+
+	if err := cmd.ParseInput(cc, args); err != nil {
+		return err
+	}
 	env := cmd.ToEval(args)
 
 	if os.Getenv(_c.EnvVarCompaOut) != "" {

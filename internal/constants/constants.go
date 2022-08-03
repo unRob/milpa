@@ -33,6 +33,7 @@ const EnvVarMilpaPathParsed = "MILPA_PATH_PARSED"
 const EnvVarMilpaVerbose = "MILPA_VERBOSE"
 const EnvVarMilpaSilent = "MILPA_SILENT"
 const EnvVarMilpaUnstyled = "NO_COLOR"
+const EnvVarMilpaForceColor = "COLOR"
 const EnvVarValidationDisabled = "MILPA_SKIP_VALIDATION"
 const EnvVarCompaOut = "COMPA_OUT"
 const EnvVarDebug = "DEBUG"
@@ -43,6 +44,7 @@ const EnvVarLookupGlobalReposDisabled = "MILPA_DISABLE_GLOBAL_REPOS"
 // EnvFlagNames are flags also available as environment variables.
 var EnvFlagNames = map[string]string{
 	"no-color":        EnvVarMilpaUnstyled,
+	"color":           EnvVarMilpaForceColor,
 	"silent":          EnvVarMilpaSilent,
 	"verbose":         EnvVarMilpaVerbose,
 	"skip-validation": EnvVarValidationDisabled,

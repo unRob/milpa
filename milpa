@@ -73,7 +73,9 @@ compaOut=$(mktemp -t "compaOut.XXX")
 compaErr=$(mktemp -t "compaErr.XXX")
 trap 'rm -rf $compaOut $compaErr' ERR EXIT TERM
 
-@milpa.log debug "Calling out compa with ${*}"
+if ! printf '%s\0' "${@}" | grep -Fqxz -- '--silent'; then
+  @milpa.log debug "Calling out compa with ${*}"
+fi
 # figure out what the user is asking for
 COMPA_OUT="$compaOut" "$MILPA_COMPA" "$@" 2>"$compaErr" || {
   exitCode=$?
@@ -104,7 +106,7 @@ set +o allexport
   @milpa.log info "lookup stderr: $(cat "$compaErr")"
   @milpa.log info "lookup stdout: $(cat "$compaOut")"
   @milpa.log info "milpa environment:"
-  env | grep ^MILPA | sort | @milpa.log info
+  env | grep -e ^MILPA -e "^\(NO_\)\?COLOR=" | sort | @milpa.log info
   @milpa.fail "Command lookup succeeded, but command environment is incomplete"
 }
 
@@ -116,9 +118,11 @@ export MILPA_DISABLE_UPDATE_CHECKS=1
 # normalize verbose flag
 [[ "${MILPA_VERBOSE:-$MILPA_OPT_VERBOSE}" == "true" ]] && export MILPA_VERBOSE="true"
 # print debugging output if requested
-@milpa.log debug "lookup output: $(cat "$compaErr")"
-@milpa.log debug "running <$MILPA_COMMAND_NAME> from <$MILPA_COMMAND_PATH> with arguments <${*}>"
-@milpa.log debug "milpa environment:"$'\n'"$(env | grep ^MILPA | sort)"
+if [[ "$DEBUG" ]]; then
+  @milpa.log debug "$(cat "$compaErr")"
+  @milpa.log debug "running <$MILPA_COMMAND_NAME> from <$MILPA_COMMAND_PATH> with arguments <${*}>"
+  @milpa.log debug "milpa environment:"$'\n'"$(env | grep -e ^MILPA -e "^\(NO_\)\?COLOR=" | sort)"
+fi
 
 # thanks compa, good bye
 rm -rf "$compaOut" "$compaErr"

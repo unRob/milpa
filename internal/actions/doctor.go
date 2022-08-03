@@ -37,7 +37,7 @@ var doctorCommand = &cobra.Command{
 		fail := color.New(color.FgRed)
 		success := color.New(color.FgGreen)
 		failedOverall := false
-		failures := []string{}
+		failures := map[string]uint8{}
 
 		summarize, err := cmd.Flags().GetBool("summary")
 		if err != nil {
@@ -73,7 +73,7 @@ var doctorCommand = &cobra.Command{
 				formatter := success
 				if status == 1 {
 					hasFailures = true
-					failures = append(failures, cmd.FullName())
+					failures[cmd.FullName()]++
 					formatter = fail
 				} else if status == 2 {
 					formatter = warn
@@ -97,7 +97,12 @@ var doctorCommand = &cobra.Command{
 		}
 
 		if failedOverall {
-			return fmt.Errorf("your milpa could use some help, found errors in:\n%s", strings.Join(failures, "\n"))
+			failureReport := []string{}
+			for cmd, count := range failures {
+				failureReport = append(failureReport, fmt.Sprintf("%s - %d issues", cmd, count))
+			}
+
+			return fmt.Errorf("your milpa could use some help with the following commands:\n%s", strings.Join(failureReport, "\n"))
 		}
 
 		return
