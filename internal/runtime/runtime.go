@@ -15,6 +15,7 @@ package runtime
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	_c "github.com/unrob/milpa/internal/constants"
@@ -30,6 +31,7 @@ var falseIshValues = []string{
 	"disable",
 	"disabled",
 	"off",
+	"never",
 }
 
 var trueIshValues = []string{
@@ -39,6 +41,7 @@ var trueIshValues = []string{
 	"enable",
 	"enabled",
 	"on",
+	"always",
 }
 
 func isFalseIsh(val string) bool {
@@ -96,4 +99,30 @@ func CheckMilpaPathSet() error {
 		return fmt.Errorf("no %s set on the environment", _c.EnvVarMilpaPath)
 	}
 	return nil
+}
+
+// EnvironmentMap returns the resolved environment map.
+func EnvironmentMap() map[string]string {
+	env := map[string]string{}
+	env[_c.EnvVarMilpaPath] = strings.Join(MilpaPath, ":")
+	trueString := strconv.FormatBool(true)
+	env[_c.EnvVarMilpaPathParsed] = trueString
+
+	if !ColorEnabled() {
+		env[_c.EnvVarMilpaUnstyled] = trueString
+	} else if isTrueIsh(os.Getenv(_c.EnvVarMilpaForceColor)) {
+		env[_c.EnvVarMilpaForceColor] = "always"
+	}
+
+	if DebugEnabled() {
+		env[_c.EnvVarDebug] = trueString
+	}
+
+	if VerboseEnabled() {
+		env[_c.EnvVarMilpaVerbose] = trueString
+	} else if isTrueIsh(os.Getenv(_c.EnvVarMilpaSilent)) {
+		env[_c.EnvVarMilpaSilent] = trueString
+	}
+
+	return env
 }

@@ -16,8 +16,8 @@
 # curl -L https://milpa.dev/install.sh | bash -
 
 if [[ -t 1 ]] && [[ -z ${NO_COLOR+x} ]]; then
-  [[ -z ${TERM+x} ]] && export TERM="xterm-color"
-  _FMT_INVERTED=$(tput rev)
+  [[ -z ${TERM+x} ]] && export TERM="${TERM:-xterm-color}"
+  _FMT_INVERTED="$(tput rev)"
   _FMT_BOLD="$(tput bold)"
   _FMT_RESET="$(tput sgr0)"
   _FMT_ERROR="$(tput setaf 1)"
