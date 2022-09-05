@@ -74,7 +74,7 @@ var rootcc = &cobra.Command{
 
 var Root = &command.Command{
 	Summary: "Runs commands found in " + _c.RepoRoot + " folders",
-	Description: `﹅milpa﹅ is a command-line tool to care for one's own garden of scripts, its name comes from "milpa", an agricultural method that combines multiple crops in close proximity. You and your team write scripts and a little spec for each command -use bash, or any other language-, and ﹅milpa﹅ provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.
+	Description: `﹅milpa﹅ is a command-line tool to care for one's own garden of scripts, its name comes from an agricultural method that combines multiple crops in close proximity. You and your team write scripts and a little spec for each command -use bash, or any other language-, and ﹅milpa﹅ provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.
 
   See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more information about ﹅milpa﹅`,
 	Meta: command.Meta{
@@ -97,11 +97,13 @@ var Root = &command.Command{
 		},
 		"no-color": &command.Option{
 			Type:        "bool",
-			Description: "Print to stderr without any formatting codes",
+			Description: "Disable printing of colors to stderr",
+			Default:     !runtime.ColorEnabled(),
 		},
 		"color": &command.Option{
 			Type:        "bool",
-			Description: "Print to stderr without any formatting codes",
+			Description: "Always print colors to stderr",
+			Default:     runtime.ColorEnabled(),
 		},
 		"silent": &command.Option{
 			Type:        "bool",
@@ -117,29 +119,43 @@ var Root = &command.Command{
 func RootCommand(version string) *cobra.Command {
 	rootcc.Annotations["version"] = version
 	rootFlagset := pflag.NewFlagSet("compa", pflag.ContinueOnError)
-	rootFlagset.BoolP("verbose", "v", runtime.VerboseEnabled(), "Log verbose output to stderr")
-	rootFlagset.Bool("silent", false, "Do not print any logs to stderr")
-	rootFlagset.BoolP("help", "h", false, "Display help for any command")
-	rootFlagset.Bool("no-color", !runtime.ColorEnabled(), "Do not print any formatting codes")
-	rootFlagset.Bool("color", runtime.ColorEnabled(), "Do not print any formatting codes")
-	rootFlagset.Bool("skip-validation", false, "Do not validate any arguments or options")
+	for name, opt := range Root.Options {
+		if opt.Type != "bool" {
+			continue
+		}
+		def, ok := opt.Default.(bool)
+		if !ok {
+			def = false
+		}
+
+		if opt.ShortName != "" {
+			rootFlagset.BoolP(name, opt.ShortName, def, opt.Description)
+		} else {
+			rootFlagset.Bool(name, def, opt.Description)
+		}
+	}
+
 	rootFlagset.Usage = func() {}
 	rootFlagset.SortFlags = false
-
 	rootcc.PersistentFlags().AddFlagSet(rootFlagset)
+
 	rootcc.Flags().Bool("version", false, "Display the version of milpa")
 
 	rootcc.CompletionOptions.DisableDefaultCmd = true
+
 	rootcc.AddCommand(versionCommand)
 	rootcc.AddCommand(completionCommand)
 	rootcc.AddCommand(generateDocumentationCommand)
 	rootcc.AddCommand(doctorCommand)
+
 	doctorCommand.Flags().Bool("summary", false, "")
 	rootcc.AddCommand(fetchRemoteRepo)
 	rootcc.AddCommand(introspectCommand)
+
 	introspectCommand.Flags().Int32("depth", 15, "")
 	introspectCommand.Flags().String("format", "json", "")
 	introspectCommand.Flags().String("template", "{{ indent . }}{{ .Name }} - {{ .Summary }}\n", "")
+
 	rootcc.SetHelpCommand(helpCommand)
 	helpCommand.AddCommand(docsCommand)
 	docsCommand.SetHelpFunc(docs.HelpRenderer(Root.Options))

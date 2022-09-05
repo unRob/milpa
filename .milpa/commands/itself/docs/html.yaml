@@ -22,3 +22,5 @@ options:
   hostname:
     default: milpa.dev
     description: The hostname to set as base for the rendered docs
+  template:
+    description: a local template to use instead of the default when serving

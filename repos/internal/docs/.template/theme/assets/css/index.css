@@ -1,11 +1,41 @@
 
+
+@font-face {
+  font-family: "Aestetico";
+  font-style: italic;
+  font-weight: normal;
+  src: url('https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: "Aestetico";
+  font-weight: bold;
+  font-style: italic, oblique;
+  src: url('https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: "Aestetico";
+  font-weight: bold;
+  font-style: normal;
+  src: url('https://cdn.rob.mx/fonts/AesteticoBold.woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: "Aestetico";
+  font-style: normal;
+  font-weight: normal;
+  src: url('https://cdn.rob.mx/fonts/AesteticoLight.woff2');
+  font-display: swap;
+}
+
 html, body {
   margin: 0;
   padding: 0;
 }
 
 body {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Aestetico", sans-serif;
   font-size: 16px;
   color: #2B3C2D;
   background-color: #dff4d4
@@ -22,6 +52,7 @@ header {
   top: 0;
   height: 53px;
   z-index: 100;
+  overflow: hidden;
 }
 
 header h1 {
@@ -65,9 +96,16 @@ header .emoji-maiz:hover::before {
   outline: 2px solid rgba(190, 197, 6, 0.0);
 }
 
+
 #command-selector:focus, #command-selector:hover {
   background: rgba(255,255,255,.2);
   outline: 2px solid rgba(190, 197, 6, 0.8);
+}
+
+#command-selector:invalid {
+  outline: 2px solid rgba(197, 51, 6, 0.8);
+  color: rgba(197, 51, 6, 1);
+  background: rgba(74, 14, 14, 0.584);
 }
 
 #menu-toggle {
@@ -106,7 +144,7 @@ header .emoji-maiz:hover::before {
   padding: 10px;
   top: 53px;
   height: calc(100vh - 73px);
-  overflow-y: scroll;
+  overflow-y: auto;
   z-index: 10;
 }
 
@@ -116,7 +154,7 @@ header .emoji-maiz:hover::before {
 
 #sidebar .heading {
   font-size: 16px;
-  font-style: italic;
+  font-weight: bold;
   display: block;
 }
 
@@ -130,7 +168,7 @@ header .emoji-maiz:hover::before {
 }
 
 #commands {
-  overflow-y: scroll;
+  overflow-y: hidden;
 }
 
 #commands ul {
@@ -159,13 +197,32 @@ header .emoji-maiz:hover::before {
   padding-left: 240px;
 }
 
+#content h2, #content h3 {
+  font-weight: bold
+}
+
 #content > h1:first-child {
   margin-top: 0;
+}
+
+#content h2 {
+  margin-bottom: .2em;
+}
+
+#content h3 {
+  margin: 0;
+  padding-top: 1em
 }
 
 .content-header {
   color: #12731D;
   display: inline-block;
+}
+
+.content-header code {
+  background: rgba(65, 80, 66, 0.06);
+  border-radius: 3px;
+  padding:0 .3em;
 }
 
 .heading-anchor {
@@ -175,6 +232,11 @@ header .emoji-maiz:hover::before {
   opacity: .7;
   display: none;
 }
+
+.content-header-wrapper {
+  scroll-margin: 53px;
+}
+
 
 .content-header-wrapper:hover .heading-anchor{
   display: inline-block;
@@ -192,10 +254,19 @@ header .emoji-maiz:hover::before {
   font-family: "Fira Code", monospace;
   font-size: .9em;
   line-height: 1.2em;
+  font-variant-ligatures: no-contextual;
+}
+
+#content p:first-of-type {
+  margin-top: 0;
 }
 
 #content p {
-  line-height: 1.4em;
+  line-height: 1.45em;
+}
+
+#content em {
+  font-style: italic;
 }
 
 #content p code, #content li > code, #content a code {
@@ -210,6 +281,11 @@ pre {
   white-space: pre-wrap;
 }
 
+code {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
 
 #content li {
   margin: .4em 0;
@@ -217,6 +293,28 @@ pre {
 
 #content img {
   max-width: 100%;
+}
+
+#content table {
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+#content th, td {
+  padding: .2em .5em;
+}
+
+#content tr:nth-child(odd) {
+  background-color: none;
+}
+
+#content tr:nth-child(even) {
+  background-color: rgba(65, 80, 66, 0.1);
+}
+
+#content th {
+  text-align: left;
+  color: #12731d;
 }
 
 hr {
@@ -264,6 +362,10 @@ hr {
     color: #CEFCD3;
   }
 
+  #sidebar .heading {
+    color: #132b17;
+  }
+
   #sidebar a {
     color: #CEFCD3
   }
@@ -279,6 +381,21 @@ hr {
   #content p code, #content li > code, #content a code {
     color: #96b452;
     background: #132b17;
+  }
+
+  #content tr:nth-child(even) {
+    background-color: rgba(65, 80, 66, 0.6);
+  }
+
+  #content th {
+    text-align: left;
+    color: #c0e394;
+  }
+
+  .content-header code {
+    background: #132b17;
+    border-radius: 3px;
+    padding:0 .3em;
   }
 
 }
@@ -311,7 +428,7 @@ hr {
     display: none;
     width: 100%;
     padding: 1em 0;
-    height: calc(100vh - 81px);
+    height: calc(100vh - 81px - env(safe-area-inset-bottom));
     opacity: .95;
     background-color: rgba(223, 244, 212, .9);
     -webkit-backdrop-filter: blur(2px);
@@ -337,6 +454,11 @@ hr {
     display: block;
   }
 
+  #commands {
+    overflow-y: scroll;
+    padding-bottom: 4em;
+  }
+
   #command-selector {
     padding-left: .2em;
   }
@@ -353,12 +475,20 @@ hr {
 }
 
 @media screen and (max-width: 480px) {
+  body {
+    font-size: 16px;
+  }
+
   .emoji-maiz::before {
     display: none;
   }
 
   header h1 {
     margin: 0 .2em;
+  }
+
+  #commands {
+    margin-bottom: 100px;
   }
 }
 

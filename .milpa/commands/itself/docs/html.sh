@@ -42,15 +42,24 @@ if [[ "$MILPA_ARG_ACTION" == "serve" ]]; then
   fi
 
   @milpa.log info "Launching hugo website generator with $MILPA_OPT_IMAGE"
+
+  templateDir=()
+  if [[ "$MILPA_OPT_TEMPLATE" != "" ]]; then
+    tplDir="$(cd "$MILPA_OPT_TEMPLATE" && pwd)" || @milpa.fail "--template is not a directory"
+    templateDir=(
+      -v "$tplDir/theme:/src/themes/cli/"
+      -v "$tplDir/config.toml:/src/config.toml"
+    )
+  fi
+
   containerID="$(docker run --rm -it \
     --name milpa_docs \
     --detach \
     -p "$MILPA_OPT_PORT:$MILPA_OPT_PORT" \
     -v "$content:/src/content/" \
+    "${templateDir[@]}" \
     "$MILPA_OPT_IMAGE" serve --debug --port "$MILPA_OPT_PORT")" || @milpa.fail "Could not spin up website generator"
     # to debug add:
-    # -v "${MILPA_ROOT}/repos/internal/docs/.template/theme:/src/themes/cli/" \
-    # -v "${MILPA_ROOT}/repos/internal/docs/.template/config.toml:/src/config.toml" \
 
   docker logs --follow milpa_docs &
 
