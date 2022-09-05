@@ -5,23 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en" />
-  <meta property="og:title" content="help docs milpa alternatives" />
+  <meta property="og:title" content="milpa help docs milpa alternatives" />
   <meta property="og:site_name" content="🌽 milpa" />
   <meta property="og:description" content="Use-cases and alternatives when using milpa" />
   <meta name="description" content="Use-cases and alternatives when using milpa" />
   <meta property="og:url" content="https://milpa.dev/help/docs/milpa/alternatives/" />
   <title>milpa help docs milpa alternatives</title>
-  <link rel="stylesheet" href="/css/bundle.min.ede1eef6269c98894bb1d97136560b8364cb9d02c32b628bfd58bd5aaaf24d68.css"/>
+
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2" />
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2" />
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2" />
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2" />
+
+  <link rel="stylesheet" href="/css/bundle.min.673c3a63856ed82a10dde662b119f9c2e2f7b10844ab8cf7028893b873b22b90.css"/>
 
   <link rel="canonical" href="https://milpa.dev/help/docs/milpa/alternatives/">
 
   
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="preload" as="style">
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="preload" as="style">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript>
-    <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" />
   </noscript>
 </head>
 <body><header role="banner">
@@ -33,6 +39,7 @@
     type="text"
     aria-label="milpa command selector"
     id="command-selector"
+    pattern='|help docs milpa alternatives'
     value="help docs milpa alternatives" />
   <datalist id="milpa-commands">
     <option value="help" />
@@ -75,8 +82,8 @@
 <div id="sidebar" aria-hidden="false">
   <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
   <ul>
-    <li><a href="#milpa-is-great-for">milpa is great for</a></li>
-    <li><a href="#where-milpa-wont-shine">Where milpa won&rsquo;t shine</a></li>
+    <li><a href="#milpa-is-great-for"><code>milpa</code> is great for</a></li>
+    <li><a href="#where-milpa-wont-shine">Where <code>milpa</code> won&rsquo;t shine</a></li>
     <li><a href="#okay-so-what-about">Okay, so what about&hellip;</a>
       <ul>
         <li><a href="#regular-scripts-in-the-filesystem">Regular scripts in the filesystem</a></li>
@@ -376,23 +383,23 @@
 
 <main id="content">
 <h1 id="command-name-header" class="sr-only">milpa help docs milpa alternatives</h1>
-<p>I built milpa with a few use cases in mind:</p>
+<p>I built <code>milpa</code> with a few use cases in mind:</p>
 <ul>
 <li>To <strong>share groups of scripts</strong> used by a group of folks in an engineering team (i.e. setup development environments, work with secrets/credentials)</li>
 <li>to <strong>share context and code</strong>, without having to ask folks to run stuff off READMEs (i.e. pull service logs, forward ports), and</li>
 <li>to <strong>quickly build scripts</strong> that will be documented sufficiently well for my forgetful future-self.</li>
 </ul>
-<p>I have used/would use milpa for:</p>
+<p>I have used/would use <code>milpa</code> for:</p>
 <ul>
 <li>managing homelab services: building and deploying them, looking at their status and logs. From my personal device or CI.</li>
 <li>bootstrapping engineering laptops: no need to follow a README, you get the right development environment for your os/arch, your credentials setup and the code ready for you to dive in.</li>
 <li>every-day dev workflow: connect to vpn, get credentials for a database, maybe <code>--connect</code> directly to it, abstract away all those weird cloud provider APIs and CLIs, create releases.</li>
 <li>organize all those odd, one-off-but-not-really commands: all those shells scripts, quick ruby scripts, perl hacks and jq monstrosities can have a nice home.</li>
 </ul>
-<p>milpa is great for these things, since it only requires Bash and a supported OS/arch but will setup and work with whatever your team likes using (today and beyond). milpa does the work of parsing arguments, validating them, offering help when things go sideways and so on, so these small scripts remain just so: small scripts.</p>
+<p><code>milpa</code> is great for these things, since it only requires Bash and a supported OS/arch but will setup and work with whatever your team likes using (today and beyond). <code>milpa</code> does the work of parsing arguments, validating them, offering help when things go sideways and so on, so these small scripts remain just so: small scripts.</p>
 <p>See <a href="https://github.com/unRob/nidito/tree/master/.milpa">unRob/nidito</a> for a working example, and/or the drop that that spilled the cup and got me to work on <code>milpa</code>.</p>
 <div class="content-header-wrapper">
-<h2 class="content-header" id="milpa-is-great-for">milpa is great for</h2> <a aria-hidden="true" class="heading-anchor" href="#milpa-is-great-for" tabindex="-1">#</a>
+<h2 class="content-header" id="milpa-is-great-for"><code>milpa</code> is great for</h2> <a aria-hidden="true" class="heading-anchor" href="#milpa-is-great-for" tabindex="-1">#</a>
 </div>
 <ul>
 <li>working with small programs meant to be used as either building blocks for other programs, or user-facing collections of these blocks</li>
@@ -402,11 +409,11 @@
 <p>Tasks like bootstrapping development environments are usually left out for the user to accomplish by following through a README or wiki with likely outdated links; <code>milpa</code> is great when these tasks can be accomplished by prompting for information, querying identity providers and then running configuration commands or modifying the filesystem directly.</p>
 <p>My aim is to make following the <a href="https://clig.dev">Command Line Interface Guidelines</a> require as little effort as possible.</p>
 <div class="content-header-wrapper">
-<h2 class="content-header" id="where-milpa-wont-shine">Where milpa won&rsquo;t shine</h2> <a aria-hidden="true" class="heading-anchor" href="#where-milpa-wont-shine" tabindex="-1">#</a>
+<h2 class="content-header" id="where-milpa-wont-shine">Where <code>milpa</code> won&rsquo;t shine</h2> <a aria-hidden="true" class="heading-anchor" href="#where-milpa-wont-shine" tabindex="-1">#</a>
 </div>
-<p>I haven&rsquo;t tested the performance beyond dozens of repos with dozens of commands, and that being said, I can&rsquo;t see myself using milpa for anything more complex than that. I&rsquo;d usually reach for another language to build a domain-specific CLI, specially if working with a team that is not very comfortable with shell scripting.</p>
-<p>When there&rsquo;s a need to distribute stand-alone CLI programs. milpa is not the best platform to package and distribute CLIs. Complex argument parsing and auto completion are also not in my roadmap; these are very valid use cases, but keeping a simple spec that works for most cases is going to create some friction for the least-common path.</p>
-<p>When the primary runner of commands is not gonna be a human. Sorry robot friends! milpa&rsquo;s features are oriented primarily towards improving the experience of maintaining and running scripts by humans, and while there&rsquo;s nothing wrong with having an automated system (say CI, for example) run milpa commands, there is an overhead to consider by invoking <code>milpa</code> (both cognitive overhead and in terms of resource usage).</p>
+<p>I haven&rsquo;t tested the performance beyond dozens of repos with dozens of commands, and that being said, I can&rsquo;t see myself using <code>milpa</code> for anything more complex than that. I&rsquo;d usually reach for another language to build a domain-specific CLI, specially if working with a team that is not very comfortable with shell scripting.</p>
+<p>When there&rsquo;s a need to distribute stand-alone CLI programs. <code>milpa</code> is not the best platform to package and distribute CLIs. Complex argument parsing and auto completion are also not in my roadmap; these are very valid use cases, but keeping a simple spec that works for most cases is going to create some friction for the least-common path.</p>
+<p>When the primary runner of commands is not gonna be a human. Sorry robot friends! <code>milpa</code>&rsquo;s features are oriented primarily towards improving the experience of maintaining and running scripts by humans, and while there&rsquo;s nothing wrong with having an automated system (say CI, for example) run <code>milpa</code> commands, there is an overhead to consider by invoking <code>milpa</code> (both cognitive overhead and in terms of resource usage).</p>
 <div class="content-header-wrapper">
 <h2 class="content-header" id="okay-so-what-about">Okay, so what about&hellip;</h2> <a aria-hidden="true" class="heading-anchor" href="#okay-so-what-about" tabindex="-1">#</a>
 </div>
@@ -425,11 +432,11 @@
 <li><a href="https://github.com/basecamp/sub">Sub</a></li>
 <li><a href="https://github.com/basherpm/basher">Basher package manager</a></li>
 </ul>
-<p>These all serve different purposes, and there is some feature overlap. milpa aims to provide the same level of support to non-bash scripts (hello applescript) without the need for another runtime to be installed. These projects are great for distributing and packaging software that may be used beyond your organization, while milpa aims to help smaller user bases, such as engineering teams, keep their shared scripts organized and up-to-date.</p>
+<p>These all serve different purposes, and there is some feature overlap. <code>milpa</code> aims to provide the same level of support to non-bash scripts (hello applescript) without the need for another runtime to be installed. These projects are great for distributing and packaging software that may be used beyond your organization, while <code>milpa</code> aims to help smaller user bases, such as engineering teams, keep their shared scripts organized and up-to-date.</p>
 <div class="content-header-wrapper">
 <h3 class="content-header" id="make">Make</h3> <a aria-hidden="true" class="heading-anchor" href="#make" tabindex="-1">#</a>
 </div>
-<p>Make is great! I love using <code>make</code> for building artifacts, but I always end up hacking around it and wishing I had all of Make&rsquo;s strengths and the expressiveness of bash. I used <code>make</code> to build milpa initially since it&rsquo;s really a great tool, has a huge user base and flavors of it produce software used by millions. That being said, organizing makefiles and dealing with arguments is not something I can say I enjoy, and producing anything other than artifacts to the filesystem with Make doesn&rsquo;t feel right to me.</p>
+<p>Make is great! I love using <code>make</code> for building artifacts, but I always end up hacking around it and wishing I had all of Make&rsquo;s strengths and the expressiveness of bash. I used <code>make</code> to build <code>milpa</code> initially since it&rsquo;s really a great tool, has a huge user base and flavors of it produce software used by millions. That being said, organizing makefiles and dealing with arguments is not something I can say I enjoy, and producing anything other than artifacts to the filesystem with Make doesn&rsquo;t feel right to me.</p>
 <div class="content-header-wrapper">
 <h3 class="content-header" id="byocli">BYOCLI</h3> <a aria-hidden="true" class="heading-anchor" href="#byocli" tabindex="-1">#</a>
 </div>
@@ -437,6 +444,6 @@
 
 
     </main>
-<script src="https://milpa.dev/js/index.min.a5506f189383980f5c23031e721a22c7b0d860428a98abd5acab1bb2dd83c7f5.js"></script>
+<script src="https://milpa.dev/js/index.min.e8fb4266f19590f6cbf4007c65faa8e38a0e23bfbc40ef56ca24eed9d96fa64c.js"></script>
 </body>
 </html>

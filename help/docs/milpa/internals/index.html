@@ -5,23 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en" />
-  <meta property="og:title" content="help docs milpa internals" />
+  <meta property="og:title" content="milpa help docs milpa internals" />
   <meta property="og:site_name" content="🌽 milpa" />
   <meta property="og:description" content="Summary of how milpa works" />
   <meta name="description" content="Summary of how milpa works" />
   <meta property="og:url" content="https://milpa.dev/help/docs/milpa/internals/" />
   <title>milpa help docs milpa internals</title>
-  <link rel="stylesheet" href="/css/bundle.min.ede1eef6269c98894bb1d97136560b8364cb9d02c32b628bfd58bd5aaaf24d68.css"/>
+
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2" />
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2" />
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2" />
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2" />
+
+  <link rel="stylesheet" href="/css/bundle.min.673c3a63856ed82a10dde662b119f9c2e2f7b10844ab8cf7028893b873b22b90.css"/>
 
   <link rel="canonical" href="https://milpa.dev/help/docs/milpa/internals/">
 
   
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="preload" as="style">
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="preload" as="style">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript>
-    <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" />
   </noscript>
 </head>
 <body><header role="banner">
@@ -33,6 +39,7 @@
     type="text"
     aria-label="milpa command selector"
     id="command-selector"
+    pattern='|help docs milpa internals'
     value="help docs milpa internals" />
   <datalist id="milpa-commands">
     <option value="help" />
@@ -75,7 +82,7 @@
 <div id="sidebar" aria-hidden="false">
   <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
   <ul>
-    <li>
+    <li><a href="#how-it-works">How it works</a>
       <ul>
         <li><a href="#milpa-sets-the-stage"><code>milpa</code> sets the stage</a></li>
         <li><a href="#compa-resolves-intentions"><code>compa</code> resolves intentions</a></li>
@@ -374,12 +381,15 @@
 
 <main id="content">
 <h1 id="command-name-header" class="sr-only">milpa help docs milpa internals</h1>
-<p><code>milpa</code> is a bash script in charge of setting environment variables and handing off to the user-requested script. Most of the heavy lifting, including argument/option parsing and validation, as well as finding commands, is done by a companion binary named <code>compa</code> (a slang term for friend).</p>
-<p>Milpa is built with, and thanks to:</p>
+<p><code>milpa</code> is a bash script in charge of setting environment variables and handing off to the user-requested script. Most of the heavy lifting, including argument/option parsing and validation, as well as finding commands, is done by a companion binary named <code>compa</code> (a slang term for friend in spanish).</p>
+<p><code>milpa</code> is built with, and thanks to:</p>
 <ul>
 <li><a href="https://www.gnu.org/software/bash/">bash</a></li>
 <li><a href="https://cobra.dev">spf13/cobra</a></li>
 </ul>
+<div class="content-header-wrapper">
+<h2 class="content-header" id="how-it-works">How it works</h2> <a aria-hidden="true" class="heading-anchor" href="#how-it-works" tabindex="-1">#</a>
+</div>
 <div class="content-header-wrapper">
 <h3 class="content-header" id="milpa-sets-the-stage"><code>milpa</code> sets the stage</h3> <a aria-hidden="true" class="heading-anchor" href="#milpa-sets-the-stage" tabindex="-1">#</a>
 </div>
@@ -414,17 +424,43 @@
 <h2 class="content-header" id="exit-codes">Exit codes</h2> <a aria-hidden="true" class="heading-anchor" href="#exit-codes" tabindex="-1">#</a>
 </div>
 <p>Mostly based on Bash&rsquo;s <a href="https://tldp.org/LDP/abs/html/exitcodes.html">Appendix E</a> and FreeBSD&rsquo;s <a href="https://www.freebsd.org/cgi/man.cgi?query=sysexits&amp;apropos=0&amp;sektion=0&amp;manpath=FreeBSD+4.3-RELEASE&amp;format=html"><code>sysexits</code></a></p>
-<ul>
-<li>2: <code>@milpa.fail</code> was called</li>
-<li>42: <code>compa</code> is requesting pretty printing and a clean <code>milpa</code> exit</li>
-<li>64: arguments/flags could not be parsed or failed validation</li>
-<li>70: a spec could not be parsed or help failed rendering</li>
-<li>78: <code>MILPA_ROOT</code> points to something that&rsquo;s not a directory, or <code>MILPA_PATH</code> has an incorrect path set</li>
-<li>127: sub-command not found</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>code</th>
+<th>reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>2</code></td>
+<td><code>@milpa.fail</code> was called</td>
+</tr>
+<tr>
+<td><code>42</code></td>
+<td><code>compa</code> is requesting pretty printing and a clean <code>milpa</code> exit</td>
+</tr>
+<tr>
+<td><code>64</code></td>
+<td>arguments/flags could not be parsed or failed validation</td>
+</tr>
+<tr>
+<td><code>70</code></td>
+<td>a spec could not be parsed or help failed rendering</td>
+</tr>
+<tr>
+<td><code>78</code></td>
+<td><code>MILPA_ROOT</code> points to something that&rsquo;s not a directory, or <code>MILPA_PATH</code> has an incorrect path set</td>
+</tr>
+<tr>
+<td><code>127</code></td>
+<td>sub-command not found</td>
+</tr>
+</tbody>
+</table>
 
 
     </main>
-<script src="https://milpa.dev/js/index.min.a5506f189383980f5c23031e721a22c7b0d860428a98abd5acab1bb2dd83c7f5.js"></script>
+<script src="https://milpa.dev/js/index.min.e8fb4266f19590f6cbf4007c65faa8e38a0e23bfbc40ef56ca24eed9d96fa64c.js"></script>
 </body>
 </html>

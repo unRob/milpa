@@ -43,9 +43,9 @@ You can set it to a local installation, like a fork, and run $MILPA_ROOT/milpa t
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://milpa.dev/help/docs/milpa/internals/</guid>
-      <description>milpa is a bash script in charge of setting environment variables and handing off to the user-requested script. Most of the heavy lifting, including argument/option parsing and validation, as well as finding commands, is done by a companion binary named compa (a slang term for friend).
-Milpa is built with, and thanks to:
-bash spf13/cobra milpa sets the stage # As it starts running, milpa will set MILPA_ROOT, exit unless it points to an existing directory, We&amp;rsquo;ll bail after setting the global environment if the user requested a completion (with the hidden __complete command).</description>
+      <description>milpa is a bash script in charge of setting environment variables and handing off to the user-requested script. Most of the heavy lifting, including argument/option parsing and validation, as well as finding commands, is done by a companion binary named compa (a slang term for friend in spanish).
+milpa is built with, and thanks to:
+bash spf13/cobra How it works # milpa sets the stage # As it starts running, milpa will set MILPA_ROOT, exit unless it points to an existing directory, We&amp;rsquo;ll bail after setting the global environment if the user requested a completion (with the hidden __complete command).</description>
     </item>
     
     <item>
@@ -180,7 +180,7 @@ Arguments # ACTION - the action to take with documentation Options # --hostname 
       <description>Validates all commands found on the MILPA_PATH
 Usage # milpa itself doctor [options] [flags]
 Options # --summary (bool): only print errors, if any. Description # This command will run checks on all known commands, parsing specs and validating their values.
-Global Options # --color (bool): Print to stderr without any formatting codes. --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging.</description>
+Global Options # --color (bool): Always print colors to stderr. --help (bool): Display help for any command. --no-color (bool): Disable printing of colors to stderr. Default: true. --silent (bool): Silence non-error logging.</description>
     </item>
     
     <item>
@@ -204,7 +204,7 @@ Arguments # SOURCE required - A go-getter URL to fetch the repo from. TARGET - T
 Usage # milpa itself repo list [options] [flags]
 Options # --paths-only (bool): Only output the paths to repos with no decoration. Description # Milpa can install repositories from remote locations at two different locations, depending on how it was instaled.
 In the $MILPA_ROOT (by default, /usr/local/lib/milpa) In $XDG_DATA_HOME/milpa folder For more information on installing packages, see milpa itself repo install --help
-Global Options # --color (bool): Print to stderr without any formatting codes.</description>
+Global Options # --color (bool): Always print colors to stderr.</description>
     </item>
     
     <item>
@@ -216,7 +216,7 @@ Global Options # --color (bool): Print to stderr without any formatting codes.</
       <description>Removes an installed milpa repo
 Usage # milpa itself repo uninstall [options] PATH
 Arguments # PATH required - The repo path to uninstall Description # Uninstalls a milpa repo by PATH. See milpa itself repo list --help for a list of available repos
-Global Options # --color (bool): Print to stderr without any formatting codes. --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes.</description>
+Global Options # --color (bool): Always print colors to stderr. --help (bool): Display help for any command. --no-color (bool): Disable printing of colors to stderr. Default: true. --silent (bool): Silence non-error logging.</description>
     </item>
     
     <item>
@@ -253,7 +253,7 @@ for bash, either /etc/bash_completion.d or /usr/local/etc/bash_completion.d for 
       <description>Upgrades milpa to the latest available version
 Usage # milpa itself upgrade [options]
 Description # If a new version is available, this command will download and install it.
-Global Options # --color (bool): Print to stderr without any formatting codes. --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --skip-validation (bool): Do not validate any arguments or options. --verbose (bool): Log verbose output to stderr.</description>
+Global Options # --color (bool): Always print colors to stderr. --help (bool): Display help for any command. --no-color (bool): Disable printing of colors to stderr. Default: true. --silent (bool): Silence non-error logging. --skip-validation (bool): Do not validate any arguments or options. --verbose (bool): Log verbose output to stderr.</description>
     </item>
     
     <item>
@@ -265,7 +265,7 @@ Global Options # --color (bool): Print to stderr without any formatting codes. -
       <description>Displays the version of milpa
 Usage # milpa itself version [options]
 Description # Outputs the version of milpa to stdout, printing a new line if the output is a TTY. Also available as milpa --version
-Global Options # --color (bool): Print to stderr without any formatting codes. --help (bool): Display help for any command. --no-color (bool): Print to stderr without any formatting codes. --silent (bool): Silence non-error logging. --skip-validation (bool): Do not validate any arguments or options.</description>
+Global Options # --color (bool): Always print colors to stderr. --help (bool): Display help for any command. --no-color (bool): Disable printing of colors to stderr. Default: true. --silent (bool): Silence non-error logging. --skip-validation (bool): Do not validate any arguments or options.</description>
     </item>
     
   </channel>
