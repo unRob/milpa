@@ -3,12 +3,14 @@ description: Summary of how milpa works
 weight: 50
 ---
 
-`milpa` is a bash script in charge of setting environment variables and handing off to the user-requested script. Most of the heavy lifting, including argument/option parsing and validation, as well as finding commands, is done by a companion binary named `compa` (a slang term for friend).
+`milpa` is a bash script in charge of setting environment variables and handing off to the user-requested script. Most of the heavy lifting, including argument/option parsing and validation, as well as finding commands, is done by a companion binary named `compa` (a slang term for friend in spanish).
 
-Milpa is built with, and thanks to:
+`milpa` is built with, and thanks to:
 
 - [bash](https://www.gnu.org/software/bash/)
 - [spf13/cobra](https://cobra.dev)
+
+## How it works
 
 ### `milpa` sets the stage
 
@@ -40,10 +42,12 @@ Milpa is built with, and thanks to:
 
 Mostly based on Bash's [Appendix E](https://tldp.org/LDP/abs/html/exitcodes.html) and FreeBSD's [`sysexits`](https://www.freebsd.org/cgi/man.cgi?query=sysexits&apropos=0&sektion=0&manpath=FreeBSD+4.3-RELEASE&format=html)
 
-- 2: `@milpa.fail` was called
-- 42: `compa` is requesting pretty printing and a clean `milpa` exit
-- 64: arguments/flags could not be parsed or failed validation
-- 70: a spec could not be parsed or help failed rendering
-- 78: `MILPA_ROOT` points to something that's not a directory, or `MILPA_PATH` has an incorrect path set
-- 127: sub-command not found
+| code  | reason |
+|-------|--------|
+| `2`   | `@milpa.fail` was called |
+| `42`  | `compa` is requesting pretty printing and a clean `milpa` exit |
+| `64`  | arguments/flags could not be parsed or failed validation |
+| `70`  | a spec could not be parsed or help failed rendering |
+| `78`  | `MILPA_ROOT` points to something that's not a directory, or `MILPA_PATH` has an incorrect path set |
+| `127` | sub-command not found |
 

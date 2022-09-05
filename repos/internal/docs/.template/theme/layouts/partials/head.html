@@ -17,12 +17,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en" />
-  <meta property="og:title" content="{{ if not .IsHome }}{{ if not $is404 }}{{ $commandName }}{{else}}Not Found{{end}}{{- else -}}milpa command line utility{{- end -}}" />
+  <meta property="og:title" content="{{ if not .IsHome }}{{ if not $is404 }}milpa {{ $commandName }}{{else}}Not Found{{end}}{{- else -}}milpa command line utility{{- end -}}" />
   <meta property="og:site_name" content="🌽 milpa" />
   <meta property="og:description" content="{{ $description }}" />
   <meta name="description" content="{{ $description }}" />
   <meta property="og:url" content="{{ .Permalink }}" />
   <title>milpa{{ if not .IsHome }} {{ if not $is404 }}{{ $commandName }}{{else}}Not Found{{end}}{{end}}</title>
+
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2" />
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2" />
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2" />
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2" />
+
   {{ $css := resources.Get "css/index.css" -}}
   {{- $hlLight := resources.Get "css/highlight-light.css" -}}
   {{- $hlDark := resources.Get "css/highlight-dark.css" -}}
@@ -40,9 +46,9 @@
    */}}
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   {{/* <!-- We use the full link to the CSS file in the rest of the tags --> */}}
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="preload" as="style">
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="preload" as="style">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript>
-    <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600;1,900&display=swap" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" />
   </noscript>
 </head>

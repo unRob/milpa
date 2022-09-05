@@ -1,8 +1,8 @@
 # milpa
 
-[`milpa`](https://milpa.dev) is a command-line tool to care for one's own garden of scripts, its name comes from ["milpa"](https://en.wikipedia.org/wiki/Milpa), an agricultural method that combines multiple crops in close proximity
+[`milpa`](https://milpa.dev) is a command-line tool to care for one's own garden of scripts. [Its name](https://en.wikipedia.org/wiki/Milpa) comes from an agricultural method that combines multiple crops in close proximity.
 
-For a brief intro to get started, check out [milpa help docs milpa quick-guide](/.milpa/docs/milpa/quick-guide.md).
+For a brief introductory tutorial, check out [milpa help docs milpa quick-guide](/.milpa/docs/milpa/quick-guide.md).
 
 ```sh
 # install on mac and linux with:

@@ -7,6 +7,7 @@
     type="text"
     aria-label="milpa command selector"
     id="command-selector"
+    pattern='{{- template "command-autocomplete-patterns" . -}}'
     value="{{ if not .IsHome }}{{ replace (trim .RelPermalink "/") "/" " " }}{{ end }}" />
   <datalist id="milpa-commands">
     {{ range (union .Site.Home.Pages .Site.Home.Sections).ByWeight -}}
@@ -26,4 +27,20 @@
 {{ template "command-autocomplete-list" .}}
 {{- end -}}
 {{- end -}}
+{{- end -}}
+
+{{ define "command-autocomplete-patterns" -}}
+{{- $page := . -}}
+{{ $data := slice "" }}
+{{- $subPages := (union .Pages .Sections).ByWeight -}}
+{{- $hasChildren := gt (len $subPages) 0 -}}
+{{ if not (eq .RelPermalink "/") }}
+{{- $data = $data | append (slice (replace (trim .RelPermalink "/") "/" " ")) -}}
+{{- end -}}
+{{- if $hasChildren -}}
+{{- range $subPages -}}
+{{- template "command-autocomplete-patterns" . -}}
+{{- end -}}
+{{- end -}}
+{{ delimit $data "|" "|" }}
 {{- end -}}
