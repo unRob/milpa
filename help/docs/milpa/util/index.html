@@ -17,7 +17,7 @@
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2" />
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2" />
 
-  <link rel="stylesheet" href="/css/bundle.min.673c3a63856ed82a10dde662b119f9c2e2f7b10844ab8cf7028893b873b22b90.css"/>
+  <link rel="stylesheet" href="/css/bundle.min.763d8f97db3def1b05ce9f80d740c56fe7a728b47d9bf6140bccdc4bec228fff.css"/>
 
   <link rel="canonical" href="https://milpa.dev/help/docs/milpa/util/">
 
@@ -39,14 +39,14 @@
     type="text"
     aria-label="milpa command selector"
     id="command-selector"
-    pattern='|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util'
+    pattern='|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util'
     value="help docs milpa util" />
   <datalist id="milpa-commands">
     <option value="help" />
 <option value="help docs" />
 <option value="help docs milpa" />
 <option value="help docs milpa quick-guide" />
-<option value="help docs milpa alternatives" />
+<option value="help docs milpa use-case" />
 <option value="help docs milpa environment" />
 <option value="help docs milpa repo" />
 <option value="help docs milpa repo docs" />
@@ -57,8 +57,10 @@
 <option value="help docs milpa util log" />
 <option value="help docs milpa util repo" />
 <option value="help docs milpa util shell" />
+<option value="help docs milpa util tmp" />
 <option value="help docs milpa internals" />
 <option value="help docs milpa changelog" />
+<option value="help docs milpa support" />
 <option value="itself" />
 <option value="itself command-tree" />
 <option value="itself create" />
@@ -83,8 +85,12 @@
   <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
   <ul>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#utilities">Utilities</a></li>
-    <li><a href="#add-your-own">Add your own</a></li>
+    <li><a href="#built-in-utilities">Built-in utilities</a></li>
+    <li><a href="#add-your-own">Add your own</a>
+      <ul>
+        <li><a href="#example">Example</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
   
@@ -94,69 +100,51 @@
     
     <ul>
     
-<li >
-  <a href="https://milpa.dev/help/">help</a>
-
+<li ><a href="https://milpa.dev/help/"class="command-menu-selected-prefix">help</a>
 <ul
   class="sub-menu"
   aria-label="help subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/">docs</a>
-
+<li ><a href="https://milpa.dev/help/docs/"class="command-menu-selected-prefix">docs</a>
 <ul
   class="sub-menu"
   aria-label="docs subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/">milpa</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/"class="command-menu-selected-prefix">milpa</a>
 <ul
   class="sub-menu"
   aria-label="milpa subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/quick-guide/">quick-guide</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/quick-guide/">quick-guide</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/alternatives/">alternatives</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/use-case/">use-case</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/environment/">environment</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/environment/">environment</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/repo/">repo</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/repo/">repo</a>
 <ul
   class="sub-menu"
   aria-label="repo subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/repo/docs/">docs</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/repo/docs/">docs</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/repo/hooks/">hooks</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/repo/hooks/">hooks</a>
 
   
 </ul>
@@ -165,18 +153,14 @@
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/command/">command</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/command/">command</a>
 <ul
   class="sub-menu"
   aria-label="command subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/command/spec/">spec</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/command/spec/">spec</a>
 
   
 </ul>
@@ -186,29 +170,26 @@
   
   
 <li >
-  <a href="https://milpa.dev/help/docs/milpa/util/">util</a>
-
+  <strong class="command-menu-selected-prefix">util</strong>
 <ul
   class="sub-menu"
   aria-label="util subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/util/log/">log</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/util/log/">log</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/util/repo/">repo</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/util/repo/">repo</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/util/shell/">shell</a>
+<li ><a href="https://milpa.dev/help/docs/milpa/util/shell/">shell</a>
 
+  
+  
+<li ><a href="https://milpa.dev/help/docs/milpa/util/tmp/">tmp</a>
 
   
 </ul>
@@ -217,15 +198,15 @@
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/internals/">internals</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/internals/">internals</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
+<li ><a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
 
+  
+  
+<li ><a href="https://milpa.dev/help/docs/milpa/support/">support</a>
 
   
 </ul>
@@ -243,45 +224,33 @@
 
 
     
-<li >
-  <a href="https://milpa.dev/itself/">itself</a>
-
+<li ><a href="https://milpa.dev/itself/">itself</a>
 <ul
   class="sub-menu"
   aria-label="itself subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/itself/command-tree/">command-tree</a>
-
+<li ><a href="https://milpa.dev/itself/command-tree/">command-tree</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/create/">create</a>
-
+<li ><a href="https://milpa.dev/itself/create/">create</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/docs/">docs</a>
-
+<li ><a href="https://milpa.dev/itself/docs/">docs</a>
 <ul
   class="sub-menu"
   aria-label="docs subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/itself/docs/create/">create</a>
-
+<li ><a href="https://milpa.dev/itself/docs/create/">create</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/docs/html/">html</a>
-
+<li ><a href="https://milpa.dev/itself/docs/html/">html</a>
 
   
 </ul>
@@ -290,36 +259,26 @@
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/doctor/">doctor</a>
-
+<li ><a href="https://milpa.dev/itself/doctor/">doctor</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/repo/">repo</a>
-
+<li ><a href="https://milpa.dev/itself/repo/">repo</a>
 <ul
   class="sub-menu"
   aria-label="repo subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/itself/repo/install/">install</a>
-
+<li ><a href="https://milpa.dev/itself/repo/install/">install</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/repo/list/">list</a>
-
+<li ><a href="https://milpa.dev/itself/repo/list/">list</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/repo/uninstall/">uninstall</a>
-
+<li ><a href="https://milpa.dev/itself/repo/uninstall/">uninstall</a>
 
   
 </ul>
@@ -328,24 +287,18 @@
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/shell/">shell</a>
-
+<li ><a href="https://milpa.dev/itself/shell/">shell</a>
 <ul
   class="sub-menu"
   aria-label="shell subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/itself/shell/init/">init</a>
-
+<li ><a href="https://milpa.dev/itself/shell/init/">init</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/shell/install-autocomplete/">install-autocomplete</a>
-
+<li ><a href="https://milpa.dev/itself/shell/install-autocomplete/">install-autocomplete</a>
 
   
 </ul>
@@ -354,15 +307,11 @@
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/upgrade/">upgrade</a>
-
+<li ><a href="https://milpa.dev/itself/upgrade/">upgrade</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/version/">version</a>
-
+<li ><a href="https://milpa.dev/itself/version/">version</a>
 
   
 </ul>
@@ -377,7 +326,8 @@
 <main id="content">
 <section class="content-list">
   <h1 id="command-name-header" class="sr-only">milpa help docs milpa util</h1>
-	<p><code>milpa</code> scripts that are written with bash may use any of the built-in or repo-specific shell utilities under the <code>.milpa/utils</code> folder.</p>
+	<p><code>milpa</code> scripts that are written with bash may use any of the built-in utilities, or any utilities defined in the same repo, under the <code>.milpa/utils</code> folder.</p>
+<p>These are also bash scripts, with an <code>.sh</code> extension that provide functions that may be used by more than one command.</p>
 <div class="content-header-wrapper">
 <h2 class="content-header" id="usage">Usage</h2> <a aria-hidden="true" class="heading-anchor" href="#usage" tabindex="-1">#</a>
 </div>
@@ -385,31 +335,45 @@
 <p>In your scripts, you may load utilities like so:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
-</span></span><span class="line"><span class="cl"><span class="c1"># loads the repo util</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># loads the built-in util named `repo`</span>
 </span></span><span class="line"><span class="cl">@milpa.load_util repo
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">@milpa.log info <span class="s2">&#34;Current repo path is: </span><span class="k">$(</span>@milpa.repo.current_path<span class="k">)</span><span class="s2">&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># loads shell, as well as repo</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># load multiple utils at a time</span>
 </span></span><span class="line"><span class="cl">@milpa.load_util repo shell
 </span></span></code></pre></div><div class="content-header-wrapper">
-<h2 class="content-header" id="utilities">Utilities</h2> <a aria-hidden="true" class="heading-anchor" href="#utilities" tabindex="-1">#</a>
+<h2 class="content-header" id="built-in-utilities">Built-in utilities</h2> <a aria-hidden="true" class="heading-anchor" href="#built-in-utilities" tabindex="-1">#</a>
 </div>
-<p>There&rsquo;s a few built-in utilities:</p>
+<p>There&rsquo;s a few utilities that come built-in to <code>milpa</code> and may be used by any bash scripts:</p>
 <ul>
 <li><a href="log">log</a>: Loaded by default, has output-related functions</li>
 <li><a href="repo">repo</a>: has functions related to milpa repositories</li>
-<li><a href="shell">shell</a>: Has functions used by <a href="/.milpa/help/docs/milpa/repo/hooks/#shell-initsh"><code>shell-init</code></a> hook scripts.</li>
+<li><a href="shell">shell</a>: has functions used by <a href="/help/docs/milpa/repo/hooks/#shell-initsh"><code>shell-init</code></a> hook scripts</li>
+<li><a href="tmp">tmp</a>: has functions related to temporary files</li>
 </ul>
 <div class="content-header-wrapper">
 <h2 class="content-header" id="add-your-own">Add your own</h2> <a aria-hidden="true" class="heading-anchor" href="#add-your-own" tabindex="-1">#</a>
 </div>
-<p>To add your own to your repo, create a <code>util</code> folder and add <code>your-util-name.sh</code> under it. You may put in there whatever you want available for your shell scripts. Ideally, you&rsquo;d put in there a few functions, whose name may start with <code>@milpa</code>, but are not required to be named in any particular way.</p>
-<p>Then, you can:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">@milpa.load_util your-util-name
+<p>To add your own utilities to your repo, create a <code>util</code> folder in it (that is<code>.milpa/util</code>) and add <code>your-util-name.sh</code> under it (<code>.milpa/util/your-util-name.sh</code>). You may put in there whatever you want available for your shell scripts.</p>
+<div class="content-header-wrapper">
+<h3 class="content-header" id="example">Example</h3> <a aria-hidden="true" class="heading-anchor" href="#example" tabindex="-1">#</a>
+</div>
+<p>Let&rsquo;s create a util at <code>.milpa/utils/voice.sh</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># .milpa/utils/voice.sh</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> yell<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$@</span><span class="s2">&#34;</span> <span class="p">|</span> awk <span class="s1">&#39;{print toupper($0)}&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">function</span> yell-audibly<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  osascript -e <span class="s2">&#34;say </span><span class="k">$(</span>yell <span class="s2">&#34;</span><span class="nv">$@</span><span class="s2">&#34;</span><span class="k">)</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></div><p>Then, on any of your repo&rsquo;s scripts, you can:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>@milpa.load_util voice
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># and use whatever functions you put in there</span>
-</span></span><span class="line"><span class="cl">do_some_cool_stuff <span class="s2">&#34;</span><span class="nv">$SHELL</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">yell <span class="s2">&#34;i &lt;3 </span><span class="nv">$SHELL</span><span class="s2">&#34;</span>
 </span></span></code></pre></div>
 </div>
 

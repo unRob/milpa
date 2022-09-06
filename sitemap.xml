@@ -4,7 +4,7 @@
   <url>
     <loc>https://milpa.dev/help/docs/milpa/quick-guide/</loc>
   </url><url>
-    <loc>https://milpa.dev/help/docs/milpa/alternatives/</loc>
+    <loc>https://milpa.dev/help/docs/milpa/use-case/</loc>
   </url><url>
     <loc>https://milpa.dev/help/docs/milpa/environment/</loc>
   </url><url>
@@ -38,6 +38,8 @@
   </url><url>
     <loc>https://milpa.dev/help/docs/milpa/util/shell/</loc>
   </url><url>
+    <loc>https://milpa.dev/help/docs/milpa/util/tmp/</loc>
+  </url><url>
     <loc>https://milpa.dev/itself/</loc>
   </url><url>
     <loc>https://milpa.dev/itself/command-tree/</loc>
@@ -69,5 +71,7 @@
     <loc>https://milpa.dev/itself/upgrade/</loc>
   </url><url>
     <loc>https://milpa.dev/itself/version/</loc>
+  </url><url>
+    <loc>https://milpa.dev/help/docs/milpa/support/</loc>
   </url>
 </urlset>

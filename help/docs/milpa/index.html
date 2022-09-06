@@ -17,7 +17,7 @@
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2" />
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2" />
 
-  <link rel="stylesheet" href="/css/bundle.min.673c3a63856ed82a10dde662b119f9c2e2f7b10844ab8cf7028893b873b22b90.css"/>
+  <link rel="stylesheet" href="/css/bundle.min.763d8f97db3def1b05ce9f80d740c56fe7a728b47d9bf6140bccdc4bec228fff.css"/>
 
   <link rel="canonical" href="https://milpa.dev/help/docs/milpa/">
 
@@ -39,14 +39,14 @@
     type="text"
     aria-label="milpa command selector"
     id="command-selector"
-    pattern='|help docs milpa quick-guide|help docs milpa alternatives|help docs milpa environment|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa repo|help docs milpa command spec|help docs milpa command|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util|help docs milpa internals|help docs milpa changelog|help docs milpa'
+    pattern='|help docs milpa quick-guide|help docs milpa use-case|help docs milpa environment|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa repo|help docs milpa command spec|help docs milpa command|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util|help docs milpa internals|help docs milpa changelog|help docs milpa support|help docs milpa'
     value="help docs milpa" />
   <datalist id="milpa-commands">
     <option value="help" />
 <option value="help docs" />
 <option value="help docs milpa" />
 <option value="help docs milpa quick-guide" />
-<option value="help docs milpa alternatives" />
+<option value="help docs milpa use-case" />
 <option value="help docs milpa environment" />
 <option value="help docs milpa repo" />
 <option value="help docs milpa repo docs" />
@@ -57,8 +57,10 @@
 <option value="help docs milpa util log" />
 <option value="help docs milpa util repo" />
 <option value="help docs milpa util shell" />
+<option value="help docs milpa util tmp" />
 <option value="help docs milpa internals" />
 <option value="help docs milpa changelog" />
+<option value="help docs milpa support" />
 <option value="itself" />
 <option value="itself command-tree" />
 <option value="itself create" />
@@ -93,18 +95,14 @@
     
     <ul>
     
-<li >
-  <a href="https://milpa.dev/help/">help</a>
-
+<li ><a href="https://milpa.dev/help/"class="command-menu-selected-prefix">help</a>
 <ul
   class="sub-menu"
   aria-label="help subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/">docs</a>
-
+<li ><a href="https://milpa.dev/help/docs/"class="command-menu-selected-prefix">docs</a>
 <ul
   class="sub-menu"
   aria-label="docs subcommands"
@@ -112,50 +110,37 @@
   
   
 <li >
-  <a href="https://milpa.dev/help/docs/milpa/">milpa</a>
-
+  <strong class="command-menu-selected-prefix">milpa</strong>
 <ul
   class="sub-menu"
   aria-label="milpa subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/quick-guide/">quick-guide</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/quick-guide/">quick-guide</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/alternatives/">alternatives</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/use-case/">use-case</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/environment/">environment</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/environment/">environment</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/repo/">repo</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/repo/">repo</a>
 <ul
   class="sub-menu"
   aria-label="repo subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/repo/docs/">docs</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/repo/docs/">docs</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/repo/hooks/">hooks</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/repo/hooks/">hooks</a>
 
   
 </ul>
@@ -164,18 +149,14 @@
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/command/">command</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/command/">command</a>
 <ul
   class="sub-menu"
   aria-label="command subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/command/spec/">spec</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/command/spec/">spec</a>
 
   
 </ul>
@@ -184,30 +165,26 @@
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/util/">util</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/util/">util</a>
 <ul
   class="sub-menu"
   aria-label="util subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/util/log/">log</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/util/log/">log</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/util/repo/">repo</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/util/repo/">repo</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/util/shell/">shell</a>
+<li ><a href="https://milpa.dev/help/docs/milpa/util/shell/">shell</a>
 
+  
+  
+<li ><a href="https://milpa.dev/help/docs/milpa/util/tmp/">tmp</a>
 
   
 </ul>
@@ -216,15 +193,15 @@
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/internals/">internals</a>
-
+<li ><a href="https://milpa.dev/help/docs/milpa/internals/">internals</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
+<li ><a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
 
+  
+  
+<li ><a href="https://milpa.dev/help/docs/milpa/support/">support</a>
 
   
 </ul>
@@ -242,45 +219,33 @@
 
 
     
-<li >
-  <a href="https://milpa.dev/itself/">itself</a>
-
+<li ><a href="https://milpa.dev/itself/">itself</a>
 <ul
   class="sub-menu"
   aria-label="itself subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/itself/command-tree/">command-tree</a>
-
+<li ><a href="https://milpa.dev/itself/command-tree/">command-tree</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/create/">create</a>
-
+<li ><a href="https://milpa.dev/itself/create/">create</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/docs/">docs</a>
-
+<li ><a href="https://milpa.dev/itself/docs/">docs</a>
 <ul
   class="sub-menu"
   aria-label="docs subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/itself/docs/create/">create</a>
-
+<li ><a href="https://milpa.dev/itself/docs/create/">create</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/docs/html/">html</a>
-
+<li ><a href="https://milpa.dev/itself/docs/html/">html</a>
 
   
 </ul>
@@ -289,36 +254,26 @@
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/doctor/">doctor</a>
-
+<li ><a href="https://milpa.dev/itself/doctor/">doctor</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/repo/">repo</a>
-
+<li ><a href="https://milpa.dev/itself/repo/">repo</a>
 <ul
   class="sub-menu"
   aria-label="repo subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/itself/repo/install/">install</a>
-
+<li ><a href="https://milpa.dev/itself/repo/install/">install</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/repo/list/">list</a>
-
+<li ><a href="https://milpa.dev/itself/repo/list/">list</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/repo/uninstall/">uninstall</a>
-
+<li ><a href="https://milpa.dev/itself/repo/uninstall/">uninstall</a>
 
   
 </ul>
@@ -327,24 +282,18 @@
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/shell/">shell</a>
-
+<li ><a href="https://milpa.dev/itself/shell/">shell</a>
 <ul
   class="sub-menu"
   aria-label="shell subcommands"
 >
   
   
-<li >
-  <a href="https://milpa.dev/itself/shell/init/">init</a>
-
+<li ><a href="https://milpa.dev/itself/shell/init/">init</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/shell/install-autocomplete/">install-autocomplete</a>
-
+<li ><a href="https://milpa.dev/itself/shell/install-autocomplete/">install-autocomplete</a>
 
   
 </ul>
@@ -353,15 +302,11 @@
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/upgrade/">upgrade</a>
-
+<li ><a href="https://milpa.dev/itself/upgrade/">upgrade</a>
 
   
   
-<li >
-  <a href="https://milpa.dev/itself/version/">version</a>
-
+<li ><a href="https://milpa.dev/itself/version/">version</a>
 
   
 </ul>
@@ -380,17 +325,26 @@
 <h1 class="content-header" id="milpa">milpa</h1> <a aria-hidden="true" class="heading-anchor" href="#milpa" tabindex="-1">#</a>
 </div>
 <p><a href="https://milpa.dev"><code>milpa</code></a> is a command-line tool to care for one&rsquo;s own garden of scripts. <a href="https://en.wikipedia.org/wiki/Milpa">Its name</a> comes from an agricultural method that combines multiple crops in close proximity.</p>
-<p>For a brief introductory tutorial, check out <a href="/help/docs/milpa/quick-guide/">milpa help docs milpa quick-guide</a>.</p>
+<p>For a brief introductory tutorial, check out <a href="/help/docs/milpa/quick-guide/"><code>milpa help docs milpa quick-guide</code></a>.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># install on mac and linux with:</span>
 </span></span><span class="line"><span class="cl">curl -L https://milpa.dev/install.sh <span class="p">|</span> bash -
-</span></span></code></pre></div><p>You and your team write scripts and a little spec for each of them—use bash, or any other language—, and <code>milpa</code> provides <strong>autocompletions</strong>, <strong>subcommands</strong>, <strong>argument parsing</strong> and <strong>validation</strong> so you can skip the toil and focus on your scripts.</p>
-<p>There&rsquo;s <a href="/help/docs/milpa/alternatives/">a few reasons why</a> you and your team might wanna use milpa, but basically, it&rsquo;s meant to provide all those nice features above while making it easier to follow the <a href="https://clig.dev">Command Line Interface Guidelines</a>.</p>
+</span></span></code></pre></div><p>You and your team write scripts and a little spec for each of them—use bash, or any other language—, and <code>milpa</code> provides:</p>
+<ul>
+<li><strong>autocompletions</strong> from static sources, other <code>milpa</code> scripts or even other programs;</li>
+<li><strong>nested sub commands</strong> as simple as the filesystem, organize them in folders and <code>milpa</code> does the rest;</li>
+<li><strong>parsing</strong> and <strong>validation</strong> for arguments and options, writing little to no code; and</li>
+<li><strong>help</strong> and <strong>documentation</strong> on the terminal and browser.</li>
+</ul>
+<p>There&rsquo;s <a href="/help/docs/milpa/use-case/">a few reasons why</a> you and your team might wanna use <code>milpa</code>, but in summary, it&rsquo;s goal is to provide all those nice features above while making it easier to follow the <a href="https://clig.dev">Command Line Interface Guidelines</a>.</p>
 <p><code>milpa</code> is licensed under the Apache License 2.0, and its code is available at <a href="https://github.com/unRob/milpa">github.com/unRob/milpa</a>.</p>
 <div class="content-header-wrapper">
 <h2 class="content-header" id="concepts">Concepts</h2> <a aria-hidden="true" class="heading-anchor" href="#concepts" tabindex="-1">#</a>
 </div>
-<p><strong>Commands</strong> are bash scripts or executables written in your language of choice, and their corresponding specs. Get the full story with <a href="/help/docs/milpa/command/">milpa help docs milpa command</a></p>
-<p>Commands are grouped into one or more <strong>repos</strong>. These are folders that contain a <code>.milpa</code> folder within. Check out <a href="/help/docs/milpa/repo/"><code>milpa help docs milpa repo</code></a> for more details about repos.</p>
+<p><code>milpa</code> runs <strong>commands</strong> found in one or more <strong>repos</strong>:</p>
+<ul>
+<li><strong>Commands</strong> are bash scripts or executables written in your language of choice, and their corresponding specs written in YAML. Get the full story with <a href="/help/docs/milpa/command/"><code>milpa help docs milpa command</code></a>.</li>
+<li>Commands are organized in folders within one or more <strong>repos</strong>. Repos are just folders that contain a <code>.milpa</code> folder within. Check out <a href="/help/docs/milpa/repo/"><code>milpa help docs milpa repo</code></a> for more details about repos.</li>
+</ul>
 <div class="content-header-wrapper">
 <h2 class="content-header" id="enough-words-show-me-some-code">Enough words, show me some code</h2> <a aria-hidden="true" class="heading-anchor" href="#enough-words-show-me-some-code" tabindex="-1">#</a>
 </div>

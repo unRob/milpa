@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en" />
-  <meta property="og:title" content="milpa itself shell init" />
+  <meta property="og:title" content="milpa help docs milpa support" />
   <meta property="og:site_name" content="🌽 milpa" />
-  <meta property="og:description" content="Initializes shells" />
-  <meta name="description" content="Initializes shells" />
-  <meta property="og:url" content="https://milpa.dev/itself/shell/init/" />
-  <title>milpa itself shell init</title>
+  <meta property="og:description" content="how to deal with bugs in milpa" />
+  <meta name="description" content="how to deal with bugs in milpa" />
+  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/support/" />
+  <title>milpa help docs milpa support</title>
 
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2" />
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2" />
@@ -19,7 +19,7 @@
 
   <link rel="stylesheet" href="/css/bundle.min.763d8f97db3def1b05ce9f80d740c56fe7a728b47d9bf6140bccdc4bec228fff.css"/>
 
-  <link rel="canonical" href="https://milpa.dev/itself/shell/init/">
+  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/support/">
 
   
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -39,8 +39,8 @@
     type="text"
     aria-label="milpa command selector"
     id="command-selector"
-    pattern='|itself shell init'
-    value="itself shell init" />
+    pattern='|help docs milpa support'
+    value="help docs milpa support" />
   <datalist id="milpa-commands">
     <option value="help" />
 <option value="help docs" />
@@ -84,14 +84,8 @@
 <div id="sidebar" aria-hidden="false">
   <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
   <ul>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#description">Description</a>
-      <ul>
-        <li><a href="#using-with-bash-zsh-etc">Using with bash, zsh, etc:</a></li>
-        <li><a href="#using-with-fish">Using with fish:</a></li>
-      </ul>
-    </li>
-    <li><a href="#global-options">Global Options</a></li>
+    <li><a href="#ℹ-requesting-help">ℹ️ Requesting help</a></li>
+    <li><a href="#-reporting-bugs">🐛 Reporting bugs</a></li>
   </ul>
 </nav>
   
@@ -101,21 +95,21 @@
     
     <ul>
     
-<li ><a href="https://milpa.dev/help/">help</a>
+<li ><a href="https://milpa.dev/help/"class="command-menu-selected-prefix">help</a>
 <ul
   class="sub-menu"
   aria-label="help subcommands"
 >
   
   
-<li ><a href="https://milpa.dev/help/docs/">docs</a>
+<li ><a href="https://milpa.dev/help/docs/"class="command-menu-selected-prefix">docs</a>
 <ul
   class="sub-menu"
   aria-label="docs subcommands"
 >
   
   
-<li ><a href="https://milpa.dev/help/docs/milpa/">milpa</a>
+<li ><a href="https://milpa.dev/help/docs/milpa/"class="command-menu-selected-prefix">milpa</a>
 <ul
   class="sub-menu"
   aria-label="milpa subcommands"
@@ -206,7 +200,8 @@
 
   
   
-<li ><a href="https://milpa.dev/help/docs/milpa/support/">support</a>
+<li >
+  <strong class="command-menu-selected-prefix">support</strong>
 
   
 </ul>
@@ -224,7 +219,7 @@
 
 
     
-<li ><a href="https://milpa.dev/itself/"class="command-menu-selected-prefix">itself</a>
+<li ><a href="https://milpa.dev/itself/">itself</a>
 <ul
   class="sub-menu"
   aria-label="itself subcommands"
@@ -287,15 +282,14 @@
 
   
   
-<li ><a href="https://milpa.dev/itself/shell/"class="command-menu-selected-prefix">shell</a>
+<li ><a href="https://milpa.dev/itself/shell/">shell</a>
 <ul
   class="sub-menu"
   aria-label="shell subcommands"
 >
   
   
-<li >
-  <strong class="command-menu-selected-prefix">init</strong>
+<li ><a href="https://milpa.dev/itself/shell/init/">init</a>
 
   
   
@@ -325,36 +319,21 @@
 
 
 <main id="content">
-<h1 id="command-name-header" class="sr-only">milpa itself shell init</h1>
-<p>Initializes shells</p>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="usage">Usage</h2> <a aria-hidden="true" class="heading-anchor" href="#usage" tabindex="-1">#</a>
-</div>
-<p><code>milpa itself shell init [options]</code></p>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="description">Description</h2> <a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a>
-</div>
-<p>Running <code>milpa itself shell init</code> will look for shell scripts named <code>.milpa/hooks/shell-init.sh</code>/executables named <code>.milpa/hooks/shell-init</code> and source them.</p>
-<p>These <code>shell-init</code> scripts should print shell-specific instructions that a user may <code>eval</code> during the initialization of a new shell prompt. The @milpa.shell bash functions will be available for script shells to facilitate printing <code>export</code> statements compatible with POSIX-compliant shells and <code>fish</code>.</p>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="using-with-bash-zsh-etc">Using with bash, zsh, etc:</h3> <a aria-hidden="true" class="heading-anchor" href="#using-with-bash-zsh-etc" tabindex="-1">#</a>
-</div>
-<p>On POSIX-compliant shells (zsh or bash, for example), you may add this to near the very end of shell profile (usually at <code>~/.zshrc</code> or <code>~/.bash_profile</code>): <code>eval &quot;$(milpa itself shell init)&quot;</code></p>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="using-with-fish">Using with fish:</h3> <a aria-hidden="true" class="heading-anchor" href="#using-with-fish" tabindex="-1">#</a>
-</div>
-<p>When using fish, you&rsquo;ll need to <code>eval (milpa itself shell init)</code> around the end of your <code>~/.config/fish/config.fish</code> file.</p>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="global-options">Global Options</h2> <a aria-hidden="true" class="heading-anchor" href="#global-options" tabindex="-1">#</a>
-</div>
+<h1 id="command-name-header" class="sr-only">milpa help docs milpa support</h1>
+<p><code>milpa</code> is currently alpha software. This means that while I&rsquo;ve personally tested it for over a year:</p>
 <ul>
-<li><code>--color</code> (<em>bool</em>): Always print colors to stderr.</li>
-<li><code>--help</code> (<em>bool</em>): Display help for any command.</li>
-<li><code>--no-color</code> (<em>bool</em>): Disable printing of colors to stderr. Default: <em>true</em>.</li>
-<li><code>--silent</code> (<em>bool</em>): Silence non-error logging.</li>
-<li><code>--skip-validation</code> (<em>bool</em>): Do not validate any arguments or options.</li>
-<li><code>--verbose</code> (<em>bool</em>): Log verbose output to stderr.</li>
+<li>test coverage is pretty lacking,</li>
+<li>the command spec and script environment is subject to change, and</li>
+<li>there&rsquo;s <strong>no guarantee of stability</strong> of any internal command or utility</li>
 </ul>
+<div class="content-header-wrapper">
+<h2 class="content-header" id="ℹ-requesting-help">ℹ️ Requesting help</h2> <a aria-hidden="true" class="heading-anchor" href="#%e2%84%b9-requesting-help" tabindex="-1">#</a>
+</div>
+<p>Please <a href="https://github.com/unRob/milpa/issues/new?assignees=&amp;labels=help-requested&amp;template=help-request.yml&amp;title=%5Bhelp%5D%3A+">open a support request</a> on github, and I&rsquo;ll do my best to help.</p>
+<div class="content-header-wrapper">
+<h2 class="content-header" id="-reporting-bugs">🐛 Reporting bugs</h2> <a aria-hidden="true" class="heading-anchor" href="#-reporting-bugs" tabindex="-1">#</a>
+</div>
+<p>If you find any bugs, please <a href="https://github.com/unRob/milpa/issues/new?assignees=&amp;labels=bug&amp;template=bug-report.yml&amp;title=%5Bbug%5D%3A+">open a bug report</a> so I can take a look and we can fix it together.</p>
 
 
     </main>

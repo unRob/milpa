@@ -11,19 +11,18 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://milpa.dev/help/docs/milpa/quick-guide/</guid>
-      <description>We&amp;rsquo;ll assume you have a repo with your team&amp;rsquo;s code at ~/src/my-teams-app, but you can also test milpa out by creating any folder, wherever you like.
-Once that&amp;rsquo;s set up, you&amp;rsquo;d get started with milpa by:
-Installing it, installing milpa&amp;rsquo;s autocompletion script to your shell, possibly restarting your session, heading to your team&amp;rsquo;s project folder creating a new command, and editing it&amp;rsquo;s spec running the command to test it out installing milpa # Running the following command will install the latest version of milpa</description>
+      <description>Getting started with milpa is a matter of following these steps:
+Installing it, installing milpa&amp;rsquo;s autocompletion script to your shell, possibly restarting your session, creating a new command, and editing it&amp;rsquo;s spec running the command to test it out You&amp;rsquo;ll be creating some files during this guide, so make sure to create a folder wherever you like. Feel free to use an existing project folder if you already have a script for it in mind!</description>
     </item>
     
     <item>
-      <title>Why use milpa</title>
-      <link>https://milpa.dev/help/docs/milpa/alternatives/</link>
+      <title>Why use milpa?</title>
+      <link>https://milpa.dev/help/docs/milpa/use-case/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://milpa.dev/help/docs/milpa/alternatives/</guid>
+      <guid>https://milpa.dev/help/docs/milpa/use-case/</guid>
       <description>I built milpa with a few use cases in mind:
-To share groups of scripts used by a group of folks in an engineering team (i.e. setup development environments, work with secrets/credentials) to share context and code, without having to ask folks to run stuff off READMEs (i.e. pull service logs, forward ports), and to quickly build scripts that will be documented sufficiently well for my forgetful future-self. I have used/would use milpa for:</description>
+To share groups of scripts used by a group of folks in an engineering team (i.e. setup development environments, work with secrets/credentials) to share context and code, without having to ask folks to run stuff off READMEs (i.e. pull service logs, forward ports), and to quickly build scripts that will be documented sufficiently well for my forgetful future-self. My goal with milpa is to make following the Command Line Interface Guidelines require as little effort as possible.</description>
     </item>
     
     <item>
@@ -129,12 +128,24 @@ Prints a command, that when evaluated by a user&amp;rsquo;s shell, will set an e
     
     <item>
       <title></title>
+      <link>https://milpa.dev/help/docs/milpa/util/tmp/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://milpa.dev/help/docs/milpa/util/tmp/</guid>
+      <description>The fmt util contains shell functions related to the creation and cleanup of temporary files and directories.
+Functions # @tmp.file # @tmp.file HANDLE
+Creates a temporary file (in /tmp with HANDLE as prefix) and exports a new variable named HANDLE with the path to this new file. HANDLE should therefore be a valid variable name identifier.
+#!/usr/bin/env bash @milpa.load_util tmp # create the file @tmp.file my_tmp_file echo &amp;#34;some data&amp;#34; &amp;gt;&amp;#34;$my_tmp_file&amp;#34; @tmp.</description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://milpa.dev/itself/command-tree/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://milpa.dev/itself/command-tree/</guid>
       <description>Prints a tree of known commands
-Usage # milpa itself command-tree [options] [PREFIX...] [flags]
+Usage # milpa itself command-tree [options] [PREFIX...]
 Arguments # PREFIX... - Sets the name prefix to list from Options # --depth (string): The maximum depth to search for commands. Default: 15. --output (string): the format to output results in. Default: text. --template (string): with --output text, a go template to apply to every command. Description # Prints out command names and descriptions, or optionally all properties as json or yaml.</description>
     </item>
     
@@ -145,7 +156,7 @@ Arguments # PREFIX... - Sets the name prefix to list from Options # --depth (str
       
       <guid>https://milpa.dev/itself/create/</guid>
       <description>Create a milpa command
-Usage # milpa itself create [options] NAME... [flags]
+Usage # milpa itself create [options] NAME...
 Arguments # NAME... required - the name you&amp;rsquo;d like for your command Options # --description (string): a longer description of how this command works. Default: Works by doing a thing with another thing until the first thing looks about right. --executable (bool): Create an empty, executable command. Useful when you&amp;rsquo;d like using something other than bash. --open (bool): Open the script file in your current $EDITOR after creation.</description>
     </item>
     
@@ -156,7 +167,7 @@ Arguments # NAME... required - the name you&amp;rsquo;d like for your command Op
       
       <guid>https://milpa.dev/itself/docs/create/</guid>
       <description>Creates a new doc in your milpa
-Usage # milpa itself docs create [options] NAME... [flags]
+Usage # milpa itself docs create [options] NAME...
 Arguments # NAME... required - the name you&amp;rsquo;d like for your doc Options # --open (bool): Open the script file in your current $EDITOR after creation. --repo (string): a path to the milpa repo to create this doc in. By default, the nearest .milpa directory from pwd and up. Description # See milpa help docs for more info on docs.</description>
     </item>
     
@@ -167,7 +178,7 @@ Arguments # NAME... required - the name you&amp;rsquo;d like for your doc Option
       
       <guid>https://milpa.dev/itself/docs/html/</guid>
       <description>Renders or displays HTML documentation for all commands
-Usage # milpa itself docs html [options] [ACTION] [flags]
+Usage # milpa itself docs html [options] [ACTION]
 Arguments # ACTION - the action to take with documentation Options # --hostname (string): The hostname to set as base for the rendered docs. Default: milpa.dev. --image (string): The docker image with hugo to use for building html docs. Default: ghcr.io/unrob/milpa/docs:latest. --port (string): The port to expose docs on, when ACTION is serve. Default: 8118.</description>
     </item>
     
@@ -178,7 +189,7 @@ Arguments # ACTION - the action to take with documentation Options # --hostname 
       
       <guid>https://milpa.dev/itself/doctor/</guid>
       <description>Validates all commands found on the MILPA_PATH
-Usage # milpa itself doctor [options] [flags]
+Usage # milpa itself doctor [options]
 Options # --summary (bool): only print errors, if any. Description # This command will run checks on all known commands, parsing specs and validating their values.
 Global Options # --color (bool): Always print colors to stderr. --help (bool): Display help for any command. --no-color (bool): Disable printing of colors to stderr. Default: true. --silent (bool): Silence non-error logging.</description>
     </item>
@@ -190,7 +201,7 @@ Global Options # --color (bool): Always print colors to stderr. --help (bool): D
       
       <guid>https://milpa.dev/itself/repo/install/</guid>
       <description>Installs a milpa repo
-Usage # milpa itself repo install [options] SOURCE [TARGET] [flags]
+Usage # milpa itself repo install [options] SOURCE [TARGET]
 Arguments # SOURCE required - A go-getter URL to fetch the repo from. TARGET - The path where to place the resulting .milpa folder in Options # --global (bool): If specified, install the repo to $MILPA_ROOT. --user (bool): If specified, install the repo to ~/.local/share/milpa/repos. Description # Fetches a milpa repo and installs it to any of three locations:</description>
     </item>
     
@@ -201,7 +212,7 @@ Arguments # SOURCE required - A go-getter URL to fetch the repo from. TARGET - T
       
       <guid>https://milpa.dev/itself/repo/list/</guid>
       <description>Lists installed repos
-Usage # milpa itself repo list [options] [flags]
+Usage # milpa itself repo list [options]
 Options # --paths-only (bool): Only output the paths to repos with no decoration. Description # Milpa can install repositories from remote locations at two different locations, depending on how it was instaled.
 In the $MILPA_ROOT (by default, /usr/local/lib/milpa) In $XDG_DATA_HOME/milpa folder For more information on installing packages, see milpa itself repo install --help
 Global Options # --color (bool): Always print colors to stderr.</description>
@@ -266,6 +277,17 @@ Global Options # --color (bool): Always print colors to stderr. --help (bool): D
 Usage # milpa itself version [options]
 Description # Outputs the version of milpa to stdout, printing a new line if the output is a TTY. Also available as milpa --version
 Global Options # --color (bool): Always print colors to stderr. --help (bool): Display help for any command. --no-color (bool): Disable printing of colors to stderr. Default: true. --silent (bool): Silence non-error logging. --skip-validation (bool): Do not validate any arguments or options.</description>
+    </item>
+    
+    <item>
+      <title>Getting help with milpa</title>
+      <link>https://milpa.dev/help/docs/milpa/support/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://milpa.dev/help/docs/milpa/support/</guid>
+      <description>milpa is currently alpha software. This means that while I&amp;rsquo;ve personally tested it for over a year:
+test coverage is pretty lacking, the command spec and script environment is subject to change, and there&amp;rsquo;s no guarantee of stability of any internal command or utility ℹ️ Requesting help # Please open a support request on github, and I&amp;rsquo;ll do my best to help.
+🐛 Reporting bugs # If you find any bugs, please open a bug report so I can take a look and we can fix it together.</description>
     </item>
     
   </channel>

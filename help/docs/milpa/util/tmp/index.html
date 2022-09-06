@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en" />
-  <meta property="og:title" content="milpa itself shell init" />
+  <meta property="og:title" content="milpa help docs milpa util tmp" />
   <meta property="og:site_name" content="🌽 milpa" />
-  <meta property="og:description" content="Initializes shells" />
-  <meta name="description" content="Initializes shells" />
-  <meta property="og:url" content="https://milpa.dev/itself/shell/init/" />
-  <title>milpa itself shell init</title>
+  <meta property="og:description" content="Functions related to temporary files" />
+  <meta name="description" content="Functions related to temporary files" />
+  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/util/tmp/" />
+  <title>milpa help docs milpa util tmp</title>
 
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2" />
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2" />
@@ -19,7 +19,7 @@
 
   <link rel="stylesheet" href="/css/bundle.min.763d8f97db3def1b05ce9f80d740c56fe7a728b47d9bf6140bccdc4bec228fff.css"/>
 
-  <link rel="canonical" href="https://milpa.dev/itself/shell/init/">
+  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/util/tmp/">
 
   
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -39,8 +39,8 @@
     type="text"
     aria-label="milpa command selector"
     id="command-selector"
-    pattern='|itself shell init'
-    value="itself shell init" />
+    pattern='|help docs milpa util tmp'
+    value="help docs milpa util tmp" />
   <datalist id="milpa-commands">
     <option value="help" />
 <option value="help docs" />
@@ -84,14 +84,13 @@
 <div id="sidebar" aria-hidden="false">
   <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
   <ul>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#description">Description</a>
+    <li><a href="#functions">Functions</a>
       <ul>
-        <li><a href="#using-with-bash-zsh-etc">Using with bash, zsh, etc:</a></li>
-        <li><a href="#using-with-fish">Using with fish:</a></li>
+        <li><a href="#tmpfile"><code>@tmp.file</code></a></li>
+        <li><a href="#tmpdir"><code>@tmp.dir</code></a></li>
+        <li><a href="#tmpcleanup"><code>@tmp.cleanup</code></a></li>
       </ul>
     </li>
-    <li><a href="#global-options">Global Options</a></li>
   </ul>
 </nav>
   
@@ -101,21 +100,21 @@
     
     <ul>
     
-<li ><a href="https://milpa.dev/help/">help</a>
+<li ><a href="https://milpa.dev/help/"class="command-menu-selected-prefix">help</a>
 <ul
   class="sub-menu"
   aria-label="help subcommands"
 >
   
   
-<li ><a href="https://milpa.dev/help/docs/">docs</a>
+<li ><a href="https://milpa.dev/help/docs/"class="command-menu-selected-prefix">docs</a>
 <ul
   class="sub-menu"
   aria-label="docs subcommands"
 >
   
   
-<li ><a href="https://milpa.dev/help/docs/milpa/">milpa</a>
+<li ><a href="https://milpa.dev/help/docs/milpa/"class="command-menu-selected-prefix">milpa</a>
 <ul
   class="sub-menu"
   aria-label="milpa subcommands"
@@ -170,7 +169,7 @@
 
   
   
-<li ><a href="https://milpa.dev/help/docs/milpa/util/">util</a>
+<li ><a href="https://milpa.dev/help/docs/milpa/util/"class="command-menu-selected-prefix">util</a>
 <ul
   class="sub-menu"
   aria-label="util subcommands"
@@ -189,7 +188,8 @@
 
   
   
-<li ><a href="https://milpa.dev/help/docs/milpa/util/tmp/">tmp</a>
+<li >
+  <strong class="command-menu-selected-prefix">tmp</strong>
 
   
 </ul>
@@ -224,7 +224,7 @@
 
 
     
-<li ><a href="https://milpa.dev/itself/"class="command-menu-selected-prefix">itself</a>
+<li ><a href="https://milpa.dev/itself/">itself</a>
 <ul
   class="sub-menu"
   aria-label="itself subcommands"
@@ -287,15 +287,14 @@
 
   
   
-<li ><a href="https://milpa.dev/itself/shell/"class="command-menu-selected-prefix">shell</a>
+<li ><a href="https://milpa.dev/itself/shell/">shell</a>
 <ul
   class="sub-menu"
   aria-label="shell subcommands"
 >
   
   
-<li >
-  <strong class="command-menu-selected-prefix">init</strong>
+<li ><a href="https://milpa.dev/itself/shell/init/">init</a>
 
   
   
@@ -325,37 +324,53 @@
 
 
 <main id="content">
-<h1 id="command-name-header" class="sr-only">milpa itself shell init</h1>
-<p>Initializes shells</p>
+<h1 id="command-name-header" class="sr-only">milpa help docs milpa util tmp</h1>
+<p>The <code>fmt</code> util contains shell functions related to the creation and cleanup of temporary files and directories.</p>
 <div class="content-header-wrapper">
-<h2 class="content-header" id="usage">Usage</h2> <a aria-hidden="true" class="heading-anchor" href="#usage" tabindex="-1">#</a>
+<h2 class="content-header" id="functions">Functions</h2> <a aria-hidden="true" class="heading-anchor" href="#functions" tabindex="-1">#</a>
 </div>
-<p><code>milpa itself shell init [options]</code></p>
 <div class="content-header-wrapper">
-<h2 class="content-header" id="description">Description</h2> <a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a>
+<h3 class="content-header" id="tmpfile"><code>@tmp.file</code></h3> <a aria-hidden="true" class="heading-anchor" href="#tmpfile" tabindex="-1">#</a>
 </div>
-<p>Running <code>milpa itself shell init</code> will look for shell scripts named <code>.milpa/hooks/shell-init.sh</code>/executables named <code>.milpa/hooks/shell-init</code> and source them.</p>
-<p>These <code>shell-init</code> scripts should print shell-specific instructions that a user may <code>eval</code> during the initialization of a new shell prompt. The @milpa.shell bash functions will be available for script shells to facilitate printing <code>export</code> statements compatible with POSIX-compliant shells and <code>fish</code>.</p>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="using-with-bash-zsh-etc">Using with bash, zsh, etc:</h3> <a aria-hidden="true" class="heading-anchor" href="#using-with-bash-zsh-etc" tabindex="-1">#</a>
+<p><code>@tmp.file HANDLE</code></p>
+<p>Creates a temporary file (in <code>/tmp</code> with <code>HANDLE</code> as prefix) and exports a new variable named <code>HANDLE</code> with the path to this new file. <code>HANDLE</code> should therefore be a valid variable name identifier.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>@milpa.load_util tmp
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># create the file</span>
+</span></span><span class="line"><span class="cl">@tmp.file my_tmp_file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;some data&#34;</span> &gt;<span class="s2">&#34;</span><span class="nv">$my_tmp_file</span><span class="s2">&#34;</span>
+</span></span></code></pre></div><div class="content-header-wrapper">
+<h3 class="content-header" id="tmpdir"><code>@tmp.dir</code></h3> <a aria-hidden="true" class="heading-anchor" href="#tmpdir" tabindex="-1">#</a>
 </div>
-<p>On POSIX-compliant shells (zsh or bash, for example), you may add this to near the very end of shell profile (usually at <code>~/.zshrc</code> or <code>~/.bash_profile</code>): <code>eval &quot;$(milpa itself shell init)&quot;</code></p>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="using-with-fish">Using with fish:</h3> <a aria-hidden="true" class="heading-anchor" href="#using-with-fish" tabindex="-1">#</a>
+<p><code>@tmp.dir PREFIX</code></p>
+<p>Creates a temporary directory (in <code>/tmp</code> with <code>HANDLE</code> as prefix) and exports a new variable named <code>HANDLE</code> with the path to this new directory. <code>HANDLE</code> should therefore be a valid variable name identifier.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>@milpa.load_util tmp
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># create the directory</span>
+</span></span><span class="line"><span class="cl">@tmp.dir my_tmp_data
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># write to it</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;some data&#34;</span> &gt;<span class="s2">&#34;</span><span class="nv">$my_tmp_data</span><span class="s2">/some.thing&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;other data&#34;</span> &gt;<span class="s2">&#34;</span><span class="nv">$my_tmp_data</span><span class="s2">/something.else&#34;</span>
+</span></span></code></pre></div><div class="content-header-wrapper">
+<h3 class="content-header" id="tmpcleanup"><code>@tmp.cleanup</code></h3> <a aria-hidden="true" class="heading-anchor" href="#tmpcleanup" tabindex="-1">#</a>
 </div>
-<p>When using fish, you&rsquo;ll need to <code>eval (milpa itself shell init)</code> around the end of your <code>~/.config/fish/config.fish</code> file.</p>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="global-options">Global Options</h2> <a aria-hidden="true" class="heading-anchor" href="#global-options" tabindex="-1">#</a>
-</div>
-<ul>
-<li><code>--color</code> (<em>bool</em>): Always print colors to stderr.</li>
-<li><code>--help</code> (<em>bool</em>): Display help for any command.</li>
-<li><code>--no-color</code> (<em>bool</em>): Disable printing of colors to stderr. Default: <em>true</em>.</li>
-<li><code>--silent</code> (<em>bool</em>): Silence non-error logging.</li>
-<li><code>--skip-validation</code> (<em>bool</em>): Do not validate any arguments or options.</li>
-<li><code>--verbose</code> (<em>bool</em>): Log verbose output to stderr.</li>
-</ul>
-
+<p><code>@tmp.cleanup</code></p>
+<p>Cleans up all temporary files created so far for all users of this utility.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>@milpa.load_util tmp
+</span></span><span class="line"><span class="cl">@tmp.file my_tmp_file
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;some data&#34;</span> &gt;<span class="s2">&#34;</span><span class="nv">$my_tmp_file</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># delete all temporary files on normal exit or error</span>
+</span></span><span class="line"><span class="cl"><span class="nb">trap</span> <span class="s1">&#39;@tmp.cleanup&#39;</span> ERR EXIT
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># or run as needed</span>
+</span></span><span class="line"><span class="cl">@tmp.cleanup
+</span></span></code></pre></div>
 
     </main>
 <script src="https://milpa.dev/js/index.min.e8fb4266f19590f6cbf4007c65faa8e38a0e23bfbc40ef56ca24eed9d96fa64c.js"></script>
