@@ -302,16 +302,14 @@ func TestBootstrapWithUserRepoAndNoHome(t *testing.T) {
 }
 
 func TestBootstrapWithUserRepo(t *testing.T) {
-	fromProjectRoot()
-	resetMilpaPath()
-	wd, _ := os.Getwd()
-	home := wd + "/internal/runtime/testdata/home"
+	root := fromProjectRoot()
+	home := root + "/internal/runtime/testdata/home"
 	repo := home + "/.local/share/milpa/repos/user-repo"
-	expected := []string{wd + "/.milpa", repo}
+	expected := []string{root + "/.milpa", repo}
 
 	t.Run("with XDG_DATA_HOME", func(t *testing.T) {
 		resetMilpaPath()
-		os.Setenv(_c.EnvVarMilpaRoot, wd)
+		os.Setenv(_c.EnvVarMilpaRoot, root)
 		os.Setenv(_c.EnvVarLookupGitDisabled, "true")
 		os.Setenv(_c.EnvVarLookupGlobalReposDisabled, "true")
 		os.Unsetenv(_c.EnvVarLookupUserReposDisabled)
@@ -324,26 +322,32 @@ func TestBootstrapWithUserRepo(t *testing.T) {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 		}
 
-		if !reflect.DeepEqual(MilpaPath, expected) {
-			t.Fatalf("Unexpected milpa path: wanted %s, got %s", expected, MilpaPath)
-		}
-
 		if buff.String() != "" {
 			t.Fatalf("repo bootstrap printed unexpected output: %s", buff)
+		}
+
+		if !reflect.DeepEqual(MilpaPath, expected) {
+			t.Fatalf("Unexpected milpa path: wanted %s, got %s", expected, MilpaPath)
 		}
 	})
 
 	t.Run("with HOME", func(t *testing.T) {
 		resetMilpaPath()
-		os.Setenv(_c.EnvVarMilpaRoot, wd)
+		os.Setenv(_c.EnvVarMilpaRoot, root)
 		os.Setenv(_c.EnvVarLookupGitDisabled, "true")
 		os.Setenv(_c.EnvVarLookupGlobalReposDisabled, "true")
 		os.Unsetenv(_c.EnvVarLookupUserReposDisabled)
 		os.Unsetenv("XDG_DATA_HOME")
 		os.Setenv("HOME", home)
 
+		buff := &bytes.Buffer{}
+		logrus.SetOutput(buff)
 		if err := Bootstrap(); err != nil {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
+		}
+
+		if buff.String() != "" {
+			t.Fatalf("repo bootstrap printed unexpected output: %s", buff)
 		}
 
 		if !reflect.DeepEqual(MilpaPath, expected) {
