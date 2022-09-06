@@ -26,7 +26,7 @@ import (
 )
 
 var rootcc = &cobra.Command{
-	Use: "milpa [--silent|-v|--verbose] [--no-color|--color] [-h|-help] [--version]",
+	Use: "milpa [--silent|-v|--verbose] [--[no-]color] [-h|--help] [--version]",
 	Annotations: map[string]string{
 		_c.ContextKeyRuntimeIndex: "milpa",
 	},
@@ -120,9 +120,6 @@ func RootCommand(version string) *cobra.Command {
 	rootcc.Annotations["version"] = version
 	rootFlagset := pflag.NewFlagSet("compa", pflag.ContinueOnError)
 	for name, opt := range Root.Options {
-		if opt.Type != "bool" {
-			continue
-		}
 		def, ok := opt.Default.(bool)
 		if !ok {
 			def = false

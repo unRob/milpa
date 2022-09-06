@@ -1,5 +1,6 @@
 {{ define "main" }}
 {{ with .Content }}
+<h1 id="command-name-header" class="sr-only">milpa {{ replace (trim $.RelPermalink "/") "/" " " }}</h1>
 {{ . }}
 {{ end }}
 {{ end }}

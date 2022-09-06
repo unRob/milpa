@@ -24,7 +24,7 @@ import (
 
 var helpCommand = &cobra.Command{
 	Use:   _c.HelpCommandName + " [command]",
-	Short: "Display usage information on any **COMMAND...**",
+	Short: "Display usage information for any command",
 	Long:  `Help provides the valid arguments and options for any command known to milpa. By default, ﹅milpa help﹅ will query the environment variable ﹅COLORFGBG﹅ to decide which style to use when rendering help, except if ﹅MILPA_HELP_STYLE﹅ is set. Valid styles are: **light**, **dark**, and **auto**.`,
 	ValidArgsFunction: func(c *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		var completions []string

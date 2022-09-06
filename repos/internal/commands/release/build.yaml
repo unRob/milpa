@@ -25,6 +25,7 @@ arguments:
     description: the targets to build for
     variadic: true
     values:
+      # remember to update .github/ISSUE_TEMPLATE/bug-report.yml
       static:
         - auto
         - linux/amd64

@@ -1,0 +1,27 @@
+name: Help request
+description: Let's talk about any hard edges you've found while using milpa
+title: "[help] summaryOfYourRequest"
+labels: [help-requested]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this help request!
+
+        Please provide any relevant details to the issue at hand, including any code, logs, or commands that came up during your own research.
+  - type: input
+    id: version
+    attributes:
+      label: milpa version
+      description: your installed milpa version, if any
+      placeholder: see `milpa --version`
+    validations:
+      required: false
+  - type: textarea
+    id: details
+    attributes:
+      label: What's up?
+      description: Let me know how I can help
+      placeholder: I'm trying this ... and expected this ... but instead, got ..., so I tried ... but `milpa my-command` errored with ...
+    validations:
+      required: true

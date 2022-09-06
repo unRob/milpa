@@ -10,7 +10,7 @@ description: {{ .Command.Short }}
 
 ## Usage
 
-  ﹅{{ .Command.UseLine }}{{if .Command.HasAvailableSubCommands}} subcommand{{end}}﹅
+  ﹅{{ replace .Command.UseLine " [flags]" "" }}{{if .Command.HasAvailableSubCommands}} SUBCOMMAND{{end}}﹅
 
 {{ if .Command.HasAvailableSubCommands -}}
 ## Subcommands

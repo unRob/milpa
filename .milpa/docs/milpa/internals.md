@@ -31,7 +31,7 @@ weight: 50
 
 ### `milpa` acts on the resolved intention
 
-1. If a non-zero exit code is returned by `compa`, `milpa` will print out `compa`'s  `stdout`, fomatting it with `less -FIRX` if help or docs are being rendered and exit with status code 0. Otherwise, we'll print out both pipes before removing them and exiting with `compa`'s original exit code.
+1. If a non-zero exit code is returned by `compa`, `milpa` will print out `compa`'s  `stdout`, formatting it with `less -FIRX` if help or docs are being rendered and exit with status code 0. Otherwise, we'll print out both pipes before removing them and exiting with `compa`'s original exit code.
 2. Assuming things went well, we'll take `compa`'s output and `eval` it to set the command's environment. If an incomplete environment is found, we exit with status code 2, print debugging information and cleanup temporary pipes.
 3. a version check is performed to nag the user to update to the latest available version
 4. if requested, debug information of this session is printed to stderr, and temporary pipes are removed.

@@ -69,7 +69,18 @@ func (cmd *Command) ShowHelp(globalOptions Options, args []string) ([]byte, erro
 		return nil, err
 	}
 
-	content, err := render.Markdown(buf.Bytes(), runtime.ColorEnabled())
+	colorEnabled := runtime.ColorEnabled()
+	flags := cmd.cc.Flags()
+	ncf := cmd.cc.Flag("no-color")
+	cf := cmd.cc.Flag("color")
+
+	if noColorFlag, err := flags.GetBool("no-color"); err == nil && ncf.Changed {
+		colorEnabled = !noColorFlag
+	} else if colorFlag, err := flags.GetBool("color"); err == nil && cf.Changed {
+		colorEnabled = colorFlag
+	}
+
+	content, err := render.Markdown(buf.Bytes(), colorEnabled)
 	if err != nil {
 		return nil, err
 	}
