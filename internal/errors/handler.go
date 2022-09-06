@@ -45,7 +45,7 @@ func HandleCobraExit(cmd *cobra.Command, err error) {
 	case SubCommandExit:
 		logrus.Debugf("Sub-command failed with: %s", err.Error())
 		os.Exit(tErr.ExitCode)
-	case BadArguments, ConfigError:
+	case BadArguments:
 		showHelp(cmd)
 		logrus.Error(err)
 		os.Exit(_c.ExitStatusUsage)
@@ -53,6 +53,13 @@ func HandleCobraExit(cmd *cobra.Command, err error) {
 		showHelp(cmd)
 		logrus.Error(err)
 		os.Exit(_c.ExitStatusNotFound)
+	case ConfigError:
+		showHelp(cmd)
+		logrus.Error(err)
+		os.Exit(_c.ExitStatusConfigError)
+	case EnvironmentError:
+		logrus.Error(err)
+		os.Exit(_c.ExitStatusConfigError)
 	default:
 		if strings.HasPrefix(err.Error(), "unknown command") {
 			showHelp(cmd)
