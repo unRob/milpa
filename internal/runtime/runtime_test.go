@@ -17,6 +17,7 @@ import (
 	"os"
 	"reflect"
 	"runtime"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -137,5 +138,58 @@ func TestDoctorMode(t *testing.T) {
 				t.Fatalf("Expected %v for %v and got %v", c.Expects, c.Args, res)
 			}
 		})
+	}
+}
+
+func TestEnvironmentMapEnabled(t *testing.T) {
+	MilpaPath = []string{"something"}
+	trueString := strconv.FormatBool(true)
+	os.Setenv(_c.EnvVarMilpaForceColor, trueString)
+	os.Setenv(_c.EnvVarDebug, trueString)
+	os.Setenv(_c.EnvVarMilpaVerbose, trueString)
+
+	res := EnvironmentMap()
+	if res == nil {
+		t.Fatalf("Expected map, got nil")
+	}
+
+	expected := map[string]string{
+		_c.EnvVarMilpaPath:       "something",
+		_c.EnvVarMilpaForceColor: "always",
+		_c.EnvVarMilpaPathParsed: trueString,
+		_c.EnvVarDebug:           trueString,
+		_c.EnvVarMilpaVerbose:    trueString,
+	}
+
+	if !reflect.DeepEqual(res, expected) {
+		t.Fatalf("Unexpected result from enabled environment. Wanted %v, got %v", res, expected)
+	}
+}
+
+func TestEnvironmentMapDisabled(t *testing.T) {
+	MilpaPath = []string{"something"}
+	trueString := strconv.FormatBool(true)
+	// clear COLOR
+	os.Unsetenv(_c.EnvVarMilpaForceColor)
+	// set NO_COLOR
+	os.Setenv(_c.EnvVarMilpaUnstyled, trueString)
+	os.Unsetenv(_c.EnvVarDebug)
+	os.Unsetenv(_c.EnvVarMilpaVerbose)
+	os.Setenv(_c.EnvVarMilpaSilent, trueString)
+
+	res := EnvironmentMap()
+	if res == nil {
+		t.Fatalf("Expected map, got nil")
+	}
+
+	expected := map[string]string{
+		_c.EnvVarMilpaPath:       "something",
+		_c.EnvVarMilpaUnstyled:   trueString,
+		_c.EnvVarMilpaPathParsed: trueString,
+		_c.EnvVarMilpaSilent:     trueString,
+	}
+
+	if !reflect.DeepEqual(res, expected) {
+		t.Fatalf("Unexpected result from disabled environment. Wanted %v, got %v", res, expected)
 	}
 }

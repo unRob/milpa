@@ -21,7 +21,12 @@ import (
 	_c "github.com/unrob/milpa/internal/constants"
 )
 
-var MilpaPath = strings.Split(os.Getenv(_c.EnvVarMilpaPath), ":")
+var MilpaPath = ParseMilpaPath()
+
+// ParseMilpaPath turns MILPA_PATH into a string slice.
+func ParseMilpaPath() []string {
+	return strings.Split(os.Getenv(_c.EnvVarMilpaPath), ":")
+}
 
 var falseIshValues = []string{
 	"",
