@@ -71,8 +71,8 @@ func (cmd *Command) ShowHelp(globalOptions Options, args []string) ([]byte, erro
 
 	colorEnabled := runtime.ColorEnabled()
 	flags := cmd.cc.Flags()
-	ncf := cmd.cc.Flag("no-color")
-	cf := cmd.cc.Flag("color")
+	ncf := cmd.cc.Flag("no-color") // nolint:ifshort
+	cf := cmd.cc.Flag("color")     // nolint:ifshort
 
 	if noColorFlag, err := flags.GetBool("no-color"); err == nil && ncf.Changed {
 		colorEnabled = !noColorFlag
