@@ -64,7 +64,6 @@ func Bootstrap() error {
 			}
 			pathMap.Add(0, p)
 		}
-		// logrus.Debugf("Parsed MILPA_PATH is %s", M)
 	}
 
 	rootRepo := filepath.Join(MilpaRoot, _c.RepoRoot)
@@ -137,6 +136,8 @@ func lookupUserRepos() []string {
 				found = append(found, userRepo)
 			}
 		}
+	} else {
+		logrus.Warnf("User repo directory not found: %s", userRepos)
 	}
 
 	return found
