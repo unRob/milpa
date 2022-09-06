@@ -295,29 +295,42 @@ func TestBootstrapOkOnRepoWitUser(t *testing.T) {
 	fromProjectRoot()
 	resetMilpaPath()
 	wd, _ := os.Getwd()
-	os.Setenv(_c.EnvVarMilpaRoot, wd)
-	os.Setenv(_c.EnvVarLookupGitDisabled, "true")
-	os.Setenv(_c.EnvVarLookupGlobalReposDisabled, "true")
-	os.Unsetenv(_c.EnvVarLookupUserReposDisabled)
-	os.Setenv("XDG_DATA_HOME", wd+"/internal/runtime/testdata/home")
+	home := "/internal/runtime/testdata/home"
+	repo := home + "/.local/share/milpa/repos/user-repo"
+	expected := []string{repo + "/.milpa", wd + "/.milpa"}
 
-	if err := Bootstrap(); err != nil {
-		t.Fatalf("repo bootstrap raised unexpected error: %s", err)
-	}
+	t.Run("with XDG_DATA_HOME", func(t *testing.T) {
+		resetMilpaPath()
+		os.Setenv(_c.EnvVarMilpaRoot, wd)
+		os.Setenv(_c.EnvVarLookupGitDisabled, "true")
+		os.Setenv(_c.EnvVarLookupGlobalReposDisabled, "true")
+		os.Unsetenv(_c.EnvVarLookupUserReposDisabled)
+		os.Setenv("XDG_DATA_HOME", home)
 
-	if len(MilpaPath) != 2 && MilpaPath[0] != wd && MilpaPath[0] != wd+"/internal/runtime/testdata/home/.local/share/milpa/repos/user-repo" {
-		t.Fatalf("Unexpected milpa path: %s", MilpaPath)
-	}
+		if err := Bootstrap(); err != nil {
+			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
+		}
 
-	resetMilpaPath()
-	os.Unsetenv("XDG_DATA_HOME")
-	os.Setenv("HOME", wd+"/internal/runtime/testdata/home")
+		if reflect.DeepEqual(MilpaPath, expected) {
+			t.Fatalf("Unexpected milpa path: wanted %s, got %s", expected, MilpaPath)
+		}
+	})
 
-	if err := Bootstrap(); err != nil {
-		t.Fatalf("repo bootstrap raised unexpected error: %s", err)
-	}
+	t.Run("with HOME", func(t *testing.T) {
+		resetMilpaPath()
+		os.Setenv(_c.EnvVarMilpaRoot, wd)
+		os.Setenv(_c.EnvVarLookupGitDisabled, "true")
+		os.Setenv(_c.EnvVarLookupGlobalReposDisabled, "true")
+		os.Unsetenv(_c.EnvVarLookupUserReposDisabled)
+		os.Unsetenv("XDG_DATA_HOME")
+		os.Setenv("HOME", wd+"/internal/runtime/testdata/home")
 
-	if len(MilpaPath) != 2 && MilpaPath[0] != wd && MilpaPath[0] != wd+"/internal/runtime/testdata/home/.local/share/milpa/repos/user-repo" {
-		t.Fatalf("Unexpected milpa path: %s", MilpaPath)
-	}
+		if err := Bootstrap(); err != nil {
+			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
+		}
+
+		if reflect.DeepEqual(MilpaPath, expected) {
+			t.Fatalf("Unexpected milpa path: wanted %s, got %s", expected, MilpaPath)
+		}
+	})
 }
