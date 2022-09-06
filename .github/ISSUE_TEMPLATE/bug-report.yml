@@ -1,0 +1,70 @@
+name: Bug report
+description: Report any issues you've found with milpa
+title: "[bug] summaryOfIssue"
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+        Please provide any relevant details to the issue at hand, including any code, logs, or commands that came up during your own research.
+  - type: input
+    id: version
+    attributes:
+      label: milpa version
+      description: your installed milpa version, if any
+      placeholder: see `milpa --version`
+    validations:
+      required: false
+  - type: dropdown
+    id: os_arch
+    attributes:
+      label: os/arch
+      description: your operating system and arch, if applicable
+      multiple: true
+      options:
+        - linux/arm
+        - linux/arm64
+        - linux/mips
+        - linux/x86_64
+        - macos/arm64
+        - macos/x86_64
+    validations:
+      required: false
+  - type: textarea
+    id: spec
+    attributes:
+      label: command spec
+      description: Provide the command spec, if any
+      placeholder: |
+        summary: does a thing
+        description: with other things
+        arguments:
+          ...
+      render: YAML
+    validations:
+      required: false
+  - type: textarea
+    id: script
+    attributes:
+      label: command script
+      description: Provide the command script, if any
+      placeholder: |
+        #!/usr/bin/env bash
+        .. your command script
+      render: Shell
+    validations:
+      required: false
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Steps to reproduce
+      description: Provide the steps to reproduce the issue you've come across, and any relevant commands, output or environment variables.
+      value: |
+        1. ran `milpa my-command`
+        2. expected to see `...`, but instead got `...`
+        3. tried to run `DEBUG=1 milpa --verbose my-command`
+        4. ...
+    validations:
+      required: true

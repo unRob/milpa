@@ -78,4 +78,4 @@ If set to a non-empty string, update checks will not be performed periodically b
 
 ## Command Environment
 
-Your commands will also have specific environment variables available, check out [milpa help docs milpa command](/.milpa/docs/milpa/command/index.md#environment-variables)
+Your commands will also have specific environment variables available, check out [milpa help docs milpa command](/.milpa/docs/milpa/command/index.md#arguments-options-and-environment)

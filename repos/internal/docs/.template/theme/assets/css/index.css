@@ -175,6 +175,11 @@ header .emoji-maiz:hover::before {
   font-family: "Fira Code", monospace;
 }
 
+#commands .command-menu-selected-prefix {
+  color: #2b3c2d;
+  font-weight: bold;
+}
+
 #sidebar ul {
   margin: 0;
   padding: 0;
@@ -212,6 +217,10 @@ header .emoji-maiz:hover::before {
 #content h3 {
   margin: 0;
   padding-top: 1em
+}
+
+#command-name-header {
+  font-family: "Fira Code", monospace;
 }
 
 .content-header {
@@ -257,7 +266,7 @@ header .emoji-maiz:hover::before {
   font-variant-ligatures: no-contextual;
 }
 
-#content p:first-of-type {
+#content > p:first-of-type {
   margin-top: 0;
 }
 
@@ -315,6 +324,14 @@ code {
 #content th {
   text-align: left;
   color: #12731d;
+}
+
+#content blockquote {
+  margin: 1em 0;
+  padding: .1em .5em;
+  box-shadow: 1px 1px 4px rgba(0,0,0,.3);
+  border-radius: 3px;
+  background: rgba(0,0,0,.1)
 }
 
 hr {
@@ -397,6 +414,15 @@ hr {
     border-radius: 3px;
     padding:0 .3em;
   }
+
+  #commands .command-menu-selected-prefix {
+    color: #fff5a8;
+  }
+
+  #content blockquote {
+    background: rgba(255,255,255,.1)
+  }
+
 
 }
 
@@ -513,13 +539,39 @@ hr {
     width: auto;
   }
 
+  .content-header {
+    color: black;
+  }
+
   #content p code, #content li > code, #content a code {
     background: none;
     color: black;
     padding:0 .3em;
   }
 
+  #content a {
+    color: black;
+    text-underline-offset: .3em;
+  }
+
   .highlight pre {
     background-color: transparent !important
   }
+
+  #content a[href^="http"]:after {
+		content: ' (' attr(href) ')';
+	}
+
+  #content a[href^="/"]:after {
+		content: ' (https://milpa.dev' attr(href) ')';
+	}
+
+  #content blockquote {
+    margin: 1em 0;
+    padding: .1em .5em;
+    box-shadow: 1px 1px 4px rgba(0,0,0,.3);
+    border-radius: 3px;
+    background: none;
+  }
+
 }

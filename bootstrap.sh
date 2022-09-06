@@ -86,13 +86,13 @@ package="milpa-$OS-$ARCH.tgz"
 
 # Get the package
 if [[ ! -f "$package" ]]; then
-  @info "${_FMT_BOLD}Downloading milpa version $VERSION to $PREFIX${_FMT_RESET}"
-  curl --silent --fail --show-error -LO "$ASSET_BASE/download/$VERSION/$package" || @fail "Could not download milpa package from $ASSET_BASE/download/$VERSION/$package"
+  @info "${_FMT_BOLD}Downloading milpa version $MILPA_VERSION to $PREFIX${_FMT_RESET}"
+  curl --silent --fail --show-error -LO "$ASSET_BASE/download/$MILPA_VERSION/$package" || @fail "Could not download milpa package from $ASSET_BASE/download/$MILPA_VERSION/$package"
 else
   @info "${_FMT_BOLD}Using downloaded package at $package${_FMT_RESET}"
 fi
 
-@info "Downloaded $ASSET_BASE/download/$VERSION/$package"
+@info "Downloaded $ASSET_BASE/download/$MILPA_VERSION/$package"
 
 # Find some nice spot in the ground
 if [[ ! -d "$PREFIX" ]]; then

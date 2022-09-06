@@ -2,24 +2,30 @@
 
 [`milpa`](https://milpa.dev) is a command-line tool to care for one's own garden of scripts. [Its name](https://en.wikipedia.org/wiki/Milpa) comes from an agricultural method that combines multiple crops in close proximity.
 
-For a brief introductory tutorial, check out [milpa help docs milpa quick-guide](/.milpa/docs/milpa/quick-guide.md).
+For a brief introductory tutorial, check out [`milpa help docs milpa quick-guide`](/.milpa/docs/milpa/quick-guide.md).
 
 ```sh
 # install on mac and linux with:
 curl -L https://milpa.dev/install.sh | bash -
 ```
 
-You and your team write scripts and a little spec for each of them—use bash, or any other language—, and `milpa` provides **autocompletions**, **subcommands**, **argument parsing** and **validation** so you can skip the toil and focus on your scripts.
+You and your team write scripts and a little spec for each of them—use bash, or any other language—, and `milpa` provides:
 
-There's [a few reasons why](/.milpa/docs/milpa/alternatives.md) you and your team might wanna use milpa, but basically, it's meant to provide all those nice features above while making it easier to follow the [Command Line Interface Guidelines](https://clig.dev).
+- **autocompletions** from static sources, other `milpa` scripts or even other programs;
+- **nested sub commands** as simple as the filesystem, organize them in folders and `milpa` does the rest;
+- **parsing** and **validation** for arguments and options, writing little to no code; and
+- **help** and **documentation** on the terminal and browser.
+
+There's [a few reasons why](/.milpa/docs/milpa/use-case.md) you and your team might wanna use `milpa`, but in summary, it's goal is to provide all those nice features above while making it easier to follow the [Command Line Interface Guidelines](https://clig.dev).
 
 `milpa` is licensed under the Apache License 2.0, and its code is available at [github.com/unRob/milpa](https://github.com/unRob/milpa).
 
 ## Concepts
 
-**Commands** are bash scripts or executables written in your language of choice, and their corresponding specs. Get the full story with [milpa help docs milpa command](/.milpa/docs/milpa/command/index.md)
+`milpa` runs **commands** found in one or more **repos**:
 
-Commands are grouped into one or more **repos**. These are folders that contain a `.milpa` folder within. Check out [`milpa help docs milpa repo`](/.milpa/docs/milpa/repo/index.md) for more details about repos.
+- **Commands** are bash scripts or executables written in your language of choice, and their corresponding specs written in YAML. Get the full story with [`milpa help docs milpa command`](/.milpa/docs/milpa/command/index.md).
+- Commands are organized in folders within one or more **repos**. Repos are just folders that contain a `.milpa` folder within. Check out [`milpa help docs milpa repo`](/.milpa/docs/milpa/repo/index.md) for more details about repos.
 
 ## Enough words, show me some code
 
