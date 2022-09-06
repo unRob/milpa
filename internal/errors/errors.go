@@ -32,6 +32,10 @@ type ConfigError struct {
 	Config string
 }
 
+type EnvironmentError struct {
+	Err error
+}
+
 type SubCommandExit struct {
 	Err      error
 	ExitCode int
@@ -59,4 +63,8 @@ func (err SubCommandExit) Error() string {
 
 func (err ConfigError) Error() string {
 	return fmt.Sprintf("Invalid configuration %s: %v", err.Config, err.Err)
+}
+
+func (err EnvironmentError) Error() string {
+	return fmt.Sprintf("Invalid MILPA_ environment: %v", err.Err)
 }

@@ -32,7 +32,7 @@ var MilpaRoot = "/usr/local/lib/milpa"
 
 func Bootstrap() error {
 	envRoot := os.Getenv(_c.EnvVarMilpaRoot)
-	pathMap := newPathBuilder()
+	pathMap := NewPathBuilder()
 
 	if envRoot != "" {
 		MilpaRoot = envRoot
@@ -40,8 +40,8 @@ func Bootstrap() error {
 		logrus.Debugf("%s is not set, using default %s", _c.EnvVarMilpaRoot, envRoot)
 	}
 
-	if !isDir(MilpaRoot, false) {
-		return errors.ConfigError{Err: fmt.Errorf("%s (%s) is not a directory", _c.EnvVarMilpaRoot, MilpaRoot)}
+	if !IsDir(MilpaRoot, false) {
+		return errors.EnvironmentError{Err: fmt.Errorf("%s (%s) is not a directory", _c.EnvVarMilpaRoot, MilpaRoot)}
 	}
 
 	if len(MilpaPath) != 0 && MilpaPath[0] != "" {
@@ -52,7 +52,7 @@ func Bootstrap() error {
 
 		logrus.Debugf("%s is has %d items, parsing", _c.EnvVarMilpaPath, len(MilpaPath))
 		for idx, p := range MilpaPath {
-			if p == "" || !isDir(p, true) {
+			if p == "" || !IsDir(p, true) {
 				logrus.Debugf("Dropping non-directory <%s> from MILPA_PATH", p)
 				MilpaPath = append(MilpaPath[:idx], MilpaPath[idx+1:]...)
 				continue
@@ -68,14 +68,14 @@ func Bootstrap() error {
 	}
 
 	rootRepo := filepath.Join(MilpaRoot, _c.RepoRoot)
-	if !isDir(rootRepo, false) {
-		return errors.ConfigError{Err: fmt.Errorf("milpa's built-in repo at %s is not a directory", rootRepo)}
+	if !IsDir(rootRepo, false) {
+		return errors.EnvironmentError{Err: fmt.Errorf("milpa's built-in repo at %s is not a directory", rootRepo)}
 	}
 
 	pathMap.Add(1, rootRepo)
 	if pwd, err := os.Getwd(); err == nil {
 		pwdRepo := filepath.Join(pwd, _c.RepoRoot)
-		if isDir(pwdRepo, false) {
+		if IsDir(pwdRepo, false) {
 			logrus.Debugf("Adding pwd repo %s", pwdRepo)
 			pathMap.Add(2, pwdRepo)
 		}
@@ -106,7 +106,7 @@ func lookupGitRepo() []string {
 	if ctx.Err() == nil && err == nil {
 		repoRoot := strings.TrimSuffix(stdout.String(), "\n")
 		gitRepo := filepath.Join(repoRoot, _c.RepoRoot)
-		if isDir(gitRepo, false) {
+		if IsDir(gitRepo, false) {
 			logrus.Debugf("Found repo from git: %s", gitRepo)
 			return []string{gitRepo}
 		}
@@ -132,7 +132,7 @@ func lookupUserRepos() []string {
 	if files, err := os.ReadDir(userRepos); err == nil {
 		for _, file := range files {
 			userRepo := filepath.Join(userRepos, file.Name())
-			if isDir(userRepo, true) {
+			if IsDir(userRepo, true) {
 				logrus.Debugf("Found user repo: %s", userRepo)
 				found = append(found, userRepo)
 			}
@@ -149,7 +149,7 @@ func lookupGlobalRepos() []string {
 	if files, err := os.ReadDir(globalRepos); err == nil {
 		for _, file := range files {
 			globalRepo := filepath.Join(globalRepos, file.Name())
-			if isDir(globalRepo, true) {
+			if IsDir(globalRepo, true) {
 				logrus.Debugf("Found global repo: %s", globalRepo)
 				found = append(found, globalRepo)
 			}

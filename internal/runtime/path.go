@@ -14,13 +14,14 @@ package runtime
 
 import (
 	"os"
+	"path/filepath"
 	"sort"
 	"sync"
 
 	"github.com/sirupsen/logrus"
 )
 
-func isDir(path string, warn bool) bool {
+func IsDir(path string, warn bool) bool {
 	if fi, err := os.Stat(path); err == nil {
 		if fi.Mode().IsDir() {
 			return true
@@ -44,7 +45,7 @@ func (pl pathLayer) add(path string) {
 
 type lookupFunc func() []string
 
-type pathBuilder struct {
+type PathBuilder struct {
 	layers   map[int]*pathLayer
 	unique   map[string]bool
 	lookups  []lookupFunc
@@ -52,21 +53,26 @@ type pathBuilder struct {
 	mutex    sync.Mutex
 }
 
-func newPathBuilder() *pathBuilder {
-	return &pathBuilder{
+func NewPathBuilder() *PathBuilder {
+	return &PathBuilder{
 		layers:  map[int]*pathLayer{},
 		unique:  map[string]bool{},
 		lookups: []lookupFunc{},
 	}
 }
 
-func (pb *pathBuilder) AddLookup(envVar string, fn lookupFunc) {
+func (pb *PathBuilder) LookupLen() int {
+	return len(pb.lookups)
+}
+
+// AddLookup adds a lookup function if envVar is unset or falseish.
+func (pb *PathBuilder) AddLookup(envVar string, fn lookupFunc) {
 	if !isTrueIsh(os.Getenv(envVar)) {
 		pb.lookups = append(pb.lookups, fn)
 	}
 }
 
-func (pb *pathBuilder) resolve() {
+func (pb *PathBuilder) resolve() {
 	if pb.resolved {
 		return
 	}
@@ -87,31 +93,46 @@ func (pb *pathBuilder) resolve() {
 	pb.resolved = true
 }
 
-func (pb *pathBuilder) Add(layerID int, path string) {
+// Add appends unique symlink-resolved paths at the given layer.
+func (pb *PathBuilder) Add(layerID int, path string) {
+	pb.mutex.Lock()
+	defer pb.mutex.Unlock()
 	if pb.unique == nil {
 		pb.unique = map[string]bool{}
 	}
 
+	if pb.layers == nil {
+		pb.layers = map[int]*pathLayer{}
+	}
+
+	// check for uniqueness on unresolved path, as they may not be symlinks
+	if _, exists := pb.unique[path]; exists {
+		return
+	}
+
+	// Resolve symlinks before checking if unique
 	if pathR, err := os.Readlink(path); err == nil {
+		// Output of os.Readlink is OS-dependent...
+		if !filepath.IsAbs(pathR) {
+			pathR = filepath.Join(filepath.Dir(path), pathR)
+		}
 		path = pathR
 	}
 
 	if _, exists := pb.unique[path]; exists {
 		return
 	}
-	pb.unique[path] = true
 
-	pb.mutex.Lock()
+	pb.unique[path] = true
 
 	if _, exists := pb.layers[layerID]; !exists {
 		pb.layers[layerID] = &pathLayer{}
 	}
 
 	pb.layers[layerID].add(path)
-	pb.mutex.Unlock()
 }
 
-func (pb *pathBuilder) Ordered() []string {
+func (pb *PathBuilder) Ordered() []string {
 	pb.resolve()
 	res := []string{}
 	keys := []int{}
