@@ -20,6 +20,7 @@ import (
 )
 
 func TestResolveTemplate(t *testing.T) {
+	t.Parallel()
 	overrideFlags := &pflag.FlagSet{}
 	overrideFlags.String("option", "override", "stuff")
 	overrideFlags.Bool("bool", false, "stuff")
@@ -126,6 +127,7 @@ func TestResolveTemplate(t *testing.T) {
 	for _, test := range cases {
 		test := test
 		t.Run(test.Expected, func(t *testing.T) {
+			t.Parallel()
 			cmd := (&Command{
 				Arguments: []*Argument{
 					{

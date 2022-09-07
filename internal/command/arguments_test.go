@@ -48,6 +48,7 @@ func testCommand() *Command {
 }
 
 func TestParse(t *testing.T) {
+	t.Parallel()
 	cmd := testCommand()
 	cmd.Arguments.Parse([]string{"asdf", "one", "two", "three"})
 	known := cmd.Arguments.AllKnown()
@@ -104,6 +105,7 @@ func TestParse(t *testing.T) {
 }
 
 func TestBeforeParse(t *testing.T) {
+	t.Parallel()
 	cmd := testCommand()
 	known := cmd.Arguments.AllKnown()
 
@@ -131,6 +133,7 @@ func TestBeforeParse(t *testing.T) {
 }
 
 func TestArgumentsValidate(t *testing.T) {
+	t.Parallel()
 	staticArgument := func(name string, def string, values []string, variadic bool) *Argument {
 		return &Argument{
 			Name:     name,
@@ -222,6 +225,7 @@ func TestArgumentsValidate(t *testing.T) {
 	}
 
 	t.Run("good command is good", func(t *testing.T) {
+		t.Parallel()
 		cmd := testCommand()
 		cmd.Arguments[0] = staticArgument("first", "default", []string{"default", "good"}, false)
 		cmd.Arguments[1] = staticArgument("second", "", []string{"one", "two", "three"}, true)
@@ -237,6 +241,7 @@ func TestArgumentsValidate(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.Command.FullName(), func(t *testing.T) {
+			t.Parallel()
 			c.Command.Arguments.Parse(c.Args)
 
 			err := c.Command.Arguments.AreValid()
@@ -251,6 +256,7 @@ func TestArgumentsValidate(t *testing.T) {
 }
 
 func TestArgumentsToEnv(t *testing.T) {
+	t.Parallel()
 	cases := []struct {
 		Command *Command
 		Args    []string
@@ -373,6 +379,7 @@ func TestArgumentsToEnv(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.Command.FullName(), func(t *testing.T) {
+			t.Parallel()
 			dst := []string{}
 			c.Command.SetBindings()
 			c.Command.Arguments.Parse(c.Args)
@@ -401,6 +408,7 @@ func TestArgumentsToEnv(t *testing.T) {
 }
 
 func TestArgumentToDesc(t *testing.T) {
+	t.Parallel()
 	cases := []struct {
 		Arg  *Argument
 		Spec string
@@ -437,6 +445,7 @@ func TestArgumentToDesc(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.Arg.Name, func(t *testing.T) {
+			t.Parallel()
 			res := c.Arg.ToDesc()
 			if res != c.Spec {
 				t.Fatalf("Expected %s got %s", c.Spec, res)
@@ -445,33 +454,40 @@ func TestArgumentToDesc(t *testing.T) {
 	}
 }
 
-func TestArgumentCompletionEmpty(t *testing.T) {
-	args := &Arguments{}
-
-	cc := &cobra.Command{}
-	values, directive := args.CompletionFunction(cc, []string{}, "")
-
-	if len(values) != 0 {
-		t.Fatal("Values offered for empty argument spec")
-	}
-
-	if directive != cobra.ShellCompDirectiveError {
-		t.Fatalf("Unexpected directive: %d", directive)
-	}
-}
-
 func TestArgumentCompletion(t *testing.T) {
-	cc := &cobra.Command{
-		Use:   "test-command",
-		Short: "test",
-	}
-	// cc.Flags().AddFlagSet(pflag.NewFlagSet("test", pflag.ExitOnError))
+	t.Parallel()
 
-	cmd := testCommand()
-	cmd.SetCobra(cc)
-	cmd.SetBindings()
+	testcmd := func() (*Command, *cobra.Command) {
+		cc := &cobra.Command{
+			Use:   "test-command",
+			Short: "test",
+		}
+
+		cmd := testCommand()
+		cmd.SetCobra(cc)
+		cmd.SetBindings()
+		return cmd, cc
+	}
+
+	t.Run("empty-args", func(t *testing.T) {
+		t.Parallel()
+		args := &Arguments{}
+
+		cc := &cobra.Command{}
+		values, directive := args.CompletionFunction(cc, []string{}, "")
+
+		if len(values) != 0 {
+			t.Fatal("Values offered for empty argument spec")
+		}
+
+		if directive != cobra.ShellCompDirectiveError {
+			t.Fatalf("Unexpected directive: %d", directive)
+		}
+	})
 
 	t.Run("empty arg spec", func(t *testing.T) {
+		t.Parallel()
+		cmd, cc := testcmd()
 		values, directive := cmd.Arguments.CompletionFunction(cc, []string{}, "")
 
 		if len(values) != 1 || values[0] != "_activeHelp_ " {
@@ -484,6 +500,8 @@ func TestArgumentCompletion(t *testing.T) {
 	})
 
 	t.Run("first-arg", func(t *testing.T) {
+		t.Parallel()
+		cmd, cc := testcmd()
 		choices := []string{"au", "to", "com", "plete"}
 		cmd.Arguments[0].Values = &ValueSource{
 			Static: &choices,
@@ -502,6 +520,12 @@ func TestArgumentCompletion(t *testing.T) {
 	})
 
 	t.Run("first-arg-prefix", func(t *testing.T) {
+		t.Parallel()
+		choices := []string{"au", "to", "com", "plete"}
+		cmd, cc := testcmd()
+		cmd.Arguments[0].Values = &ValueSource{
+			Static: &choices,
+		}
 		values, directive := cmd.Arguments.CompletionFunction(cc, []string{}, "a")
 
 		expected := []string{"au", "_activeHelp_"}
@@ -516,6 +540,7 @@ func TestArgumentCompletion(t *testing.T) {
 
 	t.Run("variadic-arg", func(t *testing.T) {
 		choices := []string{"au", "to", "com", "plete"}
+		cmd, cc := testcmd()
 		cmd.Arguments[1].Values = &ValueSource{
 			Static: &choices,
 		}
@@ -533,6 +558,8 @@ func TestArgumentCompletion(t *testing.T) {
 	})
 
 	t.Run("variadic-arg-repeated", func(t *testing.T) {
+		t.Parallel()
+		cmd, cc := testcmd()
 		choices := []string{"au", "to", "com", "plete"}
 		cmd.Arguments[1].Values = &ValueSource{
 			Static: &choices,
