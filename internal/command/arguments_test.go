@@ -13,9 +13,11 @@
 package command_test
 
 import (
+	"reflect"
 	"strings"
 	"testing"
 
+	"github.com/spf13/cobra"
 	. "github.com/unrob/milpa/internal/command"
 )
 
@@ -441,4 +443,110 @@ func TestArgumentToDesc(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestArgumentCompletionEmpty(t *testing.T) {
+	args := &Arguments{}
+
+	cc := &cobra.Command{}
+	values, directive := args.CompletionFunction(cc, []string{}, "")
+
+	if len(values) != 0 {
+		t.Fatal("Values offered for empty argument spec")
+	}
+
+	if directive != cobra.ShellCompDirectiveError {
+		t.Fatalf("Unexpected directive: %d", directive)
+	}
+}
+
+func TestArgumentCompletion(t *testing.T) {
+	cc := &cobra.Command{
+		Use:   "test-command",
+		Short: "test",
+	}
+	// cc.Flags().AddFlagSet(pflag.NewFlagSet("test", pflag.ExitOnError))
+
+	cmd := testCommand()
+	cmd.SetCobra(cc)
+	cmd.SetBindings()
+
+	t.Run("empty arg spec", func(t *testing.T) {
+		values, directive := cmd.Arguments.CompletionFunction(cc, []string{}, "")
+
+		if len(values) != 1 || values[0] != "_activeHelp_ " {
+			t.Fatalf("Values offered for empty argument spec: (%d) %v", len(values), values)
+		}
+
+		if directive != cobra.ShellCompDirectiveError {
+			t.Fatalf("Unexpected directive: %d", directive)
+		}
+	})
+
+	t.Run("first-arg", func(t *testing.T) {
+		choices := []string{"au", "to", "com", "plete"}
+		cmd.Arguments[0].Values = &ValueSource{
+			Static: &choices,
+		}
+
+		values, directive := cmd.Arguments.CompletionFunction(cc, []string{}, "")
+
+		expected := append(choices, "_activeHelp_") // nolint: gocritic
+		if reflect.DeepEqual(expected, values) {
+			t.Fatalf("Unexpected values offered: %v", values)
+		}
+
+		if directive != cobra.ShellCompDirectiveDefault {
+			t.Fatalf("Unexpected directive: %d", directive)
+		}
+	})
+
+	t.Run("first-arg-prefix", func(t *testing.T) {
+		values, directive := cmd.Arguments.CompletionFunction(cc, []string{}, "a")
+
+		expected := []string{"au", "_activeHelp_"}
+		if reflect.DeepEqual(expected, values) {
+			t.Fatalf("Unexpected values offered: %v", values)
+		}
+
+		if directive != cobra.ShellCompDirectiveDefault {
+			t.Fatalf("Unexpected directive: %d", directive)
+		}
+	})
+
+	t.Run("variadic-arg", func(t *testing.T) {
+		choices := []string{"au", "to", "com", "plete"}
+		cmd.Arguments[1].Values = &ValueSource{
+			Static: &choices,
+		}
+
+		values, directive := cmd.Arguments.CompletionFunction(cc, []string{"au", ""}, "")
+
+		expected := append(choices, "_activeHelp_") // nolint: gocritic
+		if reflect.DeepEqual(expected, values) {
+			t.Fatalf("Unexpected values offered: %v", values)
+		}
+
+		if directive != cobra.ShellCompDirectiveDefault {
+			t.Fatalf("Unexpected directive: %d", directive)
+		}
+	})
+
+	t.Run("variadic-arg-repeated", func(t *testing.T) {
+		choices := []string{"au", "to", "com", "plete"}
+		cmd.Arguments[1].Values = &ValueSource{
+			Static: &choices,
+		}
+
+		values, directive := cmd.Arguments.CompletionFunction(cc, []string{"au", "au", ""}, "t")
+
+		expected := []string{"to", "_activeHelp_"}
+		if reflect.DeepEqual(expected, values) {
+			t.Fatalf("Unexpected values offered: %v", values)
+		}
+
+		if directive != cobra.ShellCompDirectiveDefault {
+			t.Fatalf("Unexpected directive: %d", directive)
+		}
+	})
 }

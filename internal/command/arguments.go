@@ -102,47 +102,49 @@ func (args *Arguments) CompletionFunction(cc *cobra.Command, provided []string, 
 	values := []string{}
 	directive := cobra.ShellCompDirectiveError
 
-	if expectedArgLen > 0 {
-		argsCompleted := len(provided)
-		lastArg := (*args)[len(*args)-1]
-		hasVariadicArg := expectedArgLen > 0 && lastArg.Variadic
-		lastArg.Command.Options.Parse(cc.Flags())
-		args.Parse(provided)
+	if expectedArgLen == 0 {
+		return values, directive
+	}
 
-		directive = cobra.ShellCompDirectiveDefault
-		if argsCompleted < expectedArgLen || hasVariadicArg {
-			var arg *Argument
-			if hasVariadicArg && argsCompleted >= expectedArgLen {
-				// completing a variadic argument
-				arg = lastArg
-			} else {
-				// completing regular argument (maybe variadic!)
-				arg = (*args)[argsCompleted]
-			}
+	argsCompleted := len(provided)
+	lastArg := (*args)[len(*args)-1]
+	hasVariadicArg := expectedArgLen > 0 && lastArg.Variadic
+	lastArg.Command.Options.Parse(cc.Flags())
+	args.Parse(provided)
 
-			if arg.Values != nil {
-				var err error
-				arg.Values.Command = lastArg.Command
-				arg.Command = lastArg.Command
-				values, directive, err = arg.Resolve(toComplete)
-				if err != nil {
-					return []string{err.Error()}, cobra.ShellCompDirectiveDefault
-				}
-			} else {
-				directive = cobra.ShellCompDirectiveError
-			}
-			values = cobra.AppendActiveHelp(values, arg.Description)
+	directive = cobra.ShellCompDirectiveDefault
+	if argsCompleted < expectedArgLen || hasVariadicArg {
+		var arg *Argument
+		if hasVariadicArg && argsCompleted >= expectedArgLen {
+			// completing a variadic argument
+			arg = lastArg
+		} else {
+			// completing regular argument (maybe variadic!)
+			arg = (*args)[argsCompleted]
 		}
 
-		if toComplete != "" {
-			filtered := []string{}
-			for _, value := range values {
-				if strings.HasPrefix(value, toComplete) {
-					filtered = append(filtered, value)
-				}
+		if arg.Values != nil {
+			var err error
+			arg.Values.Command = lastArg.Command
+			arg.Command = lastArg.Command
+			values, directive, err = arg.Resolve(toComplete)
+			if err != nil {
+				return []string{err.Error()}, cobra.ShellCompDirectiveDefault
 			}
-			values = filtered
+		} else {
+			directive = cobra.ShellCompDirectiveError
 		}
+		values = cobra.AppendActiveHelp(values, arg.Description)
+	}
+
+	if toComplete != "" {
+		filtered := []string{}
+		for _, value := range values {
+			if strings.HasPrefix(value, toComplete) {
+				filtered = append(filtered, value)
+			}
+		}
+		values = filtered
 	}
 
 	return values, directive
