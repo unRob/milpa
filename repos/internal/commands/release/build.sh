@@ -56,6 +56,11 @@ done
 @milpa.log success "Archives generated"
 
 # create docs
+if [[ -d "$output/$MILPA_ARG_HOSTNAME" ]]; then
+  @milpa.log complete "Docs folder at $output/$MILPA_ARG_HOSTNAME already generated, build complete"
+  exit 0
+fi
+
 milpa release docs-image --skip-publish "$MILPA_VERSION" || @milpa.fail "Could not build docs image"
 @milpa.log info "Generating html docs"
 mp="$MILPA_PATH"
