@@ -74,8 +74,8 @@ function @milpa.fail () {
 }
 
 # create some files pipes for compa
-compaOut=$(mktemp -t "compaOut.XXX")
-compaErr=$(mktemp -t "compaErr.XXX")
+compaOut=$(mktemp -t "compaOut.XXXXXX")
+compaErr=$(mktemp -t "compaErr.XXXXXX")
 trap 'rm -rf $compaOut $compaErr' ERR EXIT TERM
 
 # figure out what the user is asking for

@@ -24,7 +24,7 @@ fi
 
 @milpa.log info "Starting build for ${MILPA_ARG_TARGETS[*]}"
 mkdir -p "$output"
-GOFLAGS="-trimpath" gox -osarch "${MILPA_ARG_TARGETS[*]}" \
+CGO_ENABLED=0 GOFLAGS="-trimpath" gox -osarch "${MILPA_ARG_TARGETS[*]}" \
   -parallel="$MILPA_OPT_PARALLEL" \
   -ldflags "-s -w -X main.version=${MILPA_VERSION}" \
   -output "$output/{{.OS}}-{{.Arch}}" || @milpa.fail "Could not build with gox"
