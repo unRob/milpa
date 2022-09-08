@@ -85,7 +85,7 @@ jobs:
           export MILPA_ROOT=$(pwd)
           export MILPA_DISABLE_UPDATE_CHECKS="1"
           echo "::group::release docker image"
-          $(pwd)/milpa release docs-image --docker-login "unrob:GITHUB_TOKEN" "$version"
+          # $(pwd)/milpa release docs-image --docker-login "unrob:GITHUB_TOKEN" "$version"
           echo "::endgroup::"
 
           export PATH="$PATH:$(pwd)"
@@ -97,7 +97,8 @@ jobs:
           echo "::set-output name=prerelease::$prerelease"
 
           echo "::group::building release"
-          $(pwd)/milpa release build --parallel 1 "${version}" "${{ matrix.arch }}"
+          # $(pwd)/milpa release build --parallel 1 "${version}" "${{ matrix.arch }}"
+          $(pwd)/milpa release build --parallel 1 "0.0.0-alpha.29" "${{ matrix.arch }}"
           echo "::endgroup::"
 
   release:
