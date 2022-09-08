@@ -97,8 +97,8 @@ jobs:
           echo "::set-output name=prerelease::$prerelease"
 
           echo "::group::building release"
-          # $(pwd)/milpa release build --parallel 1 "${version}" "${{ matrix.arch }}"
-          $(pwd)/milpa release build --parallel 1 "0.0.0-alpha.29" "${{ matrix.arch }}"
+          # $(pwd)/milpa release build --parallel 1 "${version}" milpa.dev "${{ matrix.arch }}"
+          $(pwd)/milpa release build --parallel 1 "0.0.0-alpha.29" milpa.dev "${{ matrix.arch }}"
           echo "::endgroup::"
 
   release:
