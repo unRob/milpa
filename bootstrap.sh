@@ -121,13 +121,15 @@ fi
 # get ready for growing some scripts
 @info "Installing symbolic links to $TARGET"
 if [[ -w "$PREFIX" ]]; then
+  [[ -d "$TARGET" ]] || mkdir -p "$TARGET"
   ln -sfv "$PREFIX/milpa" "$TARGET/milpa"
   ln -sfv "$PREFIX/compa" "$TARGET/compa"
   [[ -d "$globalRepos" ]] || mkdir -pv "$globalRepos"
 else
+  [[ -d "$TARGET" ]] || sudo mkdir -p "$TARGET"
   sudo ln -sfv "$PREFIX/milpa" "$TARGET/milpa"
   sudo ln -sfv "$PREFIX/compa" "$TARGET/compa"
-[[ -d "$globalRepos" ]] || sudo mkdir -pv "$globalRepos"
+  [[ -d "$globalRepos" ]] || sudo mkdir -pv "$globalRepos"
 fi
 
 # recycle the bag
