@@ -12,49 +12,47 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+caveats=""
 case "$SHELL" in
   *bash)
+    @milpa.log info "Bash detected"
     if [[ -d /etc/bash_completion.d ]]; then
-      set -x
-      "$MILPA_COMPA" __generate_completions bash > "/etc/bash_completion.d/milpa"
-      set +x
+      "$MILPA_COMPA" __generate_completions bash > "/etc/bash_completion.d/milpa" || @milpa.fail "Could not install completions"
     elif [[ -d /usr/local/etc/bash_completion.d ]]; then
-      set -x
-      "$MILPA_COMPA" __generate_completions bash | sudo tee "/usr/local/etc/bash_completion.d/milpa"
-      set +x
+      "$MILPA_COMPA" __generate_completions bash | sudo tee "/usr/local/etc/bash_completion.d/milpa" || @milpa.fail "Could not install completions"
     else
       @milpa.fail "No directory found for writing completion script (tried /etc/bash_completion.d and /usr/local/etc/bash_completion.d)"
     fi
     ;;
   *zsh)
-    $SHELL -i -c "command -v compinit >/dev/null" >/dev/null || @milpa.log warning <<EOF
-compinit has not been loaded into this shell, enable it by running
+    @milpa.log info "ZSH detected"
+    if $SHELL -i -c "command -v compinit >/dev/null" >/dev/null 2>&1; then
+      caveats='compinit has not been loaded into this shell, enable it by running:
 
-echo "autoload -U compinit; compinit" >> ~/.zshrc
-and reloading your shell
-EOF
-    # shellcheck disable=2016
-    dst=$(zsh -i -c 'printf "%s" "${${fpath[@]:#$HOME/*}[1]}"') || @milpa.fail "Unable to locate an fpath to install completions to"
-    if [[ -w "$dst" ]]; then
-      set -ex
-      "$MILPA_COMPA" __generate_completions zsh > "${dst}/_milpa"
-      set +ex
-    else
-      @milpa.log warning "$dst does not look writeable for $USER, using sudo"
-      set -ex
-      "$MILPA_COMPA" __generate_completions zsh | sudo tee "${dst}/_milpa" >/dev/null
-      set +ex
+echo "autoload -U compinit; compinit" >> ~/.zshrc && source ~/.zshrc
+
+then reloading your shell'
     fi
 
-    @milpa.log warning "Please restart your shell"
+    # shellcheck disable=2016
+    dst=$(zsh -i -c 'printf "%s" "${${fpath[@]:#$HOME/*}[1]}"' 2>/dev/null) || @milpa.fail "Unable to locate an fpath to install completions to"
+    if [[ -w "$dst" ]]; then
+      [[ -f "$dst" ]] || mkdir -pv "$dst"
+      "$MILPA_COMPA" __generate_completions zsh > "${dst}/_milpa" || @milpa.fail "Could not install completions"
+    else
+      @milpa.log warning "$dst does not look writeable for $USER, using sudo"
+      [[ -f "$dst" ]] || sudo mkdir -pv "$dst"
+      "$MILPA_COMPA" __generate_completions zsh | sudo tee "${dst}/_milpa" >/dev/null || @milpa.fail "Could not install completions"
+    fi
     ;;
   *fish)
-    set -ex
-    "$MILPA_COMPA" __generate_completions fish > "$HOME/.config/fish/completions/milpa.fish"
-    set +x
+    @milpa.log info "Fish detected"
+    "$MILPA_COMPA" __generate_completions fish > "$HOME/.config/fish/completions/milpa.fish" || @milpa.fail "Could not install completions"
   ;;
   *)
     @milpa.fail "No completion script found for shell $SHELL"
 esac
 
 @milpa.log complete "Shell completion added for $SHELL successfully"
+[[ "$caveats" == "" ]] || @milpa.log warning "$caveats"
+exit 0
