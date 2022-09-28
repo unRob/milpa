@@ -17,7 +17,9 @@ MILPA_UPDATE_PERIOD_DAYS="${MILPA_UPDATE_PERIOD_DAYS:-7}"
 MILPA_UPDATE_PERIOD_SECONDS=$(( MILPA_UPDATE_PERIOD_DAYS * 24 * 3600 ))
 MILPA_LOCAL_SHARE="${XDG_HOME_DATA:-$HOME/.local/share}/milpa"
 _milpa_last_checked_path="${MILPA_LOCAL_SHARE}/last-update-check"
-
+# sometimes milpa gets installed as root, but each use should use its own dir
+# to store update checkpoints
+[[ -d "${MILPA_LOCAL_SHARE}" ]] || mkdir -p "$MILPA_LOCAL_SHARE"
 
 function @milpa.version.installed () {
   "$MILPA_COMPA" __version 2>&1 || {

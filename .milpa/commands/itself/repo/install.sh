@@ -18,7 +18,11 @@ else
   user_target="${XDG_DATA_HOME:-$HOME/.local/share}/milpa"
   target="${user_target}/repos"
   if [[ "$MILPA_OPT_GLOBAL" ]]; then
-   target="${MILPA_ROOT}/repos"
+    target="${MILPA_ROOT}/repos"
+  else
+    # sometimes milpa gets installed as root, but each user
+    # should have it's own user repo folder
+    mkdir -p "$target"
   fi
 fi
 
@@ -36,7 +40,7 @@ function symlink_local () {
 
 if [[ -d "$base/.milpa" ]]; then
   @milpa.log info "Local repository detected, symlinking..."
-  symlink_local "$base" || @milpa.fail
+  symlink_local "$base" || @milpa.fail "Failed to symlink"
   @milpa.log success "Symlink created"
 else
   @milpa.log info "Downloading repo..."
