@@ -46,9 +46,9 @@ case "$SHELL" in
     @milpa.log info "ZSH detected"
 
     # use zsh -c and source ~/.zshrc so we can read existing config without necessarily messing
-    # with macos' session restoration
+    # with macos' session restoration and control character shenanigans
     # shellcheck disable=2016
-    dst=$(zsh -c 'source ~/.zshrc 2>/dev/null; printf "%s" "${${fpath[@]:#$HOME/*}[1]}"' 2>/dev/null) || @milpa.fail "Unable to locate an fpath to install completions to"
+    dst=$(zsh -c 'source ~/.zshrc 2>/dev/null; printf "\n%s" "${${fpath[@]:#$HOME/*}[1]}"' 2>/dev/null | tail -n 1) || @milpa.fail "Unable to locate an fpath to install completions to"
     @milpa.log info "Installing completions to $dst"
     if [[ -w "$dst" ]]; then
       [[ -f "$dst" ]] || mkdir -pv "$dst"
