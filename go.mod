@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/alessio/shellescape v1.4.1
-	github.com/bmatcuk/doublestar/v4 v4.2.0
+	github.com/bmatcuk/doublestar/v4 v4.3.2
 	github.com/charmbracelet/glamour v0.5.0
 	github.com/fatih/color v1.13.0
 	github.com/go-playground/validator/v10 v10.11.1
