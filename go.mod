@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/alessio/shellescape v1.4.1
 	github.com/bmatcuk/doublestar/v4 v4.2.0
-	github.com/charmbracelet/glamour v0.5.0
+	github.com/charmbracelet/glamour v0.6.0
 	github.com/fatih/color v1.13.0
 	github.com/go-playground/validator/v10 v10.11.1
 	github.com/hashicorp/go-getter v1.6.2
@@ -23,6 +23,7 @@ require (
 	cloud.google.com/go/storage v1.22.1 // indirect
 	github.com/alecthomas/chroma v0.10.0 // indirect
 	github.com/aws/aws-sdk-go v1.44.18 // indirect
+	github.com/aymanbagabas/go-osc52 v1.0.3 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d // indirect
 	github.com/dlclark/regexp2 v1.4.0 // indirect
@@ -44,23 +45,23 @@ require (
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
-	github.com/mattn/go-isatty v0.0.14 // indirect
-	github.com/mattn/go-runewidth v0.0.13 // indirect
-	github.com/microcosm-cc/bluemonday v1.0.18 // indirect
+	github.com/mattn/go-isatty v0.0.16 // indirect
+	github.com/mattn/go-runewidth v0.0.14 // indirect
+	github.com/microcosm-cc/bluemonday v1.0.21 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/muesli/reflow v0.3.0 // indirect
-	github.com/muesli/termenv v0.11.0 // indirect
+	github.com/muesli/termenv v0.13.0 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect
-	github.com/yuin/goldmark v1.4.12 // indirect
+	github.com/yuin/goldmark v1.5.2 // indirect
 	github.com/yuin/goldmark-emoji v1.0.1 // indirect
 	go.opencensus.io v0.23.0 // indirect
 	golang.org/x/crypto v0.0.0-20220518034528-6f7dac969898 // indirect
-	golang.org/x/net v0.0.0-20220520000938-2e3eb7b945c2 // indirect
+	golang.org/x/net v0.0.0-20221002022538-bcab6841153b // indirect
 	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5 // indirect
-	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
+	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/xerrors v0.0.0-20220517211312-f3a8303e98df // indirect
 	google.golang.org/api v0.80.0 // indirect
