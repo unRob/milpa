@@ -23,6 +23,11 @@ Let's begin by running the following command to install the latest version of `m
 curl -L https://milpa.dev/install.sh | bash -
 ```
 
+> If [homebrew](https://brew.sh) is available, you can also install `milpa` with:
+> ```sh
+>  brew install unRob/formulas/milpa
+> ```
+
 If all goes well, you'll see output that ends with something like:
 
 ```sh

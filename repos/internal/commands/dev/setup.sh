@@ -1,16 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: Apache-2.0
 # Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
 base="$(git rev-parse --show-toplevel)"
 cd "$base" || @milpa.fail "could not cd into root directory"
@@ -23,8 +13,10 @@ git fetch origin refs/notes/*:refs/notes/*
 @milpa.log info "Making sure submodules are here"
 git submodule update --init --recursive
 
+
+## golang
 if [[ "$ASDF_DIR" ]]; then
-   @milpa.log info "Installing golang version with asdf"
+  @milpa.log info "Installing golang version with asdf"
 
   if ! asdf plugin list | grep golang >/dev/null; then
     asdf plugin add golang || @milpa.fail "Could not install golang plugin"
@@ -35,6 +27,18 @@ if [[ "$ASDF_DIR" ]]; then
     asdf reshim golang
   fi
   @milpa.log success "go is now installed"
+else
+  if command -v golang >/dev/null; then
+    installed=$(go version | awk '{gsub(/[a-z]/, "", $3); print($3)}' 2>/dev/null)
+    required=$(awk '/golang/ {print $2}' .tool-versions)
+    if [[ "$installed" != "$required" ]]; then
+      @milpa.fail "Golang v${required} is not installed (found v${installed}), please install it from https://go.dev/doc/install"
+    fi
+
+    @milpa.log success "Go v${required} is already installed"
+  else
+    @milpa.fail "Golang is not installed, please install go v${required}: https://go.dev/doc/install"
+  fi
 fi
 
 @milpa.log info "Installing go packages"
@@ -60,5 +64,10 @@ done
 [[ -d "$ASDF_DIR" ]] && asdf reshim golang
 
 go mod tidy || @milpa.fail "go mod tidy failed"
+
+## shellcheck
+if ! command -v shellcheck; then
+  @milpa.fail "Shellcheck is not installed, see https://github.com/koalaman/shellcheck#installing"
+fi
 
 exec milpa dev build
