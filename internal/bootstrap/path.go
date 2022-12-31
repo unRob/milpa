@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
-package runtime
+package bootstrap
 
 import (
 	"os"
@@ -9,6 +9,7 @@ import (
 	"sync"
 
 	"github.com/sirupsen/logrus"
+	"github.com/unrob/milpa/internal/util"
 )
 
 func IsDir(path string, warn bool) bool {
@@ -57,7 +58,7 @@ func (pb *PathBuilder) LookupLen() int {
 
 // AddLookup adds a lookup function if envVar is unset or falseish.
 func (pb *PathBuilder) AddLookup(envVar string, fn lookupFunc) {
-	if !isTrueIsh(os.Getenv(envVar)) {
+	if !util.IsTrueIsh(os.Getenv(envVar)) {
 		pb.lookups = append(pb.lookups, fn)
 	}
 }

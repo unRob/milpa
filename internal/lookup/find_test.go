@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
-package registry_test
+package lookup_test
 
 import (
 	"io/fs"
@@ -9,8 +9,8 @@ import (
 	"testing/fstest"
 
 	"github.com/sirupsen/logrus"
-	. "github.com/unrob/milpa/internal/registry"
-	"github.com/unrob/milpa/internal/runtime"
+	"github.com/unrob/milpa/internal/bootstrap"
+	. "github.com/unrob/milpa/internal/lookup"
 )
 
 var fsBase = "usr/local/milpa"
@@ -78,17 +78,17 @@ func setupFS(filenames []string, pool map[string]*fstest.MapFile) *fstest.MapFS 
 		fs[fsBase+"/.milpa/commands/"+name] = pool[name]
 	}
 
-	runtime.MilpaPath = []string{fsBase + "/.milpa"}
+	bootstrap.MilpaPath = []string{fsBase + "/.milpa"}
 	DefaultFS = &fs
 	return &fs
 }
 
-func TestFindScripts(t *testing.T) {
+func TestScripts(t *testing.T) {
 	t.Run("errors without milpa_path set", func(t *testing.T) {
-		mp := runtime.MilpaPath
-		defer func() { runtime.MilpaPath = mp }()
-		runtime.MilpaPath = []string{}
-		if _, err := FindScripts([]string{"**"}); err == nil {
+		mp := bootstrap.MilpaPath
+		defer func() { bootstrap.MilpaPath = mp }()
+		bootstrap.MilpaPath = []string{}
+		if _, err := Scripts([]string{"**"}); err == nil {
 			t.Fatalf("did not error as expected")
 		}
 	})
@@ -110,7 +110,7 @@ func TestFindScripts(t *testing.T) {
 	}
 	mfs := setupFS(selected, allCommands)
 	logrus.SetLevel(logrus.DebugLevel)
-	files, err := FindScripts([]string{"**"})
+	files, err := Scripts([]string{"**"})
 	if err != nil {
 		t.Fatalf("Could not find scripts: %v", err)
 	}

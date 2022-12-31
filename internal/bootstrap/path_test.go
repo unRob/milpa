@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
-package runtime_test
+package bootstrap_test
 
 import (
 	"bytes"
@@ -12,7 +12,7 @@ import (
 	"testing"
 
 	"github.com/sirupsen/logrus"
-	. "github.com/unrob/milpa/internal/runtime"
+	. "github.com/unrob/milpa/internal/bootstrap"
 )
 
 func testdataPathBuilder() func(string) string {
@@ -22,7 +22,7 @@ func testdataPathBuilder() func(string) string {
 	}
 
 	return func(suffix string) string {
-		return fmt.Sprintf("%s/internal/runtime/testdata/%s", wd, suffix)
+		return fmt.Sprintf("%s/internal/bootstrap/testdata/%s", wd, suffix)
 	}
 }
 

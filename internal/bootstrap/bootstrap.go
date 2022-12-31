@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
-package runtime
+package bootstrap
 
 import (
 	"bytes"
@@ -12,15 +12,31 @@ import (
 	"strings"
 	"time"
 
+	"git.rob.mx/nidito/chinampa/pkg/errors"
+
 	"github.com/sirupsen/logrus"
 	_c "github.com/unrob/milpa/internal/constants"
-	"github.com/unrob/milpa/internal/errors"
+	"github.com/unrob/milpa/internal/util"
 )
+
+var MilpaPath = ParseMilpaPath()
+
+// ParseMilpaPath turns MILPA_PATH into a string slice.
+func ParseMilpaPath() []string {
+	return strings.Split(os.Getenv(_c.EnvVarMilpaPath), ":")
+}
+
+func CheckMilpaPathSet() error {
+	if len(MilpaPath) == 0 {
+		return fmt.Errorf("no %s set on the environment", _c.EnvVarMilpaPath)
+	}
+	return nil
+}
 
 // MilpaRoot points to the system's milpa installation.
 var MilpaRoot = "/usr/local/lib/milpa"
 
-func Bootstrap() error {
+func Run() error {
 	envRoot := os.Getenv(_c.EnvVarMilpaRoot)
 	pathMap := NewPathBuilder()
 
@@ -35,7 +51,7 @@ func Bootstrap() error {
 	}
 
 	if len(MilpaPath) != 0 && MilpaPath[0] != "" {
-		if isTrueIsh(os.Getenv(_c.EnvVarMilpaPathParsed)) {
+		if util.IsTrueIsh(os.Getenv(_c.EnvVarMilpaPathParsed)) {
 			logrus.Debugf("%s already parsed upstream. %d items found", _c.EnvVarMilpaPath, len(MilpaPath))
 			return nil
 		}
@@ -75,6 +91,7 @@ func Bootstrap() error {
 	pathMap.AddLookup(_c.EnvVarLookupGlobalReposDisabled, lookupGlobalRepos)
 
 	MilpaPath = pathMap.Ordered()
+	os.Setenv(_c.EnvVarMilpaPath, strings.Join(MilpaPath, ":"))
 
 	return nil
 }

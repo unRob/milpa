@@ -4,6 +4,7 @@
 
 if [[ -z ${!MILPA_ARG_VAR+x} ]]; then
   echo "${MILPA_ARG_VAR} is not set"
+  env | grep ^MILPA
   exit 2
 fi
 
