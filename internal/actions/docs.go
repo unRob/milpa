@@ -13,14 +13,16 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/errors"
 	"git.rob.mx/nidito/chinampa/pkg/render"
 	"git.rob.mx/nidito/chinampa/pkg/statuscode"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/unrob/milpa/internal/bootstrap"
 
 	milpaCommand "github.com/unrob/milpa/internal/command"
 	_c "github.com/unrob/milpa/internal/constants"
+	"github.com/unrob/milpa/internal/logger"
 	"github.com/unrob/milpa/internal/lookup"
 )
+
+var dlog = logger.Sub("action:docs")
 
 func readDoc(query []string) ([]byte, error) {
 	if err := bootstrap.CheckMilpaPathSet(); err != nil {
@@ -35,7 +37,7 @@ func readDoc(query []string) ([]byte, error) {
 
 	for _, path := range bootstrap.MilpaPath {
 		candidate := path + "/docs/" + queryString
-		logrus.Debugf("looking for doc named %s", candidate)
+		dlog.Debugf("looking for doc named %s", candidate)
 		_, err := os.Lstat(candidate + ".md")
 		if err == nil {
 			return os.ReadFile(candidate + ".md")
@@ -68,7 +70,7 @@ func writeCommandDocs(dst string, path []string, cmd *cobra.Command) error {
 		name = "_index"
 	}
 
-	logrus.Debugf("Creating directory %s", dir)
+	dlog.Debugf("Creating directory %s", dir)
 	if err := os.MkdirAll(dir, 0760); err != nil {
 		return err
 	}
@@ -81,7 +83,7 @@ func writeCommandDocs(dst string, path []string, cmd *cobra.Command) error {
 		return err
 	}
 
-	logrus.Debugf("Creating file %s", fname)
+	dlog.Debugf("Creating file %s", fname)
 	f, err := os.OpenFile(fname, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 	if err != nil {
 		return err
@@ -126,10 +128,18 @@ var Docs = &command.Command{
 			Variadic:    true,
 			Required:    true,
 			Values: &command.ValueSource{
+				Suggestion: true,
 				Func: func(cmd *command.Command, currentValue, config string) (values []string, flag cobra.ShellCompDirective, err error) {
 					args := cmd.Arguments[0].ToValue().([]string)
-					logrus.Debugf("looking for docs given %v and %s", args, currentValue)
-					docs, err := lookup.Docs(args, currentValue, false)
+					dlog.Debugf("looking for docs given %v and %s", args, currentValue)
+
+					cv := ""
+					if len(args) > 1 {
+						cv = args[len(args)-1]
+						args = args[0 : len(args)-1]
+					}
+					dlog.Debugf("looking for docs given %v and %s", args, cv)
+					docs, err := lookup.Docs(args, cv, false)
 					if err != nil {
 						return nil, cobra.ShellCompDirectiveNoFileComp, err
 					}
@@ -146,6 +156,7 @@ var Docs = &command.Command{
 		Kind: "docs",
 	},
 	HelpFunc: func(printLinks bool) string {
+		dlog.Debug("showing docs help")
 		topics, err := lookup.Docs([]string{}, "", false)
 		if err != nil {
 			return ""
@@ -163,6 +174,7 @@ var Docs = &command.Command{
 ` + strings.Join(topicList, "\n")
 	},
 	Action: func(cmd *command.Command) error {
+		dlog.Debug("Rendering docs")
 		args := cmd.Arguments[0].ToValue().([]string)
 		if len(args) == 0 {
 			return errors.BadArguments{Msg: "Missing doc topic to display"}
@@ -240,12 +252,12 @@ func writeDocs(dst string) error {
 		}
 
 		fname := fmt.Sprintf("%s/help%s.md", dst, strings.Join(components, "/"))
-		logrus.Debugf("Creating dir %s", dir)
+		dlog.Debugf("Creating dir %s", dir)
 		if err := os.MkdirAll(dir, 0760); err != nil {
 			return err
 		}
 
-		logrus.Debugf("Creating file %s (%s)", fname, dir)
+		dlog.Debugf("Creating file %s (%s)", fname, dir)
 		f, err := os.OpenFile(fname, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 		if err != nil {
 			return err

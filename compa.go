@@ -7,32 +7,24 @@ import (
 
 	"git.rob.mx/nidito/chinampa"
 	"git.rob.mx/nidito/chinampa/pkg/runtime"
-	"github.com/sirupsen/logrus"
 	"github.com/unrob/milpa/internal/actions"
 	"github.com/unrob/milpa/internal/bootstrap"
 	_c "github.com/unrob/milpa/internal/constants"
+	"github.com/unrob/milpa/internal/logger"
 	"github.com/unrob/milpa/internal/lookup"
 )
 
 var version = "beta"
 
 func main() {
-	logrus.SetFormatter(&logrus.TextFormatter{
-		DisableLevelTruncation: true,
-		DisableTimestamp:       true,
-		ForceColors:            runtime.ColorEnabled(),
-	})
-
-	if !runtime.SilenceEnabled() && runtime.DebugEnabled() {
-		logrus.SetLevel(logrus.DebugLevel)
-	}
+	logger.Configure(false, runtime.ColorEnabled(), runtime.SilenceEnabled(), runtime.DebugEnabled())
 
 	isDoctor := actions.DoctorModeEnabled()
-	logrus.Debugf("doctor mode enabled: %v", isDoctor)
+	logger.Debugf("doctor mode enabled: %v", isDoctor)
 
 	err := bootstrap.Run()
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	cfg := chinampa.Config{
@@ -52,11 +44,11 @@ See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more informat
 
 	err = lookup.AllSubCommands(!isDoctor)
 	if err != nil && !isDoctor {
-		logrus.Fatalf("Could not find subcommands: %s", err)
+		logger.Fatalf("Could not find subcommands: %s", err)
 	}
 
 	if err := chinampa.Execute(cfg); err != nil {
-		logrus.Errorf("total failure: %s", err)
+		logger.Errorf("total failure: %s", err)
 		os.Exit(2)
 	}
 }
