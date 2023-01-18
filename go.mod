@@ -2,8 +2,10 @@ module github.com/unrob/milpa
 
 go 1.18
 
+// replace git.rob.mx/nidito/chinampa => /Users/roberto/src/chinampa
+
 require (
-	git.rob.mx/nidito/chinampa v0.0.0-20230101000754-0d24a8007547
+	git.rob.mx/nidito/chinampa v0.0.0-20230118042046-424ae202cd2d
 	github.com/alessio/shellescape v1.4.1
 	github.com/bmatcuk/doublestar/v4 v4.2.0
 	github.com/fatih/color v1.13.0
@@ -25,8 +27,8 @@ require (
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d // indirect
 	github.com/charmbracelet/glamour v0.6.0 // indirect
-	github.com/dlclark/regexp2 v1.7.0 // indirect
-	github.com/go-playground/locales v0.14.0 // indirect
+	github.com/dlclark/regexp2 v1.8.0 // indirect
+	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.1 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
@@ -58,12 +60,12 @@ require (
 	github.com/yuin/goldmark v1.5.3 // indirect
 	github.com/yuin/goldmark-emoji v1.0.1 // indirect
 	go.opencensus.io v0.23.0 // indirect
-	golang.org/x/crypto v0.4.0 // indirect
-	golang.org/x/net v0.4.0 // indirect
+	golang.org/x/crypto v0.5.0 // indirect
+	golang.org/x/net v0.5.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5 // indirect
-	golang.org/x/sys v0.3.0 // indirect
-	golang.org/x/term v0.3.0 // indirect
-	golang.org/x/text v0.5.0 // indirect
+	golang.org/x/sys v0.4.0 // indirect
+	golang.org/x/term v0.4.0 // indirect
+	golang.org/x/text v0.6.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220517211312-f3a8303e98df // indirect
 	google.golang.org/api v0.80.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect

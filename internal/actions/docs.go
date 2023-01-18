@@ -119,14 +119,14 @@ func writeCommandDocs(dst string, path []string, cmd *cobra.Command) error {
 
 var Docs = &command.Command{
 	Path:        []string{"help", "docs"},
-	Summary:     "Dislplays docs on TOPIC",
+	Summary:     "Displays docs on TOPIC",
 	Description: "Shows markdown-formatted documentation from milpa repos. See `" + _c.Milpa + " " + _c.HelpCommandName + " docs milpa repo docs` for more information on how to write your own.",
 	Arguments: command.Arguments{
 		&command.Argument{
 			Name:        "topic",
 			Description: "The topic to show docs for",
 			Variadic:    true,
-			Required:    true,
+			Required:    false,
 			Values: &command.ValueSource{
 				Suggestion: true,
 				Func: func(cmd *command.Command, currentValue, config string) (values []string, flag cobra.ShellCompDirective, err error) {
@@ -169,15 +169,17 @@ var Docs = &command.Command{
 			topicList = append(topicList, "- "+topic)
 		}
 
-		return `## Available topics:
-
-` + strings.Join(topicList, "\n")
+		return "## Available topics:\n\n" + strings.Join(topicList, "\n")
 	},
 	Action: func(cmd *command.Command) error {
 		dlog.Debug("Rendering docs")
 		args := cmd.Arguments[0].ToValue().([]string)
 		if len(args) == 0 {
-			return errors.BadArguments{Msg: "Missing doc topic to display"}
+			err := cmd.Cobra.Help()
+			if err != nil {
+				return err
+			}
+			os.Exit(statuscode.RenderHelp)
 		}
 
 		contents, err := readDoc(args)

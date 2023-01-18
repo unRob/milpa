@@ -8,9 +8,9 @@ import (
 	"strings"
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
-	"git.rob.mx/nidito/chinampa/pkg/errors"
 	"github.com/sirupsen/logrus"
 	_c "github.com/unrob/milpa/internal/constants"
+	"github.com/unrob/milpa/internal/errors"
 	"gopkg.in/yaml.v3"
 )
 

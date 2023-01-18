@@ -34,6 +34,15 @@ func ArgumentsToEnv(cmd *command.Command, dst *[]string, prefix string) {
 	}
 }
 
+// FlagNames are flags also available as environment variables.
+var flagNames = map[string]string{
+	"no-color":        env.NoColor,
+	"color":           env.ForceColor,
+	"silent":          env.Silent,
+	"verbose":         env.Verbose,
+	"skip-validation": env.ValidationDisabled,
+}
+
 func envValue(opts command.Options, f *pflag.Flag) (*string, *string) {
 	name := f.Name
 	if name == _c.HelpCommandName {
@@ -42,7 +51,7 @@ func envValue(opts command.Options, f *pflag.Flag) (*string, *string) {
 	envName := ""
 	value := f.Value.String()
 
-	if cname, ok := env.FlagNames[name]; ok {
+	if cname, ok := flagNames[name]; ok {
 		if value == "false" {
 			return nil, nil
 		}

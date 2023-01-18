@@ -10,6 +10,7 @@ import (
 	"github.com/unrob/milpa/internal/actions"
 	"github.com/unrob/milpa/internal/bootstrap"
 	_c "github.com/unrob/milpa/internal/constants"
+	"github.com/unrob/milpa/internal/errors"
 	"github.com/unrob/milpa/internal/logger"
 	"github.com/unrob/milpa/internal/lookup"
 )
@@ -35,10 +36,10 @@ func main() {
 
 See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more information about ﹅milpa﹅`,
 	}
+	chinampa.SetErrorHandler(errors.HandleCobraExit)
 
 	chinampa.Register(actions.Doctor)
-	chinampa.Register(actions.Docs)
-	chinampa.Register(actions.GenerateDocs)
+	chinampa.Register(actions.Docs, actions.GenerateDocs)
 	chinampa.Register(actions.CommandTree)
 	chinampa.Register(actions.Fetch)
 

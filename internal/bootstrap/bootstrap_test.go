@@ -12,10 +12,10 @@ import (
 	"strings"
 	"testing"
 
-	merrors "git.rob.mx/nidito/chinampa/pkg/errors"
 	"github.com/sirupsen/logrus"
 	. "github.com/unrob/milpa/internal/bootstrap"
 	_c "github.com/unrob/milpa/internal/constants"
+	merrors "github.com/unrob/milpa/internal/errors"
 )
 
 func fromProjectRoot() string {
