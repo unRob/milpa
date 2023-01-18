@@ -11,13 +11,13 @@ setup () {
 @test "compa prints version" {
   # compa only talks to stdout when talking to milpa
   # compa parses flags, so it should parse the version flag
-  run -42 --keep-empty-lines --separate-stderr compa --version
-  assert_equal "$output" ""
-  assert_equal "$stderr" "$TEST_MILPA_VERSION"
+  run --keep-empty-lines --separate-stderr compa --version
+  assert_equal "$output" "$TEST_MILPA_VERSION"
+  assert_equal "$stderr" ""
 
-  run -42 --keep-empty-lines --separate-stderr compa __version
-  assert_equal "$output" ""
+  run --keep-empty-lines --separate-stderr compa version
   assert_equal "$stderr" "$TEST_MILPA_VERSION"
+  assert_equal "$output" ""
 }
 
 @test "compa exits correctly on bad commands" {

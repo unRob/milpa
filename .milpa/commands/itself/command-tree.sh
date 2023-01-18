@@ -11,7 +11,7 @@ else
 fi
 
 function get_tree () {
-  "$MILPA_COMPA" __inspect \
+  "$MILPA_COMPA" __command_tree \
     --depth "$MILPA_OPT_DEPTH" \
     --format "$1" \
     "${2+--template=}${2:-}" \
@@ -36,4 +36,4 @@ while IFS='¬' read -r depth name description; do
     indent="$(printf -- ' %.0s' $(seq 0 $depth))"
   fi
   echo "$indent$(@milpa.fmt bold "$name") - $description"
-done < <(get_tree text "{{ len .Meta.Name }}¬{{ .Name }}¬{{ .Summary }}"$'\n')
+done < <(get_tree text "{{ len .Path }}¬{{ .FullName }}¬{{ .Summary }}"$'\n')

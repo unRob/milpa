@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
-package runtime_test
+package bootstrap_test
 
 import (
 	"bytes"
@@ -13,9 +13,9 @@ import (
 	"testing"
 
 	"github.com/sirupsen/logrus"
+	. "github.com/unrob/milpa/internal/bootstrap"
 	_c "github.com/unrob/milpa/internal/constants"
 	merrors "github.com/unrob/milpa/internal/errors"
-	. "github.com/unrob/milpa/internal/runtime"
 )
 
 func fromProjectRoot() string {
@@ -34,10 +34,23 @@ func resetMilpaPath() {
 	MilpaPath = []string{}
 }
 
+func TestCheckMilpaPathSet(t *testing.T) {
+	MilpaPath = []string{"a", "b"}
+
+	if err := CheckMilpaPathSet(); err != nil {
+		t.Fatalf("Got error with set MILPA_PATH: %v", err)
+	}
+
+	MilpaPath = []string{}
+	if err := CheckMilpaPathSet(); err == nil {
+		t.Fatalf("Got no error with unset MILPA_PATH")
+	}
+}
+
 func TestBootstrapErrorsOnFakeMilpaRoot(t *testing.T) {
 	resetMilpaPath()
 	os.Setenv(_c.EnvVarMilpaRoot, "fake_dir")
-	err := Bootstrap()
+	err := Run()
 	expected := merrors.EnvironmentError{Err: fmt.Errorf("MILPA_ROOT (fake_dir) is not a directory")}
 	if err == nil {
 		t.Fatal("fake directory did not raise error")
@@ -59,7 +72,7 @@ func TestBootstrapErrorsOnIncompleteMilpaRoot(t *testing.T) {
 	os.Setenv(_c.EnvVarLookupGitDisabled, "true")
 	os.Setenv(_c.EnvVarLookupGlobalReposDisabled, "true")
 	os.Setenv(_c.EnvVarLookupUserReposDisabled, "true")
-	err := Bootstrap()
+	err := Run()
 	expected := merrors.EnvironmentError{Err: fmt.Errorf("milpa's built-in repo at %s/internal/.milpa is not a directory", root)}
 	if err == nil {
 		t.Fatalf("incomplete directory did not raise error, MilpaPath is %s", MilpaPath)
@@ -84,7 +97,7 @@ func TestBootstrapWithMilpaPath(t *testing.T) {
 		os.Setenv(_c.EnvVarLookupUserReposDisabled, "true")
 
 		// with MILPA_ROOT set
-		err := Bootstrap()
+		err := Run()
 		if err != nil {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 		}
@@ -103,7 +116,7 @@ func TestBootstrapWithMilpaPath(t *testing.T) {
 		os.Setenv(_c.EnvVarLookupUserReposDisabled, "true")
 		MilpaPath = ParseMilpaPath()
 
-		err := Bootstrap()
+		err := Run()
 		if err != nil {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 		}
@@ -124,7 +137,7 @@ func TestBootstrapWithMilpaPath(t *testing.T) {
 		expected := []string{root + "/repos/internal/.milpa", root + "/.milpa"}
 		MilpaPath = ParseMilpaPath()
 
-		err := Bootstrap()
+		err := Run()
 		if err != nil {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 		}
@@ -144,7 +157,7 @@ func TestBootstrapWithMilpaPath(t *testing.T) {
 		os.Setenv(_c.EnvVarLookupUserReposDisabled, "true")
 		MilpaPath = ParseMilpaPath()
 		expected := []string{root, root + "/repos/fake"}
-		err := Bootstrap()
+		err := Run()
 
 		if err != nil {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
@@ -160,7 +173,7 @@ func TestBootstrapWithMilpaPath(t *testing.T) {
 		os.Unsetenv(_c.EnvVarMilpaRoot)
 		// update default var though, because otherwise we'd need milpa installed locally
 		MilpaRoot = root
-		err := Bootstrap()
+		err := Run()
 		if err != nil {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 		}
@@ -180,7 +193,7 @@ func TestBootstrapOkOnRepo(t *testing.T) {
 	os.Setenv(_c.EnvVarLookupUserReposDisabled, "true")
 
 	// with MILPA_ROOT set
-	if err := Bootstrap(); err != nil {
+	if err := Run(); err != nil {
 		t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 	}
 
@@ -192,7 +205,7 @@ func TestBootstrapOkOnRepo(t *testing.T) {
 	resetMilpaPath()
 	os.Unsetenv(_c.EnvVarMilpaRoot)
 	MilpaRoot = root
-	if err := Bootstrap(); err != nil {
+	if err := Run(); err != nil {
 		t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 	}
 
@@ -209,7 +222,7 @@ func TestBootstrapWithGit(t *testing.T) {
 	os.Setenv(_c.EnvVarLookupGlobalReposDisabled, "true")
 	os.Setenv(_c.EnvVarLookupUserReposDisabled, "true")
 
-	if err := Bootstrap(); err != nil {
+	if err := Run(); err != nil {
 		t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 	}
 
@@ -233,7 +246,7 @@ func TestBootstrapWithoutGit(t *testing.T) {
 	os.Setenv(_c.EnvVarLookupGlobalReposDisabled, "true")
 	os.Setenv(_c.EnvVarLookupUserReposDisabled, "true")
 
-	if err := Bootstrap(); err != nil {
+	if err := Run(); err != nil {
 		t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 	}
 
@@ -251,7 +264,7 @@ func TestBootstrapWithGlobalRepo(t *testing.T) {
 	os.Unsetenv(_c.EnvVarLookupGlobalReposDisabled)
 	os.Setenv(_c.EnvVarLookupUserReposDisabled, "true")
 
-	if err := Bootstrap(); err != nil {
+	if err := Run(); err != nil {
 		t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 	}
 
@@ -272,7 +285,7 @@ func TestBootstrapWithUserRepoAndNoHome(t *testing.T) {
 	os.Unsetenv("XDG_DATA_HOME")
 	os.Unsetenv("HOME")
 
-	if err := Bootstrap(); err != nil {
+	if err := Run(); err != nil {
 		t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 	}
 
@@ -282,7 +295,7 @@ func TestBootstrapWithUserRepoAndNoHome(t *testing.T) {
 
 	resetMilpaPath()
 	os.Setenv("XDG_DATA_HOME", "something-wrong")
-	if err := Bootstrap(); err != nil {
+	if err := Run(); err != nil {
 		t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 	}
 
@@ -293,7 +306,7 @@ func TestBootstrapWithUserRepoAndNoHome(t *testing.T) {
 
 func TestBootstrapWithUserRepo(t *testing.T) {
 	root := fromProjectRoot()
-	home := root + "/internal/runtime/testdata/home"
+	home := root + "/internal/bootstrap/testdata/home"
 	repo := home + "/.local/share/milpa/repos/user-repo"
 	expected := []string{root + "/.milpa", repo}
 
@@ -308,7 +321,7 @@ func TestBootstrapWithUserRepo(t *testing.T) {
 
 		buff := &bytes.Buffer{}
 		logrus.SetOutput(buff)
-		if err := Bootstrap(); err != nil {
+		if err := Run(); err != nil {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 		}
 
@@ -332,7 +345,7 @@ func TestBootstrapWithUserRepo(t *testing.T) {
 
 		buff := &bytes.Buffer{}
 		logrus.SetOutput(buff)
-		if err := Bootstrap(); err != nil {
+		if err := Run(); err != nil {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 		}
 
