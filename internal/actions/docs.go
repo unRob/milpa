@@ -109,11 +109,6 @@ func writeCommandDocs(dst string, path []string, cmd *cobra.Command) error {
 				return err
 			}
 		}
-	} else if cmd.Annotations["MilpaDocs"] == "true" {
-		err := writeDocs(dst)
-		if err != nil {
-			return err
-		}
 	}
 
 	return nil
@@ -287,10 +282,21 @@ var GenerateDocs = &command.Command{
 	Hidden:      true,
 	Summary:     "Outputs markdown documentation for all known commands",
 	Description: "Creates a set of nested folders at `DEST` with markdown files for every command.",
+	Arguments: []*command.Argument{
+		{
+			Name:     "destination",
+			Required: true,
+		},
+	},
 	Action: func(cmd *command.Command) error {
 		path := []string{}
 		dst := cmd.Arguments[0].ToString()
 
-		return writeCommandDocs(dst, path, cmd.Cobra.Root())
+		err := writeCommandDocs(dst, path, cmd.Cobra.Root())
+		if err != nil {
+			return err
+		}
+
+		return writeDocs(dst)
 	},
 }

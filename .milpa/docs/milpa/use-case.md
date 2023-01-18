@@ -30,10 +30,10 @@ Here's some examples of how I've used used `milpa` so far:
 
 - for **managing homelab services** (i.e. [unRob/nidito](https://github.com/unRob/nidito/tree/master/.milpa)): building and deploying them, looking at their status and logs. From my personal device or CI.
 - **bootstrapping engineering laptops** (i.e. [unRob/dotfiles](https://github.com/unRob/dotfiles/tree/master/.milpa/commands/computar)): no need to follow a README, you get the right development environment for your os/arch, your credentials setup and the code ready for you to dive in.
-- **every-day dev workflow** (i.e. [unrRob/milpa](https://github.com/unRob/milpa/tree/main/repos/internal/commands/)): lint and test a codebase, connect to vpn, get credentials to resources, maybe `--connect` to them, abstract away APIs (internal, cloud provider and SaaS) and CLIs, toggle feature gates, build reports and update google sheets with the results.
+- **every-day dev workflow** (i.e. [unRob/milpa](https://github.com/unRob/milpa/tree/main/repos/internal/commands/)): lint and test a codebase, connect to vpn, get credentials to resources, maybe `--connect` to them, abstract away APIs (internal, cloud provider and SaaS) and CLIs, toggle feature gates, build reports and update google sheets with the results.
 - as a way to organize all those odd, one-off-but-not-really commands: found a nice home for [shell scripts](https://github.com/unRob/dotfiles/blob/master/.milpa/commands/code/todo.sh), quick ruby scripts, perl hacks and [jq monstrosities](https://github.com/unRob/dotfiles/blob/master/.milpa/commands/creds.sh) that used to live in my `~/.zsh_history`.
 
-I found `milpa` useful for these particular problems, since it only requires Bash and a supported OS/arch. `milpa` helps setup the computers I use (directly or remotely) and makes working with whatever languages my employer prefers (today and beyond) a breeze to integrate into a cohesive set of scripts. `milpa` does the work of parsing arguments, validating them, offering help when things go sideways and so on, so these small scripts remain just so: small scripts.
+I found `milpa` useful for these particular problems, since it only requires Bash and a supported OS/arch. `milpa` helps setup the computers I use (directly or remotely) and makes working with whatever languages my employer prefers (today and beyond) a breeze to integrate into a cohesive set of scripts. `milpa` takes care of parsing, validation, offering help when things go sideways, and so on, so these small scripts remain just so: _small scripts_.
 
 ## Where `milpa` won't shine
 
@@ -41,16 +41,18 @@ I haven't tested the performance beyond dozens of repos with dozens of commands,
 
 When there's a need to distribute stand-alone CLI programs, `milpa` won't be the best method to package and distribute CLIs. While facilities to work with `milpa` repos exists (see [`milpa itself repo install`](/.milpa/commands/itself/repo/install)), it may be less than ideal since there's a dependency in `milpa`.
 
-`milpa` could be the wrong tool when the primary runner of commands is not gonna be a human. Sorry robot friends! `milpa`'s features are oriented primarily towards improving the experience of maintaining and running scripts by humans, and while there's nothing wrong with having an automated system (say CI, for example) run `milpa` commands, there is an overhead to consider by invoking `milpa` (both cognitive overhead and in terms of resource usage). That being said, it can be done and it works fine: I've used `milpa` to orchestrate and operate a raspberry pi running an art installation.
+`milpa` could be the wrong tool when the primary runner of commands is not gonna be a human. Sorry robot friends! `milpa`'s features are oriented primarily towards improving the experience of maintaining and running scripts by humans, and while there's nothing wrong with having an automated system (say CI, for example) run `milpa` commands, there is an overhead to consider by invoking `milpa` (both cognitive overhead and in terms of resource usage).
+
+That being said, it can be done and it works fine (or, if you like writing bash scripts as much as I do, _beautifully_); check out [unRob/smoked-by-the-house](https://github.com/unRob/smoked-by-the-house) where `milpa` orchestrated and operated a Raspberry Pi running an art installation for three months of 2022 at the Anahuacalli Museum in Mexico City.
 
 
 ## Alternatives to `milpa`
 
 ### Regular scripts in the filesystem
 
-These are great, as long as you know the path to your script, it doesn't consume many arguments/options, rarely changes, and/or is used only by the same few folks.
+These are great, as long as: a) you know the path to your script, b) it doesn't consume many arguments/options, c) rarely changes, and/or d) is used only by the same few folks.
 
-`milpa` provides usability advantages over this approach which will come handy when any of the constraints listed before are not met. With `milpa`, scripts that change often get updated docs and auto completion for free, and may be appreciated by new users and non-regulars alike. Coming back to rarely used commands is one `--help` away when these scripts are part of a `milpa` repo.
+`milpa` provides usability advantages over this approach which will come handy when any of the constraints listed before are not met. With `milpa`, scripts that change often get updated docs and autocomplete for free, and may be appreciated by new users and non-regulars alike. Coming back to rarely used commands is one `--help` away when these scripts are part of a `milpa` repo.
 
 ### Bash tools
 

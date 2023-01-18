@@ -79,7 +79,6 @@ func TestRenderDocsRender(t *testing.T) {
 		t.Fatalf("did not run: %s", err)
 	}
 
-	logrus.Info("asdf")
 	expected := `# milpa
 
 [` + "`milpa`" + `](https://milpa.dev) is a command-line tool to care for one's own garden of scripts. [Its name](https://en.wikipedia.org/wiki/Milpa) comes from an agricultural method that combines multiple crops in close proximity.`

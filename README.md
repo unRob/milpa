@@ -11,8 +11,8 @@ curl -L https://milpa.dev/install.sh | bash -
 
 You and your team write scripts and a little spec for each of them—use bash, or any other language—, and `milpa` provides:
 
-- **autocompletions** from static sources, other `milpa` scripts or even other programs;
-- **nested sub commands** as simple as the filesystem, organize them in folders and `milpa` does the rest;
+- argument and option **completions** from static sources, other `milpa` scripts or even other programs;
+- **nested sub-commands** as simple as the filesystem, organize them in folders and `milpa` does the rest;
 - **parsing** and **validation** for arguments and options, writing little to no code; and
 - **help** and **documentation** on the terminal and browser.
 

@@ -7,7 +7,7 @@ weight: 1
 Getting started with `milpa` is a matter of following these steps:
 
 0. Installing it,
-1. installing milpa's autocompletion script to your shell, possibly restarting your session,
+1. installing milpa's autocomplete script to your shell, possibly restarting your session,
 2. creating a new command, and editing it's spec
 3. running the command to test it out
 
