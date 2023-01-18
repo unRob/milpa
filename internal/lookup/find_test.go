@@ -3,8 +3,11 @@
 package lookup_test
 
 import (
+	"fmt"
 	"io/fs"
 	"os"
+	"path"
+	"runtime"
 	"testing"
 	"testing/fstest"
 
@@ -12,6 +15,16 @@ import (
 	"github.com/unrob/milpa/internal/bootstrap"
 	. "github.com/unrob/milpa/internal/lookup"
 )
+
+func fromProjectRoot() string {
+	_, filename, _, _ := runtime.Caller(0)
+	dir := path.Join(path.Dir(filename), "../../")
+	if err := os.Chdir(dir); err != nil {
+		panic(err)
+	}
+	wd, _ := os.Getwd()
+	return wd
+}
 
 var fsBase = "usr/local/milpa"
 var allCommands = map[string]*fstest.MapFile{
@@ -67,7 +80,9 @@ echo "hello"`),
 	},
 }
 
-func setupFS(filenames []string, pool map[string]*fstest.MapFile) *fstest.MapFS {
+var noDocs = map[string]*fstest.MapFile{}
+
+func setupFS(filenames []string, pool map[string]*fstest.MapFile, docs map[string]*fstest.MapFile) *fstest.MapFS {
 	fs := fstest.MapFS{
 		fsBase + "/.milpa":                 {Mode: fs.ModeDir},
 		fsBase + "/.milpa/commands":        {Mode: fs.ModeDir},
@@ -76,6 +91,10 @@ func setupFS(filenames []string, pool map[string]*fstest.MapFile) *fstest.MapFS 
 
 	for _, name := range filenames {
 		fs[fsBase+"/.milpa/commands/"+name] = pool[name]
+	}
+
+	for path, f := range docs {
+		fs[fsBase+"/.milpa/docs/"+path] = f
 	}
 
 	bootstrap.MilpaPath = []string{fsBase + "/.milpa"}
@@ -108,7 +127,7 @@ func TestScripts(t *testing.T) {
 		"nested/executable",
 		"nested/executable.yaml",
 	}
-	mfs := setupFS(selected, allCommands)
+	mfs := setupFS(selected, allCommands, noDocs)
 	logrus.SetLevel(logrus.DebugLevel)
 	files, err := Scripts([]string{"**"})
 	if err != nil {
@@ -152,4 +171,58 @@ func TestScripts(t *testing.T) {
 			t.Errorf("Unexpected mode. Expected: %v, got: %v", einfo.Mode(), data.Info.Mode())
 		}
 	}
+}
+
+func TestDocs(t *testing.T) {
+	logrus.SetLevel(logrus.DebugLevel)
+	root := fromProjectRoot()
+	bootstrap.MilpaPath = []string{root + "/.milpa"}
+
+	t.Run("top-level", func(t *testing.T) {
+		topics, err := Docs([]string{}, "", false)
+		if err != nil {
+			t.Fatalf("did not find docs: %s", err)
+		}
+
+		expected := []string{"milpa"}
+		if len(topics) != len(expected) || fmt.Sprintf("%s", expected) != fmt.Sprintf("%s", topics) {
+			t.Fatalf("Did not find expected docs:\nwanted: %s\ngot: %s", expected, topics)
+		}
+	})
+
+	t.Run("sub-level", func(t *testing.T) {
+		topics, err := Docs([]string{"milpa"}, "", false)
+		if err != nil {
+			t.Fatalf("did not find docs: %s", err)
+		}
+
+		expected := []string{"command", "environment", "index", "internals", "quick-guide", "repo", "support", "use-case", "util"}
+		if len(topics) != len(expected) || fmt.Sprintf("%s", expected) != fmt.Sprintf("%s", topics) {
+			t.Fatalf("Did not find expected docs:\nwanted: %s\ngot: %s", expected, topics)
+		}
+	})
+
+	t.Run("sub-level autocomplete", func(t *testing.T) {
+		topics, err := Docs([]string{"milpa"}, "env", false)
+		if err != nil {
+			t.Fatalf("did not find docs: %s", err)
+		}
+
+		expected := []string{"environment"}
+		if len(topics) != len(expected) || fmt.Sprintf("%s", expected) != fmt.Sprintf("%s", topics) {
+			t.Fatalf("Did not find expected docs:\nwanted: %s\ngot: %s", expected, topics)
+		}
+	})
+
+	t.Run("sub-level autocomplete files", func(t *testing.T) {
+		topics, err := Docs([]string{"milpa"}, "env", true)
+		if err != nil {
+			t.Fatalf("did not find docs: %s", err)
+		}
+
+		expected := []string{root + "/.milpa/docs/milpa/environment.md"}
+		if len(topics) != len(expected) || fmt.Sprintf("%s", expected) != fmt.Sprintf("%s", topics) {
+			t.Fatalf("Did not find expected docs:\nwanted: %s\ngot: %s", expected, topics)
+		}
+	})
 }

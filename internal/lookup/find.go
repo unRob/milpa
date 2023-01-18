@@ -154,7 +154,10 @@ func Docs(query []string, needle string, returnPaths bool) ([]string, error) {
 	}
 
 	for _, path := range bootstrap.MilpaPath {
-		qbase := path + "/" + _c.RepoDocsFolderName + "/" + queryString
+		qbase := path + "/" + _c.RepoDocsFolderName
+		if len(query) > 0 {
+			qbase += "/" + queryString
+		}
 		q := qbase + "/*"
 		if returnPaths {
 			q = qbase + "/*.md"
