@@ -19,9 +19,6 @@ import (
 	"github.com/unrob/milpa/internal/lookup"
 )
 
-// import (
-// )
-
 func fromProjectRoot() string {
 	_, filename, _, _ := runtime.Caller(0)
 	dir := path.Join(path.Dir(filename), "../../")
