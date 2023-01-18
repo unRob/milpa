@@ -1,15 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
 // Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 package actions
 
 import (
@@ -17,32 +7,44 @@ import (
 	"os"
 	"strings"
 
+	"git.rob.mx/nidito/chinampa/pkg/command"
+	"git.rob.mx/nidito/chinampa/pkg/tree"
 	"github.com/fatih/color"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/cobra"
+	"github.com/unrob/milpa/internal/bootstrap"
 	_c "github.com/unrob/milpa/internal/constants"
-	"github.com/unrob/milpa/internal/registry"
-	"github.com/unrob/milpa/internal/runtime"
 )
 
-var doctorCommand = &cobra.Command{
-	Use:               "__doctor",
-	Short:             "Outputs information about milpa and known repos. See milpa help itself doctor",
-	Hidden:            true,
-	DisableAutoGenTag: true,
-	SilenceUsage:      true,
-	RunE: func(cmd *cobra.Command, args []string) (err error) {
+func DoctorModeEnabled() bool {
+	if len(os.Args) < 3 {
+		return false
+	}
+	first := os.Args[1]
+	second := os.Args[2]
+
+	return first == "itself" && second == "doctor"
+}
+
+var Doctor = &command.Command{
+	Path:        []string{"itself", "doctor"},
+	Summary:     "Validates all commands found on the `MILPA_PATH`",
+	Description: `This command will run checks on all known commands, parsing specs and validating their values.`,
+	Options: command.Options{
+		"summary": {
+			Type:        command.ValueTypeBoolean,
+			Description: "Only print errors, if any",
+		},
+	},
+	Action: func(cmd *command.Command) (err error) {
 		bold := color.New(color.Bold)
 		warn := color.New(color.FgYellow)
 		fail := color.New(color.FgRed)
 		success := color.New(color.FgGreen)
 		failedOverall := false
 		failures := map[string]uint8{}
+		var out = cmd.Cobra.OutOrStdout()
 
-		summarize, err := cmd.Flags().GetBool("summary")
-		if err != nil {
-			summarize = false
-		}
+		summarize := cmd.Options["summary"].ToValue().(bool)
 
 		var milpaRoot string
 		if mp := os.Getenv(_c.EnvVarMilpaRoot); mp != "" {
@@ -50,20 +52,23 @@ var doctorCommand = &cobra.Command{
 		} else {
 			milpaRoot = warn.Sprint("empty")
 		}
-		bold.Printf("%s is: %s\n", _c.EnvVarMilpaRoot, milpaRoot)
+		bold.Fprintf(out, "%s is: %s\n", _c.EnvVarMilpaRoot, milpaRoot)
 
 		var milpaPath string
-		bold.Printf("%s is: ", _c.EnvVarMilpaPath)
+		bold.Fprintf(out, "%s is: ", _c.EnvVarMilpaPath)
 		if mp := os.Getenv(_c.EnvVarMilpaPath); mp != "" {
-			milpaPath = "\n" + strings.Join(runtime.MilpaPath, "\n")
+			milpaPath = "\n" + strings.Join(bootstrap.MilpaPath, "\n")
 		} else {
 			milpaPath = warn.Sprint("empty")
 		}
-		fmt.Printf("%s\n", milpaPath)
-		fmt.Println("")
-		bold.Printf("Runnable commands:\n")
+		fmt.Fprintf(out, "%s\n", milpaPath)
+		fmt.Fprintln(out, "")
+		bold.Fprintf(out, "Runnable commands:\n")
 
-		for _, cmd := range registry.CommandList() {
+		for _, cmd := range tree.CommandList() {
+			if cmd.Hidden {
+				continue
+			}
 			logrus.Debugf("Validating %s", cmd.FullName())
 			report := cmd.Validate()
 			message := ""
@@ -87,12 +92,12 @@ var doctorCommand = &cobra.Command{
 				prefix = "❌"
 			}
 
-			fmt.Println(bold.Sprintf("%s %s", prefix, cmd.FullName()), "—", cmd.Meta.Path)
+			fmt.Println(bold.Sprintf("%s %s", prefix, cmd.FullName()), "—", cmd.Path)
 			if !summarize || hasFailures {
 				if message != "" {
-					fmt.Println(message)
+					fmt.Fprintln(out, message)
 				}
-				fmt.Println("-----------")
+				fmt.Fprintln(out, "-----------")
 			}
 		}
 

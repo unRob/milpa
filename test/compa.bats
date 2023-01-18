@@ -1,16 +1,6 @@
-#!usr/bin/env bats
+#!/usr/bin/env bats
+# SPDX-License-Identifier: Apache-2.0
 # Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 bats_load_library 'milpa'
 _suite_setup
 
@@ -21,13 +11,13 @@ setup () {
 @test "compa prints version" {
   # compa only talks to stdout when talking to milpa
   # compa parses flags, so it should parse the version flag
-  run -42 --keep-empty-lines --separate-stderr compa --version
-  assert_equal "$output" ""
-  assert_equal "$stderr" "$TEST_MILPA_VERSION"
+  run --keep-empty-lines --separate-stderr compa --version
+  assert_equal "$output" "$TEST_MILPA_VERSION"
+  assert_equal "$stderr" ""
 
-  run -42 --keep-empty-lines --separate-stderr compa __version
-  assert_equal "$output" ""
+  run --keep-empty-lines --separate-stderr compa version
   assert_equal "$stderr" "$TEST_MILPA_VERSION"
+  assert_equal "$output" ""
 }
 
 @test "compa exits correctly on bad commands" {

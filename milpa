@@ -1,16 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: Apache-2.0
 # Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
 # MILPA ROOT points to this installation of the milpa kernel
 # lol, kernel. La gente bilingue seguro entiende el chiste.
@@ -27,8 +17,8 @@ fi
 
 # bash is fine and all, but we need a little helper to run parsing for us
 export MILPA_COMPA="${MILPA_COMPA:-$MILPA_ROOT/compa}"
-# bail early if we're autocompleting
-[[ $1 == "__complete"* ]] && exec "$MILPA_COMPA" "$@"
+# bail early if we're doing magic commands
+if [[ $1 == "__complete"* ]] || [[ "$*" == "itself doctor"* ]] || [[ $1 == "--version" ]] || [[ $1 == "version" ]]; then exec "$MILPA_COMPA" "$@"; fi
 
 function @milpa.load_util () {
   # shell scripts can call @milpa.load_util to load utils from MILPA_ROOT
@@ -104,13 +94,13 @@ set -o allexport
 # shellcheck disable=1090
 source "$compaOut" || @milpa.fail "Failed setting command environment"
 set +o allexport
-[[ -z "$MILPA_COMMAND_KIND" ]] && {
+if [[ -z "$MILPA_COMMAND_KIND" ]]; then
   @milpa.log info "lookup stderr: $(cat "$compaErr")"
   @milpa.log info "lookup stdout: $(cat "$compaOut")"
   @milpa.log info "milpa environment:"
   env | grep -e ^MILPA -e "^\(NO_\)\?COLOR=" | sort | @milpa.log info
   @milpa.fail "Command lookup succeeded, but command environment is incomplete"
-}
+fi
 
 @milpa.load_util milpa-version
 _milpa_check_for_updates_automagically

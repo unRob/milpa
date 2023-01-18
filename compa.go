@@ -1,63 +1,55 @@
+// SPDX-License-Identifier: Apache-2.0
 // Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 package main
 
 import (
 	"os"
 
-	"github.com/sirupsen/logrus"
+	"git.rob.mx/nidito/chinampa"
+	"git.rob.mx/nidito/chinampa/pkg/runtime"
 	"github.com/unrob/milpa/internal/actions"
+	"github.com/unrob/milpa/internal/bootstrap"
+	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/unrob/milpa/internal/errors"
-	"github.com/unrob/milpa/internal/registry"
-	"github.com/unrob/milpa/internal/runtime"
+	"github.com/unrob/milpa/internal/logger"
+	"github.com/unrob/milpa/internal/lookup"
 )
 
 var version = "beta"
 
 func main() {
-	logrus.SetFormatter(&logrus.TextFormatter{
-		DisableLevelTruncation: true,
-		DisableTimestamp:       true,
-		ForceColors:            runtime.ColorEnabled(),
-	})
+	logger.Configure(false, runtime.ColorEnabled(), runtime.SilenceEnabled(), runtime.DebugEnabled())
 
-	root := actions.RootCommand(version)
-	f := root.PersistentFlags()
-	silent := false
-	if err := f.Parse(os.Args); err != nil {
-		silent, _ = f.GetBool("silent")
-	}
+	isDoctor := actions.DoctorModeEnabled()
+	logger.Debugf("doctor mode enabled: %v", isDoctor)
 
-	if !silent && runtime.DebugEnabled() {
-		logrus.SetLevel(logrus.DebugLevel)
-	}
-
-	isDoctor := runtime.DoctorModeEnabled()
-	logrus.Debugf("doctor mode enabled: %v", isDoctor)
-
-	err := runtime.Bootstrap()
+	err := bootstrap.Run()
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 
-	err = registry.FindAllSubCommands(!isDoctor)
+	cfg := chinampa.Config{
+		Name:    "milpa",
+		Version: version,
+		Summary: "Runs commands found in " + _c.RepoRoot + " folders",
+		Description: `﹅milpa﹅ is a command-line tool to care for one's own garden of scripts, its name comes from an agricultural method that combines multiple crops in close proximity. You and your team write scripts and a little spec for each command -use bash, or any other language-, and ﹅milpa﹅ provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.
+
+See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more information about ﹅milpa﹅`,
+	}
+	chinampa.SetErrorHandler(errors.HandleCobraExit)
+
+	chinampa.Register(actions.Doctor)
+	chinampa.Register(actions.Docs, actions.GenerateDocs)
+	chinampa.Register(actions.CommandTree)
+	chinampa.Register(actions.Fetch)
+
+	err = lookup.AllSubCommands(!isDoctor)
 	if err != nil && !isDoctor {
-		logrus.Fatalf("Could not find subcommands: %s", err)
+		logger.Fatalf("Could not find subcommands: %s", err)
 	}
 
-	registry.SetRoot(root, actions.Root)
-	initialArgs := []string{"milpa"}
-	os.Args = append(initialArgs, os.Args[1:]...) //nolint:gocritic
-
-	errors.HandleCobraExit(root.ExecuteC())
+	if err := chinampa.Execute(cfg); err != nil {
+		logger.Errorf("total failure: %s", err)
+		os.Exit(2)
+	}
 }

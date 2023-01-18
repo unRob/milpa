@@ -1,16 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
 // Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-package runtime
+package bootstrap
 
 import (
 	"bytes"
@@ -25,12 +15,27 @@ import (
 	"github.com/sirupsen/logrus"
 	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/unrob/milpa/internal/errors"
+	"github.com/unrob/milpa/internal/util"
 )
+
+var MilpaPath = ParseMilpaPath()
+
+// ParseMilpaPath turns MILPA_PATH into a string slice.
+func ParseMilpaPath() []string {
+	return strings.Split(os.Getenv(_c.EnvVarMilpaPath), ":")
+}
+
+func CheckMilpaPathSet() error {
+	if len(MilpaPath) == 0 {
+		return fmt.Errorf("no %s set on the environment", _c.EnvVarMilpaPath)
+	}
+	return nil
+}
 
 // MilpaRoot points to the system's milpa installation.
 var MilpaRoot = "/usr/local/lib/milpa"
 
-func Bootstrap() error {
+func Run() error {
 	envRoot := os.Getenv(_c.EnvVarMilpaRoot)
 	pathMap := NewPathBuilder()
 
@@ -45,7 +50,7 @@ func Bootstrap() error {
 	}
 
 	if len(MilpaPath) != 0 && MilpaPath[0] != "" {
-		if isTrueIsh(os.Getenv(_c.EnvVarMilpaPathParsed)) {
+		if util.IsTrueIsh(os.Getenv(_c.EnvVarMilpaPathParsed)) {
 			logrus.Debugf("%s already parsed upstream. %d items found", _c.EnvVarMilpaPath, len(MilpaPath))
 			return nil
 		}
@@ -85,6 +90,7 @@ func Bootstrap() error {
 	pathMap.AddLookup(_c.EnvVarLookupGlobalReposDisabled, lookupGlobalRepos)
 
 	MilpaPath = pathMap.Ordered()
+	os.Setenv(_c.EnvVarMilpaPath, strings.Join(MilpaPath, ":"))
 
 	return nil
 }

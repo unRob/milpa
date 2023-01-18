@@ -41,7 +41,7 @@ I haven't tested the performance beyond dozens of repos with dozens of commands,
 
 When there's a need to distribute stand-alone CLI programs, `milpa` won't be the best method to package and distribute CLIs. While facilities to work with `milpa` repos exists (see [`milpa itself repo install`](/.milpa/commands/itself/repo/install)), it may be less than ideal since there's a dependency in `milpa`.
 
-`milpa` could be the wrong tool when the primary runner of commands is not gonna be a human. Sorry robot friends! `milpa`'s features are oriented primarily towards improving the experience of maintaining and running scripts by humans, and while there's nothing wrong with having an automated system (say CI, for example) run `milpa` commands, there is an overhead to consider by invoking `milpa` (both cognitive overhead and in terms of resource usage).
+`milpa` could be the wrong tool when the primary runner of commands is not gonna be a human. Sorry robot friends! `milpa`'s features are oriented primarily towards improving the experience of maintaining and running scripts by humans, and while there's nothing wrong with having an automated system (say CI, for example) run `milpa` commands, there is an overhead to consider by invoking `milpa` (both cognitive overhead and in terms of resource usage). That being said, it can be done and it works fine: I've used `milpa` to orchestrate and operate a raspberry pi running an art installation.
 
 
 ## Alternatives to `milpa`
