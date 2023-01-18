@@ -173,7 +173,7 @@ func TestScripts(t *testing.T) {
 	}
 }
 
-func TestDocs(t *testing.T) {
+func TestDocsFind(t *testing.T) {
 	logrus.SetLevel(logrus.DebugLevel)
 	root := fromProjectRoot()
 	bootstrap.MilpaPath = []string{root + "/.milpa"}
@@ -225,4 +225,37 @@ func TestDocs(t *testing.T) {
 			t.Fatalf("Did not find expected docs:\nwanted: %s\ngot: %s", expected, topics)
 		}
 	})
+}
+
+func TestDocsFindAll(t *testing.T) {
+	logrus.SetLevel(logrus.DebugLevel)
+	root := fromProjectRoot()
+	bootstrap.MilpaPath = []string{root + "/.milpa"}
+
+	paths, err := AllDocs()
+	if err != nil {
+		t.Fatalf("did not find docs: %s", err)
+	}
+
+	expected := []string{
+		root + "/.milpa/docs/milpa/environment.md",
+		root + "/.milpa/docs/milpa/index.md",
+		root + "/.milpa/docs/milpa/internals.md",
+		root + "/.milpa/docs/milpa/quick-guide.md",
+		root + "/.milpa/docs/milpa/support.md",
+		root + "/.milpa/docs/milpa/use-case.md",
+		root + "/.milpa/docs/milpa/command/index.md",
+		root + "/.milpa/docs/milpa/command/spec.md",
+		root + "/.milpa/docs/milpa/repo/docs.md",
+		root + "/.milpa/docs/milpa/repo/hooks.md",
+		root + "/.milpa/docs/milpa/repo/index.md",
+		root + "/.milpa/docs/milpa/util/index.md",
+		root + "/.milpa/docs/milpa/util/log.md",
+		root + "/.milpa/docs/milpa/util/repo.md",
+		root + "/.milpa/docs/milpa/util/shell.md",
+		root + "/.milpa/docs/milpa/util/tmp.md",
+	}
+	if len(paths) != len(expected) || fmt.Sprintf("%s", expected) != fmt.Sprintf("%s", paths) {
+		t.Fatalf("Did not find expected docs:\nwanted: %s\ngot: %s", expected, paths)
+	}
 }

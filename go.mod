@@ -2,8 +2,6 @@ module github.com/unrob/milpa
 
 go 1.18
 
-// replace git.rob.mx/nidito/chinampa => /Users/roberto/src/chinampa
-
 require (
 	git.rob.mx/nidito/chinampa v0.0.0-20230118042046-424ae202cd2d
 	github.com/alessio/shellescape v1.4.1
