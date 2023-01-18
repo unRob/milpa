@@ -11,6 +11,7 @@ import (
 	"testing"
 	"testing/fstest"
 
+	"git.rob.mx/nidito/chinampa/pkg/tree"
 	"github.com/sirupsen/logrus"
 	"github.com/unrob/milpa/internal/bootstrap"
 	. "github.com/unrob/milpa/internal/lookup"
@@ -170,6 +171,39 @@ func TestScripts(t *testing.T) {
 		if data.Info.Mode() != einfo.Mode() {
 			t.Errorf("Unexpected mode. Expected: %v, got: %v", einfo.Mode(), data.Info.Mode())
 		}
+	}
+}
+
+func TestAllSubCommands(t *testing.T) {
+	logrus.SetLevel(logrus.DebugLevel)
+	root := fromProjectRoot()
+	DefaultFS = os.DirFS("/")
+	bootstrap.MilpaPath = []string{root + "/.milpa"}
+	bootstrap.ParseMilpaPath()
+
+	if err := AllSubCommands(true); err != nil {
+		t.Fatalf("did not find all subcommands: %s", err)
+	}
+
+	list := []string{}
+	for _, cmd := range tree.CommandList() {
+		list = append(list, cmd.FullName())
+	}
+	expected := []string{
+		"itself command-tree",
+		"itself create",
+		"itself docs create",
+		"itself docs html",
+		"itself repo install",
+		"itself repo list",
+		"itself repo uninstall",
+		"itself shell init",
+		"itself shell install-autocomplete",
+		"itself upgrade",
+		"itself version",
+	}
+	if len(list) != len(expected) || fmt.Sprintf("%s", expected) != fmt.Sprintf("%s", list) {
+		t.Fatalf("Did not find expected commands:\nwanted: %v\ngot: %v", expected, list)
 	}
 }
 
