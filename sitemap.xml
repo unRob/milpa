@@ -72,6 +72,8 @@
   </url><url>
     <loc>https://milpa.dev/itself/version/</loc>
   </url><url>
+    <loc>https://milpa.dev/version/</loc>
+  </url><url>
     <loc>https://milpa.dev/help/docs/milpa/support/</loc>
   </url>
 </urlset>

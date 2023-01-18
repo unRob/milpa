@@ -12,7 +12,7 @@
       
       <guid>https://milpa.dev/help/docs/milpa/quick-guide/</guid>
       <description>Getting started with milpa is a matter of following these steps:
-Installing it, installing milpa&amp;rsquo;s autocompletion script to your shell, possibly restarting your session, creating a new command, and editing it&amp;rsquo;s spec running the command to test it out You&amp;rsquo;ll be creating some files during this guide, so make sure to create a folder wherever you like. Feel free to use an existing project folder if you already have a script for it in mind!</description>
+Installing it, installing milpa&amp;rsquo;s autocomplete script to your shell, possibly restarting your session, creating a new command, and editing it&amp;rsquo;s spec running the command to test it out You&amp;rsquo;ll be creating some files during this guide, so make sure to create a folder wherever you like. Feel free to use an existing project folder if you already have a script for it in mind!</description>
     </item>
     
     <item>
@@ -63,7 +63,7 @@ Upcoming # 🌱 Features # (dfa152) Argument and flag run-time validation, so yo
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://milpa.dev/help/docs/milpa/command/spec/</guid>
-      <description>Command specs go along with your scripts and help inform milpa of what its input should look like. Based on it, milpa will produce help pages and autocompletions, and may validate the arguments to your command.
+      <description>Command specs go along with your scripts and help inform milpa of what its input should look like. Based on it, milpa will produce help pages and word completions, and may validate the arguments to your command.
 Specs must be written in YAML, have a yaml extension, and be named exactly like your command (minus the extension, if any). For example, given a command at .milpa/commands/my-command.sh the corresponding spec file would be .</description>
     </item>
     
@@ -146,7 +146,8 @@ Creates a temporary file (in /tmp with HANDLE as prefix) and exports a new varia
       <guid>https://milpa.dev/itself/command-tree/</guid>
       <description>Prints a tree of known commands
 Usage # milpa itself command-tree [options] [PREFIX...]
-Arguments # PREFIX... - Sets the name prefix to list from Options # --depth (string): The maximum depth to search for commands. Default: 15. --output (string): the format to output results in. Default: text. --template (string): with --output text, a go template to apply to every command. Description # Prints out command names and descriptions, or optionally all properties as json or yaml.</description>
+Description # Prints out command names and descriptions, or optionally all properties as json or yaml.
+Examples # # print all known subcommands milpa itself command-tree # print a tree of milpa itself sub-commands milpa itself command-tree itself # print out all commands, skipping groups milpa itself command-tree --template &amp;#39;{{ if (not (eq .Meta.Kind &amp;#34;virtual&amp;#34;)) }}{{ .FullName }}&amp;#39;$&amp;#39;\n&amp;#39;&amp;#39;{{ end }}&amp;#39; # get all commands as a json tree milpa itself command-tree --output json # same, but as the yaml representation of this command itself milpa itself command-tree --output json itself command-tree Arguments # PREFIX.</description>
     </item>
     
     <item>
@@ -157,7 +158,8 @@ Arguments # PREFIX... - Sets the name prefix to list from Options # --depth (str
       <guid>https://milpa.dev/itself/create/</guid>
       <description>Create a milpa command
 Usage # milpa itself create [options] NAME...
-Arguments # NAME... required - the name you&amp;rsquo;d like for your command Options # --description (string): a longer description of how this command works. Default: Works by doing a thing with another thing until the first thing looks about right. --executable (bool): Create an empty, executable command. Useful when you&amp;rsquo;d like using something other than bash. --open (bool): Open the script file in your current $EDITOR after creation.</description>
+Description # Creates a local milpa command named $NAME.
+Arguments # NAME... required - the name you&amp;rsquo;d like for your command Options # --description (string): a longer description of how this command works. Default: Works by doing a thing with another thing until the first thing looks about right. --executable (bool): Create an empty, executable command. Useful when you&amp;rsquo;d like using something other than bash.</description>
     </item>
     
     <item>
@@ -168,7 +170,8 @@ Arguments # NAME... required - the name you&amp;rsquo;d like for your command Op
       <guid>https://milpa.dev/itself/docs/create/</guid>
       <description>Creates a new doc in your milpa
 Usage # milpa itself docs create [options] NAME...
-Arguments # NAME... required - the name you&amp;rsquo;d like for your doc Options # --open (bool): Open the script file in your current $EDITOR after creation. --repo (string): a path to the milpa repo to create this doc in. By default, the nearest .milpa directory from pwd and up. Description # See milpa help docs for more info on docs.</description>
+Description # See milpa help docs for more info on docs.
+Arguments # NAME... required - the name you&amp;rsquo;d like for your doc Options # --open (bool): Open the script file in your current $EDITOR after creation. --repo (string): a path to the milpa repo to create this doc in. By default, the nearest .milpa directory from pwd and up.</description>
     </item>
     
     <item>
@@ -179,7 +182,8 @@ Arguments # NAME... required - the name you&amp;rsquo;d like for your doc Option
       <guid>https://milpa.dev/itself/docs/html/</guid>
       <description>Renders or displays HTML documentation for all commands
 Usage # milpa itself docs html [options] [ACTION]
-Arguments # ACTION - the action to take with documentation Options # --hostname (string): The hostname to set as base for the rendered docs. Default: milpa.dev. --image (string): The docker image with hugo to use for building html docs. Default: ghcr.io/unrob/milpa/docs:latest. --port (string): The port to expose docs on, when ACTION is serve. Default: 8118.</description>
+Description # Renders documentation for all known milpa commands, and all docs folders. Requires docker to be installed and running. To learn more about milpa docs, check out milpa help docs milpa repo docs.
+By default, documentation will be served from http://localhost:8118 and if a browser is configured to open websites from the terminal, it&amp;rsquo;ll open at that address.</description>
     </item>
     
     <item>
@@ -190,8 +194,8 @@ Arguments # ACTION - the action to take with documentation Options # --hostname 
       <guid>https://milpa.dev/itself/doctor/</guid>
       <description>Validates all commands found on the MILPA_PATH
 Usage # milpa itself doctor [options]
-Options # --summary (bool): only print errors, if any. Description # This command will run checks on all known commands, parsing specs and validating their values.
-Global Options # --color (bool): Always print colors to stderr. --help (bool): Display help for any command. --no-color (bool): Disable printing of colors to stderr. Default: true. --silent (bool): Silence non-error logging.</description>
+Description # This command will run checks on all known commands, parsing specs and validating their values.
+Options # --summary (bool): Only print errors, if any. Global Options # --color (bool): Always print colors to stderr. Default: true. --help (bool): Display help for any command. --no-color (bool): Disable printing of colors to stderr. --silent (bool): Silence non-error logging.</description>
     </item>
     
     <item>
@@ -202,7 +206,8 @@ Global Options # --color (bool): Always print colors to stderr. --help (bool): D
       <guid>https://milpa.dev/itself/repo/install/</guid>
       <description>Installs a milpa repo
 Usage # milpa itself repo install [options] SOURCE [TARGET]
-Arguments # SOURCE required - A go-getter URL to fetch the repo from. TARGET - The path where to place the resulting .milpa folder in Options # --global (bool): If specified, install the repo to $MILPA_ROOT. --user (bool): If specified, install the repo to ~/.local/share/milpa/repos. Description # Fetches a milpa repo and installs it to any of three locations:</description>
+Description # Fetches a milpa repo and installs it to any of three locations:
+The path specified by the TARGET argument, if provided, In the $MILPA_ROOT (by default, /usr/local/lib/milpa), if --global is specified, or In $XDG_DATA_HOME/milpa folder, if --user is specified. Repos will be fetched from the .milpa subdirectory of SOURCE, which must be an URL as specified by go-getter.</description>
     </item>
     
     <item>
@@ -213,9 +218,9 @@ Arguments # SOURCE required - A go-getter URL to fetch the repo from. TARGET - T
       <guid>https://milpa.dev/itself/repo/list/</guid>
       <description>Lists installed repos
 Usage # milpa itself repo list [options]
-Options # --paths-only (bool): Only output the paths to repos with no decoration. Description # Milpa can install repositories from remote locations at two different locations, depending on how it was instaled.
+Description # Milpa can install repositories from remote locations at two different locations, depending on how it was instaled.
 In the $MILPA_ROOT (by default, /usr/local/lib/milpa) In $XDG_DATA_HOME/milpa folder For more information on installing packages, see milpa itself repo install --help
-Global Options # --color (bool): Always print colors to stderr.</description>
+Options # --paths-only (bool): Only output the paths to repos with no decoration. Global Options # --color (bool): Always print colors to stderr.</description>
     </item>
     
     <item>
@@ -226,8 +231,8 @@ Global Options # --color (bool): Always print colors to stderr.</description>
       <guid>https://milpa.dev/itself/repo/uninstall/</guid>
       <description>Removes an installed milpa repo
 Usage # milpa itself repo uninstall [options] PATH
-Arguments # PATH required - The repo path to uninstall Description # Uninstalls a milpa repo by PATH. See milpa itself repo list --help for a list of available repos
-Global Options # --color (bool): Always print colors to stderr. --help (bool): Display help for any command. --no-color (bool): Disable printing of colors to stderr. Default: true. --silent (bool): Silence non-error logging.</description>
+Description # Uninstalls a milpa repo by PATH. See milpa itself repo list --help for a list of available repos
+Arguments # PATH required - The repo path to uninstall Global Options # --color (bool): Always print colors to stderr. Default: true. --help (bool): Display help for any command. --no-color (bool): Disable printing of colors to stderr. --silent (bool): Silence non-error logging.</description>
     </item>
     
     <item>
@@ -264,7 +269,7 @@ for bash, either /etc/bash_completion.d or /usr/local/etc/bash_completion.d for 
       <description>Upgrades milpa to the latest available version
 Usage # milpa itself upgrade [options]
 Description # If a new version is available, this command will download and install it.
-Global Options # --color (bool): Always print colors to stderr. --help (bool): Display help for any command. --no-color (bool): Disable printing of colors to stderr. Default: true. --silent (bool): Silence non-error logging. --skip-validation (bool): Do not validate any arguments or options. --verbose (bool): Log verbose output to stderr.</description>
+Global Options # --color (bool): Always print colors to stderr. Default: true. --help (bool): Display help for any command. --no-color (bool): Disable printing of colors to stderr. --silent (bool): Silence non-error logging. --skip-validation (bool): Do not validate any arguments or options. --verbose (bool): Log verbose output to stderr.</description>
     </item>
     
     <item>
@@ -276,7 +281,18 @@ Global Options # --color (bool): Always print colors to stderr. --help (bool): D
       <description>Displays the version of milpa
 Usage # milpa itself version [options]
 Description # Outputs the version of milpa to stdout, printing a new line if the output is a TTY. Also available as milpa --version
-Global Options # --color (bool): Always print colors to stderr. --help (bool): Display help for any command. --no-color (bool): Disable printing of colors to stderr. Default: true. --silent (bool): Silence non-error logging. --skip-validation (bool): Do not validate any arguments or options.</description>
+Global Options # --color (bool): Always print colors to stderr. Default: true. --help (bool): Display help for any command. --no-color (bool): Disable printing of colors to stderr. --silent (bool): Silence non-error logging. --skip-validation (bool): Do not validate any arguments or options.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://milpa.dev/version/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://milpa.dev/version/</guid>
+      <description>Display program version
+Usage # milpa version
+Description # milpa is a command-line tool to care for one&amp;rsquo;s own garden of scripts, its name comes from an agricultural method that combines multiple crops in close proximity. You and your team write scripts and a little spec for each command -use bash, or any other language-, and milpa provides autocomplete, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.</description>
     </item>
     
     <item>

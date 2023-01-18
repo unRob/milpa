@@ -77,6 +77,7 @@
 <option value="itself shell install-autocomplete" />
 <option value="itself upgrade" />
 <option value="itself version" />
+<option value="version" />
 </datalist>
   <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewBox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg"><title>Menu Icon</title><g transform="translate(10.016 -803.03)"><g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336"><path d="m19.668 1032.7h250.65"/><path d="m19.668 932.69h250.65"/><path d="m19.668 832.69h250.65"/></g></g></svg></button>
 </header>
@@ -321,6 +322,9 @@
 </li>
 
 
+    
+<li ><a href="https://milpa.dev/version/">version</a>
+
     </ul>
   </nav>
 </div>
@@ -331,7 +335,7 @@
 <p>Getting started with <code>milpa</code> is a matter of following these steps:</p>
 <ol start="0">
 <li>Installing it,</li>
-<li>installing milpa&rsquo;s autocompletion script to your shell, possibly restarting your session,</li>
+<li>installing milpa&rsquo;s autocomplete script to your shell, possibly restarting your session,</li>
 <li>creating a new command, and editing it&rsquo;s spec</li>
 <li>running the command to test it out</li>
 </ol>
@@ -344,7 +348,11 @@
 </div>
 <p>Let&rsquo;s begin by running the following command to install the latest version of <code>milpa</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl -L https://milpa.dev/install.sh <span class="p">|</span> bash -
-</span></span></code></pre></div><p>If all goes well, you&rsquo;ll see output that ends with something like:</p>
+</span></span></code></pre></div><blockquote>
+<p>If <a href="https://brew.sh">homebrew</a> is available, you can also install <code>milpa</code> with:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"> brew install unRob/formulas/milpa
+</span></span></code></pre></div></blockquote>
+<p>If all goes well, you&rsquo;ll see output that ends with something like:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">-----------------------------------
 </span></span><span class="line"><span class="cl">🌽 Installed milpa version 3.1.4 🌽
 </span></span><span class="line"><span class="cl">-----------------------------------

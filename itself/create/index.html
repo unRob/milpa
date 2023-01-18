@@ -77,6 +77,7 @@
 <option value="itself shell install-autocomplete" />
 <option value="itself upgrade" />
 <option value="itself version" />
+<option value="version" />
 </datalist>
   <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewBox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg"><title>Menu Icon</title><g transform="translate(10.016 -803.03)"><g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336"><path d="m19.668 1032.7h250.65"/><path d="m19.668 932.69h250.65"/><path d="m19.668 832.69h250.65"/></g></g></svg></button>
 </header>
@@ -85,9 +86,9 @@
   <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
   <ul>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#description">Description</a></li>
     <li><a href="#arguments">Arguments</a></li>
     <li><a href="#options">Options</a></li>
-    <li><a href="#description">Description</a></li>
     <li><a href="#global-options">Global Options</a></li>
   </ul>
 </nav>
@@ -316,6 +317,9 @@
 </li>
 
 
+    
+<li ><a href="https://milpa.dev/version/">version</a>
+
     </ul>
   </nav>
 </div>
@@ -328,6 +332,10 @@
 <h2 class="content-header" id="usage">Usage</h2> <a aria-hidden="true" class="heading-anchor" href="#usage" tabindex="-1">#</a>
 </div>
 <p><code>milpa itself create [options] NAME...</code></p>
+<div class="content-header-wrapper">
+<h2 class="content-header" id="description">Description</h2> <a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a>
+</div>
+<p>Creates a local <code>milpa</code> command named $NAME.</p>
 <div class="content-header-wrapper">
 <h2 class="content-header" id="arguments">Arguments</h2> <a aria-hidden="true" class="heading-anchor" href="#arguments" tabindex="-1">#</a>
 </div>
@@ -345,19 +353,16 @@
 <li><code>--summary</code> (<em>string</em>): a short summary of what this command does. Default: <em>Does a thing</em>.</li>
 </ul>
 <div class="content-header-wrapper">
-<h2 class="content-header" id="description">Description</h2> <a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a>
-</div>
-<p>Creates a local <code>milpa</code> command named $NAME.</p>
-<div class="content-header-wrapper">
 <h2 class="content-header" id="global-options">Global Options</h2> <a aria-hidden="true" class="heading-anchor" href="#global-options" tabindex="-1">#</a>
 </div>
 <ul>
-<li><code>--color</code> (<em>bool</em>): Always print colors to stderr.</li>
+<li><code>--color</code> (<em>bool</em>): Always print colors to stderr. Default: <em>true</em>.</li>
 <li><code>--help</code> (<em>bool</em>): Display help for any command.</li>
-<li><code>--no-color</code> (<em>bool</em>): Disable printing of colors to stderr. Default: <em>true</em>.</li>
+<li><code>--no-color</code> (<em>bool</em>): Disable printing of colors to stderr.</li>
 <li><code>--silent</code> (<em>bool</em>): Silence non-error logging.</li>
 <li><code>--skip-validation</code> (<em>bool</em>): Do not validate any arguments or options.</li>
 <li><code>--verbose</code> (<em>bool</em>): Log verbose output to stderr.</li>
+<li><code>--version</code> (<em>bool</em>): Display program version and exit.</li>
 </ul>
 
 

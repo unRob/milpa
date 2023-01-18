@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en" />
-  <meta property="og:title" content="milpa help docs" />
+  <meta property="og:title" content="milpa version" />
   <meta property="og:site_name" content="🌽 milpa" />
-  <meta property="og:description" content="Displays docs on TOPIC" />
-  <meta name="description" content="Displays docs on TOPIC" />
-  <meta property="og:url" content="https://milpa.dev/help/docs/" />
-  <title>milpa help docs</title>
+  <meta property="og:description" content="Display program version" />
+  <meta name="description" content="Display program version" />
+  <meta property="og:url" content="https://milpa.dev/version/" />
+  <title>milpa version</title>
 
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2" />
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2" />
@@ -19,7 +19,7 @@
 
   <link rel="stylesheet" href="/css/bundle.min.763d8f97db3def1b05ce9f80d740c56fe7a728b47d9bf6140bccdc4bec228fff.css"/>
 
-  <link rel="canonical" href="https://milpa.dev/help/docs/">
+  <link rel="canonical" href="https://milpa.dev/version/">
 
   
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -39,8 +39,8 @@
     type="text"
     aria-label="milpa command selector"
     id="command-selector"
-    pattern='|help docs milpa quick-guide|help docs milpa use-case|help docs milpa environment|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa repo|help docs milpa command spec|help docs milpa command|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util|help docs milpa internals|help docs milpa changelog|help docs milpa support|help docs milpa|help docs'
-    value="help docs" />
+    pattern='|version'
+    value="version" />
   <datalist id="milpa-commands">
     <option value="help" />
 <option value="help docs" />
@@ -86,9 +86,7 @@
   <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
   <ul>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#available-topics">Available topics:</a></li>
     <li><a href="#description">Description</a></li>
-    <li><a href="#arguments">Arguments</a></li>
     <li><a href="#global-options">Global Options</a></li>
   </ul>
 </nav>
@@ -99,15 +97,14 @@
     
     <ul>
     
-<li ><a href="https://milpa.dev/help/"class="command-menu-selected-prefix">help</a>
+<li ><a href="https://milpa.dev/help/">help</a>
 <ul
   class="sub-menu"
   aria-label="help subcommands"
 >
   
   
-<li >
-  <strong class="command-menu-selected-prefix">docs</strong>
+<li ><a href="https://milpa.dev/help/docs/">docs</a>
 <ul
   class="sub-menu"
   aria-label="docs subcommands"
@@ -318,7 +315,8 @@
 
 
     
-<li ><a href="https://milpa.dev/version/">version</a>
+<li >
+  <strong class="command-menu-selected-prefix">version</strong>
 
     </ul>
   </nav>
@@ -326,29 +324,17 @@
 
 
 <main id="content">
-<section class="content-list">
-  <h1 id="command-name-header" class="sr-only">milpa help docs</h1>
-	<p>Displays docs on TOPIC</p>
+<h1 id="command-name-header" class="sr-only">milpa version</h1>
+<p>Display program version</p>
 <div class="content-header-wrapper">
 <h2 class="content-header" id="usage">Usage</h2> <a aria-hidden="true" class="heading-anchor" href="#usage" tabindex="-1">#</a>
 </div>
-<p><code>milpa help docs [options] [TOPIC...]</code></p>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="available-topics">Available topics:</h2> <a aria-hidden="true" class="heading-anchor" href="#available-topics" tabindex="-1">#</a>
-</div>
-<ul>
-<li><a href="milpa">milpa</a></li>
-</ul>
+<p><code>milpa version</code></p>
 <div class="content-header-wrapper">
 <h2 class="content-header" id="description">Description</h2> <a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a>
 </div>
-<p>Shows markdown-formatted documentation from milpa repos. See <code>milpa help docs milpa repo docs</code> for more information on how to write your own.</p>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="arguments">Arguments</h2> <a aria-hidden="true" class="heading-anchor" href="#arguments" tabindex="-1">#</a>
-</div>
-<ul>
-<li><code>TOPIC...</code> - The topic to show docs for</li>
-</ul>
+<p><code>milpa</code> is a command-line tool to care for one&rsquo;s own garden of scripts, its name comes from an agricultural method that combines multiple crops in close proximity. You and your team write scripts and a little spec for each command -use bash, or any other language-, and <code>milpa</code> provides autocomplete, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.</p>
+<p>See <a href="/help/docs/milpa/"><code>milpa help docs milpa</code></a> for more information about <code>milpa</code></p>
 <div class="content-header-wrapper">
 <h2 class="content-header" id="global-options">Global Options</h2> <a aria-hidden="true" class="heading-anchor" href="#global-options" tabindex="-1">#</a>
 </div>
@@ -362,7 +348,6 @@
 <li><code>--version</code> (<em>bool</em>): Display program version and exit.</li>
 </ul>
 
-</div>
 
     </main>
 <script src="https://milpa.dev/js/index.min.e8fb4266f19590f6cbf4007c65faa8e38a0e23bfbc40ef56ca24eed9d96fa64c.js"></script>

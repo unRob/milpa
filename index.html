@@ -39,7 +39,7 @@
     type="text"
     aria-label="milpa command selector"
     id="command-selector"
-    pattern='|help docs milpa quick-guide|help docs milpa use-case|help docs milpa environment|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa repo|help docs milpa command spec|help docs milpa command|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util|help docs milpa internals|help docs milpa changelog|help docs milpa support|help docs milpa|help docs|help|itself command-tree|itself create|itself docs create|itself docs html|itself docs|itself doctor|itself repo install|itself repo list|itself repo uninstall|itself repo|itself shell init|itself shell install-autocomplete|itself shell|itself upgrade|itself version|itself'
+    pattern='|help docs milpa quick-guide|help docs milpa use-case|help docs milpa environment|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa repo|help docs milpa command spec|help docs milpa command|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util|help docs milpa internals|help docs milpa changelog|help docs milpa support|help docs milpa|help docs|help|itself command-tree|itself create|itself docs create|itself docs html|itself docs|itself doctor|itself repo install|itself repo list|itself repo uninstall|itself repo|itself shell init|itself shell install-autocomplete|itself shell|itself upgrade|itself version|itself|version'
     value="" />
   <datalist id="milpa-commands">
     <option value="help" />
@@ -77,6 +77,7 @@
 <option value="itself shell install-autocomplete" />
 <option value="itself upgrade" />
 <option value="itself version" />
+<option value="version" />
 </datalist>
   <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewBox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg"><title>Menu Icon</title><g transform="translate(10.016 -803.03)"><g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336"><path d="m19.668 1032.7h250.65"/><path d="m19.668 932.69h250.65"/><path d="m19.668 832.69h250.65"/></g></g></svg></button>
 </header>
@@ -85,8 +86,8 @@
   <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
   <ul>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#subcommands">Subcommands</a></li>
     <li><a href="#description">Description</a></li>
+    <li><a href="#subcommands">Subcommands</a></li>
     <li><a href="#options">Options</a></li>
   </ul>
 </nav>
@@ -314,6 +315,9 @@
 </li>
 
 
+    
+<li ><a href="https://milpa.dev/version/">version</a>
+
     </ul>
   </nav>
 </div>
@@ -328,27 +332,29 @@
 </div>
 <p><code>milpa [--silent|-v|--verbose] [--[no-]color] [-h|--help] [--version] SUBCOMMAND</code></p>
 <div class="content-header-wrapper">
+<h2 class="content-header" id="description">Description</h2> <a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a>
+</div>
+<p><code>milpa</code> is a command-line tool to care for one&rsquo;s own garden of scripts, its name comes from an agricultural method that combines multiple crops in close proximity. You and your team write scripts and a little spec for each command -use bash, or any other language-, and <code>milpa</code> provides autocomplete, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.</p>
+<p>See <a href="/help/docs/milpa/"><code>milpa help docs milpa</code></a> for more information about <code>milpa</code></p>
+<div class="content-header-wrapper">
 <h2 class="content-header" id="subcommands">Subcommands</h2> <a aria-hidden="true" class="heading-anchor" href="#subcommands" tabindex="-1">#</a>
 </div>
 <ul>
 <li><a href="help"><code>help</code></a> - Display usage information for any command</li>
 <li><a href="itself"><code>itself</code></a> - itself subcommands</li>
+<li><a href="version"><code>version</code></a> - Display program version</li>
 </ul>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="description">Description</h2> <a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a>
-</div>
-<p><code>milpa</code> is a command-line tool to care for one&rsquo;s own garden of scripts, its name comes from an agricultural method that combines multiple crops in close proximity. You and your team write scripts and a little spec for each command -use bash, or any other language-, and <code>milpa</code> provides autocompletions, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.</p>
-<p>See <a href="/help/docs/milpa/"><code>milpa help docs milpa</code></a> for more information about <code>milpa</code></p>
 <div class="content-header-wrapper">
 <h2 class="content-header" id="options">Options</h2> <a aria-hidden="true" class="heading-anchor" href="#options" tabindex="-1">#</a>
 </div>
 <ul>
-<li><code>--color</code> (<em>bool</em>): Always print colors to stderr.</li>
+<li><code>--color</code> (<em>bool</em>): Always print colors to stderr. Default: <em>true</em>.</li>
 <li><code>--help</code> (<em>bool</em>): Display help for any command.</li>
-<li><code>--no-color</code> (<em>bool</em>): Disable printing of colors to stderr. Default: <em>true</em>.</li>
+<li><code>--no-color</code> (<em>bool</em>): Disable printing of colors to stderr.</li>
 <li><code>--silent</code> (<em>bool</em>): Silence non-error logging.</li>
 <li><code>--skip-validation</code> (<em>bool</em>): Do not validate any arguments or options.</li>
 <li><code>--verbose</code> (<em>bool</em>): Log verbose output to stderr.</li>
+<li><code>--version</code> (<em>bool</em>): Display program version and exit.</li>
 </ul>
 
 
