@@ -40,10 +40,12 @@ func readDoc(query []string) ([]byte, error) {
 		dlog.Debugf("looking for doc named %s", candidate)
 		_, err := os.Lstat(candidate + ".md")
 		if err == nil {
+			dlog.Debugf("found doc for %s", candidate)
 			return os.ReadFile(candidate + ".md")
 		}
 
 		if _, err := os.Lstat(candidate + "/index.md"); err == nil {
+			dlog.Debugf("found index doc for %s", candidate)
 			return os.ReadFile(candidate + "/index.md")
 		}
 
@@ -117,6 +119,8 @@ func writeCommandDocs(dst string, path []string, cmd *cobra.Command) error {
 	return nil
 }
 
+var AfterHelp = os.Exit
+
 var Docs = &command.Command{
 	Path:        []string{"help", "docs"},
 	Summary:     "Displays docs on TOPIC",
@@ -175,11 +179,14 @@ var Docs = &command.Command{
 		dlog.Debug("Rendering docs")
 		args := cmd.Arguments[0].ToValue().([]string)
 		if len(args) == 0 {
+			dlog.Debug("Rendering docs help page")
 			err := cmd.Cobra.Help()
 			if err != nil {
 				return err
 			}
-			os.Exit(statuscode.RenderHelp)
+			AfterHelp(statuscode.RenderHelp)
+			dlog.Debug("Rendered docs help page")
+			return nil
 		}
 
 		contents, err := readDoc(args)
@@ -215,7 +222,7 @@ var Docs = &command.Command{
 		if _, err := cmd.Cobra.OutOrStderr().Write(doc); err != nil {
 			return err
 		}
-		os.Exit(statuscode.RenderHelp)
+		AfterHelp(statuscode.RenderHelp)
 
 		return nil
 	},
