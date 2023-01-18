@@ -12,7 +12,7 @@ _milpa_last_checked_path="${MILPA_LOCAL_SHARE}/last-update-check"
 [[ -d "${MILPA_LOCAL_SHARE}" ]] || mkdir -p "$MILPA_LOCAL_SHARE"
 
 function @milpa.version.installed () {
-  "$MILPA_COMPA" __version 2>&1 || {
+  "$MILPA_COMPA" --version 2>&1 || {
     if [[ "$?" != 42 ]]; then
       @milpa.log debug "could not get installed version"
       return 1

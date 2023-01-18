@@ -8,9 +8,9 @@ import (
 	"os"
 	"strings"
 
+	"git.rob.mx/nidito/chinampa/pkg/command"
 	"github.com/hashicorp/go-getter"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/cobra"
 )
 
 func NormalizeRepoURI(src string) (uri *url.URL, scheme string, err error) {
@@ -54,16 +54,26 @@ func RepoFolderName(uri *url.URL) string {
 	)
 }
 
-var fetchRemoteRepo = &cobra.Command{
-	Use:               "__fetch [dst] [src]",
-	Short:             "Fetches repos using go-getter",
-	Hidden:            true,
-	DisableAutoGenTag: true,
-	SilenceUsage:      true,
-	Args:              cobra.MinimumNArgs(2),
-	RunE: func(cmd *cobra.Command, args []string) (err error) {
-		src := args[0]
-		dst := args[1]
+var Fetch = &command.Command{
+	Path:        []string{"__fetch"},
+	Hidden:      true,
+	Summary:     "Fetches repos using go-getter",
+	Description: `Yep`,
+	Arguments: command.Arguments{
+		{
+			Name:        "source",
+			Description: "The source to fetch from",
+			Required:    true,
+		},
+		{
+			Name:        "target",
+			Description: "The destination to fetch to",
+			Required:    true,
+		},
+	},
+	Action: func(cmd *command.Command) error {
+		src := cmd.Arguments[0].ToString()
+		dst := cmd.Arguments[1].ToString()
 
 		uri, scheme, err := NormalizeRepoURI(src)
 		if err != nil {

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
-package registry
+package lookup
 
 import (
 	"fmt"
@@ -10,30 +10,34 @@ import (
 	"sort"
 	"strings"
 
+	"git.rob.mx/nidito/chinampa"
 	doublestar "github.com/bmatcuk/doublestar/v4"
 	"github.com/sirupsen/logrus"
+	"github.com/unrob/milpa/internal/bootstrap"
 	"github.com/unrob/milpa/internal/command"
 	_c "github.com/unrob/milpa/internal/constants"
-	"github.com/unrob/milpa/internal/runtime"
+	"github.com/unrob/milpa/internal/logger"
 )
+
+var log = logger.Sub("lookup")
 
 var DefaultFS = os.DirFS("/")
 
-func FindScripts(query []string) (results map[string]struct {
+func Scripts(query []string) (results map[string]struct {
 	Info os.FileInfo
 	Repo string
 }, err error) {
-	if len(runtime.MilpaPath) == 0 {
+	if len(bootstrap.MilpaPath) == 0 {
 		err = fmt.Errorf("no %s set on the environment", _c.EnvVarMilpaPath)
 		return
 	}
 
-	logrus.Debugf("looking for scripts in %s=%s", _c.EnvVarMilpaPath, strings.Join(runtime.MilpaPath, ":"))
+	logrus.Debugf("looking for scripts in %s=%s", _c.EnvVarMilpaPath, strings.Join(bootstrap.MilpaPath, ":"))
 	results = map[string]struct {
 		Info os.FileInfo
 		Repo string
 	}{}
-	for _, path := range runtime.MilpaPath {
+	for _, path := range bootstrap.MilpaPath {
 		queryBase := strings.Join(append([]string{strings.TrimPrefix(path, "/"), _c.RepoCommandFolderName}, query...), "/")
 		matches, err := doublestar.Glob(DefaultFS, fmt.Sprintf("%s/*", queryBase))
 
@@ -71,13 +75,13 @@ func FindScripts(query []string) (results map[string]struct {
 	return results, err
 }
 
-func FindAllSubCommands(returnOnError bool) error {
-	files, err := FindScripts([]string{"**"})
+func AllSubCommands(returnOnError bool) error {
+	files, err := Scripts([]string{"**"})
 	if err != nil {
 		return err
 	}
 
-	logrus.Debugf("Found %d files", len(files))
+	log.Debugf("Found %d files", len(files))
 
 	// make sure we always sort commands by path before initializing
 	// this helps with "index" commands, i.e. commands named like an existing folder
@@ -96,34 +100,34 @@ func FindAllSubCommands(returnOnError bool) error {
 			}
 		}
 
-		logrus.Debugf("Initialized %s", cmd.FullName())
-		Register(cmd)
+		log.Debugf("Initialized %s", cmd.FullName())
+		chinampa.Register(cmd)
 	}
 
 	return err
 }
 
-func FindAllDocs() ([]string, error) {
+func AllDocs() ([]string, error) {
 	results := []string{}
-	if err := runtime.CheckMilpaPathSet(); err != nil {
+	if err := bootstrap.CheckMilpaPathSet(); err != nil {
 		return results, err
 	}
 
-	logrus.Debugf("looking for all docs in %s", runtime.MilpaPath)
+	log.WithField("kind", "docs").Debugf("looking for all docs in %s", bootstrap.MilpaPath)
 
-	for _, path := range runtime.MilpaPath {
+	for _, path := range bootstrap.MilpaPath {
 		q := path + "/" + _c.RepoDocsFolderName + "/**/*.md"
 
-		logrus.Debugf("looking for all docs matching %s", q)
+		log.WithField("kind", "docs").Debugf("looking for all docs matching %s", q)
 		basepath, pattern := doublestar.SplitPattern(q)
 		fsys := os.DirFS(basepath)
 		docs, err := doublestar.Glob(fsys, pattern)
 		if err != nil {
-			logrus.Debugf("errored looking for all docs matching %s: %s", q, err)
+			log.WithField("kind", "docs").Debugf("errored looking for all docs matching %s: %s", q, err)
 			return results, err
 		}
 
-		logrus.Debugf("found %d docs matching %s", len(docs), q)
+		log.WithField("kind", "docs").Debugf("found %d docs matching %s", len(docs), q)
 
 		for _, doc := range docs {
 			if strings.Contains(doc, _c.RepoDocsTemplateFolderName) {
@@ -136,31 +140,36 @@ func FindAllDocs() ([]string, error) {
 	return results, nil
 }
 
-func FindDocs(query []string, needle string, returnPaths bool) ([]string, error) {
+func Docs(query []string, needle string, returnPaths bool) ([]string, error) {
 	results := []string{}
 	found := map[string]bool{}
-	if err := runtime.CheckMilpaPathSet(); err != nil {
+	if err := bootstrap.CheckMilpaPathSet(); err != nil {
 		return results, err
 	}
 
-	logrus.Debugf("looking for docs in %s", runtime.MilpaPath)
+	log.WithField("kind", "docs").Debugf("looking for docs in %s with", bootstrap.MilpaPath)
 	queryString := ""
 	if len(query) > 0 {
 		queryString = strings.Join(query, "/")
 	}
 
-	for _, path := range runtime.MilpaPath {
-		qbase := path + "/" + _c.RepoDocsFolderName + "/" + queryString
+	for _, path := range bootstrap.MilpaPath {
+		qbase := path + "/" + _c.RepoDocsFolderName
+		if len(query) > 0 {
+			qbase += "/" + queryString
+		}
 		q := qbase + "/*"
 		if returnPaths {
 			q = qbase + "/*.md"
 		}
-		logrus.Debugf("looking for docs matching %s", q)
+		log.WithField("kind", "docs").Debugf("looking for docs matching %s", q)
 		docs, err := filepath.Glob(q)
 		if err != nil {
+			log.WithField("kind", "docs").Debugf("failed looking for docs matching %s", q)
 			return results, err
 		}
 
+		log.WithField("kind", "docs").Debugf("Found %d docs matching %s", len(docs), q)
 		for _, doc := range docs {
 			fname := filepath.Base(doc)
 			extensionParts := strings.Split(fname, ".")
@@ -170,7 +179,7 @@ func FindDocs(query []string, needle string, returnPaths bool) ([]string, error)
 			}
 
 			if strings.Contains(doc, "/"+_c.RepoDocsTemplateFolderName) || (ext != "" && ext != "md") {
-				logrus.Debugf("Ignoring non-doc file: %s, ext: %s, md: %v", doc, ext, (ext != "" && ext != ".md"))
+				log.WithField("kind", "docs").Debugf("Ignoring non-doc file: %s, ext: %s, md: %v", doc, ext, (ext != "" && ext != ".md"))
 				continue
 			}
 			name := strings.TrimSuffix(fname, ".md")
@@ -181,9 +190,12 @@ func FindDocs(query []string, needle string, returnPaths bool) ([]string, error)
 					results = append(results, name)
 				}
 				found[name] = true
+			} else {
+				log.WithField("kind", "docs").Debugf("ignoring %s => %s", name, doc)
 			}
 		}
 	}
 
+	log.WithField("kind", "docs").Debugf("returning %d docs", len(results))
 	return results, nil
 }

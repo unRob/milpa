@@ -27,7 +27,7 @@ arguments:
     variadic: true
     values:
       suggest-only: true
-      script: 'compa __inspect --format autocomplete{{ if (index .Args "prefix") }} {{ Arg "prefix" }}{{ end }}'
+      script: 'compa __command_tree --format autocomplete{{ if (index .Args "prefix") }} {{ Arg "prefix" }}{{ end }}'
 options:
   depth:
     default: "15"

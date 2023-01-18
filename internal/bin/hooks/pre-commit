@@ -13,7 +13,7 @@ if [[ ! -x "$MILPA_ROOT/compa" ]]; then
   milpa dev build --test
 fi
 #shellcheck disable=2155
-export TEST_MILPA_VERSION="$("$MILPA_ROOT/compa" __version 2>&1)"
+export TEST_MILPA_VERSION="$("$MILPA_ROOT/compa" --version 2>&1)"
 
 # things checked by golangci-lint run and gotestsum
 GO_DEPS=( compa.go go.mod go.sum internal/**/*.go )

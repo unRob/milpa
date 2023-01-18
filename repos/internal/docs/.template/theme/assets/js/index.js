@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
 (function navigateOnCommand () {
   const allCommands = Array.from(document.querySelectorAll("#milpa-commands option")).map((opt) => opt.value)
   const commandSelector = document.querySelector("#command-selector")
