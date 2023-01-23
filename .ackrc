@@ -1,4 +1,0 @@
---ignore-dir=dist
---ignore-dir=test/_helpers/bats-assert
---ignore-dir=test/_helpers/bats-file
---ignore-dir=test/_helpers/bats-support

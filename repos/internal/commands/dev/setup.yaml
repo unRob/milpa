@@ -1,3 +1,0 @@
-summary: Sets up the development environment
-description: |
-  Installs git hooks, golang with asdf (if available), go+bash dependencies, and builds a fresh local copy of compa.

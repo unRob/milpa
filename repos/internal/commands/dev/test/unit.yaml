@@ -1,7 +1,0 @@
-summary: Runs unit tests
-description: |
-  Runs unit tests using gotestsum
-options:
-  coverage:
-    type: bool
-    description: if provided, will output coverage reports

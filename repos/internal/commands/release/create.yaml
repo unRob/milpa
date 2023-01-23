@@ -1,8 +1,0 @@
-summary: Creates a new tag and updates the changelog
-description: |
-  Automation might trigger a release if github is in a good mood
-options:
-  pre:
-    values:
-      static: [alpha, beta, rc]
-    description: create a pre-release

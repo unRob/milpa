@@ -1,3 +1,0 @@
-summary: Lints shell scripts in this repo
-description: |
-  Runs shellcheck on all bash files

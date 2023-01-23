@@ -1,7 +1,0 @@
-summary: Updates the changelog
-description: |
-  Adds the upcoming changes to the changelog. If a VERSION is provided, the changes are wrapped under the given tag (even if one does not exist!).
-arguments:
-  - name: version
-    description: The version to use when creating notes for the updated changelog
-    default: HEAD

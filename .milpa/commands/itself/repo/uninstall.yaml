@@ -1,9 +1,0 @@
-summary: Removes an installed milpa repo
-description: |
-  Uninstalls a milpa repo by PATH. See [`milpa itself repo list --help`](/.milpa/commands/itself/repo/list.md) for a list of available repos
-arguments:
-  - name: path
-    description: The repo path to uninstall
-    required: true
-    values:
-      milpa: itself repo list --paths-only

@@ -1,3 +1,0 @@
-summary: Lints and tests milpa
-description: |
-  runs `milpa dev lint {shell,go}` and `milpa dev test {unit,integration}`
