@@ -4,7 +4,6 @@ package lookup
 
 import (
 	"fmt"
-	"io/fs"
 	"os"
 	"path/filepath"
 	"sort"
@@ -23,23 +22,17 @@ var log = logger.Sub("lookup")
 
 var DefaultFS = os.DirFS("/")
 
-func Scripts(query []string) (results map[string]struct {
-	Info os.FileInfo
-	Repo string
-}, err error) {
+func Scripts(query []string) (results map[string]string, err error) {
 	if len(bootstrap.MilpaPath) == 0 {
 		err = fmt.Errorf("no %s set on the environment", _c.EnvVarMilpaPath)
 		return
 	}
 
 	logrus.Debugf("looking for scripts in %s=%s", _c.EnvVarMilpaPath, strings.Join(bootstrap.MilpaPath, ":"))
-	results = map[string]struct {
-		Info os.FileInfo
-		Repo string
-	}{}
+	results = map[string]string{}
 	for _, path := range bootstrap.MilpaPath {
 		queryBase := strings.Join(append([]string{strings.TrimPrefix(path, "/"), _c.RepoCommandFolderName}, query...), "/")
-		matches, err := doublestar.Glob(DefaultFS, fmt.Sprintf("%s/*", queryBase))
+		matches, err := doublestar.Glob(DefaultFS, fmt.Sprintf("%s/*", queryBase), doublestar.WithFilesOnly())
 
 		if err != nil {
 			logrus.Debugf("errored while globbing")
@@ -56,19 +49,7 @@ func Scripts(query []string) (results map[string]struct {
 				continue
 			}
 
-			fileInfo, err := fs.Stat(DefaultFS, match)
-			if err != nil {
-				logrus.Debugf("ignoring %s, failed to stat: %v", match, err)
-				continue
-			} else if fileInfo.IsDir() {
-				// logrus.Debugf("ignoring directory %s", match)
-				continue
-			}
-
-			results["/"+match] = struct {
-				Info fs.FileInfo
-				Repo string
-			}{fileInfo, path}
+			results["/"+match] = path
 		}
 	}
 
@@ -92,8 +73,8 @@ func AllSubCommands(returnOnError bool) error {
 	sort.Strings(keys)
 
 	for _, path := range keys {
-		data := files[path]
-		cmd, specErr := command.New(path, data.Repo)
+		repo := files[path]
+		cmd, specErr := command.New(path, repo)
 		if specErr != nil {
 			if returnOnError {
 				return specErr
@@ -121,7 +102,7 @@ func AllDocs() ([]string, error) {
 		log.WithField("kind", "docs").Debugf("looking for all docs matching %s", q)
 		basepath, pattern := doublestar.SplitPattern(q)
 		fsys := os.DirFS(basepath)
-		docs, err := doublestar.Glob(fsys, pattern)
+		docs, err := doublestar.Glob(fsys, pattern, doublestar.WithFilesOnly())
 		if err != nil {
 			log.WithField("kind", "docs").Debugf("errored looking for all docs matching %s: %s", q, err)
 			return results, err

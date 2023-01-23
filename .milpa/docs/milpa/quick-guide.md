@@ -34,7 +34,7 @@ If all goes well, you'll see output that ends with something like:
 -----------------------------------
 🌽 Installed milpa version 3.1.4 🌽
 -----------------------------------
-Run 'milpa itself shell install-autocomplete' to install shell completions
+Run 'milpa itself install-autocomplete' to install shell completions
 ```
 
 You may run `milpa --version` to test `milpa` got installed correctly.
@@ -46,7 +46,7 @@ One of the best things about `milpa` is it's built-in support for shell completi
 `milpa` will offer suggestions on commands, arguments and options based on your commands' spec. We'll install the required scripts by running:
 
 ```sh
-milpa itself shell install-autocomplete
+milpa itself install-autocomplete
 ```
 
 After this is done, you'll likely **need to reload your shell** or open a new session/tab. Verifying it's installed correctly can be done like so:

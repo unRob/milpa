@@ -50,6 +50,6 @@ Then, `milpa` would allow you to run `milpa vault cloud-provider login` and `mil
 
 Using `@milpa.load_util` your posix-compliant shell scripts will be able to use any utils anywhere in the `MILPA_PATH`, for example, you could `@milpa.load_util github` and use any github-related functions in any of your repo's milpa commands.
 
-Before any command runs, `.milpa/hooks/before-run.sh` would be called, and `.milpa/hooks/shell-init.sh` would be ran by `milpa itself shell init` during your shell's initialization process. See [hooks](/.milpa/docs/milpa/repo/hooks.md).
+Before any command runs, `.milpa/hooks/before-run.sh` will be called. See [hooks](/.milpa/docs/milpa/repo/hooks.md).
 
 Ideally, you'll only store milpa-related files in your `.milpa` repo, as adding more files (specifically to the `commands` folder, will impact performance).

@@ -5,16 +5,19 @@ package actions
 import (
 	"bytes"
 	"fmt"
+	"net/http"
 	"os"
 	"regexp"
 	"strings"
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
+	"git.rob.mx/nidito/chinampa/pkg/env"
 	"git.rob.mx/nidito/chinampa/pkg/errors"
 	"git.rob.mx/nidito/chinampa/pkg/render"
 	"git.rob.mx/nidito/chinampa/pkg/statuscode"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/unrob/milpa/internal/bootstrap"
+	"github.com/unrob/milpa/internal/docs"
 
 	milpaCommand "github.com/unrob/milpa/internal/command"
 	_c "github.com/unrob/milpa/internal/constants"
@@ -24,102 +27,29 @@ import (
 
 var dlog = logger.Sub("action:docs")
 
-func readDoc(query []string) ([]byte, error) {
-	if err := bootstrap.CheckMilpaPathSet(); err != nil {
-		return []byte{}, err
-	}
-
-	if len(query) == 0 {
-		return nil, fmt.Errorf("requesting docs help")
-	}
-
-	queryString := strings.Join(query, "/")
-
-	for _, path := range bootstrap.MilpaPath {
-		candidate := path + "/docs/" + queryString
-		dlog.Debugf("looking for doc named %s", candidate)
-		_, err := os.Lstat(candidate + ".md")
-		if err == nil {
-			dlog.Debugf("found doc for %s", candidate)
-			return os.ReadFile(candidate + ".md")
-		}
-
-		if _, err := os.Lstat(candidate + "/index.md"); err == nil {
-			dlog.Debugf("found index doc for %s", candidate)
-			return os.ReadFile(candidate + "/index.md")
-		}
-
-		if _, err := os.Stat(candidate); err == nil {
-			return []byte{}, errors.BadArguments{Msg: fmt.Sprintf("Missing topic for %s", strings.Join(query, " "))}
-		}
-	}
-
-	return nil, fmt.Errorf("doc not found")
-}
-
-func writeCommandDocs(dst string, path []string, cmd *cobra.Command) error {
-	if !cmd.IsAvailableCommand() && cmd.Name() != _c.HelpCommandName {
-		return nil
-	}
-
-	dir := strings.Join(append([]string{dst}, path...), "/")
-	name := cmd.Name()
-
-	if cmd.HasAvailableSubCommands() {
-		if name != _c.Milpa {
-			dir = dir + "/" + name
-		}
-		name = "_index"
-	}
-
-	dlog.Debugf("Creating directory %s", dir)
-	if err := os.MkdirAll(dir, 0760); err != nil {
-		return err
-	}
-	fname := dir + "/" + name + ".md"
-
-	var tmp bytes.Buffer
-	cmd.SetOutput(&tmp)
-
-	if err := cmd.Help(); err != nil {
-		return err
-	}
-
-	dlog.Debugf("Creating file %s", fname)
-	f, err := os.OpenFile(fname, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	_, err = f.Write(fixLinks(tmp.Bytes()))
-	if err != nil {
-		return err
-	}
-
-	if cmd.HasAvailableSubCommands() {
-		for _, cc := range cmd.Commands() {
-			subPath := path
-			if cmd.Name() != "milpa" {
-				subPath = append(path, cmd.Name()) //nolint:gocritic
-			}
-
-			err := writeCommandDocs(dst, subPath, cc)
-			if err != nil {
-				return err
-			}
-		}
-	}
-
-	return nil
-}
-
 var AfterHelp = os.Exit
 
+func startServer(listen, address string) error {
+	logrus.Warnf("Using static resources at %s", os.Getenv("MILPA_ROOT")+"/internal/static")
+	os.Setenv(env.HelpUnstyled, "true")
+	http.Handle("/static/", docs.StaticHandler())
+	http.HandleFunc("/", docs.RenderHandler(address))
+
+	dlog.Info("Starting help http server")
+	return http.ListenAndServe(listen, nil)
+}
+
 var Docs = &command.Command{
-	Path:        []string{"help", "docs"},
-	Summary:     "Displays docs on TOPIC",
-	Description: "Shows markdown-formatted documentation from milpa repos. See `" + _c.Milpa + " " + _c.HelpCommandName + " docs milpa repo docs` for more information on how to write your own.",
+	Path:    []string{"help", "docs"},
+	Summary: "Displays docs on TOPIC",
+	Description: "Shows markdown-formatted documentation from milpa repos. See `" + _c.Milpa + " " + _c.HelpCommandName + " docs milpa repo docs` for more information on how to write your own." + `
+
+An HTTP server to browse documentation can be started by running:
+
+﹅﹅﹅sh
+milpa help docs --server
+﹅﹅﹅
+`,
 	Arguments: command.Arguments{
 		&command.Argument{
 			Name:        "topic",
@@ -148,6 +78,23 @@ var Docs = &command.Command{
 			},
 		},
 	},
+	Options: command.Options{
+		"server": {
+			Description: "Starts an http server at the specified address",
+			Type:        command.ValueTypeBoolean,
+			Default:     false,
+		},
+		"listen": {
+			Description: "The address to listen at when using `--server`",
+			Type:        command.ValueTypeString,
+			Default:     "localhost:4242",
+		},
+		"base": {
+			Description: "A URL base to use for rendering html links",
+			Type:        command.ValueTypeString,
+			Default:     "http://localhost:4242",
+		},
+	},
 	Meta: milpaCommand.Meta{
 		Path: os.Getenv(_c.EnvVarMilpaRoot) + "/milpa/docs",
 		Name: []string{_c.HelpCommandName, "docs"},
@@ -174,6 +121,12 @@ var Docs = &command.Command{
 		dlog.Debug("Rendering docs")
 		args := cmd.Arguments[0].ToValue().([]string)
 		if len(args) == 0 {
+			if cmd.Options["server"].ToValue().(bool) {
+				listen := cmd.Options["listen"].ToString()
+				address := cmd.Options["base"].ToString()
+				dlog.Infof("Starting docs server at %s", listen)
+				return startServer(listen, address)
+			}
 			dlog.Debug("Rendering docs help page")
 			err := cmd.Cobra.Help()
 			if err != nil {
@@ -184,7 +137,7 @@ var Docs = &command.Command{
 			return nil
 		}
 
-		contents, err := readDoc(args)
+		contents, err := docs.FromQuery(args)
 		if err != nil {
 			switch err.(type) {
 			case errors.BadArguments:
@@ -220,83 +173,5 @@ var Docs = &command.Command{
 		AfterHelp(statuscode.RenderHelp)
 
 		return nil
-	},
-}
-
-func fixLinks(contents []byte) []byte {
-	fixedLinks := bytes.ReplaceAll(contents, []byte("(/"+_c.RepoDocs), []byte("(/help/docs"))
-	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("(/"+_c.RepoCommands+"/"), []byte("(/"))
-	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("index.md"), []byte(""))
-	return bytes.ReplaceAll(fixedLinks, []byte(".md"), []byte("/"))
-}
-
-func writeDocs(dst string) error {
-	allDocs, err := lookup.AllDocs()
-	if err != nil {
-		return err
-	}
-
-	for _, doc := range allDocs {
-		contents, err := os.ReadFile(doc)
-		if err != nil {
-			return err
-		}
-
-		name := strings.TrimSuffix(doc, ".md")
-		for _, p := range bootstrap.MilpaPath {
-			name = strings.Replace(name, p, "", 1)
-		}
-
-		components := strings.Split(name, "/")
-		last := len(components) - 1
-		dir := fmt.Sprintf("%s/help%s", dst, strings.Join(components[0:last], "/"))
-
-		if components[last] == "index" {
-			components[last] = "_index"
-		}
-
-		fname := fmt.Sprintf("%s/help%s.md", dst, strings.Join(components, "/"))
-		dlog.Debugf("Creating dir %s", dir)
-		if err := os.MkdirAll(dir, 0760); err != nil {
-			return err
-		}
-
-		dlog.Debugf("Creating file %s (%s)", fname, dir)
-		f, err := os.OpenFile(fname, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
-		if err != nil {
-			return err
-		}
-		defer f.Close()
-
-		_, err = f.Write(fixLinks(contents))
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-var GenerateDocs = &command.Command{
-	Path:        []string{"__generate_documentation"},
-	Hidden:      true,
-	Summary:     "Outputs markdown documentation for all known commands",
-	Description: "Creates a set of nested folders at `DEST` with markdown files for every command.",
-	Arguments: []*command.Argument{
-		{
-			Name:     "destination",
-			Required: true,
-		},
-	},
-	Action: func(cmd *command.Command) error {
-		path := []string{}
-		dst := cmd.Arguments[0].ToString()
-
-		err := writeCommandDocs(dst, path, cmd.Cobra.Root())
-		if err != nil {
-			return err
-		}
-
-		return writeDocs(dst)
 	},
 }

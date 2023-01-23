@@ -32,16 +32,22 @@ There's [a few reasons why](/.milpa/docs/milpa/use-case.md) you and your team mi
 ```sh
 # milpa is a program you run
 milpa
-# you can add a command at .milpa/commands/hello.{sh,yaml} and milpa will gladly run it
+# Add a command at .milpa/commands/hello.{sh,yaml} and milpa will gladly run it
 milpa hello
-# when typing gets annoying, install autocomplete scripts for your $SHELL
-milpa itself shell install-autocomplete
-# see how to create new milpa commands on the local repo
+# How do you create a milpa command? Check out:
 milpa itself create --help
-# read some documentation
+# Speaking of, milpa comes with fancy documentation
 milpa help docs milpa
-# see what's making milpa sad
+# You can also browse through an HTML version of it
+milpa help docs --server
+# Trouble with milpa? see what's making milpa sad
 milpa itself doctor
-# add new commands to milpa written by strangers on the internet!
+
+# Install whole groups of commands written by strangers on the internet!
 milpa itself repo install github.com/nidito/unRob
+# and use them like so:
+# milpa nidito dc list
+
+# When typing gets annoying, install autocomplete scripts for your $SHELL
+milpa itself install-autocomplete
 ```

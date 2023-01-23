@@ -59,22 +59,22 @@ The **arguments** and **options** passed in the command line will be parsed and 
 
 The environment available to a **script** is composed of four groups:
 
-- `MILPA_COMMAND_*` variables have information about the command called by the user,
-- `MILPA_ARG_*` variables hold values for every argument of the spec,
-- `MILPA_OPT_*` variables hold values for every option defined, and
+- `MILPA_COMMAND_*` variables have information about the **command** called by the user,
+- `MILPA_ARG_*` variables hold values for every **argument** of the spec,
+- `MILPA_OPT_*` variables hold values for every **option** defined, and
 - [global environment variables](/.milpa/docs/milpa/environment.md) that affect `milpa`'s overall behavior.
 
 
-### `MILPA_COMMAND_*`
+### Command: `MILPA_COMMAND_*`
 
 Your script has access to the following variables set by `milpa` after parsing arguments and running validations:
 
 - `MILPA_COMMAND_NAME`: the space delimited name of your command, i.e. `db connect`;
 - `MILPA_COMMAND_KIND`: either `source` for `.sh` scripts, or `exec` for executables;
-- `MILPA_COMMAND_REPO`: the path to the repo containing this command, i.e. `/home/you/project`; and
+- `MILPA_COMMAND_REPO`: the path to the repo containing this command, i.e. `/home/you/project/.milpa`; and
 - `MILPA_COMMAND_PATH`: the full path to the executable being called
 
-### `MILPA_ARG_*`
+### Arguments: `MILPA_ARG_*`
 
 **Arguments** specified on your spec will show up as environment variables with the `MILPA_ARG_` prefix, followed by the name set in your spec. Names will be all uppercase, and dashes will be turned into underscores. See the [command spec](/.milpa/docs/milpa/command/spec.md) for more information on **arguments**, and this abbreviated example below:
 
@@ -91,9 +91,9 @@ milpa greet elmer homero
 #> Quihúbole mi Elmer Homero
 ```
 
-### `MILPA_OPT_*`
+### Options: `MILPA_OPT_*`
 
-**Options** show up on the **environment** with the `MILPA_OPT_` prefix followed by the name in your spec. Names will be all uppercase, and dashes will be turned into underscores. In the [command spec](/.milpa/docs/milpa/command/spec.md) you'll find more details on how to set **options**.
+**Options** show up on the environment with the `MILPA_OPT_` prefix followed by the name in your spec. Names will be all uppercase, and dashes will be turned into underscores. In the [command spec](/.milpa/docs/milpa/command/spec.md) you'll find more details on how to set **options**.
 
 ```sh
 # when ran like this:

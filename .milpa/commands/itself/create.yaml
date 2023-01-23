@@ -1,6 +1,6 @@
-summary: Create a `milpa` command
+summary: Creates a new `milpa` sub-command
 description: |
-  Creates a local `milpa` command named $NAME.
+  Creates a local `milpa` command named `$NAME`.
 arguments:
   - name: name
     description: the name you'd like for your command

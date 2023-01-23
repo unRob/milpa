@@ -11,21 +11,21 @@
   font-family: "Aestetico";
   font-weight: bold;
   font-style: italic, oblique;
-  src: url('https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2');
+  src: url('https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2?a=1');
   font-display: swap;
 }
 @font-face {
   font-family: "Aestetico";
   font-weight: bold;
   font-style: normal;
-  src: url('https://cdn.rob.mx/fonts/AesteticoBold.woff2');
+  src: url('https://cdn.rob.mx/fonts/AesteticoBold.woff2?a=1');
   font-display: swap;
 }
 @font-face {
   font-family: "Aestetico";
   font-style: normal;
   font-weight: normal;
-  src: url('https://cdn.rob.mx/fonts/AesteticoLight.woff2');
+  src: url('https://cdn.rob.mx/fonts/AesteticoLight.woff2?a=1');
   font-display: swap;
 }
 
@@ -42,7 +42,7 @@ body {
 }
 
 header {
-  color: #CEFCD3;
+  color: #c0e394;
   background: #2B3C2D;
   margin: 0;
   font-family: "Fira Code", monospace;
@@ -94,6 +94,10 @@ header .emoji-maiz:hover::before {
   flex: auto;
   transition: all .3s ease-in-out;
   outline: 2px solid rgba(190, 197, 6, 0.0);
+}
+
+#command-selector::placeholder {
+  color: #8dad90
 }
 
 
@@ -197,7 +201,7 @@ header .emoji-maiz:hover::before {
 }
 
 #content {
-  padding: 20px;
+  padding: 10px;
   max-width: 800px;
   padding-left: 240px;
 }

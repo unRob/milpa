@@ -20,7 +20,7 @@ arguments:
       script: git tag -l
   - name: hostname
     description: the hostname where documentation and install scripts will be served under
-    default: milpa.dev
+    default: https://milpa.dev
   - name: targets
     description: the targets to build for
     variadic: true

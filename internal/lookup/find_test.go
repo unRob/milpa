@@ -161,15 +161,23 @@ func TestScripts(t *testing.T) {
 	}
 
 	for efile, einfo := range expected {
-		data, exists := files[efile]
-		if !exists {
+		if _, exists := files[efile]; !exists {
 			t.Errorf("missing file %s", efile)
 			continue
 		}
 		delete(files, efile)
 
-		if data.Info.Mode() != einfo.Mode() {
-			t.Errorf("Unexpected mode. Expected: %v, got: %v", einfo.Mode(), data.Info.Mode())
+		fileInfo, err := fs.Stat(DefaultFS, efile)
+		if err != nil {
+			logrus.Debugf("ignoring %s, failed to stat: %v", efile, err)
+			continue
+		} else if fileInfo.IsDir() {
+			// logrus.Debugf("ignoring directory %s", match)
+			continue
+		}
+
+		if fileInfo.Mode() != einfo.Mode() {
+			t.Errorf("Unexpected mode. Expected: %v, got: %v", einfo.Mode(), fileInfo.Mode())
 		}
 	}
 }
@@ -192,13 +200,10 @@ func TestAllSubCommands(t *testing.T) {
 	expected := []string{
 		"itself command-tree",
 		"itself create",
-		"itself docs create",
-		"itself docs html",
+		"itself install-autocomplete",
 		"itself repo install",
 		"itself repo list",
 		"itself repo uninstall",
-		"itself shell init",
-		"itself shell install-autocomplete",
 		"itself upgrade",
 		"itself version",
 	}
@@ -288,6 +293,7 @@ func TestDocsFindAll(t *testing.T) {
 		root + "/.milpa/docs/milpa/util/repo.md",
 		root + "/.milpa/docs/milpa/util/shell.md",
 		root + "/.milpa/docs/milpa/util/tmp.md",
+		root + "/.milpa/docs/milpa/util/user-input.md",
 	}
 	if len(paths) != len(expected) || fmt.Sprintf("%s", expected) != fmt.Sprintf("%s", paths) {
 		t.Fatalf("Did not find expected docs:\nwanted: %s\ngot: %s", expected, paths)

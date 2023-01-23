@@ -1,3 +1,5 @@
 summary: Displays the version of `milpa`
 description: |
-  Outputs the version of milpa to stdout, printing a new line if the output is a TTY. Also available as `milpa --version`
+  Outputs the version of milpa to stdout, printing a new line if the output is a TTY.
+
+  Also available as `milpa --version`.

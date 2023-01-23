@@ -38,38 +38,74 @@ for pair in "${MILPA_ARG_TARGETS[@]//\//-}"; do
     rm -rf "${output:?}/$pair"
   fi
 
-  cp -rv ./milpa ./.milpa LICENSE.txt README.md CHANGELOG.md "$dist_dir/"
+  cp -r ./milpa ./.milpa LICENSE.txt README.md CHANGELOG.md "$dist_dir/"
   rm -rf "$package"
   tar -czf "$package" -C "$(dirname "$dist_dir")" milpa || @milpa.fail "Could not archive $package"
   openssl dgst -sha256 "$package" | awk '{print $2}' > "${package##.tgz}.shasum" || @milpa.fail "Could not generate shasum for $package"
 done
 @milpa.log success "Archives generated"
 
-# create docs
-milpa release docs-image --skip-publish "$MILPA_VERSION" || @milpa.fail "Could not build docs image"
+
+function fetchDoc () {
+  curl --silent --fail --show-error "http://localhost:4242$path" || @milpa.fail "Could not fetch $path"
+}
+
+function renderDoc() {
+  @milpa.log info "Serializing docs for $path"
+  mkdir -p "${html}${1:-}"
+
+  set -o pipefail
+  fetchDoc "$path" |
+    tidy -quiet -wrap 0 -indent - > "${html}/${path}${path+/}index.html"
+
+  [[ "$?" -gt 1 ]] && @milpa.fail "Could not tidy up $path"
+  return 0
+}
+
 @milpa.log info "Generating html docs"
 mp="$MILPA_PATH"
+html="$output/${MILPA_ARG_HOSTNAME##*//}"
 export MILPA_DISABLE_USER_REPOS=true
 export MILPA_DISABLE_GLOBAL_REPOS=true
-MILPA_PATH="" milpa itself docs html write \
-  --to "$output" \
-  --image milpa-docs \
-  --hostname "$MILPA_ARG_HOSTNAME" || @milpa.fail "Could not generate docs"
+cat - <(tail -n +2 "$MILPA_ROOT/CHANGELOG.md") > "$MILPA_ROOT/.milpa/docs/milpa/changelog.md" <<YAML
+---
+description: "Changelog entries for every released version"
+weight: 100
+---
+
+YAML
+MILPA_PATH="" "$MILPA_COMPA" help docs --server --base "$MILPA_ARG_HOSTNAME" &
+pid=$!
+@milpa.log info "started server at pid $pid"
+trap 'rm "$MILPA_ROOT/.milpa/docs/milpa/changelog.md"; kill -9 "$pid"' ERR EXIT
+sleep 3
+
+mkdir "$html"
+renderDoc "/"
+
+while read -r path; do
+  renderDoc "$path" || @milpa.fail "Could not fetch $path"
+done < <(htmlq --attribute href "#commands a" <dist/milpa.dev/index.html)
+
+# this returns a 404, which is very much expected so no --show-error nor --fail
+curl --silent "http://localhost:4242/404" | tidy -quiet -wrap 0 -indent - > "${html}/404.html"
+
 unset MILPA_DISABLE_USER_REPOS MILPA_DISABLE_GLOBAL_REPOS
 export MILPA_PATH="$mp"
 @milpa.log success "Docs exported"
 
 @milpa.log info "Copying website assets"
-html="$output/$MILPA_ARG_HOSTNAME"
+# static files
+cp -r internal/docs/static "$html/static"
 # Copy over bootstrap script
 cp "$MILPA_ROOT/bootstrap.sh" "$html/install.sh"
 # Write version to a well-known location
 mkdir -p "$html/.well-known/milpa"
 echo -n "$MILPA_VERSION" > "$html/.well-known/milpa/latest-version"
 # github pages needs a CNAME, provide one
-echo -n "$MILPA_ARG_HOSTNAME" > "$html/CNAME"
+echo -n "${MILPA_ARG_HOSTNAME##*//}" > "$html/CNAME"
 # github pages doesn't need to process our docs as jekyll
-echo -n "$MILPA_ARG_HOSTNAME" > "$html/.nojekyll"
+echo -n "${MILPA_ARG_HOSTNAME}" > "$html/.nojekyll"
 @milpa.log success "HTML docs written to $html"
 
 @milpa.log complete "Release built to $output"

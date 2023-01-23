@@ -37,9 +37,10 @@ func main() {
 See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more information about ﹅milpa﹅`,
 	}
 	chinampa.SetErrorHandler(errors.HandleCobraExit)
+	chinampa.SetVersionCommandName("__version")
 
 	chinampa.Register(actions.Doctor)
-	chinampa.Register(actions.Docs, actions.GenerateDocs)
+	chinampa.Register(actions.Docs)
 	chinampa.Register(actions.CommandTree)
 	chinampa.Register(actions.Fetch)
 
