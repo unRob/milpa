@@ -18,7 +18,13 @@ fi
 # bash is fine and all, but we need a little helper to run parsing for us
 export MILPA_COMPA="${MILPA_COMPA:-$MILPA_ROOT/compa}"
 # bail early if we're doing magic commands
-if [[ $1 == "__complete"* ]] || [[ "$*" == "itself doctor"* ]] || [[ $1 == "--version" ]] || [[ $1 == "version" ]]; then exec "$MILPA_COMPA" "$@"; fi
+if [[ $1 == "__complete"* ]] ||
+  [[ "$*" == "itself doctor"* ]] ||
+  [[ $1 == "--version" ]] ||
+  [[ $1 == "version" ]] ||
+  [[ "$1 $2 $3" == "help docs --server" ]]; then
+  exec "$MILPA_COMPA" "$@";
+fi
 
 function @milpa.load_util () {
   # shell scripts can call @milpa.load_util to load utils from MILPA_ROOT
