@@ -27,6 +27,7 @@ body:
         - linux/arm
         - linux/arm64
         - linux/mips
+        - linux/mips64
         - linux/x86_64
         - macos/arm64
         - macos/x86_64

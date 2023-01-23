@@ -76,7 +76,7 @@ jobs:
             prerelease="true"
             echo "Building a pre-release"
           fi
-          echo "::set-output name=prerelease::$prerelease"
+          echo "prerelease=$prerelease" >> $GITHUB_OUTPUT
 
           echo "::group::building release"
           $(pwd)/milpa release build --parallel 2 "${version}"

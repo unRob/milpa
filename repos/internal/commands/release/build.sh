@@ -5,7 +5,7 @@
 export MILPA_VERSION="$MILPA_ARG_VERSION"
 
 output="${MILPA_OPT_OUTPUT:-$MILPA_ROOT/dist}"
-all_targets=( linux/amd64 linux/arm64 linux/arm linux/mips darwin/amd64 darwin/arm64 )
+all_targets=( linux/amd64 linux/arm64 linux/arm linux/mips linux/mips64 darwin/amd64 darwin/arm64 )
 # build packages
 
 if [[ "${#MILPA_ARG_TARGETS}" -eq 0 ]] || [[ "${MILPA_ARG_TARGETS[1]}" == "auto" ]]; then
