@@ -59,7 +59,6 @@ func contentsForRequest(comps []string) ([]byte, string, error) {
 		args = []string{}
 	} else {
 		cmd, args, err = command.Root.Cobra.Find(comps)
-		log.Infof("querying root command for command %s, got %s", comps, cmd.Name())
 	}
 
 	var helpMD bytes.Buffer
@@ -89,7 +88,7 @@ func contentsForRequest(comps []string) ([]byte, string, error) {
 			helpMD.Write(data)
 		}
 	} else {
-		log.Infof("Rendering command help page for %s, args: %s", cmd.Use, args)
+		log.Infof("Rendering command help for %s, args: %s", cmd.Use, args)
 		cmd.SetOutput(&helpMD)
 
 		if err := cmd.Help(); err != nil {
@@ -148,22 +147,22 @@ func RenderHandler(serverAddr string) func(http.ResponseWriter, *http.Request) {
 			comps = strings.Split(prefix, "/")
 		}
 
-		log.Infof("Serving for path: %s, (%d)", comps, len(comps))
+		log.Infof("Handling request for: %s", comps)
 
 		contents, desc, err := contentsForRequest(comps)
 		if err != nil {
 			if !strings.HasPrefix(err.Error(), "not found:") {
-				log.Errorf("error servicing request: %s", err)
+				log.Errorf("could not get contents: %s", err)
 				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
-			log.Infof("404: %s", comps)
+			log.Errorf("404: %s", comps)
 			w.WriteHeader(http.StatusNotFound)
 		}
 
 		md, toc, err := mdToHTML(contents)
 		if err != nil {
-			log.Errorf("Could not service request: %s", err)
+			log.Errorf("could convert to html: %s", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
@@ -195,13 +194,13 @@ func RenderHandler(serverAddr string) func(http.ResponseWriter, *http.Request) {
 		})
 
 		if err != nil {
-			log.Error(err)
+			log.Errorf("could not render template: %s", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 		w.Header().Add("content-type", "text/html")
 		if _, err := w.Write(pageHTML.Bytes()); err != nil {
-			log.Errorf("Failed render: %s", err)
+			log.Errorf("could not write response: %s", err)
 		}
 	}
 }

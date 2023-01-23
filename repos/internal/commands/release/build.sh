@@ -38,7 +38,7 @@ for pair in "${MILPA_ARG_TARGETS[@]//\//-}"; do
     rm -rf "${output:?}/$pair"
   fi
 
-  cp -rv ./milpa ./.milpa LICENSE.txt README.md CHANGELOG.md "$dist_dir/"
+  cp -r ./milpa ./.milpa LICENSE.txt README.md CHANGELOG.md "$dist_dir/"
   rm -rf "$package"
   tar -czf "$package" -C "$(dirname "$dist_dir")" milpa || @milpa.fail "Could not archive $package"
   openssl dgst -sha256 "$package" | awk '{print $2}' > "${package##.tgz}.shasum" || @milpa.fail "Could not generate shasum for $package"
@@ -67,10 +67,17 @@ mp="$MILPA_PATH"
 html="$output/${MILPA_ARG_HOSTNAME##*//}"
 export MILPA_DISABLE_USER_REPOS=true
 export MILPA_DISABLE_GLOBAL_REPOS=true
+cat - <(tail -n +2 "$MILPA_ROOT/CHANGELOG.md") > "$MILPA_ROOT/.milpa/docs/milpa/changelog.md" <<YAML
+---
+description: "Changelog entries for every released version"
+weight: 100
+---
+
+YAML
 MILPA_PATH="" "$MILPA_COMPA" help docs --server --base "$MILPA_ARG_HOSTNAME" &
 pid=$!
 @milpa.log info "started server at pid $pid"
-trap 'kill -9 "$pid"' ERR EXIT
+trap 'rm "$MILPA_ROOT/.milpa/docs/milpa/changelog.md"; kill -9 "$pid"' ERR EXIT
 sleep 3
 
 mkdir "$html"
@@ -79,6 +86,9 @@ renderDoc "/"
 while read -r path; do
   renderDoc "$path" || @milpa.fail "Could not fetch $path"
 done < <(htmlq --attribute href "#commands a" <dist/milpa.dev/index.html)
+
+# this returns a 404, which is very much expected so no --show-error nor --fail
+curl --silent "http://localhost:4242/404" | tidy -quiet -wrap 0 -indent - > "${html}/404.html"
 
 unset MILPA_DISABLE_USER_REPOS MILPA_DISABLE_GLOBAL_REPOS
 export MILPA_PATH="$mp"
@@ -93,9 +103,9 @@ cp "$MILPA_ROOT/bootstrap.sh" "$html/install.sh"
 mkdir -p "$html/.well-known/milpa"
 echo -n "$MILPA_VERSION" > "$html/.well-known/milpa/latest-version"
 # github pages needs a CNAME, provide one
-echo -n "$MILPA_ARG_HOSTNAME" > "$html/CNAME"
+echo -n "${MILPA_ARG_HOSTNAME##*//}" > "$html/CNAME"
 # github pages doesn't need to process our docs as jekyll
-echo -n "$MILPA_ARG_HOSTNAME" > "$html/.nojekyll"
+echo -n "${MILPA_ARG_HOSTNAME}" > "$html/.nojekyll"
 @milpa.log success "HTML docs written to $html"
 
 @milpa.log complete "Release built to $output"
