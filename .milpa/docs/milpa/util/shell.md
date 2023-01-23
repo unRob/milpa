@@ -1,10 +1,10 @@
 ---
-description: Functions related to shell-init hooks
+description: Functions related to shells
 ---
 
-The `repo` util contains shell functions useful during [`shell-init`](/.milpa/help/docs/milpa/repo/hooks/#shell-initsh) hook scripts, where it's loaded by default.
+The `shell` util contains shell functions useful for programs that output commands to be evaluated by a user's shell.
 
-These functions are compatible with shells whose name ends in "sh" and are POSIX-compliant, and the fish shell.
+These functions are compatible with shells whose name ends in "sh" and are POSIX-compliant, and, the `fish` shell.
 
 ## Functions
 

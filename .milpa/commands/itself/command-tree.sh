@@ -11,11 +11,15 @@ else
 fi
 
 function get_tree () {
+  local args; args=()
+  if [[ "${2:-}" != "" ]]; then
+    args=( "--template=${2}" )
+  fi
+  args+=( "${MILPA_ARG_PREFIX[@]}" )
   "$MILPA_COMPA" __command_tree \
     --depth "$MILPA_OPT_DEPTH" \
     --format "$1" \
-    "${2+--template=}${2:-}" \
-    "${MILPA_ARG_PREFIX[@]}"
+    "${args[@]}"
 }
 
 if [[ "$MILPA_OPT_OUTPUT" =~ ^(yaml|json)$ ]]; then

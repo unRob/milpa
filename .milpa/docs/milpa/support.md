@@ -1,6 +1,7 @@
 ---
 title: Getting help with milpa
 description: how to deal with bugs in milpa
+weight: 99
 ---
 
 `milpa` is currently alpha software. This means that while I've personally tested it for over a year:

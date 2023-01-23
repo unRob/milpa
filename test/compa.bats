@@ -15,7 +15,7 @@ setup () {
   assert_equal "$output" "$TEST_MILPA_VERSION"
   assert_equal "$stderr" ""
 
-  run --keep-empty-lines --separate-stderr compa version
+  run --keep-empty-lines --separate-stderr compa __version
   assert_equal "$stderr" "$TEST_MILPA_VERSION"
   assert_equal "$output" ""
 }

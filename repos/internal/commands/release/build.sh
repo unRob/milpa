@@ -45,22 +45,48 @@ for pair in "${MILPA_ARG_TARGETS[@]//\//-}"; do
 done
 @milpa.log success "Archives generated"
 
-# create docs
-milpa release docs-image --skip-publish "$MILPA_VERSION" || @milpa.fail "Could not build docs image"
+
+function fetchDoc () {
+  curl --silent --fail --show-error "http://localhost:4242$path" || @milpa.fail "Could not fetch $path"
+}
+
+function renderDoc() {
+  @milpa.log info "Serializing docs for $path"
+  mkdir -p "${html}${1:-}"
+
+  set -o pipefail
+  fetchDoc "$path" |
+    tidy -quiet -wrap 0 -indent - > "${html}/${path}${path+/}index.html"
+
+  [[ "$?" -gt 1 ]] && @milpa.fail "Could not tidy up $path"
+  return 0
+}
+
 @milpa.log info "Generating html docs"
 mp="$MILPA_PATH"
+html="$output/${MILPA_ARG_HOSTNAME##*//}"
 export MILPA_DISABLE_USER_REPOS=true
 export MILPA_DISABLE_GLOBAL_REPOS=true
-MILPA_PATH="" milpa itself docs html write \
-  --to "$output" \
-  --image milpa-docs \
-  --hostname "$MILPA_ARG_HOSTNAME" || @milpa.fail "Could not generate docs"
+MILPA_PATH="" "$MILPA_COMPA" help docs --server --base "$MILPA_ARG_HOSTNAME" &
+pid=$!
+@milpa.log info "started server at pid $pid"
+trap 'kill -9 "$pid"' ERR EXIT
+sleep 3
+
+mkdir "$html"
+renderDoc "/"
+
+while read -r path; do
+  renderDoc "$path" || @milpa.fail "Could not fetch $path"
+done < <(htmlq --attribute href "#commands a" <dist/milpa.dev/index.html)
+
 unset MILPA_DISABLE_USER_REPOS MILPA_DISABLE_GLOBAL_REPOS
 export MILPA_PATH="$mp"
 @milpa.log success "Docs exported"
 
 @milpa.log info "Copying website assets"
-html="$output/$MILPA_ARG_HOSTNAME"
+# static files
+cp -r internal/docs/static "$html/static"
 # Copy over bootstrap script
 cp "$MILPA_ROOT/bootstrap.sh" "$html/install.sh"
 # Write version to a well-known location

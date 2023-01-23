@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
 
-"$MILPA_COMPA" version 2>&1 || {
+"$MILPA_COMPA" __version 2>&1 || {
   if [[ "$?" != 42 ]]; then
     @milpa.fail "could not get version"
   fi

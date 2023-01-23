@@ -41,6 +41,7 @@ If desired, you may set a `MILPA_PATH` for all shells by adding it to your shell
 
 ### `DEBUG`
 
+<!-- TODO: clean this up before beta, likely make logging more useful to hypothetical non-roberto users -->
 Set `DEBUG=1` and find out whatever roberto needed to debug before writing proper tests.
 
 ### `MILPA_VERBOSE`
@@ -57,6 +58,12 @@ By default, when stdout is a TTY, `milpa` will output color escape characters. I
 
 If either `--no-color` or `--color` options are provided, these will override both `COLOR` and `NO_COLOR` environment variables.
 
+### `MILPA_HELP_STYLE` / `MILPA_PLAIN_HELP`
+
+`MILPA_HELP_STYLE` can be one of `auto`, `dark`, and `light` and specifies the theme to use when rendering help pages. This option has no effect if `--no-color` or `NO_COLOR=1` is specified.
+
+`MILPA_PLAIN_HELP` will not colorize help output at all, formatting help as plain markdown text instead.
+
 ---
 
 ## Input
@@ -64,7 +71,6 @@ If either `--no-color` or `--color` options are provided, these will override bo
 ### `MILPA_SKIP_VALIDATION`
 
 If enabled, validation will be skipped for arguments and options. Also enabled with `--skip-validation`. **Skipping validation may be unsafe**, but may be useful when validation depends on unavailable data or services.
-
 
 ---
 

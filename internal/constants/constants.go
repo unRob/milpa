@@ -5,9 +5,6 @@ package constants
 import (
 	"regexp"
 
-	// Embed requires an import so the compiler knows what's up. Golint requires a comment. Gotta please em both.
-	_ "embed"
-
 	"git.rob.mx/nidito/chinampa/pkg/env"
 )
 

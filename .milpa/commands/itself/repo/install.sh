@@ -20,7 +20,7 @@ base="${MILPA_ARG_SOURCE%%/.milpa/*}"
 
 function symlink_local () {
   local base repo_name dst;
-  base="$(cd "$1" && pwd)" || @milpa.fail "Could not "
+  base="$(cd "$1" && pwd)" || @milpa.fail "Could not cd into local directory <$1>"
   repo_name="${base##*/}"
   repo_name="${repo_name#.}"
   dst="$target/$repo_name"
@@ -29,16 +29,15 @@ function symlink_local () {
 }
 
 if [[ -d "$base/.milpa" ]]; then
-  @milpa.log info "Local repository detected, symlinking..."
+  @milpa.log info "Local repository detected at $base, symlinking..."
   symlink_local "$base" || @milpa.fail "Failed to symlink"
   @milpa.log success "Symlink created"
 else
-  @milpa.log info "Downloading repo..."
+  @milpa.log info "Downloading repo: $base"
   new_repo=$("$MILPA_COMPA" __fetch "$base/.milpa" "$target") || @milpa.fail "Failed to download repo"
   @milpa.log success "Repo dowloaded"
   echo -n "$MILPA_ARG_SOURCE" > "$new_repo/downloaded-from"
 fi
-
 
 @milpa.log info "Running repo setup tasks"
 if [[ -f "$new_repo/hooks/post-install.sh" ]]; then

@@ -1,5 +1,5 @@
-// // SPDX-License-Identifier: Apache-2.0
-// // Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
+// SPDX-License-Identifier: Apache-2.0
+// Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
 package command_test
 
 import (
