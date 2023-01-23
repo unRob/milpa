@@ -1,423 +1,353 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#" lang="en"><head lang="en">
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head lang="en">
+  <meta name="generator" content="HTML Tidy for HTML5 for Apple macOS version 5.8.0">
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="en" />
-  <meta property="og:title" content="milpa help docs milpa environment" />
-  <meta property="og:site_name" content="🌽 milpa" />
-  <meta property="og:description" content="An overview of all milpa environment variables" />
-  <meta name="description" content="An overview of all milpa environment variables" />
-  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/environment/" />
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en">
+  <meta property="og:title" content="milpa help docs milpa environment">
+  <meta property="og:site_name" content="🌽 milpa">
+  <meta property="og:description" content="An overview of all milpa environment variables">
+  <meta name="description" content="An overview of all milpa environment variables">
+  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/environment">
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   <title>milpa help docs milpa environment</title>
-
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2" />
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2" />
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2" />
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2" />
-
-  <link rel="stylesheet" href="/css/bundle.min.763d8f97db3def1b05ce9f80d740c56fe7a728b47d9bf6140bccdc4bec228fff.css"/>
-
-  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/environment/">
-
-  
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="preload" as="style">
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript>
-    <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" />
-  </noscript>
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2">
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2">
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2">
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2">
+  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/environment">
+  <link rel="stylesheet" href="/static/css/highlight-light.css">
+  <link rel="stylesheet" href="/static/css/highlight-dark.css">
+  <link rel="stylesheet" href="/static/css/index.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap" rel="preload" as="style">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap"></noscript>
 </head>
-<body><header role="banner">
-  <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
-  <h1 lang="es" ><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1>
-  <input
-    list="milpa-commands"
-    placeholder="type a milpa command"
-    type="text"
-    aria-label="milpa command selector"
-    id="command-selector"
-    pattern='|help docs milpa environment'
-    value="help docs milpa environment" />
-  <datalist id="milpa-commands">
-    <option value="help" />
-<option value="help docs" />
-<option value="help docs milpa" />
-<option value="help docs milpa quick-guide" />
-<option value="help docs milpa use-case" />
-<option value="help docs milpa environment" />
-<option value="help docs milpa repo" />
-<option value="help docs milpa repo docs" />
-<option value="help docs milpa repo hooks" />
-<option value="help docs milpa command" />
-<option value="help docs milpa command spec" />
-<option value="help docs milpa util" />
-<option value="help docs milpa util log" />
-<option value="help docs milpa util repo" />
-<option value="help docs milpa util shell" />
-<option value="help docs milpa util tmp" />
-<option value="help docs milpa internals" />
-<option value="help docs milpa changelog" />
-<option value="help docs milpa support" />
-<option value="itself" />
-<option value="itself command-tree" />
-<option value="itself create" />
-<option value="itself docs" />
-<option value="itself docs create" />
-<option value="itself docs html" />
-<option value="itself doctor" />
-<option value="itself repo" />
-<option value="itself repo install" />
-<option value="itself repo list" />
-<option value="itself repo uninstall" />
-<option value="itself shell" />
-<option value="itself shell init" />
-<option value="itself shell install-autocomplete" />
-<option value="itself upgrade" />
-<option value="itself version" />
-<option value="version" />
-</datalist>
-  <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewBox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg"><title>Menu Icon</title><g transform="translate(10.016 -803.03)"><g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336"><path d="m19.668 1032.7h250.65"/><path d="m19.668 932.69h250.65"/><path d="m19.668 832.69h250.65"/></g></g></svg></button>
-</header>
-
-<div id="sidebar" aria-hidden="false">
-  <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
-  <ul>
-    <li><a href="#paths">Paths</a>
+<body>
+  <header role="banner">
+    <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
+    <h1 lang="es"><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1><input list="milpa-commands" placeholder="type a milpa command" type="text" aria-label="milpa command selector" id="command-selector" pattern='|help|help docs|help docs milpa|help docs milpa changelog|help docs milpa command|help docs milpa command spec|help docs milpa environment|help docs milpa internals|help docs milpa quick-guide|help docs milpa repo|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa support|help docs milpa use-case|help docs milpa util|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util user-input|itself|itself command-tree|itself create|itself doctor|itself install-autocomplete|itself repo|itself repo install|itself repo list|itself repo uninstall|itself upgrade|itself version' value="help docs milpa environment"> <datalist id="milpa-commands">
+      <option value="help">
+      </option>
+      <option value="help docs">
+      </option>
+      <option value="help docs milpa">
+      </option>
+      <option value="help docs milpa quick-guide">
+      </option>
+      <option value="help docs milpa use-case">
+      </option>
+      <option value="help docs milpa environment">
+      </option>
+      <option value="help docs milpa repo">
+      </option>
+      <option value="help docs milpa repo docs">
+      </option>
+      <option value="help docs milpa repo hooks">
+      </option>
+      <option value="help docs milpa command">
+      </option>
+      <option value="help docs milpa command spec">
+      </option>
+      <option value="help docs milpa util">
+      </option>
+      <option value="help docs milpa util log">
+      </option>
+      <option value="help docs milpa util repo">
+      </option>
+      <option value="help docs milpa util shell">
+      </option>
+      <option value="help docs milpa util tmp">
+      </option>
+      <option value="help docs milpa util user-input">
+      </option>
+      <option value="help docs milpa internals">
+      </option>
+      <option value="help docs milpa support">
+      </option>
+      <option value="help docs milpa changelog">
+      </option>
+      <option value="itself">
+      </option>
+      <option value="itself command-tree">
+      </option>
+      <option value="itself create">
+      </option>
+      <option value="itself doctor">
+      </option>
+      <option value="itself install-autocomplete">
+      </option>
+      <option value="itself repo">
+      </option>
+      <option value="itself repo install">
+      </option>
+      <option value="itself repo list">
+      </option>
+      <option value="itself repo uninstall">
+      </option>
+      <option value="itself upgrade">
+      </option>
+      <option value="itself version">
+      </option>
+    </datalist> <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewbox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg">
+    <title>Menu Icon</title>
+    <g transform="translate(10.016 -803.03)">
+      <g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336">
+        <path d="m19.668 1032.7h250.65"></path>
+        <path d="m19.668 932.69h250.65"></path>
+        <path d="m19.668 832.69h250.65"></path>
+      </g>
+    </g></svg></button>
+  </header>
+  <div id="sidebar" aria-hidden="false">
+    <nav id="table-of-contents" aria-labelledby="toc-header">
+      <span class="heading" id="toc-header">In this page</span>
       <ul>
-        <li><a href="#milpa_root"><code>MILPA_ROOT</code></a></li>
-        <li><a href="#milpa_path"><code>MILPA_PATH</code></a></li>
+        <li>
+          <a href="#paths">Paths</a>
+          <ul>
+            <li>
+              <a href="#milpa-root"><code>MILPA_ROOT</code></a>
+            </li>
+            <li>
+              <a href="#milpa-path"><code>MILPA_PATH</code></a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#output">Output</a>
+          <ul>
+            <li>
+              <a href="#debug"><code>DEBUG</code></a>
+            </li>
+            <li>
+              <a href="#milpa-verbose"><code>MILPA_VERBOSE</code></a>
+            </li>
+            <li>
+              <a href="#milpa-silent"><code>MILPA_SILENT</code></a>
+            </li>
+            <li>
+              <a href="#no-color--color"><code>NO_COLOR</code> / <code>COLOR</code></a>
+            </li>
+            <li>
+              <a href="#milpa-help-style--milpa-plain-help"><code>MILPA_HELP_STYLE</code> / <code>MILPA_PLAIN_HELP</code></a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#input">Input</a>
+          <ul>
+            <li>
+              <a href="#milpa-skip-validation"><code>MILPA_SKIP_VALIDATION</code></a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#auto-updates">Auto-updates</a>
+          <ul>
+            <li>
+              <a href="#milpa-disable-update-checks"><code>MILPA_DISABLE_UPDATE_CHECKS</code></a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#command-environment">Command Environment</a>
+        </li>
       </ul>
-    </li>
-    <li><a href="#output">Output</a>
+    </nav>
+    <nav id="commands" aria-labelledby="commands-header">
+      <span class="heading" id="commands-header">Commands</span>
       <ul>
-        <li><a href="#debug"><code>DEBUG</code></a></li>
-        <li><a href="#milpa_verbose"><code>MILPA_VERBOSE</code></a></li>
-        <li><a href="#milpa_silent"><code>MILPA_SILENT</code></a></li>
-        <li><a href="#no_color--color"><code>NO_COLOR</code> / <code>COLOR</code></a></li>
+        <li>
+          <a href="/help/" class="command-menu-selected-prefix">help</a>
+          <ul class="sub-menu" aria-label="help subcommands">
+            <li>
+              <a href="/help/docs/" class="command-menu-selected-prefix">docs</a>
+              <ul class="sub-menu" aria-label="docs subcommands">
+                <li>
+                  <a href="/help/docs/milpa/" class="command-menu-selected-prefix">milpa</a>
+                  <ul class="sub-menu" aria-label="milpa subcommands">
+                    <li>
+                      <a href="/help/docs/milpa/quick-guide/" class="">quick-guide</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/use-case/" class="">use-case</a>
+                    </li>
+                    <li><strong class="command-menu-selected-prefix">environment</strong></li>
+                    <li>
+                      <a href="/help/docs/milpa/repo/" class="">repo</a>
+                      <ul class="sub-menu" aria-label="repo subcommands">
+                        <li>
+                          <a href="/help/docs/milpa/repo/docs/" class="">docs</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/repo/hooks/" class="">hooks</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/command/" class="">command</a>
+                      <ul class="sub-menu" aria-label="command subcommands">
+                        <li>
+                          <a href="/help/docs/milpa/command/spec/" class="">spec</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/util/" class="">util</a>
+                      <ul class="sub-menu" aria-label="util subcommands">
+                        <li>
+                          <a href="/help/docs/milpa/util/log/" class="">log</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/repo/" class="">repo</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/shell/" class="">shell</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/tmp/" class="">tmp</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/user-input/" class="">user-input</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/internals/" class="">internals</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/support/" class="">support</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/changelog/" class="">changelog</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="/itself/" class="">itself</a>
+          <ul class="sub-menu" aria-label="itself subcommands">
+            <li>
+              <a href="/itself/command-tree/" class="">command-tree</a>
+            </li>
+            <li>
+              <a href="/itself/create/" class="">create</a>
+            </li>
+            <li>
+              <a href="/itself/doctor/" class="">doctor</a>
+            </li>
+            <li>
+              <a href="/itself/install-autocomplete/" class="">install-autocomplete</a>
+            </li>
+            <li>
+              <a href="/itself/repo/" class="">repo</a>
+              <ul class="sub-menu" aria-label="repo subcommands">
+                <li>
+                  <a href="/itself/repo/install/" class="">install</a>
+                </li>
+                <li>
+                  <a href="/itself/repo/list/" class="">list</a>
+                </li>
+                <li>
+                  <a href="/itself/repo/uninstall/" class="">uninstall</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="/itself/upgrade/" class="">upgrade</a>
+            </li>
+            <li>
+              <a href="/itself/version/" class="">version</a>
+            </li>
+          </ul>
+        </li>
       </ul>
-    </li>
-    <li><a href="#input">Input</a>
-      <ul>
-        <li><a href="#milpa_skip_validation"><code>MILPA_SKIP_VALIDATION</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#auto-updates">Auto-updates</a>
-      <ul>
-        <li><a href="#milpa_disable_update_checks"><code>MILPA_DISABLE_UPDATE_CHECKS</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#command-environment">Command Environment</a></li>
-  </ul>
-</nav>
-  
-
-  <nav id="commands" aria-labelledby="commands-header">
-    <span class="heading" id="commands-header">Commands</span>
-    
-    <ul>
-    
-<li ><a href="https://milpa.dev/help/"class="command-menu-selected-prefix">help</a>
-<ul
-  class="sub-menu"
-  aria-label="help subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/"class="command-menu-selected-prefix">docs</a>
-<ul
-  class="sub-menu"
-  aria-label="docs subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/"class="command-menu-selected-prefix">milpa</a>
-<ul
-  class="sub-menu"
-  aria-label="milpa subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/quick-guide/">quick-guide</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/use-case/">use-case</a>
-
-  
-  
-<li >
-  <strong class="command-menu-selected-prefix">environment</strong>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/repo/">repo</a>
-<ul
-  class="sub-menu"
-  aria-label="repo subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/repo/docs/">docs</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/repo/hooks/">hooks</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/command/">command</a>
-<ul
-  class="sub-menu"
-  aria-label="command subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/command/spec/">spec</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/">util</a>
-<ul
-  class="sub-menu"
-  aria-label="util subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/log/">log</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/repo/">repo</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/shell/">shell</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/tmp/">tmp</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/internals/">internals</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/support/">support</a>
-
-  
-</ul>
-</li>
-
-
-  
-</ul>
-</li>
-
-
-  
-</ul>
-</li>
-
-
-    
-<li ><a href="https://milpa.dev/itself/">itself</a>
-<ul
-  class="sub-menu"
-  aria-label="itself subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/command-tree/">command-tree</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/create/">create</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/docs/">docs</a>
-<ul
-  class="sub-menu"
-  aria-label="docs subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/docs/create/">create</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/docs/html/">html</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/itself/doctor/">doctor</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/">repo</a>
-<ul
-  class="sub-menu"
-  aria-label="repo subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/install/">install</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/list/">list</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/uninstall/">uninstall</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/itself/shell/">shell</a>
-<ul
-  class="sub-menu"
-  aria-label="shell subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/shell/init/">init</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/shell/install-autocomplete/">install-autocomplete</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/itself/upgrade/">upgrade</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/version/">version</a>
-
-  
-</ul>
-</li>
-
-
-    
-<li ><a href="https://milpa.dev/version/">version</a>
-
-    </ul>
-  </nav>
-</div>
-
-
-<main id="content">
-<h1 id="command-name-header" class="sr-only">milpa help docs milpa environment</h1>
-<p>There&rsquo;s a few environment variables that control the behavior of <code>milpa</code>.</p>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="paths">Paths</h2> <a aria-hidden="true" class="heading-anchor" href="#paths" tabindex="-1">#</a>
-</div>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="milpa_root"><code>MILPA_ROOT</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpa_root" tabindex="-1">#</a>
-</div>
-<p><code>MILPA_ROOT</code> points to the installed milpa <em>kernel</em>, by default <code>/usr/local/lib/milpa</code>. This folder contains a milpa repo, the <code>milpa</code> executable, and a helper binary named <code>compa</code>, along a copy of the license and the source repo&rsquo;s README.</p>
-<p>You can set it to a local installation, like a fork, and run <code>$MILPA_ROOT/milpa</code> to use that fork&rsquo;s scripts instead of an installed version.</p>
-<p>If you choose to install to a different path than the default, you may wanna add <code>MILPA_ROOT=/path/to/your/install</code> you your shell profile.</p>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="milpa_path"><code>MILPA_PATH</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpa_path" tabindex="-1">#</a>
-</div>
-<p>The <code>MILPA_PATH</code> environment variable tells <code>milpa</code> where to look for repos.</p>
-<p>By default, <code>milpa</code> will look for repos in the following order:</p>
-<ol>
-<li>If <code>MILPA_PATH</code> is present in the environment, it&rsquo;ll start its search there,</li>
-<li>then, <code>milpa</code> will look at its own commands under <code>$MILPA_ROOT</code>,</li>
-<li>If the current working directory (or git repository) contains a .milpa folder, <code>milpa</code> will search that next,</li>
-<li>from there, it&rsquo;ll look for user repos at <code>$XDG_DATA_HOME/milpa/repos</code>,</li>
-<li>followed by global repos at <code>$MILPA_ROOT/repos</code>.</li>
-</ol>
-<p>Commands with the same name will be silently ignored.</p>
-<p>Additional repositories can be added as colon (<code>:</code>) delimited paths, pointing to the directory containing a <code>/.milpa</code> folder within. For example, setting <code>MILPA_PATH=$HOME/code/my-repo:/opt/milpa</code> would prepend the <code>$HOME/code/my-repo</code> and <code>/opt/milpa</code> folders to the command search path.</p>
-<p>If desired, you may set a <code>MILPA_PATH</code> for all shells by adding it to your shell&rsquo;s profile.</p>
-<p><code>MILPA_DISABLE_GIT</code>, <code>MILPA_DISABLE_USER_REPOS</code> and <code>MILPA_DISABLE_GLOBAL_REPOS</code> each disable the corresponding command lookups when set to <code>true</code>.</p>
-<hr>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="output">Output</h2> <a aria-hidden="true" class="heading-anchor" href="#output" tabindex="-1">#</a>
-</div>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="debug"><code>DEBUG</code></h3> <a aria-hidden="true" class="heading-anchor" href="#debug" tabindex="-1">#</a>
-</div>
-<p>Set <code>DEBUG=1</code> and find out whatever roberto needed to debug before writing proper tests.</p>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="milpa_verbose"><code>MILPA_VERBOSE</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpa_verbose" tabindex="-1">#</a>
-</div>
-<p>Enabled by the <code>--verbose</code> option. It shows information about what <code>milpa</code> is doing, along any <code>@milpa.log debug</code> messages from commands.</p>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="milpa_silent"><code>MILPA_SILENT</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpa_silent" tabindex="-1">#</a>
-</div>
-<p>Enabled by the <code>--silent</code> option, to hide <code>@milpa.log</code> messages completely. If <code>DEBUG</code> or <code>MILPA_VERBOSE</code> are enabled, these will override <code>MILPA_SILENT</code>.</p>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="no_color--color"><code>NO_COLOR</code> / <code>COLOR</code></h3> <a aria-hidden="true" class="heading-anchor" href="#no_color--color" tabindex="-1">#</a>
-</div>
-<p>By default, when stdout is a TTY, <code>milpa</code> will output color escape characters. If <code>NO_COLOR</code> is set to any non-empty string, then no color will be output. If not connected to a TTY, and <code>COLOR=always</code> is set, then color escape characters will be printed.</p>
-<p>If either <code>--no-color</code> or <code>--color</code> options are provided, these will override both <code>COLOR</code> and <code>NO_COLOR</code> environment variables.</p>
-<hr>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="input">Input</h2> <a aria-hidden="true" class="heading-anchor" href="#input" tabindex="-1">#</a>
-</div>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="milpa_skip_validation"><code>MILPA_SKIP_VALIDATION</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpa_skip_validation" tabindex="-1">#</a>
-</div>
-<p>If enabled, validation will be skipped for arguments and options. Also enabled with <code>--skip-validation</code>. <strong>Skipping validation may be unsafe</strong>, but may be useful when validation depends on unavailable data or services.</p>
-<hr>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="auto-updates">Auto-updates</h2> <a aria-hidden="true" class="heading-anchor" href="#auto-updates" tabindex="-1">#</a>
-</div>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="milpa_disable_update_checks"><code>MILPA_DISABLE_UPDATE_CHECKS</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpa_disable_update_checks" tabindex="-1">#</a>
-</div>
-<p>If set to a non-empty string, update checks will not be performed periodically before running commands.</p>
-<hr>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="command-environment">Command Environment</h2> <a aria-hidden="true" class="heading-anchor" href="#command-environment" tabindex="-1">#</a>
-</div>
-<p>Your commands will also have specific environment variables available, check out <a href="/help/docs/milpa/command/#arguments-options-and-environment">milpa help docs milpa command</a></p>
-
-
-    </main>
-<script src="https://milpa.dev/js/index.min.e8fb4266f19590f6cbf4007c65faa8e38a0e23bfbc40ef56ca24eed9d96fa64c.js"></script>
+    </nav>
+  </div>
+  <main id="content">
+    <h1 id="command-name-header" class="sr-only">milpa help docs milpa environment</h1>
+    <p>There's a few environment variables that control the behavior of <code>milpa</code>.</p>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="paths">Paths</h2><a aria-hidden="true" class="heading-anchor" href="#paths" tabindex="-1">#</a>
+    </div>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="milpa-root"><code>MILPA_ROOT</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpa-root" tabindex="-1">#</a>
+    </div>
+    <p><code>MILPA_ROOT</code> points to the installed milpa <em>kernel</em>, by default <code>/usr/local/lib/milpa</code>. This folder contains a milpa repo, the <code>milpa</code> executable, and a helper binary named <code>compa</code>, along a copy of the license and the source repo's README.</p>
+    <p>You can set it to a local installation, like a fork, and run <code>$MILPA_ROOT/milpa</code> to use that fork's scripts instead of an installed version.</p>
+    <p>If you choose to install to a different path than the default, you may wanna add <code>MILPA_ROOT=/path/to/your/install</code> you your shell profile.</p>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="milpa-path"><code>MILPA_PATH</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpa-path" tabindex="-1">#</a>
+    </div>
+    <p>The <code>MILPA_PATH</code> environment variable tells <code>milpa</code> where to look for repos.</p>
+    <p>By default, <code>milpa</code> will look for repos in the following order:</p>
+    <ol>
+      <li>If <code>MILPA_PATH</code> is present in the environment, it'll start its search there,</li>
+      <li>then, <code>milpa</code> will look at its own commands under <code>$MILPA_ROOT</code>,</li>
+      <li>If the current working directory (or git repository) contains a .milpa folder, <code>milpa</code> will search that next,</li>
+      <li>from there, it'll look for user repos at <code>$XDG_DATA_HOME/milpa/repos</code>,</li>
+      <li>followed by global repos at <code>$MILPA_ROOT/repos</code>.</li>
+    </ol>
+    <p>Commands with the same name will be silently ignored.</p>
+    <p>Additional repositories can be added as colon (<code>:</code>) delimited paths, pointing to the directory containing a <code>/.milpa</code> folder within. For example, setting <code>MILPA_PATH=$HOME/code/my-repo:/opt/milpa</code> would prepend the <code>$HOME/code/my-repo</code> and <code>/opt/milpa</code> folders to the command search path.</p>
+    <p>If desired, you may set a <code>MILPA_PATH</code> for all shells by adding it to your shell's profile.</p>
+    <p><code>MILPA_DISABLE_GIT</code>, <code>MILPA_DISABLE_USER_REPOS</code> and <code>MILPA_DISABLE_GLOBAL_REPOS</code> each disable the corresponding command lookups when set to <code>true</code>.</p>
+    <hr>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="output">Output</h2><a aria-hidden="true" class="heading-anchor" href="#output" tabindex="-1">#</a>
+    </div>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="debug"><code>DEBUG</code></h3><a aria-hidden="true" class="heading-anchor" href="#debug" tabindex="-1">#</a>
+    </div><!-- TODO: clean this up before beta, likely make logging more useful to hypothetical non-roberto users -->
+    <p>Set <code>DEBUG=1</code> and find out whatever roberto needed to debug before writing proper tests.</p>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="milpa-verbose"><code>MILPA_VERBOSE</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpa-verbose" tabindex="-1">#</a>
+    </div>
+    <p>Enabled by the <code>--verbose</code> option. It shows information about what <code>milpa</code> is doing, along any <code>@milpa.log debug</code> messages from commands.</p>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="milpa-silent"><code>MILPA_SILENT</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpa-silent" tabindex="-1">#</a>
+    </div>
+    <p>Enabled by the <code>--silent</code> option, to hide <code>@milpa.log</code> messages completely. If <code>DEBUG</code> or <code>MILPA_VERBOSE</code> are enabled, these will override <code>MILPA_SILENT</code>.</p>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="no-color--color"><code>NO_COLOR</code> / <code>COLOR</code></h3><a aria-hidden="true" class="heading-anchor" href="#no-color--color" tabindex="-1">#</a>
+    </div>
+    <p>By default, when stdout is a TTY, <code>milpa</code> will output color escape characters. If <code>NO_COLOR</code> is set to any non-empty string, then no color will be output. If not connected to a TTY, and <code>COLOR=always</code> is set, then color escape characters will be printed.</p>
+    <p>If either <code>--no-color</code> or <code>--color</code> options are provided, these will override both <code>COLOR</code> and <code>NO_COLOR</code> environment variables.</p>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="milpa-help-style--milpa-plain-help"><code>MILPA_HELP_STYLE</code> / <code>MILPA_PLAIN_HELP</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpa-help-style--milpa-plain-help" tabindex="-1">#</a>
+    </div>
+    <p><code>MILPA_HELP_STYLE</code> can be one of <code>auto</code>, <code>dark</code>, and <code>light</code> and specifies the theme to use when rendering help pages. This option has no effect if <code>--no-color</code> or <code>NO_COLOR=1</code> is specified.</p>
+    <p><code>MILPA_PLAIN_HELP</code> will not colorize help output at all, formatting help as plain markdown text instead.</p>
+    <hr>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="input">Input</h2><a aria-hidden="true" class="heading-anchor" href="#input" tabindex="-1">#</a>
+    </div>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="milpa-skip-validation"><code>MILPA_SKIP_VALIDATION</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpa-skip-validation" tabindex="-1">#</a>
+    </div>
+    <p>If enabled, validation will be skipped for arguments and options. Also enabled with <code>--skip-validation</code>. <strong>Skipping validation may be unsafe</strong>, but may be useful when validation depends on unavailable data or services.</p>
+    <hr>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="auto-updates">Auto-updates</h2><a aria-hidden="true" class="heading-anchor" href="#auto-updates" tabindex="-1">#</a>
+    </div>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="milpa-disable-update-checks"><code>MILPA_DISABLE_UPDATE_CHECKS</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpa-disable-update-checks" tabindex="-1">#</a>
+    </div>
+    <p>If set to a non-empty string, update checks will not be performed periodically before running commands.</p>
+    <hr>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="command-environment">Command Environment</h2><a aria-hidden="true" class="heading-anchor" href="#command-environment" tabindex="-1">#</a>
+    </div>
+    <p>Your commands will also have specific environment variables available, check out <a href="/help/docs/milpa/command/#arguments-options-and-environment">milpa help docs milpa command</a></p>
+  </main>
+  <script src="/static/js/index.js"></script>
 </body>
 </html>

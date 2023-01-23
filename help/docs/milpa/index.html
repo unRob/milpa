@@ -1,375 +1,290 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#" lang="en"><head lang="en">
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head lang="en">
+  <meta name="generator" content="HTML Tidy for HTML5 for Apple macOS version 5.8.0">
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="en" />
-  <meta property="og:title" content="milpa help docs milpa" />
-  <meta property="og:site_name" content="🌽 milpa" />
-  <meta property="og:description" content="" />
-  <meta name="description" content="" />
-  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/" />
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en">
+  <meta property="og:title" content="milpa help docs milpa">
+  <meta property="og:site_name" content="🌽 milpa">
+  <meta property="og:description" content="Displays docs on TOPIC">
+  <meta name="description" content="Displays docs on TOPIC">
+  <meta property="og:url" content="https://milpa.dev/help/docs/milpa">
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   <title>milpa help docs milpa</title>
-
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2" />
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2" />
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2" />
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2" />
-
-  <link rel="stylesheet" href="/css/bundle.min.763d8f97db3def1b05ce9f80d740c56fe7a728b47d9bf6140bccdc4bec228fff.css"/>
-
-  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/">
-
-  
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="preload" as="style">
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript>
-    <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" />
-  </noscript>
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2">
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2">
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2">
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2">
+  <link rel="canonical" href="https://milpa.dev/help/docs/milpa">
+  <link rel="stylesheet" href="/static/css/highlight-light.css">
+  <link rel="stylesheet" href="/static/css/highlight-dark.css">
+  <link rel="stylesheet" href="/static/css/index.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap" rel="preload" as="style">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap"></noscript>
 </head>
-<body><header role="banner">
-  <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
-  <h1 lang="es" ><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1>
-  <input
-    list="milpa-commands"
-    placeholder="type a milpa command"
-    type="text"
-    aria-label="milpa command selector"
-    id="command-selector"
-    pattern='|help docs milpa quick-guide|help docs milpa use-case|help docs milpa environment|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa repo|help docs milpa command spec|help docs milpa command|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util|help docs milpa internals|help docs milpa changelog|help docs milpa support|help docs milpa'
-    value="help docs milpa" />
-  <datalist id="milpa-commands">
-    <option value="help" />
-<option value="help docs" />
-<option value="help docs milpa" />
-<option value="help docs milpa quick-guide" />
-<option value="help docs milpa use-case" />
-<option value="help docs milpa environment" />
-<option value="help docs milpa repo" />
-<option value="help docs milpa repo docs" />
-<option value="help docs milpa repo hooks" />
-<option value="help docs milpa command" />
-<option value="help docs milpa command spec" />
-<option value="help docs milpa util" />
-<option value="help docs milpa util log" />
-<option value="help docs milpa util repo" />
-<option value="help docs milpa util shell" />
-<option value="help docs milpa util tmp" />
-<option value="help docs milpa internals" />
-<option value="help docs milpa changelog" />
-<option value="help docs milpa support" />
-<option value="itself" />
-<option value="itself command-tree" />
-<option value="itself create" />
-<option value="itself docs" />
-<option value="itself docs create" />
-<option value="itself docs html" />
-<option value="itself doctor" />
-<option value="itself repo" />
-<option value="itself repo install" />
-<option value="itself repo list" />
-<option value="itself repo uninstall" />
-<option value="itself shell" />
-<option value="itself shell init" />
-<option value="itself shell install-autocomplete" />
-<option value="itself upgrade" />
-<option value="itself version" />
-<option value="version" />
-</datalist>
-  <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewBox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg"><title>Menu Icon</title><g transform="translate(10.016 -803.03)"><g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336"><path d="m19.668 1032.7h250.65"/><path d="m19.668 932.69h250.65"/><path d="m19.668 832.69h250.65"/></g></g></svg></button>
-</header>
-
-<div id="sidebar" aria-hidden="false">
-  <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
-  <ul>
-    <li><a href="#concepts">Concepts</a></li>
-    <li><a href="#enough-words-show-me-some-code">Enough words, show me some code</a></li>
-  </ul>
-</nav>
-  
-
-  <nav id="commands" aria-labelledby="commands-header">
-    <span class="heading" id="commands-header">Commands</span>
-    
-    <ul>
-    
-<li ><a href="https://milpa.dev/help/"class="command-menu-selected-prefix">help</a>
-<ul
-  class="sub-menu"
-  aria-label="help subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/"class="command-menu-selected-prefix">docs</a>
-<ul
-  class="sub-menu"
-  aria-label="docs subcommands"
->
-  
-  
-<li >
-  <strong class="command-menu-selected-prefix">milpa</strong>
-<ul
-  class="sub-menu"
-  aria-label="milpa subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/quick-guide/">quick-guide</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/use-case/">use-case</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/environment/">environment</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/repo/">repo</a>
-<ul
-  class="sub-menu"
-  aria-label="repo subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/repo/docs/">docs</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/repo/hooks/">hooks</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/command/">command</a>
-<ul
-  class="sub-menu"
-  aria-label="command subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/command/spec/">spec</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/">util</a>
-<ul
-  class="sub-menu"
-  aria-label="util subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/log/">log</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/repo/">repo</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/shell/">shell</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/tmp/">tmp</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/internals/">internals</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/support/">support</a>
-
-  
-</ul>
-</li>
-
-
-  
-</ul>
-</li>
-
-
-  
-</ul>
-</li>
-
-
-    
-<li ><a href="https://milpa.dev/itself/">itself</a>
-<ul
-  class="sub-menu"
-  aria-label="itself subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/command-tree/">command-tree</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/create/">create</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/docs/">docs</a>
-<ul
-  class="sub-menu"
-  aria-label="docs subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/docs/create/">create</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/docs/html/">html</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/itself/doctor/">doctor</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/">repo</a>
-<ul
-  class="sub-menu"
-  aria-label="repo subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/install/">install</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/list/">list</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/uninstall/">uninstall</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/itself/shell/">shell</a>
-<ul
-  class="sub-menu"
-  aria-label="shell subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/shell/init/">init</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/shell/install-autocomplete/">install-autocomplete</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/itself/upgrade/">upgrade</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/version/">version</a>
-
-  
-</ul>
-</li>
-
-
-    
-<li ><a href="https://milpa.dev/version/">version</a>
-
-    </ul>
-  </nav>
-</div>
-
-
-<main id="content">
-<section class="content-list">
-  <h1 id="command-name-header" class="sr-only">milpa help docs milpa</h1>
-	<div class="content-header-wrapper">
-<h1 class="content-header" id="milpa">milpa</h1> <a aria-hidden="true" class="heading-anchor" href="#milpa" tabindex="-1">#</a>
-</div>
-<p><a href="https://milpa.dev"><code>milpa</code></a> is a command-line tool to care for one&rsquo;s own garden of scripts. <a href="https://en.wikipedia.org/wiki/Milpa">Its name</a> comes from an agricultural method that combines multiple crops in close proximity.</p>
-<p>For a brief introductory tutorial, check out <a href="/help/docs/milpa/quick-guide/"><code>milpa help docs milpa quick-guide</code></a>.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># install on mac and linux with:</span>
+<body>
+  <header role="banner">
+    <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
+    <h1 lang="es"><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1><input list="milpa-commands" placeholder="type a milpa command" type="text" aria-label="milpa command selector" id="command-selector" pattern='|help|help docs|help docs milpa|help docs milpa changelog|help docs milpa command|help docs milpa command spec|help docs milpa environment|help docs milpa internals|help docs milpa quick-guide|help docs milpa repo|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa support|help docs milpa use-case|help docs milpa util|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util user-input|itself|itself command-tree|itself create|itself doctor|itself install-autocomplete|itself repo|itself repo install|itself repo list|itself repo uninstall|itself upgrade|itself version' value="help docs milpa"> <datalist id="milpa-commands">
+      <option value="help">
+      </option>
+      <option value="help docs">
+      </option>
+      <option value="help docs milpa">
+      </option>
+      <option value="help docs milpa quick-guide">
+      </option>
+      <option value="help docs milpa use-case">
+      </option>
+      <option value="help docs milpa environment">
+      </option>
+      <option value="help docs milpa repo">
+      </option>
+      <option value="help docs milpa repo docs">
+      </option>
+      <option value="help docs milpa repo hooks">
+      </option>
+      <option value="help docs milpa command">
+      </option>
+      <option value="help docs milpa command spec">
+      </option>
+      <option value="help docs milpa util">
+      </option>
+      <option value="help docs milpa util log">
+      </option>
+      <option value="help docs milpa util repo">
+      </option>
+      <option value="help docs milpa util shell">
+      </option>
+      <option value="help docs milpa util tmp">
+      </option>
+      <option value="help docs milpa util user-input">
+      </option>
+      <option value="help docs milpa internals">
+      </option>
+      <option value="help docs milpa support">
+      </option>
+      <option value="help docs milpa changelog">
+      </option>
+      <option value="itself">
+      </option>
+      <option value="itself command-tree">
+      </option>
+      <option value="itself create">
+      </option>
+      <option value="itself doctor">
+      </option>
+      <option value="itself install-autocomplete">
+      </option>
+      <option value="itself repo">
+      </option>
+      <option value="itself repo install">
+      </option>
+      <option value="itself repo list">
+      </option>
+      <option value="itself repo uninstall">
+      </option>
+      <option value="itself upgrade">
+      </option>
+      <option value="itself version">
+      </option>
+    </datalist> <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewbox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg">
+    <title>Menu Icon</title>
+    <g transform="translate(10.016 -803.03)">
+      <g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336">
+        <path d="m19.668 1032.7h250.65"></path>
+        <path d="m19.668 932.69h250.65"></path>
+        <path d="m19.668 832.69h250.65"></path>
+      </g>
+    </g></svg></button>
+  </header>
+  <div id="sidebar" aria-hidden="false">
+    <nav id="table-of-contents" aria-labelledby="toc-header">
+      <span class="heading" id="toc-header">In this page</span>
+      <ul>
+        <li>
+          <a href="#concepts">Concepts</a>
+        </li>
+        <li>
+          <a href="#enough-words-show-me-some-code">Enough words, show me some code</a>
+        </li>
+      </ul>
+    </nav>
+    <nav id="commands" aria-labelledby="commands-header">
+      <span class="heading" id="commands-header">Commands</span>
+      <ul>
+        <li>
+          <a href="/help/" class="command-menu-selected-prefix">help</a>
+          <ul class="sub-menu" aria-label="help subcommands">
+            <li>
+              <a href="/help/docs/" class="command-menu-selected-prefix">docs</a>
+              <ul class="sub-menu" aria-label="docs subcommands">
+                <li>
+                  <strong class="command-menu-selected-prefix">milpa</strong>
+                  <ul class="sub-menu" aria-label="milpa subcommands">
+                    <li>
+                      <a href="/help/docs/milpa/quick-guide/" class="">quick-guide</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/use-case/" class="">use-case</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/environment/" class="">environment</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/repo/" class="">repo</a>
+                      <ul class="sub-menu" aria-label="repo subcommands">
+                        <li>
+                          <a href="/help/docs/milpa/repo/docs/" class="">docs</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/repo/hooks/" class="">hooks</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/command/" class="">command</a>
+                      <ul class="sub-menu" aria-label="command subcommands">
+                        <li>
+                          <a href="/help/docs/milpa/command/spec/" class="">spec</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/util/" class="">util</a>
+                      <ul class="sub-menu" aria-label="util subcommands">
+                        <li>
+                          <a href="/help/docs/milpa/util/log/" class="">log</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/repo/" class="">repo</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/shell/" class="">shell</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/tmp/" class="">tmp</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/user-input/" class="">user-input</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/internals/" class="">internals</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/support/" class="">support</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/changelog/" class="">changelog</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="/itself/" class="">itself</a>
+          <ul class="sub-menu" aria-label="itself subcommands">
+            <li>
+              <a href="/itself/command-tree/" class="">command-tree</a>
+            </li>
+            <li>
+              <a href="/itself/create/" class="">create</a>
+            </li>
+            <li>
+              <a href="/itself/doctor/" class="">doctor</a>
+            </li>
+            <li>
+              <a href="/itself/install-autocomplete/" class="">install-autocomplete</a>
+            </li>
+            <li>
+              <a href="/itself/repo/" class="">repo</a>
+              <ul class="sub-menu" aria-label="repo subcommands">
+                <li>
+                  <a href="/itself/repo/install/" class="">install</a>
+                </li>
+                <li>
+                  <a href="/itself/repo/list/" class="">list</a>
+                </li>
+                <li>
+                  <a href="/itself/repo/uninstall/" class="">uninstall</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="/itself/upgrade/" class="">upgrade</a>
+            </li>
+            <li>
+              <a href="/itself/version/" class="">version</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <main id="content">
+    <h1 id="command-name-header" class="sr-only">milpa help docs milpa</h1>
+    <div class="content-header-wrapper">
+      <h1 class="content-header" id="milpa">milpa</h1><a aria-hidden="true" class="heading-anchor" href="#milpa" tabindex="-1">#</a>
+    </div>
+    <p><a href="https://milpa.dev"><code>milpa</code></a> is a command-line tool to care for one's own garden of scripts. <a href="https://en.wikipedia.org/wiki/Milpa">Its name</a> comes from an agricultural method that combines multiple crops in close proximity.</p>
+    <p>For a brief introductory tutorial, check out <a href="/help/docs/milpa/quick-guide/"><code>milpa help docs milpa quick-guide</code></a>.</p>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c1"># install on mac and linux with:</span>
 </span></span><span class="line"><span class="cl">curl -L https://milpa.dev/install.sh <span class="p">|</span> bash -
-</span></span></code></pre></div><p>You and your team write scripts and a little spec for each of them—use bash, or any other language—, and <code>milpa</code> provides:</p>
-<ul>
-<li>argument and option <strong>completions</strong> from static sources, other <code>milpa</code> scripts or even other programs;</li>
-<li><strong>nested sub-commands</strong> as simple as the filesystem, organize them in folders and <code>milpa</code> does the rest;</li>
-<li><strong>parsing</strong> and <strong>validation</strong> for arguments and options, writing little to no code; and</li>
-<li><strong>help</strong> and <strong>documentation</strong> on the terminal and browser.</li>
-</ul>
-<p>There&rsquo;s <a href="/help/docs/milpa/use-case/">a few reasons why</a> you and your team might wanna use <code>milpa</code>, but in summary, it&rsquo;s goal is to provide all those nice features above while making it easier to follow the <a href="https://clig.dev">Command Line Interface Guidelines</a>.</p>
-<p><code>milpa</code> is licensed under the Apache License 2.0, and its code is available at <a href="https://github.com/unRob/milpa">github.com/unRob/milpa</a>.</p>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="concepts">Concepts</h2> <a aria-hidden="true" class="heading-anchor" href="#concepts" tabindex="-1">#</a>
-</div>
-<p><code>milpa</code> runs <strong>commands</strong> found in one or more <strong>repos</strong>:</p>
-<ul>
-<li><strong>Commands</strong> are bash scripts or executables written in your language of choice, and their corresponding specs written in YAML. Get the full story with <a href="/help/docs/milpa/command/"><code>milpa help docs milpa command</code></a>.</li>
-<li>Commands are organized in folders within one or more <strong>repos</strong>. Repos are just folders that contain a <code>.milpa</code> folder within. Check out <a href="/help/docs/milpa/repo/"><code>milpa help docs milpa repo</code></a> for more details about repos.</li>
-</ul>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="enough-words-show-me-some-code">Enough words, show me some code</h2> <a aria-hidden="true" class="heading-anchor" href="#enough-words-show-me-some-code" tabindex="-1">#</a>
-</div>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># milpa is a program you run</span>
+</span></span></code></pre>
+    <p>You and your team write scripts and a little spec for each of them—use bash, or any other language—, and <code>milpa</code> provides:</p>
+    <ul>
+      <li>argument and option <strong>completions</strong> from static sources, other <code>milpa</code> scripts or even other programs;</li>
+      <li><strong>nested sub-commands</strong> as simple as the filesystem, organize them in folders and <code>milpa</code> does the rest;</li>
+      <li><strong>parsing</strong> and <strong>validation</strong> for arguments and options, writing little to no code; and</li>
+      <li><strong>help</strong> and <strong>documentation</strong> on the terminal and browser.</li>
+    </ul>
+    <p>There's <a href="/help/docs/milpa/use-case/">a few reasons why</a> you and your team might wanna use <code>milpa</code>, but in summary, it's goal is to provide all those nice features above while making it easier to follow the <a href="https://clig.dev">Command Line Interface Guidelines</a>.</p>
+    <p><code>milpa</code> is licensed under the Apache License 2.0, and its code is available at <a href="https://github.com/unRob/milpa">github.com/unRob/milpa</a>.</p>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="concepts">Concepts</h2><a aria-hidden="true" class="heading-anchor" href="#concepts" tabindex="-1">#</a>
+    </div>
+    <p><code>milpa</code> runs <strong>commands</strong> found in one or more <strong>repos</strong>:</p>
+    <ul>
+      <li>
+        <strong>Commands</strong> are bash scripts or executables written in your language of choice, and their corresponding specs written in YAML. Get the full story with <a href="/help/docs/milpa/command/"><code>milpa help docs milpa command</code></a>.
+      </li>
+      <li>Commands are organized in folders within one or more <strong>repos</strong>. Repos are just folders that contain a <code>.milpa</code> folder within. Check out <a href="/help/docs/milpa/repo/"><code>milpa help docs milpa repo</code></a> for more details about repos.
+      </li>
+    </ul>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="enough-words-show-me-some-code">Enough words, show me some code</h2><a aria-hidden="true" class="heading-anchor" href="#enough-words-show-me-some-code" tabindex="-1">#</a>
+    </div>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c1"># milpa is a program you run</span>
 </span></span><span class="line"><span class="cl">milpa
-</span></span><span class="line"><span class="cl"><span class="c1"># you can add a command at .milpa/commands/hello.{sh,yaml} and milpa will gladly run it</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Add a command at .milpa/commands/hello.{sh,yaml} and milpa will gladly run it</span>
 </span></span><span class="line"><span class="cl">milpa hello
-</span></span><span class="line"><span class="cl"><span class="c1"># when typing gets annoying, install autocomplete scripts for your $SHELL</span>
-</span></span><span class="line"><span class="cl">milpa itself shell install-autocomplete
-</span></span><span class="line"><span class="cl"><span class="c1"># see how to create new milpa commands on the local repo</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># How do you create a milpa command? Check out:</span>
 </span></span><span class="line"><span class="cl">milpa itself create --help
-</span></span><span class="line"><span class="cl"><span class="c1"># read some documentation</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Speaking of, milpa comes with fancy documentation</span>
 </span></span><span class="line"><span class="cl">milpa <span class="nb">help</span> docs milpa
-</span></span><span class="line"><span class="cl"><span class="c1"># see what&#39;s making milpa sad</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># You can also browse through an HTML version of it</span>
+</span></span><span class="line"><span class="cl">milpa <span class="nb">help</span> docs --server
+</span></span><span class="line"><span class="cl"><span class="c1"># Trouble with milpa? see what's making milpa sad</span>
 </span></span><span class="line"><span class="cl">milpa itself doctor
-</span></span><span class="line"><span class="cl"><span class="c1"># add new commands to milpa written by strangers on the internet!</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Install whole groups of commands written by strangers on the internet!</span>
 </span></span><span class="line"><span class="cl">milpa itself repo install github.com/nidito/unRob
-</span></span></code></pre></div>
-</div>
-
-    </main>
-<script src="https://milpa.dev/js/index.min.e8fb4266f19590f6cbf4007c65faa8e38a0e23bfbc40ef56ca24eed9d96fa64c.js"></script>
+</span></span><span class="line"><span class="cl"><span class="c1"># and use them like so:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># milpa nidito dc list</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># When typing gets annoying, install autocomplete scripts for your $SHELL</span>
+</span></span><span class="line"><span class="cl">milpa itself install-autocomplete
+</span></span></code></pre>
+  </main>
+  <script src="/static/js/index.js"></script>
 </body>
 </html>

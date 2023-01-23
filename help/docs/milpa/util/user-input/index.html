@@ -7,18 +7,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="en">
-  <meta property="og:title" content="milpa help docs milpa util log">
+  <meta property="og:title" content="milpa help docs milpa util user-input">
   <meta property="og:site_name" content="🌽 milpa">
-  <meta property="og:description" content="Functions related to output">
-  <meta name="description" content="Functions related to output">
-  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/util/log">
+  <meta property="og:description" content="Functions related to user input">
+  <meta name="description" content="Functions related to user input">
+  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/util/user-input">
   <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
-  <title>milpa help docs milpa util log</title>
+  <title>milpa help docs milpa util user-input</title>
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2">
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2">
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2">
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2">
-  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/util/log">
+  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/util/user-input">
   <link rel="stylesheet" href="/static/css/highlight-light.css">
   <link rel="stylesheet" href="/static/css/highlight-dark.css">
   <link rel="stylesheet" href="/static/css/index.css">
@@ -30,7 +30,7 @@
 <body>
   <header role="banner">
     <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
-    <h1 lang="es"><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1><input list="milpa-commands" placeholder="type a milpa command" type="text" aria-label="milpa command selector" id="command-selector" pattern='|help|help docs|help docs milpa|help docs milpa changelog|help docs milpa command|help docs milpa command spec|help docs milpa environment|help docs milpa internals|help docs milpa quick-guide|help docs milpa repo|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa support|help docs milpa use-case|help docs milpa util|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util user-input|itself|itself command-tree|itself create|itself doctor|itself install-autocomplete|itself repo|itself repo install|itself repo list|itself repo uninstall|itself upgrade|itself version' value="help docs milpa util log"> <datalist id="milpa-commands">
+    <h1 lang="es"><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1><input list="milpa-commands" placeholder="type a milpa command" type="text" aria-label="milpa command selector" id="command-selector" pattern='|help|help docs|help docs milpa|help docs milpa changelog|help docs milpa command|help docs milpa command spec|help docs milpa environment|help docs milpa internals|help docs milpa quick-guide|help docs milpa repo|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa support|help docs milpa use-case|help docs milpa util|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util user-input|itself|itself command-tree|itself create|itself doctor|itself install-autocomplete|itself repo|itself repo install|itself repo list|itself repo uninstall|itself upgrade|itself version' value="help docs milpa util user-input"> <datalist id="milpa-commands">
       <option value="help">
       </option>
       <option value="help docs">
@@ -111,10 +111,13 @@
           <a href="#functions">Functions</a>
           <ul>
             <li>
-              <a href="#milpafmt"><code>@milpa.fmt</code></a>
+              <a href="#milpaask"><code>@milpa.ask</code></a>
             </li>
             <li>
-              <a href="#milpalog"><code>@milpa.log</code></a>
+              <a href="#milpaconfirm"><code>@milpa.confirm</code></a>
+            </li>
+            <li>
+              <a href="#milpaselect"><code>@milpa.select</code></a>
             </li>
           </ul>
         </li>
@@ -163,7 +166,9 @@
                     <li>
                       <a href="/help/docs/milpa/util/" class="command-menu-selected-prefix">util</a>
                       <ul class="sub-menu" aria-label="util subcommands">
-                        <li><strong class="command-menu-selected-prefix">log</strong></li>
+                        <li>
+                          <a href="/help/docs/milpa/util/log/" class="">log</a>
+                        </li>
                         <li>
                           <a href="/help/docs/milpa/util/repo/" class="">repo</a>
                         </li>
@@ -173,9 +178,7 @@
                         <li>
                           <a href="/help/docs/milpa/util/tmp/" class="">tmp</a>
                         </li>
-                        <li>
-                          <a href="/help/docs/milpa/util/user-input/" class="">user-input</a>
-                        </li>
+                        <li><strong class="command-menu-selected-prefix">user-input</strong></li>
                       </ul>
                     </li>
                     <li>
@@ -234,30 +237,61 @@
     </nav>
   </div>
   <main id="content">
-    <h1 id="command-name-header" class="sr-only">milpa help docs milpa util log</h1>
-    <p>The <code>log</code> util contains shell functions related to output of informational messages. This utility is <strong>loaded by default</strong>.</p>
-    <p>If <a href="https://linux.die.net/man/7/term"><code>TERM</code></a> is not set, then it'll default to <code>xterm-color</code>.</p>
+    <h1 id="command-name-header" class="sr-only">milpa help docs milpa util user-input</h1>
+    <p>The <code>user-input</code> util contains shell functions related to the creation and cleanup of temporary files and directories.</p>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="functions">Functions</h2><a aria-hidden="true" class="heading-anchor" href="#functions" tabindex="-1">#</a>
     </div>
     <div class="content-header-wrapper">
-      <h3 class="content-header" id="milpafmt"><code>@milpa.fmt</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpafmt" tabindex="-1">#</a>
+      <h3 class="content-header" id="milpaask"><code>@milpa.ask</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpaask" tabindex="-1">#</a>
     </div>
-    <p><code>@milpa.fmt CODE MESSAGE</code></p>
-    <p>Returns <code>MESSAGE</code> formatted with <code>CODE</code> and does not print a new line. Code can be any of <code>bold</code>, <code>warning</code>, <code>error</code> and <code>inverted</code>.</p>
+    <p><code>@milpa.ask PROMPT [DEFAULT]</code></p>
+    <p>Promts the user to enter a value. It will show the prompt, followed by the default value with no additional formatting. It outputs the entered value on success and asks again if no value was entered (and no default is set).</p>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
+</span></span></span><span class="line"><span class="cl">@milpa.load_util user-input
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># prompt the user to enter their favorite food</span>
+</span></span><span class="line"><span class="cl"><span class="nv">food</span><span class="o">=</span><span class="k">$(</span>@milpa.ask <span class="s2">"What's your favorite ingredient for food?"</span> <span class="s2">"tortillas"</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># shows:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># What's your favorite ingredient for food? [default: tortillas]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">@milpa.log info <span class="s2">"</span><span class="nv">$food</span><span class="s2"> are the best!"</span>
+</span></span></code></pre>
     <div class="content-header-wrapper">
-      <h3 class="content-header" id="milpalog"><code>@milpa.log</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpalog" tabindex="-1">#</a>
+      <h3 class="content-header" id="milpaconfirm"><code>@milpa.confirm</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpaconfirm" tabindex="-1">#</a>
     </div>
-    <p><code>@milpa.log LEVEL [MESSAGE]</code></p>
-    <p>Prints <code>MESSAGE</code> with a log prefix, unless <code>--silent</code> is specified or <code>LEVEL</code> is error. Level may be one of:</p>
-    <ul>
-      <li><code>complete</code>: prefixes ✅ to your message and prints in bold,</li>
-      <li><code>success</code>: prefixes ✔ to your message,</li>
-      <li><code>error</code>: prints your message in red,</li>
-      <li><code>warning</code>: prints your message in yellow,</li>
-      <li><code>info</code>: just prints your message, and</li>
-      <li><code>debug</code>: if <code>--verbose</code> is specified, prints your message in gray.</li>
-    </ul>
+    <p><code>@milpa.confirm [PROMPT]</code></p>
+    <p>Prompts the user to press the <code>y</code> key to continue the execution of a script. Optionally, a <code>PROMPT</code> may be presented to the user.</p>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
+</span></span></span><span class="line"><span class="cl">@milpa.load_util user-input
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># prompt the user for confirmation</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> @milpa.confirm <span class="s2">"Do you wanna see something cool?"</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  @milpa.log info <span class="s2">"🧊"</span>
+</span></span><span class="line"><span class="cl"><span class="k">else</span>
+</span></span><span class="line"><span class="cl">  @milpa.log info <span class="s2">"Maybe next time!"</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span></code></pre>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="milpaselect"><code>@milpa.select</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpaselect" tabindex="-1">#</a>
+    </div>
+    <p><code>@milpa.select "OPTION\n[...]"</code></p>
+    <p>Prompts the user to select a number from a list of options printed to the screen.</p>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
+</span></span></span><span class="line"><span class="cl">@milpa.load_util user-input
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">@milpa.log info <span class="s2">"What is your favorite vitamin-T meal?"</span>
+</span></span><span class="line"><span class="cl"><span class="nv">meal</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>cat <span class="o">&lt;&lt;&lt;</span>OPTIONS <span class="p">|</span> @milpa.select
+</span></span><span class="line"><span class="cl">tacos
+</span></span><span class="line"><span class="cl">tamales
+</span></span><span class="line"><span class="cl">tlayudas
+</span></span><span class="line"><span class="cl">tortas
+</span></span><span class="line"><span class="cl">tostadas
+</span></span><span class="line"><span class="cl">OPTIONS
+</span></span><span class="line"><span class="cl"><span class="k">)</span><span class="s2">"</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">@milpa.log success <span class="s2">"Definitely, </span><span class="nv">$meal</span><span class="s2"> are delicious"</span>
+</span></span></code></pre>
   </main>
   <script src="/static/js/index.js"></script>
 </body>

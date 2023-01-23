@@ -1,404 +1,322 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#" lang="en"><head lang="en">
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head lang="en">
+  <meta name="generator" content="HTML Tidy for HTML5 for Apple macOS version 5.8.0">
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="en" />
-  <meta property="og:title" content="milpa help docs milpa command" />
-  <meta property="og:site_name" content="🌽 milpa" />
-  <meta property="og:description" content="Commands overview" />
-  <meta name="description" content="Commands overview" />
-  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/command/" />
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en">
+  <meta property="og:title" content="milpa help docs milpa command">
+  <meta property="og:site_name" content="🌽 milpa">
+  <meta property="og:description" content="Commands overview">
+  <meta name="description" content="Commands overview">
+  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/command">
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   <title>milpa help docs milpa command</title>
-
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2" />
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2" />
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2" />
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2" />
-
-  <link rel="stylesheet" href="/css/bundle.min.763d8f97db3def1b05ce9f80d740c56fe7a728b47d9bf6140bccdc4bec228fff.css"/>
-
-  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/command/">
-
-  
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="preload" as="style">
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript>
-    <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" />
-  </noscript>
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2">
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2">
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2">
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2">
+  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/command">
+  <link rel="stylesheet" href="/static/css/highlight-light.css">
+  <link rel="stylesheet" href="/static/css/highlight-dark.css">
+  <link rel="stylesheet" href="/static/css/index.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap" rel="preload" as="style">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap"></noscript>
 </head>
-<body><header role="banner">
-  <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
-  <h1 lang="es" ><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1>
-  <input
-    list="milpa-commands"
-    placeholder="type a milpa command"
-    type="text"
-    aria-label="milpa command selector"
-    id="command-selector"
-    pattern='|help docs milpa command spec|help docs milpa command'
-    value="help docs milpa command" />
-  <datalist id="milpa-commands">
-    <option value="help" />
-<option value="help docs" />
-<option value="help docs milpa" />
-<option value="help docs milpa quick-guide" />
-<option value="help docs milpa use-case" />
-<option value="help docs milpa environment" />
-<option value="help docs milpa repo" />
-<option value="help docs milpa repo docs" />
-<option value="help docs milpa repo hooks" />
-<option value="help docs milpa command" />
-<option value="help docs milpa command spec" />
-<option value="help docs milpa util" />
-<option value="help docs milpa util log" />
-<option value="help docs milpa util repo" />
-<option value="help docs milpa util shell" />
-<option value="help docs milpa util tmp" />
-<option value="help docs milpa internals" />
-<option value="help docs milpa changelog" />
-<option value="help docs milpa support" />
-<option value="itself" />
-<option value="itself command-tree" />
-<option value="itself create" />
-<option value="itself docs" />
-<option value="itself docs create" />
-<option value="itself docs html" />
-<option value="itself doctor" />
-<option value="itself repo" />
-<option value="itself repo install" />
-<option value="itself repo list" />
-<option value="itself repo uninstall" />
-<option value="itself shell" />
-<option value="itself shell init" />
-<option value="itself shell install-autocomplete" />
-<option value="itself upgrade" />
-<option value="itself version" />
-<option value="version" />
-</datalist>
-  <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewBox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg"><title>Menu Icon</title><g transform="translate(10.016 -803.03)"><g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336"><path d="m19.668 1032.7h250.65"/><path d="m19.668 932.69h250.65"/><path d="m19.668 832.69h250.65"/></g></g></svg></button>
-</header>
-
-<div id="sidebar" aria-hidden="false">
-  <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
-  <ul>
-    <li><a href="#spec">Spec</a></li>
-    <li><a href="#script">Script</a></li>
-    <li><a href="#arguments-options-and-environment">Arguments, Options and Environment</a>
+<body>
+  <header role="banner">
+    <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
+    <h1 lang="es"><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1><input list="milpa-commands" placeholder="type a milpa command" type="text" aria-label="milpa command selector" id="command-selector" pattern='|help|help docs|help docs milpa|help docs milpa changelog|help docs milpa command|help docs milpa command spec|help docs milpa environment|help docs milpa internals|help docs milpa quick-guide|help docs milpa repo|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa support|help docs milpa use-case|help docs milpa util|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util user-input|itself|itself command-tree|itself create|itself doctor|itself install-autocomplete|itself repo|itself repo install|itself repo list|itself repo uninstall|itself upgrade|itself version' value="help docs milpa command"> <datalist id="milpa-commands">
+      <option value="help">
+      </option>
+      <option value="help docs">
+      </option>
+      <option value="help docs milpa">
+      </option>
+      <option value="help docs milpa quick-guide">
+      </option>
+      <option value="help docs milpa use-case">
+      </option>
+      <option value="help docs milpa environment">
+      </option>
+      <option value="help docs milpa repo">
+      </option>
+      <option value="help docs milpa repo docs">
+      </option>
+      <option value="help docs milpa repo hooks">
+      </option>
+      <option value="help docs milpa command">
+      </option>
+      <option value="help docs milpa command spec">
+      </option>
+      <option value="help docs milpa util">
+      </option>
+      <option value="help docs milpa util log">
+      </option>
+      <option value="help docs milpa util repo">
+      </option>
+      <option value="help docs milpa util shell">
+      </option>
+      <option value="help docs milpa util tmp">
+      </option>
+      <option value="help docs milpa util user-input">
+      </option>
+      <option value="help docs milpa internals">
+      </option>
+      <option value="help docs milpa support">
+      </option>
+      <option value="help docs milpa changelog">
+      </option>
+      <option value="itself">
+      </option>
+      <option value="itself command-tree">
+      </option>
+      <option value="itself create">
+      </option>
+      <option value="itself doctor">
+      </option>
+      <option value="itself install-autocomplete">
+      </option>
+      <option value="itself repo">
+      </option>
+      <option value="itself repo install">
+      </option>
+      <option value="itself repo list">
+      </option>
+      <option value="itself repo uninstall">
+      </option>
+      <option value="itself upgrade">
+      </option>
+      <option value="itself version">
+      </option>
+    </datalist> <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewbox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg">
+    <title>Menu Icon</title>
+    <g transform="translate(10.016 -803.03)">
+      <g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336">
+        <path d="m19.668 1032.7h250.65"></path>
+        <path d="m19.668 932.69h250.65"></path>
+        <path d="m19.668 832.69h250.65"></path>
+      </g>
+    </g></svg></button>
+  </header>
+  <div id="sidebar" aria-hidden="false">
+    <nav id="table-of-contents" aria-labelledby="toc-header">
+      <span class="heading" id="toc-header">In this page</span>
       <ul>
-        <li><a href="#milpa_command_"><code>MILPA_COMMAND_*</code></a></li>
-        <li><a href="#milpa_arg_"><code>MILPA_ARG_*</code></a></li>
-        <li><a href="#milpa_opt_"><code>MILPA_OPT_*</code></a></li>
+        <li>
+          <a href="#spec">Spec</a>
+        </li>
+        <li>
+          <a href="#script">Script</a>
+        </li>
+        <li>
+          <a href="#arguments-options-and-environment">Arguments, Options and Environment</a>
+          <ul>
+            <li>
+              <a href="#command-milpa-command-">Command: <code>MILPA_COMMAND_*</code></a>
+            </li>
+            <li>
+              <a href="#arguments-milpa-arg-">Arguments: <code>MILPA_ARG_*</code></a>
+            </li>
+            <li>
+              <a href="#options-milpa-opt-">Options: <code>MILPA_OPT_*</code></a>
+            </li>
+          </ul>
+        </li>
       </ul>
-    </li>
-  </ul>
-</nav>
-  
-
-  <nav id="commands" aria-labelledby="commands-header">
-    <span class="heading" id="commands-header">Commands</span>
-    
-    <ul>
-    
-<li ><a href="https://milpa.dev/help/"class="command-menu-selected-prefix">help</a>
-<ul
-  class="sub-menu"
-  aria-label="help subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/"class="command-menu-selected-prefix">docs</a>
-<ul
-  class="sub-menu"
-  aria-label="docs subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/"class="command-menu-selected-prefix">milpa</a>
-<ul
-  class="sub-menu"
-  aria-label="milpa subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/quick-guide/">quick-guide</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/use-case/">use-case</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/environment/">environment</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/repo/">repo</a>
-<ul
-  class="sub-menu"
-  aria-label="repo subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/repo/docs/">docs</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/repo/hooks/">hooks</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li >
-  <strong class="command-menu-selected-prefix">command</strong>
-<ul
-  class="sub-menu"
-  aria-label="command subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/command/spec/">spec</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/">util</a>
-<ul
-  class="sub-menu"
-  aria-label="util subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/log/">log</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/repo/">repo</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/shell/">shell</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/tmp/">tmp</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/internals/">internals</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/support/">support</a>
-
-  
-</ul>
-</li>
-
-
-  
-</ul>
-</li>
-
-
-  
-</ul>
-</li>
-
-
-    
-<li ><a href="https://milpa.dev/itself/">itself</a>
-<ul
-  class="sub-menu"
-  aria-label="itself subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/command-tree/">command-tree</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/create/">create</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/docs/">docs</a>
-<ul
-  class="sub-menu"
-  aria-label="docs subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/docs/create/">create</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/docs/html/">html</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/itself/doctor/">doctor</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/">repo</a>
-<ul
-  class="sub-menu"
-  aria-label="repo subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/install/">install</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/list/">list</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/uninstall/">uninstall</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/itself/shell/">shell</a>
-<ul
-  class="sub-menu"
-  aria-label="shell subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/shell/init/">init</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/shell/install-autocomplete/">install-autocomplete</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/itself/upgrade/">upgrade</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/version/">version</a>
-
-  
-</ul>
-</li>
-
-
-    
-<li ><a href="https://milpa.dev/version/">version</a>
-
-    </ul>
-  </nav>
-</div>
-
-
-<main id="content">
-<section class="content-list">
-  <h1 id="command-name-header" class="sr-only">milpa help docs milpa command</h1>
-	<p><code>milpa</code> has two modes for running your scripts:</p>
-<ol start="0">
-<li>bash scripts, with an <code>.sh</code> extension, or</li>
-<li>executable files without an extension, written in whatever language you want.</li>
-</ol>
-<p>Your <strong>script</strong> or executable plus its corresponding <strong>spec</strong> is what we call a <code>milpa</code> <strong>command</strong>. If your command does not have an extension, remember to set the executable bit on (<code>chmod +x .milpa/commands/your-command</code>)!</p>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="spec">Spec</h2> <a aria-hidden="true" class="heading-anchor" href="#spec" tabindex="-1">#</a>
-</div>
-<p>A <strong>spec</strong> is a file named just like your <strong>script</strong>, except with a <code>.yaml</code> extension, with a few basic details about what your command does and what kinds of input it deals with. There&rsquo;s more details at <a href="/help/docs/milpa/command/spec/"><code>milpa help docs milpa command spec</code></a>, but here&rsquo;s a brief example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># .milpa/commands/greet.yaml</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l">a very well mannered program</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">greets you politely on stdout</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">arguments</span><span class="p">:</span><span class="w">
+    </nav>
+    <nav id="commands" aria-labelledby="commands-header">
+      <span class="heading" id="commands-header">Commands</span>
+      <ul>
+        <li>
+          <a href="/help/" class="command-menu-selected-prefix">help</a>
+          <ul class="sub-menu" aria-label="help subcommands">
+            <li>
+              <a href="/help/docs/" class="command-menu-selected-prefix">docs</a>
+              <ul class="sub-menu" aria-label="docs subcommands">
+                <li>
+                  <a href="/help/docs/milpa/" class="command-menu-selected-prefix">milpa</a>
+                  <ul class="sub-menu" aria-label="milpa subcommands">
+                    <li>
+                      <a href="/help/docs/milpa/quick-guide/" class="">quick-guide</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/use-case/" class="">use-case</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/environment/" class="">environment</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/repo/" class="">repo</a>
+                      <ul class="sub-menu" aria-label="repo subcommands">
+                        <li>
+                          <a href="/help/docs/milpa/repo/docs/" class="">docs</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/repo/hooks/" class="">hooks</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong class="command-menu-selected-prefix">command</strong>
+                      <ul class="sub-menu" aria-label="command subcommands">
+                        <li>
+                          <a href="/help/docs/milpa/command/spec/" class="">spec</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/util/" class="">util</a>
+                      <ul class="sub-menu" aria-label="util subcommands">
+                        <li>
+                          <a href="/help/docs/milpa/util/log/" class="">log</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/repo/" class="">repo</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/shell/" class="">shell</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/tmp/" class="">tmp</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/user-input/" class="">user-input</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/internals/" class="">internals</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/support/" class="">support</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/changelog/" class="">changelog</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="/itself/" class="">itself</a>
+          <ul class="sub-menu" aria-label="itself subcommands">
+            <li>
+              <a href="/itself/command-tree/" class="">command-tree</a>
+            </li>
+            <li>
+              <a href="/itself/create/" class="">create</a>
+            </li>
+            <li>
+              <a href="/itself/doctor/" class="">doctor</a>
+            </li>
+            <li>
+              <a href="/itself/install-autocomplete/" class="">install-autocomplete</a>
+            </li>
+            <li>
+              <a href="/itself/repo/" class="">repo</a>
+              <ul class="sub-menu" aria-label="repo subcommands">
+                <li>
+                  <a href="/itself/repo/install/" class="">install</a>
+                </li>
+                <li>
+                  <a href="/itself/repo/list/" class="">list</a>
+                </li>
+                <li>
+                  <a href="/itself/repo/uninstall/" class="">uninstall</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="/itself/upgrade/" class="">upgrade</a>
+            </li>
+            <li>
+              <a href="/itself/version/" class="">version</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <main id="content">
+    <h1 id="command-name-header" class="sr-only">milpa help docs milpa command</h1>
+    <p><code>milpa</code> has two modes for running your scripts:</p>
+    <ol start="0">
+      <li>bash scripts, with an <code>.sh</code> extension, or</li>
+      <li>executable files without an extension, written in whatever language you want.</li>
+    </ol>
+    <p>Your <strong>script</strong> or executable plus its corresponding <strong>spec</strong> is what we call a <code>milpa</code> <strong>command</strong>. If your command does not have an extension, remember to set the executable bit on (<code>chmod +x .milpa/commands/your-command</code>)!</p>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="spec">Spec</h2><a aria-hidden="true" class="heading-anchor" href="#spec" tabindex="-1">#</a>
+    </div>
+    <p>A <strong>spec</strong> is a file named just like your <strong>script</strong>, except with a <code>.yaml</code> extension, with a few basic details about what your command does and what kinds of input it deals with. There's more details at <a href="/help/docs/milpa/command/spec/"><code>milpa help docs milpa command spec</code></a>, but here's a brief example:</p>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c"># .milpa/commands/greet.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l">a very well mannered program</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">greets you politely on stdout</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">arguments</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">full-name</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">the name to greet</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">variadic</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">options</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">options</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">greeting</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l">Quihúbole mi</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">the greeting word to use</span><span class="w">
-</span></span></span></code></pre></div><div class="content-header-wrapper">
-<h2 class="content-header" id="script">Script</h2> <a aria-hidden="true" class="heading-anchor" href="#script" tabindex="-1">#</a>
-</div>
-<p>A <strong>script</strong> then, will be able to use the definitions from your <strong>spec</strong> and do fun stuff with them, for example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/env bash
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="c1"># .milpa/commands/greet.sh</span>
+</span></span></span></code></pre>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="script">Script</h2><a aria-hidden="true" class="heading-anchor" href="#script" tabindex="-1">#</a>
+    </div>
+    <p>A <strong>script</strong> then, will be able to use the definitions from your <strong>spec</strong> and do fun stuff with them, for example:</p>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="cp">#!/bin/env bash
+</span></span></span><span class="line"><span class="cl"><span class="c1"># .milpa/commands/greet.sh</span>
 </span></span><span class="line"><span class="cl"><span class="k">function</span> title_case<span class="o">()</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">  <span class="nb">set</span> <span class="si">${</span><span class="p">*,,</span><span class="si">}</span>
 </span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="si">${</span><span class="p">*^</span><span class="si">}</span>
 </span></span><span class="line"><span class="cl"><span class="o">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># arguments are passed as environment variables</span>
-</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> <span class="s2">&#34;</span><span class="si">${#</span><span class="nv">MILPA_ARG_FULL_NAME</span><span class="si">}</span><span class="s2">&#34;</span> -eq  <span class="m">0</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="si">${#</span><span class="nv">MILPA_ARG_FULL_NAME</span><span class="si">}</span><span class="s2">"</span> -eq  <span class="m">0</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
 </span></span><span class="line"><span class="cl">  <span class="nv">name</span><span class="o">=</span><span class="k">$(</span>whoami<span class="k">)</span>
 </span></span><span class="line"><span class="cl"><span class="k">else</span>
-</span></span><span class="line"><span class="cl">  <span class="nv">name</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">MILPA_ARG_FULL_NAME</span><span class="p">[*]</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">name</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">MILPA_ARG_FULL_NAME</span><span class="p">[*]</span><span class="si">}</span><span class="s2">"</span>
 </span></span><span class="line"><span class="cl"><span class="k">fi</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># and so are options!</span>
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$MILPA_OPT_GREETING</span><span class="s2"> </span><span class="k">$(</span>title_case <span class="s2">&#34;</span><span class="nv">$name</span><span class="s2">&#34;</span><span class="k">)</span><span class="s2">&#34;</span>
-</span></span></code></pre></div><div class="content-header-wrapper">
-<h2 class="content-header" id="arguments-options-and-environment">Arguments, Options and Environment</h2> <a aria-hidden="true" class="heading-anchor" href="#arguments-options-and-environment" tabindex="-1">#</a>
-</div>
-<p>The <strong>arguments</strong> and <strong>options</strong> passed in the command line will be parsed and validated according to your spec. If valid, your script will receive numbered arguments as usual (<code>$1</code> and so on), without known options. Valid arguments and options will be available to your script as <strong>environment variables</strong> as well.</p>
-<p>The environment available to a <strong>script</strong> is composed of four groups:</p>
-<ul>
-<li><code>MILPA_COMMAND_*</code> variables have information about the command called by the user,</li>
-<li><code>MILPA_ARG_*</code> variables hold values for every argument of the spec,</li>
-<li><code>MILPA_OPT_*</code> variables hold values for every option defined, and</li>
-<li><a href="/help/docs/milpa/environment/">global environment variables</a> that affect <code>milpa</code>&rsquo;s overall behavior.</li>
-</ul>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="milpa_command_"><code>MILPA_COMMAND_*</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpa_command_" tabindex="-1">#</a>
-</div>
-<p>Your script has access to the following variables set by <code>milpa</code> after parsing arguments and running validations:</p>
-<ul>
-<li><code>MILPA_COMMAND_NAME</code>: the space delimited name of your command, i.e. <code>db connect</code>;</li>
-<li><code>MILPA_COMMAND_KIND</code>: either <code>source</code> for <code>.sh</code> scripts, or <code>exec</code> for executables;</li>
-<li><code>MILPA_COMMAND_REPO</code>: the path to the repo containing this command, i.e. <code>/home/you/project</code>; and</li>
-<li><code>MILPA_COMMAND_PATH</code>: the full path to the executable being called</li>
-</ul>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="milpa_arg_"><code>MILPA_ARG_*</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpa_arg_" tabindex="-1">#</a>
-</div>
-<p><strong>Arguments</strong> specified on your spec will show up as environment variables with the <code>MILPA_ARG_</code> prefix, followed by the name set in your spec. Names will be all uppercase, and dashes will be turned into underscores. See the <a href="/help/docs/milpa/command/spec/">command spec</a> for more information on <strong>arguments</strong>, and this abbreviated example below:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># when ran like this:</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$MILPA_OPT_GREETING</span><span class="s2"> </span><span class="k">$(</span>title_case <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span>
+</span></span></code></pre>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="arguments-options-and-environment">Arguments, Options and Environment</h2><a aria-hidden="true" class="heading-anchor" href="#arguments-options-and-environment" tabindex="-1">#</a>
+    </div>
+    <p>The <strong>arguments</strong> and <strong>options</strong> passed in the command line will be parsed and validated according to your spec. If valid, your script will receive numbered arguments as usual (<code>$1</code> and so on), without known options. Valid arguments and options will be available to your script as <strong>environment variables</strong> as well.</p>
+    <p>The environment available to a <strong>script</strong> is composed of four groups:</p>
+    <ul>
+      <li><code>MILPA_COMMAND_*</code> variables have information about the <strong>command</strong> called by the user,</li>
+      <li><code>MILPA_ARG_*</code> variables hold values for every <strong>argument</strong> of the spec,</li>
+      <li><code>MILPA_OPT_*</code> variables hold values for every <strong>option</strong> defined, and</li>
+      <li>
+        <a href="/help/docs/milpa/environment/">global environment variables</a> that affect <code>milpa</code>'s overall behavior.
+      </li>
+    </ul>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="command-milpa-command-">Command: <code>MILPA_COMMAND_*</code></h3><a aria-hidden="true" class="heading-anchor" href="#command-milpa-command-" tabindex="-1">#</a>
+    </div>
+    <p>Your script has access to the following variables set by <code>milpa</code> after parsing arguments and running validations:</p>
+    <ul>
+      <li><code>MILPA_COMMAND_NAME</code>: the space delimited name of your command, i.e. <code>db connect</code>;</li>
+      <li><code>MILPA_COMMAND_KIND</code>: either <code>source</code> for <code>.sh</code> scripts, or <code>exec</code> for executables;</li>
+      <li><code>MILPA_COMMAND_REPO</code>: the path to the repo containing this command, i.e. <code>/home/you/project/.milpa</code>; and</li>
+      <li><code>MILPA_COMMAND_PATH</code>: the full path to the executable being called</li>
+    </ul>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="arguments-milpa-arg-">Arguments: <code>MILPA_ARG_*</code></h3><a aria-hidden="true" class="heading-anchor" href="#arguments-milpa-arg-" tabindex="-1">#</a>
+    </div>
+    <p><strong>Arguments</strong> specified on your spec will show up as environment variables with the <code>MILPA_ARG_</code> prefix, followed by the name set in your spec. Names will be all uppercase, and dashes will be turned into underscores. See the <a href="/help/docs/milpa/command/spec/">command spec</a> for more information on <strong>arguments</strong>, and this abbreviated example below:</p>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c1"># when ran like this:</span>
 </span></span><span class="line"><span class="cl">milpa greet
 </span></span><span class="line"><span class="cl"><span class="c1"># would output:</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&gt; Quihúbole mi Grace</span>
@@ -407,11 +325,12 @@
 </span></span><span class="line"><span class="cl">milpa greet elmer homero
 </span></span><span class="line"><span class="cl"><span class="c1"># would output:</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&gt; Quihúbole mi Elmer Homero</span>
-</span></span></code></pre></div><div class="content-header-wrapper">
-<h3 class="content-header" id="milpa_opt_"><code>MILPA_OPT_*</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpa_opt_" tabindex="-1">#</a>
-</div>
-<p><strong>Options</strong> show up on the <strong>environment</strong> with the <code>MILPA_OPT_</code> prefix followed by the name in your spec. Names will be all uppercase, and dashes will be turned into underscores. In the <a href="/help/docs/milpa/command/spec/">command spec</a> you&rsquo;ll find more details on how to set <strong>options</strong>.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># when ran like this:</span>
+</span></span></code></pre>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="options-milpa-opt-">Options: <code>MILPA_OPT_*</code></h3><a aria-hidden="true" class="heading-anchor" href="#options-milpa-opt-" tabindex="-1">#</a>
+    </div>
+    <p><strong>Options</strong> show up on the environment with the <code>MILPA_OPT_</code> prefix followed by the name in your spec. Names will be all uppercase, and dashes will be turned into underscores. In the <a href="/help/docs/milpa/command/spec/">command spec</a> you'll find more details on how to set <strong>options</strong>.</p>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c1"># when ran like this:</span>
 </span></span><span class="line"><span class="cl">milpa greet --greeting Sup
 </span></span><span class="line"><span class="cl"><span class="c1"># would output:</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&gt; Sup Grace</span>
@@ -420,26 +339,27 @@
 </span></span><span class="line"><span class="cl">milpa greet --greeting Oi joão
 </span></span><span class="line"><span class="cl"><span class="c1"># would output:</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&gt; Oi João</span>
-</span></span></code></pre></div><p><strong>Boolean</strong> type options have a special behavior, their value will be an empty string (<code>&quot;&quot;</code>) if <code>false</code>, and <code>&quot;true&quot;</code> if <code>true</code>, so comparing them in bash is simpler (i.e. <code>if [[ &quot;$MILPA_OPT_BOOL_FLAG&quot; ]] </code>), for example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># let&#39;s add options to the example above</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">options</span><span class="p">:</span><span class="w">
+</span></span></code></pre>
+    <p><strong>Boolean</strong> type options have a special behavior, their value will be an empty string (<code>""</code>) if <code>false</code>, and <code>"true"</code> if <code>true</code>, so comparing them in bash is simpler (i.e. <code>if [[ "$MILPA_OPT_BOOL_FLAG" ]]</code> ), for example:</p>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c"># let's add options to the example above</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">options</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">shout</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">boolean</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># we modify the example above</span>
-</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$MILPA_OPT_SHOUT</span><span class="s2">&#34;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
-</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$MILPA_OPT_GREETING</span><span class="s2"> </span><span class="k">$(</span>title_case <span class="s2">&#34;</span><span class="nv">$name</span><span class="s2">&#34;</span><span class="k">)</span><span class="s2">!&#34;</span> <span class="p">|</span> awk <span class="s1">&#39;{print toupper($0)}&#39;</span>
+</span></span></span></code></pre>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c1"># we modify the example above</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$MILPA_OPT_SHOUT</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$MILPA_OPT_GREETING</span><span class="s2"> </span><span class="k">$(</span>title_case <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span><span class="k">)</span><span class="s2">!"</span> <span class="p">|</span> awk <span class="s1">'{print toupper($0)}'</span>
 </span></span><span class="line"><span class="cl"><span class="k">else</span>
-</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$MILPA_ARG_GREETING</span><span class="s2"> </span><span class="k">$(</span>title_case <span class="s2">&#34;</span><span class="si">${</span><span class="nv">MILPA_ARG_FULL_NAME</span><span class="p">[*]</span><span class="si">}</span><span class="s2">&#34;</span><span class="k">)</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$MILPA_ARG_GREETING</span><span class="s2"> </span><span class="k">$(</span>title_case <span class="s2">"</span><span class="si">${</span><span class="nv">MILPA_ARG_FULL_NAME</span><span class="p">[*]</span><span class="si">}</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span>
 </span></span><span class="line"><span class="cl"><span class="k">fi</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># and run with</span>
+</span></span></code></pre>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c1"># and run with</span>
 </span></span><span class="line"><span class="cl">milpa greet --shout loud boi
 </span></span><span class="line"><span class="cl"><span class="c1"># to get</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&gt; QUIHUBO MI LOUD BOI!</span>
-</span></span></code></pre></div>
-</div>
-
-    </main>
-<script src="https://milpa.dev/js/index.min.e8fb4266f19590f6cbf4007c65faa8e38a0e23bfbc40ef56ca24eed9d96fa64c.js"></script>
+</span></span></code></pre>
+  </main>
+  <script src="/static/js/index.js"></script>
 </body>
 </html>

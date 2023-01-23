@@ -1,413 +1,343 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#" lang="en"><head lang="en">
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head lang="en">
+  <meta name="generator" content="HTML Tidy for HTML5 for Apple macOS version 5.8.0">
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="en" />
-  <meta property="og:title" content="milpa help docs milpa use-case" />
-  <meta property="og:site_name" content="🌽 milpa" />
-  <meta property="og:description" content="Use-cases and alternatives when using milpa" />
-  <meta name="description" content="Use-cases and alternatives when using milpa" />
-  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/use-case/" />
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en">
+  <meta property="og:title" content="milpa help docs milpa use-case">
+  <meta property="og:site_name" content="🌽 milpa">
+  <meta property="og:description" content="Use-cases and alternatives when using milpa">
+  <meta name="description" content="Use-cases and alternatives when using milpa">
+  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/use-case">
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   <title>milpa help docs milpa use-case</title>
-
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2" />
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2" />
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2" />
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2" />
-
-  <link rel="stylesheet" href="/css/bundle.min.763d8f97db3def1b05ce9f80d740c56fe7a728b47d9bf6140bccdc4bec228fff.css"/>
-
-  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/use-case/">
-
-  
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="preload" as="style">
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript>
-    <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" />
-  </noscript>
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2">
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2">
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2">
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2">
+  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/use-case">
+  <link rel="stylesheet" href="/static/css/highlight-light.css">
+  <link rel="stylesheet" href="/static/css/highlight-dark.css">
+  <link rel="stylesheet" href="/static/css/index.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap" rel="preload" as="style">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap"></noscript>
 </head>
-<body><header role="banner">
-  <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
-  <h1 lang="es" ><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1>
-  <input
-    list="milpa-commands"
-    placeholder="type a milpa command"
-    type="text"
-    aria-label="milpa command selector"
-    id="command-selector"
-    pattern='|help docs milpa use-case'
-    value="help docs milpa use-case" />
-  <datalist id="milpa-commands">
-    <option value="help" />
-<option value="help docs" />
-<option value="help docs milpa" />
-<option value="help docs milpa quick-guide" />
-<option value="help docs milpa use-case" />
-<option value="help docs milpa environment" />
-<option value="help docs milpa repo" />
-<option value="help docs milpa repo docs" />
-<option value="help docs milpa repo hooks" />
-<option value="help docs milpa command" />
-<option value="help docs milpa command spec" />
-<option value="help docs milpa util" />
-<option value="help docs milpa util log" />
-<option value="help docs milpa util repo" />
-<option value="help docs milpa util shell" />
-<option value="help docs milpa util tmp" />
-<option value="help docs milpa internals" />
-<option value="help docs milpa changelog" />
-<option value="help docs milpa support" />
-<option value="itself" />
-<option value="itself command-tree" />
-<option value="itself create" />
-<option value="itself docs" />
-<option value="itself docs create" />
-<option value="itself docs html" />
-<option value="itself doctor" />
-<option value="itself repo" />
-<option value="itself repo install" />
-<option value="itself repo list" />
-<option value="itself repo uninstall" />
-<option value="itself shell" />
-<option value="itself shell init" />
-<option value="itself shell install-autocomplete" />
-<option value="itself upgrade" />
-<option value="itself version" />
-<option value="version" />
-</datalist>
-  <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewBox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg"><title>Menu Icon</title><g transform="translate(10.016 -803.03)"><g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336"><path d="m19.668 1032.7h250.65"/><path d="m19.668 932.69h250.65"/><path d="m19.668 832.69h250.65"/></g></g></svg></button>
-</header>
-
-<div id="sidebar" aria-hidden="false">
-  <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
-  <ul>
-    <li><a href="#milpa-is-great-for"><code>milpa</code> is great for</a>
+<body>
+  <header role="banner">
+    <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
+    <h1 lang="es"><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1><input list="milpa-commands" placeholder="type a milpa command" type="text" aria-label="milpa command selector" id="command-selector" pattern='|help|help docs|help docs milpa|help docs milpa changelog|help docs milpa command|help docs milpa command spec|help docs milpa environment|help docs milpa internals|help docs milpa quick-guide|help docs milpa repo|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa support|help docs milpa use-case|help docs milpa util|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util user-input|itself|itself command-tree|itself create|itself doctor|itself install-autocomplete|itself repo|itself repo install|itself repo list|itself repo uninstall|itself upgrade|itself version' value="help docs milpa use-case"> <datalist id="milpa-commands">
+      <option value="help">
+      </option>
+      <option value="help docs">
+      </option>
+      <option value="help docs milpa">
+      </option>
+      <option value="help docs milpa quick-guide">
+      </option>
+      <option value="help docs milpa use-case">
+      </option>
+      <option value="help docs milpa environment">
+      </option>
+      <option value="help docs milpa repo">
+      </option>
+      <option value="help docs milpa repo docs">
+      </option>
+      <option value="help docs milpa repo hooks">
+      </option>
+      <option value="help docs milpa command">
+      </option>
+      <option value="help docs milpa command spec">
+      </option>
+      <option value="help docs milpa util">
+      </option>
+      <option value="help docs milpa util log">
+      </option>
+      <option value="help docs milpa util repo">
+      </option>
+      <option value="help docs milpa util shell">
+      </option>
+      <option value="help docs milpa util tmp">
+      </option>
+      <option value="help docs milpa util user-input">
+      </option>
+      <option value="help docs milpa internals">
+      </option>
+      <option value="help docs milpa support">
+      </option>
+      <option value="help docs milpa changelog">
+      </option>
+      <option value="itself">
+      </option>
+      <option value="itself command-tree">
+      </option>
+      <option value="itself create">
+      </option>
+      <option value="itself doctor">
+      </option>
+      <option value="itself install-autocomplete">
+      </option>
+      <option value="itself repo">
+      </option>
+      <option value="itself repo install">
+      </option>
+      <option value="itself repo list">
+      </option>
+      <option value="itself repo uninstall">
+      </option>
+      <option value="itself upgrade">
+      </option>
+      <option value="itself version">
+      </option>
+    </datalist> <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewbox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg">
+    <title>Menu Icon</title>
+    <g transform="translate(10.016 -803.03)">
+      <g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336">
+        <path d="m19.668 1032.7h250.65"></path>
+        <path d="m19.668 932.69h250.65"></path>
+        <path d="m19.668 832.69h250.65"></path>
+      </g>
+    </g></svg></button>
+  </header>
+  <div id="sidebar" aria-hidden="false">
+    <nav id="table-of-contents" aria-labelledby="toc-header">
+      <span class="heading" id="toc-header">In this page</span>
       <ul>
-        <li><a href="#examples">Examples</a></li>
+        <li>
+          <a href="#milpa-is-great-for"><code>milpa</code> is great for</a>
+          <ul>
+            <li>
+              <a href="#examples">Examples</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#where-milpa-wont-shine">Where <code>milpa</code> won't shine</a>
+        </li>
+        <li>
+          <a href="#alternatives-to-milpa">Alternatives to <code>milpa</code></a>
+          <ul>
+            <li>
+              <a href="#regular-scripts-in-the-filesystem">Regular scripts in the filesystem</a>
+            </li>
+            <li>
+              <a href="#bash-tools">Bash tools</a>
+            </li>
+            <li>
+              <a href="#make">Make</a>
+            </li>
+            <li>
+              <a href="#byocli">BYOCLI</a>
+            </li>
+          </ul>
+        </li>
       </ul>
-    </li>
-    <li><a href="#where-milpa-wont-shine">Where <code>milpa</code> won&rsquo;t shine</a></li>
-    <li><a href="#alternatives-to-milpa">Alternatives to <code>milpa</code></a>
+    </nav>
+    <nav id="commands" aria-labelledby="commands-header">
+      <span class="heading" id="commands-header">Commands</span>
       <ul>
-        <li><a href="#regular-scripts-in-the-filesystem">Regular scripts in the filesystem</a></li>
-        <li><a href="#bash-tools">Bash tools</a></li>
-        <li><a href="#make">Make</a></li>
-        <li><a href="#byocli">BYOCLI</a></li>
+        <li>
+          <a href="/help/" class="command-menu-selected-prefix">help</a>
+          <ul class="sub-menu" aria-label="help subcommands">
+            <li>
+              <a href="/help/docs/" class="command-menu-selected-prefix">docs</a>
+              <ul class="sub-menu" aria-label="docs subcommands">
+                <li>
+                  <a href="/help/docs/milpa/" class="command-menu-selected-prefix">milpa</a>
+                  <ul class="sub-menu" aria-label="milpa subcommands">
+                    <li>
+                      <a href="/help/docs/milpa/quick-guide/" class="">quick-guide</a>
+                    </li>
+                    <li><strong class="command-menu-selected-prefix">use-case</strong></li>
+                    <li>
+                      <a href="/help/docs/milpa/environment/" class="">environment</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/repo/" class="">repo</a>
+                      <ul class="sub-menu" aria-label="repo subcommands">
+                        <li>
+                          <a href="/help/docs/milpa/repo/docs/" class="">docs</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/repo/hooks/" class="">hooks</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/command/" class="">command</a>
+                      <ul class="sub-menu" aria-label="command subcommands">
+                        <li>
+                          <a href="/help/docs/milpa/command/spec/" class="">spec</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/util/" class="">util</a>
+                      <ul class="sub-menu" aria-label="util subcommands">
+                        <li>
+                          <a href="/help/docs/milpa/util/log/" class="">log</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/repo/" class="">repo</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/shell/" class="">shell</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/tmp/" class="">tmp</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/user-input/" class="">user-input</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/internals/" class="">internals</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/support/" class="">support</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/changelog/" class="">changelog</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="/itself/" class="">itself</a>
+          <ul class="sub-menu" aria-label="itself subcommands">
+            <li>
+              <a href="/itself/command-tree/" class="">command-tree</a>
+            </li>
+            <li>
+              <a href="/itself/create/" class="">create</a>
+            </li>
+            <li>
+              <a href="/itself/doctor/" class="">doctor</a>
+            </li>
+            <li>
+              <a href="/itself/install-autocomplete/" class="">install-autocomplete</a>
+            </li>
+            <li>
+              <a href="/itself/repo/" class="">repo</a>
+              <ul class="sub-menu" aria-label="repo subcommands">
+                <li>
+                  <a href="/itself/repo/install/" class="">install</a>
+                </li>
+                <li>
+                  <a href="/itself/repo/list/" class="">list</a>
+                </li>
+                <li>
+                  <a href="/itself/repo/uninstall/" class="">uninstall</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="/itself/upgrade/" class="">upgrade</a>
+            </li>
+            <li>
+              <a href="/itself/version/" class="">version</a>
+            </li>
+          </ul>
+        </li>
       </ul>
-    </li>
-  </ul>
-</nav>
-  
-
-  <nav id="commands" aria-labelledby="commands-header">
-    <span class="heading" id="commands-header">Commands</span>
-    
+    </nav>
+  </div>
+  <main id="content">
+    <h1 id="command-name-header" class="sr-only">milpa help docs milpa use-case</h1>
+    <p>I built <code>milpa</code> with a few use cases in mind:</p>
     <ul>
-    
-<li ><a href="https://milpa.dev/help/"class="command-menu-selected-prefix">help</a>
-<ul
-  class="sub-menu"
-  aria-label="help subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/"class="command-menu-selected-prefix">docs</a>
-<ul
-  class="sub-menu"
-  aria-label="docs subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/"class="command-menu-selected-prefix">milpa</a>
-<ul
-  class="sub-menu"
-  aria-label="milpa subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/quick-guide/">quick-guide</a>
-
-  
-  
-<li >
-  <strong class="command-menu-selected-prefix">use-case</strong>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/environment/">environment</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/repo/">repo</a>
-<ul
-  class="sub-menu"
-  aria-label="repo subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/repo/docs/">docs</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/repo/hooks/">hooks</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/command/">command</a>
-<ul
-  class="sub-menu"
-  aria-label="command subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/command/spec/">spec</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/">util</a>
-<ul
-  class="sub-menu"
-  aria-label="util subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/log/">log</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/repo/">repo</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/shell/">shell</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/tmp/">tmp</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/internals/">internals</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/support/">support</a>
-
-  
-</ul>
-</li>
-
-
-  
-</ul>
-</li>
-
-
-  
-</ul>
-</li>
-
-
-    
-<li ><a href="https://milpa.dev/itself/">itself</a>
-<ul
-  class="sub-menu"
-  aria-label="itself subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/command-tree/">command-tree</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/create/">create</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/docs/">docs</a>
-<ul
-  class="sub-menu"
-  aria-label="docs subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/docs/create/">create</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/docs/html/">html</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/itself/doctor/">doctor</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/">repo</a>
-<ul
-  class="sub-menu"
-  aria-label="repo subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/install/">install</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/list/">list</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/uninstall/">uninstall</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/itself/shell/">shell</a>
-<ul
-  class="sub-menu"
-  aria-label="shell subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/shell/init/">init</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/shell/install-autocomplete/">install-autocomplete</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/itself/upgrade/">upgrade</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/version/">version</a>
-
-  
-</ul>
-</li>
-
-
-    
-<li ><a href="https://milpa.dev/version/">version</a>
-
+      <li>To <strong>share groups of scripts</strong> used by a group of folks in an engineering team (i.e. setup development environments, work with secrets/credentials)</li>
+      <li>to <strong>share context and code</strong>, without having to ask folks to run stuff off READMEs (i.e. pull service logs, forward ports), and</li>
+      <li>to <strong>quickly build scripts</strong> that will be documented sufficiently well for my forgetful future-self.</li>
     </ul>
-  </nav>
-</div>
-
-
-<main id="content">
-<h1 id="command-name-header" class="sr-only">milpa help docs milpa use-case</h1>
-<p>I built <code>milpa</code> with a few use cases in mind:</p>
-<ul>
-<li>To <strong>share groups of scripts</strong> used by a group of folks in an engineering team (i.e. setup development environments, work with secrets/credentials)</li>
-<li>to <strong>share context and code</strong>, without having to ask folks to run stuff off READMEs (i.e. pull service logs, forward ports), and</li>
-<li>to <strong>quickly build scripts</strong> that will be documented sufficiently well for my forgetful future-self.</li>
-</ul>
-<p>My goal with <code>milpa</code> is to make following the <a href="https://clig.dev">Command Line Interface Guidelines</a> require as little effort as possible.</p>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="milpa-is-great-for"><code>milpa</code> is great for</h2> <a aria-hidden="true" class="heading-anchor" href="#milpa-is-great-for" tabindex="-1">#</a>
-</div>
-<ul>
-<li>working with small programs meant to be used as either building blocks for other programs, or user-facing collections of these blocks</li>
-<li>sharing related commands using your team&rsquo;s source control versioning system, allowing anyone to mess with them and test them often</li>
-<li>when writing shell scripts is the way to go. Maybe you&rsquo;re interacting with binaries in the system, or operating on files and directories and using your programming language of choice is overkill.</li>
-<li>turning runbooks into actionable, runnable scripts. Up-to-date remediation one <code>git pull &amp;&amp; milpa runbook ...</code> away.</li>
-</ul>
-<p>Tasks like bootstrapping development environments are usually left out for the user to accomplish by following through a README or wiki with likely outdated links; <code>milpa</code> is great when these tasks can be accomplished by prompting for information, querying identity providers and then running configuration commands or modifying the filesystem directly.</p>
-<blockquote>
-<p>⚠️ <code>milpa</code> is still under development and is currently on alpha!</p>
-</blockquote>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="examples">Examples</h3> <a aria-hidden="true" class="heading-anchor" href="#examples" tabindex="-1">#</a>
-</div>
-<p>Here&rsquo;s some examples of how I&rsquo;ve used used <code>milpa</code> so far:</p>
-<ul>
-<li>for <strong>managing homelab services</strong> (i.e. <a href="https://github.com/unRob/nidito/tree/master/.milpa">unRob/nidito</a>): building and deploying them, looking at their status and logs. From my personal device or CI.</li>
-<li><strong>bootstrapping engineering laptops</strong> (i.e. <a href="https://github.com/unRob/dotfiles/tree/master/.milpa/commands/computar">unRob/dotfiles</a>): no need to follow a README, you get the right development environment for your os/arch, your credentials setup and the code ready for you to dive in.</li>
-<li><strong>every-day dev workflow</strong> (i.e. <a href="https://github.com/unRob/milpa/tree/main/repos/internal/commands/">unRob/milpa</a>): lint and test a codebase, connect to vpn, get credentials to resources, maybe <code>--connect</code> to them, abstract away APIs (internal, cloud provider and SaaS) and CLIs, toggle feature gates, build reports and update google sheets with the results.</li>
-<li>as a way to organize all those odd, one-off-but-not-really commands: found a nice home for <a href="https://github.com/unRob/dotfiles/blob/master/.milpa/commands/code/todo.sh">shell scripts</a>, quick ruby scripts, perl hacks and <a href="https://github.com/unRob/dotfiles/blob/master/.milpa/commands/creds.sh">jq monstrosities</a> that used to live in my <code>~/.zsh_history</code>.</li>
-</ul>
-<p>I found <code>milpa</code> useful for these particular problems, since it only requires Bash and a supported OS/arch. <code>milpa</code> helps setup the computers I use (directly or remotely) and makes working with whatever languages my employer prefers (today and beyond) a breeze to integrate into a cohesive set of scripts. <code>milpa</code> takes care of parsing, validation, offering help when things go sideways, and so on, so these small scripts remain just so: <em>small scripts</em>.</p>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="where-milpa-wont-shine">Where <code>milpa</code> won&rsquo;t shine</h2> <a aria-hidden="true" class="heading-anchor" href="#where-milpa-wont-shine" tabindex="-1">#</a>
-</div>
-<p>I haven&rsquo;t tested the performance beyond dozens of repos with dozens of commands, and that being said, I can&rsquo;t see myself using <code>milpa</code> for anything more complex than that. I&rsquo;d usually reach for another language to build a domain-specific CLI, specially if working with a team that is not very comfortable with shell scripting.</p>
-<p>When there&rsquo;s a need to distribute stand-alone CLI programs, <code>milpa</code> won&rsquo;t be the best method to package and distribute CLIs. While facilities to work with <code>milpa</code> repos exists (see <a href="/itself/repo/install"><code>milpa itself repo install</code></a>), it may be less than ideal since there&rsquo;s a dependency in <code>milpa</code>.</p>
-<p><code>milpa</code> could be the wrong tool when the primary runner of commands is not gonna be a human. Sorry robot friends! <code>milpa</code>&rsquo;s features are oriented primarily towards improving the experience of maintaining and running scripts by humans, and while there&rsquo;s nothing wrong with having an automated system (say CI, for example) run <code>milpa</code> commands, there is an overhead to consider by invoking <code>milpa</code> (both cognitive overhead and in terms of resource usage).</p>
-<p>That being said, it can be done and it works fine (or, if you like writing bash scripts as much as I do, <em>beautifully</em>); check out <a href="https://github.com/unRob/smoked-by-the-house">unRob/smoked-by-the-house</a> where <code>milpa</code> orchestrated and operated a Raspberry Pi running an art installation for three months of 2022 at the Anahuacalli Museum in Mexico City.</p>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="alternatives-to-milpa">Alternatives to <code>milpa</code></h2> <a aria-hidden="true" class="heading-anchor" href="#alternatives-to-milpa" tabindex="-1">#</a>
-</div>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="regular-scripts-in-the-filesystem">Regular scripts in the filesystem</h3> <a aria-hidden="true" class="heading-anchor" href="#regular-scripts-in-the-filesystem" tabindex="-1">#</a>
-</div>
-<p>These are great, as long as: a) you know the path to your script, b) it doesn&rsquo;t consume many arguments/options, c) rarely changes, and/or d) is used only by the same few folks.</p>
-<p><code>milpa</code> provides usability advantages over this approach which will come handy when any of the constraints listed before are not met. With <code>milpa</code>, scripts that change often get updated docs and autocomplete for free, and may be appreciated by new users and non-regulars alike. Coming back to rarely used commands is one <code>--help</code> away when these scripts are part of a <code>milpa</code> repo.</p>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="bash-tools">Bash tools</h3> <a aria-hidden="true" class="heading-anchor" href="#bash-tools" tabindex="-1">#</a>
-</div>
-<p>There&rsquo;s some amazing tools out there, such as:</p>
-<ul>
-<li><a href="https://github.com/pforret/bashew">Bashew</a></li>
-<li><a href="http://bashinator.org/">Bashinator</a></li>
-<li><a href="http://rerun.github.io/rerun/">Rerun</a></li>
-<li><a href="https://github.com/basecamp/sub">Sub</a></li>
-<li><a href="https://github.com/basherpm/basher">Basher package manager</a></li>
-</ul>
-<p>These all serve different purposes, and there is some feature overlap with <code>milpa</code> and each of these.</p>
-<p><code>milpa</code> aims to provide the same level of support to non-bash scripts (hello applescript) without the need for another runtime to be installed. These projects are great for distributing and packaging software that may be used beyond your organization, while <code>milpa</code> aims to help smaller user bases, such as engineering teams, keep their shared scripts organized and up-to-date.</p>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="make">Make</h3> <a aria-hidden="true" class="heading-anchor" href="#make" tabindex="-1">#</a>
-</div>
-<p>Make is great! I love using <code>make</code> for building artifacts, but given enough time, I&rsquo;ll always end up hacking around it and wishing I had all of Make&rsquo;s strengths and the expressiveness of bash. I used <code>make</code> to build <code>milpa</code> initially since it&rsquo;s really a great tool, has a huge user base and flavors of it produce software used by millions.</p>
-<p>That being said, organizing makefiles and dealing with arguments is not something I can say I enjoy, and producing anything other than artifacts to the filesystem with Make doesn&rsquo;t feel right to me. <code>milpa</code> can be a good companion to Make workflows, and fill in the gaps upstream or downstream of <code>make</code>.</p>
-<div class="content-header-wrapper">
-<h3 class="content-header" id="byocli">BYOCLI</h3> <a aria-hidden="true" class="heading-anchor" href="#byocli" tabindex="-1">#</a>
-</div>
-<p>Building your own CLI is usually what ends up happening given a team with enough time and direction to invest in building a proper CLI with whatever language is already at use. Some teams use more than one language, which may complicate this approach. In the microservices world, many codebases come with their own CLIs that may follow slightly different conventions, are seldomly documented and often just end up calling other binaries through <code>exec</code>.</p>
-<p>In my limited experience with engineering teams of less than 300 folks, many of the bootstrapping tasks will involve operations that can easily (and more succintly) be expressed with a shell scripting language. <code>milpa</code> could also be a useful intermediate step, that could help teams avoid the dread of jira runbooks until it&rsquo;s a good time to build your own CLI.</p>
-
-
-    </main>
-<script src="https://milpa.dev/js/index.min.e8fb4266f19590f6cbf4007c65faa8e38a0e23bfbc40ef56ca24eed9d96fa64c.js"></script>
+    <p>My goal with <code>milpa</code> is to make following the <a href="https://clig.dev">Command Line Interface Guidelines</a> require as little effort as possible.</p>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="milpa-is-great-for"><code>milpa</code> is great for</h2><a aria-hidden="true" class="heading-anchor" href="#milpa-is-great-for" tabindex="-1">#</a>
+    </div>
+    <ul>
+      <li>working with small programs meant to be used as either building blocks for other programs, or user-facing collections of these blocks</li>
+      <li>sharing related commands using your team's source control versioning system, allowing anyone to mess with them and test them often</li>
+      <li>when writing shell scripts is the way to go. Maybe you're interacting with binaries in the system, or operating on files and directories and using your programming language of choice is overkill.</li>
+      <li>turning runbooks into actionable, runnable scripts. Up-to-date remediation one <code>git pull &amp;& milpa runbook ...</code> away.</li>
+    </ul>
+    <p>Tasks like bootstrapping development environments are usually left out for the user to accomplish by following through a README or wiki with likely outdated links; <code>milpa</code> is great when these tasks can be accomplished by prompting for information, querying identity providers and then running configuration commands or modifying the filesystem directly.</p>
+    <blockquote>
+      <p>⚠️ <code>milpa</code> is still under development and is currently on alpha!</p>
+    </blockquote>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="examples">Examples</h3><a aria-hidden="true" class="heading-anchor" href="#examples" tabindex="-1">#</a>
+    </div>
+    <p>Here's some examples of how I've used used <code>milpa</code> so far:</p>
+    <ul>
+      <li>for <strong>managing homelab services</strong> (i.e. <a href="https://github.com/unRob/nidito/tree/master/.milpa">unRob/nidito</a>): building and deploying them, looking at their status and logs. From my personal device or CI.
+      </li>
+      <li>
+        <strong>bootstrapping engineering laptops</strong> (i.e. <a href="https://github.com/unRob/dotfiles/tree/master/.milpa/commands/computar">unRob/dotfiles</a>): no need to follow a README, you get the right development environment for your os/arch, your credentials setup and the code ready for you to dive in.
+      </li>
+      <li>
+        <strong>every-day dev workflow</strong> (i.e. <a href="https://github.com/unRob/milpa/tree/main/repos/internal/commands/">unRob/milpa</a>): lint and test a codebase, connect to vpn, get credentials to resources, maybe <code>--connect</code> to them, abstract away APIs (internal, cloud provider and SaaS) and CLIs, toggle feature gates, build reports and update google sheets with the results.
+      </li>
+      <li>as a way to organize all those odd, one-off-but-not-really commands: found a nice home for <a href="https://github.com/unRob/dotfiles/blob/master/.milpa/commands/code/todo.sh">shell scripts</a>, quick ruby scripts, perl hacks and <a href="https://github.com/unRob/dotfiles/blob/master/.milpa/commands/creds.sh">jq monstrosities</a> that used to live in my <code>~/.zsh_history</code>.
+      </li>
+    </ul>
+    <p>I found <code>milpa</code> useful for these particular problems, since it only requires Bash and a supported OS/arch. <code>milpa</code> helps setup the computers I use (directly or remotely) and makes working with whatever languages my employer prefers (today and beyond) a breeze to integrate into a cohesive set of scripts. <code>milpa</code> takes care of parsing, validation, offering help when things go sideways, and so on, so these small scripts remain just so: <em>small scripts</em>.</p>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="where-milpa-wont-shine">Where <code>milpa</code> won't shine</h2><a aria-hidden="true" class="heading-anchor" href="#where-milpa-wont-shine" tabindex="-1">#</a>
+    </div>
+    <p>I haven't tested the performance beyond dozens of repos with dozens of commands, and that being said, I can't see myself using <code>milpa</code> for anything more complex than that. I'd usually reach for another language to build a domain-specific CLI, specially if working with a team that is not very comfortable with shell scripting.</p>
+    <p>When there's a need to distribute stand-alone CLI programs, <code>milpa</code> won't be the best method to package and distribute CLIs. While facilities to work with <code>milpa</code> repos exists (see <a href="/itself/repo/install"><code>milpa itself repo install</code></a>), it may be less than ideal since there's a dependency in <code>milpa</code>.</p>
+    <p><code>milpa</code> could be the wrong tool when the primary runner of commands is not gonna be a human. Sorry robot friends! <code>milpa</code>'s features are oriented primarily towards improving the experience of maintaining and running scripts by humans, and while there's nothing wrong with having an automated system (say CI, for example) run <code>milpa</code> commands, there is an overhead to consider by invoking <code>milpa</code> (both cognitive overhead and in terms of resource usage).</p>
+    <p>That being said, it can be done and it works fine (or, if you like writing bash scripts as much as I do, <em>beautifully</em>); check out <a href="https://github.com/unRob/smoked-by-the-house">unRob/smoked-by-the-house</a> where <code>milpa</code> orchestrated and operated a Raspberry Pi running an art installation for three months of 2022 at the Anahuacalli Museum in Mexico City.</p>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="alternatives-to-milpa">Alternatives to <code>milpa</code></h2><a aria-hidden="true" class="heading-anchor" href="#alternatives-to-milpa" tabindex="-1">#</a>
+    </div>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="regular-scripts-in-the-filesystem">Regular scripts in the filesystem</h3><a aria-hidden="true" class="heading-anchor" href="#regular-scripts-in-the-filesystem" tabindex="-1">#</a>
+    </div>
+    <p>These are great, as long as: a) you know the path to your script, b) it doesn't consume many arguments/options, c) rarely changes, and/or d) is used only by the same few folks.</p>
+    <p><code>milpa</code> provides usability advantages over this approach which will come handy when any of the constraints listed before are not met. With <code>milpa</code>, scripts that change often get updated docs and autocomplete for free, and may be appreciated by new users and non-regulars alike. Coming back to rarely used commands is one <code>--help</code> away when these scripts are part of a <code>milpa</code> repo.</p>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="bash-tools">Bash tools</h3><a aria-hidden="true" class="heading-anchor" href="#bash-tools" tabindex="-1">#</a>
+    </div>
+    <p>There's some amazing tools out there, such as:</p>
+    <ul>
+      <li>
+        <a href="https://github.com/pforret/bashew">Bashew</a>
+      </li>
+      <li>
+        <a href="http://bashinator.org/">Bashinator</a>
+      </li>
+      <li>
+        <a href="http://rerun.github.io/rerun/">Rerun</a>
+      </li>
+      <li>
+        <a href="https://github.com/basecamp/sub">Sub</a>
+      </li>
+      <li>
+        <a href="https://github.com/basherpm/basher">Basher package manager</a>
+      </li>
+    </ul>
+    <p>These all serve different purposes, and there is some feature overlap with <code>milpa</code> and each of these.</p>
+    <p><code>milpa</code> aims to provide the same level of support to non-bash scripts (hello applescript) without the need for another runtime to be installed. These projects are great for distributing and packaging software that may be used beyond your organization, while <code>milpa</code> aims to help smaller user bases, such as engineering teams, keep their shared scripts organized and up-to-date.</p>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="make">Make</h3><a aria-hidden="true" class="heading-anchor" href="#make" tabindex="-1">#</a>
+    </div>
+    <p>Make is great! I love using <code>make</code> for building artifacts, but given enough time, I'll always end up hacking around it and wishing I had all of Make's strengths and the expressiveness of bash. I used <code>make</code> to build <code>milpa</code> initially since it's really a great tool, has a huge user base and flavors of it produce software used by millions.</p>
+    <p>That being said, organizing makefiles and dealing with arguments is not something I can say I enjoy, and producing anything other than artifacts to the filesystem with Make doesn't feel right to me. <code>milpa</code> can be a good companion to Make workflows, and fill in the gaps upstream or downstream of <code>make</code>.</p>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="byocli">BYOCLI</h3><a aria-hidden="true" class="heading-anchor" href="#byocli" tabindex="-1">#</a>
+    </div>
+    <p>Building your own CLI is usually what ends up happening given a team with enough time and direction to invest in building a proper CLI with whatever language is already at use. Some teams use more than one language, which may complicate this approach. In the microservices world, many codebases come with their own CLIs that may follow slightly different conventions, are seldomly documented and often just end up calling other binaries through <code>exec</code>.</p>
+    <p>In my limited experience with engineering teams of less than 300 folks, many of the bootstrapping tasks will involve operations that can easily (and more succintly) be expressed with a shell scripting language. <code>milpa</code> could also be a useful intermediate step, that could help teams avoid the dread of jira runbooks until it's a good time to build your own CLI.</p>
+  </main>
+  <script src="/static/js/index.js"></script>
 </body>
 </html>

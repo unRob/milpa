@@ -7,18 +7,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="en">
-  <meta property="og:title" content="milpa help docs milpa util log">
+  <meta property="og:title" content="milpa itself install-autocomplete">
   <meta property="og:site_name" content="🌽 milpa">
-  <meta property="og:description" content="Functions related to output">
-  <meta name="description" content="Functions related to output">
-  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/util/log">
+  <meta property="og:description" content="Generates shell completion scripts">
+  <meta name="description" content="Generates shell completion scripts">
+  <meta property="og:url" content="https://milpa.dev/itself/install-autocomplete">
   <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
-  <title>milpa help docs milpa util log</title>
+  <title>milpa itself install-autocomplete</title>
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2">
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2">
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2">
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2">
-  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/util/log">
+  <link rel="canonical" href="https://milpa.dev/itself/install-autocomplete">
   <link rel="stylesheet" href="/static/css/highlight-light.css">
   <link rel="stylesheet" href="/static/css/highlight-dark.css">
   <link rel="stylesheet" href="/static/css/index.css">
@@ -30,7 +30,7 @@
 <body>
   <header role="banner">
     <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
-    <h1 lang="es"><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1><input list="milpa-commands" placeholder="type a milpa command" type="text" aria-label="milpa command selector" id="command-selector" pattern='|help|help docs|help docs milpa|help docs milpa changelog|help docs milpa command|help docs milpa command spec|help docs milpa environment|help docs milpa internals|help docs milpa quick-guide|help docs milpa repo|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa support|help docs milpa use-case|help docs milpa util|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util user-input|itself|itself command-tree|itself create|itself doctor|itself install-autocomplete|itself repo|itself repo install|itself repo list|itself repo uninstall|itself upgrade|itself version' value="help docs milpa util log"> <datalist id="milpa-commands">
+    <h1 lang="es"><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1><input list="milpa-commands" placeholder="type a milpa command" type="text" aria-label="milpa command selector" id="command-selector" pattern='|help|help docs|help docs milpa|help docs milpa changelog|help docs milpa command|help docs milpa command spec|help docs milpa environment|help docs milpa internals|help docs milpa quick-guide|help docs milpa repo|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa support|help docs milpa use-case|help docs milpa util|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util user-input|itself|itself command-tree|itself create|itself doctor|itself install-autocomplete|itself repo|itself repo install|itself repo list|itself repo uninstall|itself upgrade|itself version' value="itself install-autocomplete"> <datalist id="milpa-commands">
       <option value="help">
       </option>
       <option value="help docs">
@@ -108,15 +108,13 @@
       <span class="heading" id="toc-header">In this page</span>
       <ul>
         <li>
-          <a href="#functions">Functions</a>
-          <ul>
-            <li>
-              <a href="#milpafmt"><code>@milpa.fmt</code></a>
-            </li>
-            <li>
-              <a href="#milpalog"><code>@milpa.log</code></a>
-            </li>
-          </ul>
+          <a href="#usage">Usage</a>
+        </li>
+        <li>
+          <a href="#description">Description</a>
+        </li>
+        <li>
+          <a href="#global-options">Global Options</a>
         </li>
       </ul>
     </nav>
@@ -124,13 +122,13 @@
       <span class="heading" id="commands-header">Commands</span>
       <ul>
         <li>
-          <a href="/help/" class="command-menu-selected-prefix">help</a>
+          <a href="/help/" class="">help</a>
           <ul class="sub-menu" aria-label="help subcommands">
             <li>
-              <a href="/help/docs/" class="command-menu-selected-prefix">docs</a>
+              <a href="/help/docs/" class="">docs</a>
               <ul class="sub-menu" aria-label="docs subcommands">
                 <li>
-                  <a href="/help/docs/milpa/" class="command-menu-selected-prefix">milpa</a>
+                  <a href="/help/docs/milpa/" class="">milpa</a>
                   <ul class="sub-menu" aria-label="milpa subcommands">
                     <li>
                       <a href="/help/docs/milpa/quick-guide/" class="">quick-guide</a>
@@ -161,9 +159,11 @@
                       </ul>
                     </li>
                     <li>
-                      <a href="/help/docs/milpa/util/" class="command-menu-selected-prefix">util</a>
+                      <a href="/help/docs/milpa/util/" class="">util</a>
                       <ul class="sub-menu" aria-label="util subcommands">
-                        <li><strong class="command-menu-selected-prefix">log</strong></li>
+                        <li>
+                          <a href="/help/docs/milpa/util/log/" class="">log</a>
+                        </li>
                         <li>
                           <a href="/help/docs/milpa/util/repo/" class="">repo</a>
                         </li>
@@ -194,7 +194,7 @@
           </ul>
         </li>
         <li>
-          <a href="/itself/" class="">itself</a>
+          <a href="/itself/" class="command-menu-selected-prefix">itself</a>
           <ul class="sub-menu" aria-label="itself subcommands">
             <li>
               <a href="/itself/command-tree/" class="">command-tree</a>
@@ -205,9 +205,7 @@
             <li>
               <a href="/itself/doctor/" class="">doctor</a>
             </li>
-            <li>
-              <a href="/itself/install-autocomplete/" class="">install-autocomplete</a>
-            </li>
+            <li><strong class="command-menu-selected-prefix">install-autocomplete</strong></li>
             <li>
               <a href="/itself/repo/" class="">repo</a>
               <ul class="sub-menu" aria-label="repo subcommands">
@@ -234,29 +232,34 @@
     </nav>
   </div>
   <main id="content">
-    <h1 id="command-name-header" class="sr-only">milpa help docs milpa util log</h1>
-    <p>The <code>log</code> util contains shell functions related to output of informational messages. This utility is <strong>loaded by default</strong>.</p>
-    <p>If <a href="https://linux.die.net/man/7/term"><code>TERM</code></a> is not set, then it'll default to <code>xterm-color</code>.</p>
+    <h1 id="command-name-header" class="sr-only">milpa itself install-autocomplete</h1>
+    <p>Generates shell completion scripts</p>
     <div class="content-header-wrapper">
-      <h2 class="content-header" id="functions">Functions</h2><a aria-hidden="true" class="heading-anchor" href="#functions" tabindex="-1">#</a>
+      <h2 class="content-header" id="usage">Usage</h2><a aria-hidden="true" class="heading-anchor" href="#usage" tabindex="-1">#</a>
     </div>
+    <p><code>milpa itself install-autocomplete [options]</code></p>
     <div class="content-header-wrapper">
-      <h3 class="content-header" id="milpafmt"><code>@milpa.fmt</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpafmt" tabindex="-1">#</a>
+      <h2 class="content-header" id="description">Description</h2><a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a>
     </div>
-    <p><code>@milpa.fmt CODE MESSAGE</code></p>
-    <p>Returns <code>MESSAGE</code> formatted with <code>CODE</code> and does not print a new line. Code can be any of <code>bold</code>, <code>warning</code>, <code>error</code> and <code>inverted</code>.</p>
-    <div class="content-header-wrapper">
-      <h3 class="content-header" id="milpalog"><code>@milpa.log</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpalog" tabindex="-1">#</a>
-    </div>
-    <p><code>@milpa.log LEVEL [MESSAGE]</code></p>
-    <p>Prints <code>MESSAGE</code> with a log prefix, unless <code>--silent</code> is specified or <code>LEVEL</code> is error. Level may be one of:</p>
+    <p>Generates a shell completion script for the current <code>$SHELL</code>. It currently supports <code>bash</code>, <code>fish</code> and <code>zsh</code>. It will write a <code>(_)milpa</code> file in your shell's completion function folder:</p>
     <ul>
-      <li><code>complete</code>: prefixes ✅ to your message and prints in bold,</li>
-      <li><code>success</code>: prefixes ✔ to your message,</li>
-      <li><code>error</code>: prints your message in red,</li>
-      <li><code>warning</code>: prints your message in yellow,</li>
-      <li><code>info</code>: just prints your message, and</li>
-      <li><code>debug</code>: if <code>--verbose</code> is specified, prints your message in gray.</li>
+      <li>for <code>bash</code>, either <code>/etc/bash_completion.d</code> or <code>/usr/local/etc/bash_completion.d</code></li>
+      <li>for <code>zsh</code>, whatever is first in <code>$fpath</code>, for example: <code>/usr/local/share/zsh/site-functions</code></li>
+      <li>for <code>fish</code>, <code>$HOME/.config/fish/completions/</code></li>
+    </ul>
+    <p>You'll <strong>need to reload your shell</strong> (for example, by restarting your terminal), and make sure <strong>your shell's completion system is enabled</strong>!</p>
+    <p>This command only needs to run once.</p>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="global-options">Global Options</h2><a aria-hidden="true" class="heading-anchor" href="#global-options" tabindex="-1">#</a>
+    </div>
+    <ul>
+      <li><code>--color</code> (<em>bool</em>): Always print colors to stderr. Default: <em>true</em>.</li>
+      <li><code>--help</code> (<em>bool</em>): Display help for any command.</li>
+      <li><code>--no-color</code> (<em>bool</em>): Disable printing of colors to stderr.</li>
+      <li><code>--silent</code> (<em>bool</em>): Silence non-error logging.</li>
+      <li><code>--skip-validation</code> (<em>bool</em>): Do not validate any arguments or options.</li>
+      <li><code>--verbose</code> (<em>bool</em>): Log verbose output to stderr.</li>
+      <li><code>--version</code> (<em>bool</em>): Display program version and exit.</li>
     </ul>
   </main>
   <script src="/static/js/index.js"></script>

@@ -1,340 +1,252 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#" lang="en"><head lang="en">
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head lang="en">
+  <meta name="generator" content="HTML Tidy for HTML5 for Apple macOS version 5.8.0">
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="en" />
-  <meta property="og:title" content="milpa help docs milpa command spec" />
-  <meta property="og:site_name" content="🌽 milpa" />
-  <meta property="og:description" content="" />
-  <meta name="description" content="" />
-  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/command/spec/" />
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en">
+  <meta property="og:title" content="milpa help docs milpa command spec">
+  <meta property="og:site_name" content="🌽 milpa">
+  <meta property="og:description" content="Displays docs on TOPIC">
+  <meta name="description" content="Displays docs on TOPIC">
+  <meta property="og:url" content="https://milpa.dev/help/docs/milpa/command/spec">
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   <title>milpa help docs milpa command spec</title>
-
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2" />
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2" />
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2" />
-  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2" />
-
-  <link rel="stylesheet" href="/css/bundle.min.763d8f97db3def1b05ce9f80d740c56fe7a728b47d9bf6140bccdc4bec228fff.css"/>
-
-  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/command/spec/">
-
-  
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="preload" as="style">
-  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript>
-    <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" />
-  </noscript>
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2">
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2">
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2">
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2">
+  <link rel="canonical" href="https://milpa.dev/help/docs/milpa/command/spec">
+  <link rel="stylesheet" href="/static/css/highlight-light.css">
+  <link rel="stylesheet" href="/static/css/highlight-dark.css">
+  <link rel="stylesheet" href="/static/css/index.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap" rel="preload" as="style">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap"></noscript>
 </head>
-<body><header role="banner">
-  <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
-  <h1 lang="es" ><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1>
-  <input
-    list="milpa-commands"
-    placeholder="type a milpa command"
-    type="text"
-    aria-label="milpa command selector"
-    id="command-selector"
-    pattern='|help docs milpa command spec'
-    value="help docs milpa command spec" />
-  <datalist id="milpa-commands">
-    <option value="help" />
-<option value="help docs" />
-<option value="help docs milpa" />
-<option value="help docs milpa quick-guide" />
-<option value="help docs milpa use-case" />
-<option value="help docs milpa environment" />
-<option value="help docs milpa repo" />
-<option value="help docs milpa repo docs" />
-<option value="help docs milpa repo hooks" />
-<option value="help docs milpa command" />
-<option value="help docs milpa command spec" />
-<option value="help docs milpa util" />
-<option value="help docs milpa util log" />
-<option value="help docs milpa util repo" />
-<option value="help docs milpa util shell" />
-<option value="help docs milpa util tmp" />
-<option value="help docs milpa internals" />
-<option value="help docs milpa changelog" />
-<option value="help docs milpa support" />
-<option value="itself" />
-<option value="itself command-tree" />
-<option value="itself create" />
-<option value="itself docs" />
-<option value="itself docs create" />
-<option value="itself docs html" />
-<option value="itself doctor" />
-<option value="itself repo" />
-<option value="itself repo install" />
-<option value="itself repo list" />
-<option value="itself repo uninstall" />
-<option value="itself shell" />
-<option value="itself shell init" />
-<option value="itself shell install-autocomplete" />
-<option value="itself upgrade" />
-<option value="itself version" />
-<option value="version" />
-</datalist>
-  <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewBox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg"><title>Menu Icon</title><g transform="translate(10.016 -803.03)"><g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336"><path d="m19.668 1032.7h250.65"/><path d="m19.668 932.69h250.65"/><path d="m19.668 832.69h250.65"/></g></g></svg></button>
-</header>
-
-<div id="sidebar" aria-hidden="false">
-  <nav id="table-of-contents" aria-labelledby="toc-header"><span class="heading" id="toc-header">In this page</span>
-  <ul>
-    <li><a href="#example">Example</a></li>
-    <li><a href="#the-basics">The Basics</a></li>
-    <li><a href="#arguments">Arguments</a></li>
-    <li><a href="#options">Options</a></li>
-    <li><a href="#value-completion-and-validation">Value completion and validation</a></li>
-  </ul>
-</nav>
-  
-
-  <nav id="commands" aria-labelledby="commands-header">
-    <span class="heading" id="commands-header">Commands</span>
-    
-    <ul>
-    
-<li ><a href="https://milpa.dev/help/"class="command-menu-selected-prefix">help</a>
-<ul
-  class="sub-menu"
-  aria-label="help subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/"class="command-menu-selected-prefix">docs</a>
-<ul
-  class="sub-menu"
-  aria-label="docs subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/"class="command-menu-selected-prefix">milpa</a>
-<ul
-  class="sub-menu"
-  aria-label="milpa subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/quick-guide/">quick-guide</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/use-case/">use-case</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/environment/">environment</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/repo/">repo</a>
-<ul
-  class="sub-menu"
-  aria-label="repo subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/repo/docs/">docs</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/repo/hooks/">hooks</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/command/"class="command-menu-selected-prefix">command</a>
-<ul
-  class="sub-menu"
-  aria-label="command subcommands"
->
-  
-  
-<li >
-  <strong class="command-menu-selected-prefix">spec</strong>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/">util</a>
-<ul
-  class="sub-menu"
-  aria-label="util subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/log/">log</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/repo/">repo</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/shell/">shell</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/util/tmp/">tmp</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/internals/">internals</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/changelog/">changelog</a>
-
-  
-  
-<li ><a href="https://milpa.dev/help/docs/milpa/support/">support</a>
-
-  
-</ul>
-</li>
-
-
-  
-</ul>
-</li>
-
-
-  
-</ul>
-</li>
-
-
-    
-<li ><a href="https://milpa.dev/itself/">itself</a>
-<ul
-  class="sub-menu"
-  aria-label="itself subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/command-tree/">command-tree</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/create/">create</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/docs/">docs</a>
-<ul
-  class="sub-menu"
-  aria-label="docs subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/docs/create/">create</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/docs/html/">html</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/itself/doctor/">doctor</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/">repo</a>
-<ul
-  class="sub-menu"
-  aria-label="repo subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/install/">install</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/list/">list</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/repo/uninstall/">uninstall</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/itself/shell/">shell</a>
-<ul
-  class="sub-menu"
-  aria-label="shell subcommands"
->
-  
-  
-<li ><a href="https://milpa.dev/itself/shell/init/">init</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/shell/install-autocomplete/">install-autocomplete</a>
-
-  
-</ul>
-</li>
-
-
-  
-  
-<li ><a href="https://milpa.dev/itself/upgrade/">upgrade</a>
-
-  
-  
-<li ><a href="https://milpa.dev/itself/version/">version</a>
-
-  
-</ul>
-</li>
-
-
-    
-<li ><a href="https://milpa.dev/version/">version</a>
-
-    </ul>
-  </nav>
-</div>
-
-
-<main id="content">
-<h1 id="command-name-header" class="sr-only">milpa help docs milpa command spec</h1>
-<p>Command specs go along with your scripts and help inform <code>milpa</code> of what its input should look like. Based on it, <code>milpa</code> will produce help pages and word completions, and may validate the arguments to your command.</p>
-<p>Specs must be written in YAML, have a <code>yaml</code> extension, and be named exactly like your command (minus the extension, if any). For example, given a command at <code>.milpa/commands/my-command.sh</code> the corresponding spec file would be <code>.milpa/commands/my-command.yaml</code>.</p>
-<div class="content-header-wrapper">
-<h2 class="content-header" id="example">Example</h2> <a aria-hidden="true" class="heading-anchor" href="#example" tabindex="-1">#</a>
-</div>
-<p>If we wanted to have a command written in bash at <code>milpa release</code>, we&rsquo;ll need to create file at <code>.milpa/commands/release.sh</code> and its corresponding spec at <code>.milpa/commands/release.yaml</code>. Let&rsquo;s take a look at what such a spec might look like:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l">Create a github release</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+<body>
+  <header role="banner">
+    <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
+    <h1 lang="es"><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1><input list="milpa-commands" placeholder="type a milpa command" type="text" aria-label="milpa command selector" id="command-selector" pattern='|help|help docs|help docs milpa|help docs milpa changelog|help docs milpa command|help docs milpa command spec|help docs milpa environment|help docs milpa internals|help docs milpa quick-guide|help docs milpa repo|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa support|help docs milpa use-case|help docs milpa util|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util user-input|itself|itself command-tree|itself create|itself doctor|itself install-autocomplete|itself repo|itself repo install|itself repo list|itself repo uninstall|itself upgrade|itself version' value="help docs milpa command spec"> <datalist id="milpa-commands">
+      <option value="help">
+      </option>
+      <option value="help docs">
+      </option>
+      <option value="help docs milpa">
+      </option>
+      <option value="help docs milpa quick-guide">
+      </option>
+      <option value="help docs milpa use-case">
+      </option>
+      <option value="help docs milpa environment">
+      </option>
+      <option value="help docs milpa repo">
+      </option>
+      <option value="help docs milpa repo docs">
+      </option>
+      <option value="help docs milpa repo hooks">
+      </option>
+      <option value="help docs milpa command">
+      </option>
+      <option value="help docs milpa command spec">
+      </option>
+      <option value="help docs milpa util">
+      </option>
+      <option value="help docs milpa util log">
+      </option>
+      <option value="help docs milpa util repo">
+      </option>
+      <option value="help docs milpa util shell">
+      </option>
+      <option value="help docs milpa util tmp">
+      </option>
+      <option value="help docs milpa util user-input">
+      </option>
+      <option value="help docs milpa internals">
+      </option>
+      <option value="help docs milpa support">
+      </option>
+      <option value="help docs milpa changelog">
+      </option>
+      <option value="itself">
+      </option>
+      <option value="itself command-tree">
+      </option>
+      <option value="itself create">
+      </option>
+      <option value="itself doctor">
+      </option>
+      <option value="itself install-autocomplete">
+      </option>
+      <option value="itself repo">
+      </option>
+      <option value="itself repo install">
+      </option>
+      <option value="itself repo list">
+      </option>
+      <option value="itself repo uninstall">
+      </option>
+      <option value="itself upgrade">
+      </option>
+      <option value="itself version">
+      </option>
+    </datalist> <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewbox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg">
+    <title>Menu Icon</title>
+    <g transform="translate(10.016 -803.03)">
+      <g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336">
+        <path d="m19.668 1032.7h250.65"></path>
+        <path d="m19.668 932.69h250.65"></path>
+        <path d="m19.668 832.69h250.65"></path>
+      </g>
+    </g></svg></button>
+  </header>
+  <div id="sidebar" aria-hidden="false">
+    <nav id="table-of-contents" aria-labelledby="toc-header">
+      <span class="heading" id="toc-header">In this page</span>
+      <ul>
+        <li>
+          <a href="#example">Example</a>
+        </li>
+        <li>
+          <a href="#the-basics">The Basics</a>
+        </li>
+        <li>
+          <a href="#arguments">Arguments</a>
+        </li>
+        <li>
+          <a href="#options">Options</a>
+        </li>
+        <li>
+          <a href="#value-completion-and-validation">Value completion and validation</a>
+        </li>
+      </ul>
+    </nav>
+    <nav id="commands" aria-labelledby="commands-header">
+      <span class="heading" id="commands-header">Commands</span>
+      <ul>
+        <li>
+          <a href="/help/" class="command-menu-selected-prefix">help</a>
+          <ul class="sub-menu" aria-label="help subcommands">
+            <li>
+              <a href="/help/docs/" class="command-menu-selected-prefix">docs</a>
+              <ul class="sub-menu" aria-label="docs subcommands">
+                <li>
+                  <a href="/help/docs/milpa/" class="command-menu-selected-prefix">milpa</a>
+                  <ul class="sub-menu" aria-label="milpa subcommands">
+                    <li>
+                      <a href="/help/docs/milpa/quick-guide/" class="">quick-guide</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/use-case/" class="">use-case</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/environment/" class="">environment</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/repo/" class="">repo</a>
+                      <ul class="sub-menu" aria-label="repo subcommands">
+                        <li>
+                          <a href="/help/docs/milpa/repo/docs/" class="">docs</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/repo/hooks/" class="">hooks</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/command/" class="command-menu-selected-prefix">command</a>
+                      <ul class="sub-menu" aria-label="command subcommands">
+                        <li><strong class="command-menu-selected-prefix">spec</strong></li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/util/" class="">util</a>
+                      <ul class="sub-menu" aria-label="util subcommands">
+                        <li>
+                          <a href="/help/docs/milpa/util/log/" class="">log</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/repo/" class="">repo</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/shell/" class="">shell</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/tmp/" class="">tmp</a>
+                        </li>
+                        <li>
+                          <a href="/help/docs/milpa/util/user-input/" class="">user-input</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/internals/" class="">internals</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/support/" class="">support</a>
+                    </li>
+                    <li>
+                      <a href="/help/docs/milpa/changelog/" class="">changelog</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="/itself/" class="">itself</a>
+          <ul class="sub-menu" aria-label="itself subcommands">
+            <li>
+              <a href="/itself/command-tree/" class="">command-tree</a>
+            </li>
+            <li>
+              <a href="/itself/create/" class="">create</a>
+            </li>
+            <li>
+              <a href="/itself/doctor/" class="">doctor</a>
+            </li>
+            <li>
+              <a href="/itself/install-autocomplete/" class="">install-autocomplete</a>
+            </li>
+            <li>
+              <a href="/itself/repo/" class="">repo</a>
+              <ul class="sub-menu" aria-label="repo subcommands">
+                <li>
+                  <a href="/itself/repo/install/" class="">install</a>
+                </li>
+                <li>
+                  <a href="/itself/repo/list/" class="">list</a>
+                </li>
+                <li>
+                  <a href="/itself/repo/uninstall/" class="">uninstall</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="/itself/upgrade/" class="">upgrade</a>
+            </li>
+            <li>
+              <a href="/itself/version/" class="">version</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <main id="content">
+    <h1 id="command-name-header" class="sr-only">milpa help docs milpa command spec</h1>
+    <p>Command specs go along with your scripts and help inform <code>milpa</code> of what its input should look like. Based on it, <code>milpa</code> will produce help pages and word completions, and may validate the arguments to your command.</p>
+    <p>Specs must be written in YAML, have a <code>yaml</code> extension, and be named exactly like your command (minus the extension, if any). For example, given a command at <code>.milpa/commands/my-command.sh</code> the corresponding spec file would be <code>.milpa/commands/my-command.yaml</code>.</p>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="example">Example</h2><a aria-hidden="true" class="heading-anchor" href="#example" tabindex="-1">#</a>
+    </div>
+    <p>If we wanted to have a command written in bash at <code>milpa release</code>, we'll need to create file at <code>.milpa/commands/release.sh</code> and its corresponding spec at <code>.milpa/commands/release.yaml</code>. Let's take a look at what such a spec might look like:</p>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l">Create a github release</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">  This command shows you a changelog and waits for approval before generating and pushing a new tag, creating a github release, and opening the browser at the new release.
 </span></span></span><span class="line"><span class="cl"><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">  ## Schemes
@@ -343,14 +255,14 @@
 </span></span></span><span class="line"><span class="cl"><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">  - **semver**: `{major}.{minor}.{patch}`, i.e. `3.14.1592`
 </span></span></span><span class="line"><span class="cl"><span class="sd">  - **calver**: `{date}.{minor}.{micro}`, where date is derived from the `prefix` option; for example `16.18.339`.</span><span class="w">  
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">arguments</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">arguments</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">increment</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">descrption</span><span class="p">:</span><span class="w"> </span><span class="l">the increment to apply to the last git version</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l">patch</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">values</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">static</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">micro, patch, minor, major]</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">options</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">options</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">scheme</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">Determines the format of the tags for this repo.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">short-name</span><span class="p">:</span><span class="w"> </span><span class="l">s</span><span class="w">
@@ -360,19 +272,20 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">prefix</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">      </span><span class="w">      </span><span class="l">An optional prefix to prepend to release identifiers. If `calver` is chosen as `scheme`, you may specify a combination of `YY`, `YYYY`, `MM`, and `DD` to be replaced with the corresponding values of the local date. The default in that case is `YY`.</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ask</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">Prompt for confirmation before creating a github release</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">bool</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-</span></span></span></code></pre></div><div class="content-header-wrapper">
-<h2 class="content-header" id="the-basics">The Basics</h2> <a aria-hidden="true" class="heading-anchor" href="#the-basics" tabindex="-1">#</a>
-</div>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># a summary is required. It shows up during autocomplete and command listings</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l">Create a github release</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># a description is required as well, and describes how your command does its magic</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># it may be formatted with markdown</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span></code></pre>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="the-basics">The Basics</h2><a aria-hidden="true" class="heading-anchor" href="#the-basics" tabindex="-1">#</a>
+    </div>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c"># a summary is required. It shows up during autocomplete and command listings</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l">Create a github release</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># a description is required as well, and describes how your command does its magic</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># it may be formatted with markdown</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">  This command shows you a changelog and waits for approval before generating and pushing a new tag, creating a github release, and opening the browser at the new release.
 </span></span></span><span class="line"><span class="cl"><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">  ## Schemes
@@ -381,51 +294,53 @@
 </span></span></span><span class="line"><span class="cl"><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">  - **semver**: `{major}.{minor}.{patch}`, i.e. `3.14.1592`
 </span></span></span><span class="line"><span class="cl"><span class="sd">  - **calver**: `{date}.{minor}.{micro}`, where date is derived from the `prefix` option; for example `16.18.339`.</span><span class="w">  
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># a list of arguments expected by your command, if any</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># as well as a map of options</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># see below for more details on options and arguments</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">options</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
-</span></span></span></code></pre></div><div class="content-header-wrapper">
-<h2 class="content-header" id="arguments">Arguments</h2> <a aria-hidden="true" class="heading-anchor" href="#arguments" tabindex="-1">#</a>
-</div>
-<p>The <code>arguments</code> list describes the positional arguments that may be passed to a command. Arguments require a <code>name</code> and a <code>description</code>. The <code>name</code> of the argument will become available to commands through the environment variable named <code>MILPA_ARG_$NAME</code> where <code>$NAME</code> means the uppercased value of the <code>name</code> property. For example, an argument with <code>name: increment</code> will be available as your command&rsquo;s environment variable <code>MILPA_ARG_INCREMENT</code>. Arguments are passed as positional arguments to your command, i.e. <code>$1</code>, <code>$2</code>, and so on. Dashes (<code>-</code>) will be turned into underscores <code>_</code> (<code>name: my-argument</code> turns into <code>MILPA_ARG_MY_ARGUMENT</code>).</p>
-<blockquote>
-<p>⚠️ Argument names need to be valid as environment variable names, and characters <code>!$\/%^@#?:'&quot;</code> are not allowed.</p>
-</blockquote>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># arguments is an ordered list of to arguments expected by your command</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">arguments</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># a list of arguments expected by your command, if any</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># as well as a map of options</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># see below for more details on options and arguments</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">options</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span></code></pre>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="arguments">Arguments</h2><a aria-hidden="true" class="heading-anchor" href="#arguments" tabindex="-1">#</a>
+    </div>
+    <p>The <code>arguments</code> list describes the positional arguments that may be passed to a command. Arguments require a <code>name</code> and a <code>description</code>. The <code>name</code> of the argument will become available to commands through the environment variable named <code>MILPA_ARG_$NAME</code> where <code>$NAME</code> means the uppercased value of the <code>name</code> property. For example, an argument with <code>name: increment</code> will be available as your command's environment variable <code>MILPA_ARG_INCREMENT</code>. Arguments are passed as positional arguments to your command, i.e. <code>$1</code>, <code>$2</code>, and so on. Dashes (<code>-</code>) will be turned into underscores <code>_</code> (<code>name: my-argument</code> turns into <code>MILPA_ARG_MY_ARGUMENT</code>).</p>
+    <blockquote>
+      <p>⚠️ Argument names need to be valid as environment variable names, and characters <code>!$\/%^@#?:'"</code> are not allowed.</p>
+    </blockquote>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c"># arguments is an ordered list of to arguments expected by your command</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">arguments</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># available in to the command as the MILPA_ARG_INCREMENT environment variable</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">increment</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># this description shows up during auto-completion and in the command&#39;s help page</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># this description shows up during auto-completion and in the command's help page</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">descrption</span><span class="p">:</span><span class="w"> </span><span class="l">the increment to apply to the last git version</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># a default may be specified, it&#39;ll be passed to your command if none is provided</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># a default may be specified, it'll be passed to your command if none is provided</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l">patch</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># if marked as required, the command won&#39;t run unless this argument is provided</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># if marked as required, the command won't run unless this argument is provided</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># An error will result if the argument is bothr required and has a default set</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># arguments may be variadic, that is, all remaining arguments starting at this position</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># in this case, since there&#39;s only one argument, it would mean all arguments after</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># in this case, since there's only one argument, it would mean all arguments after</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># the command name (not including options)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># should an argument be variadic, it&#39;s `default:` then must also be a list!</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># should an argument be variadic, it's `default:` then must also be a list!</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">variadic</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># the `values` property specifies how to provide completions and perform validation on</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># the values provided at the command line</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">values</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
-</span></span></span></code></pre></div><div class="content-header-wrapper">
-<h2 class="content-header" id="options">Options</h2> <a aria-hidden="true" class="heading-anchor" href="#options" tabindex="-1">#</a>
-</div>
-<p>The <code>options</code> map describes the named options that may be passed to a command. Options require a <code>name</code> and a <code>description</code>. The <code>name</code> of the option will become available to commands through the environment variable named <code>MILPA_OPT_$NAME</code> where <code>$NAME</code> means the uppercased value of key for an option. For example, an option at the key <code>scheme</code> will be available as your command&rsquo;s environment variable <code>MILPA_OPT_SCHEME</code>.</p>
-<blockquote>
-<p>⚠️ Options are not available as positional arguments to your command. The same character restrictions as arguments apply to options.</p>
-</blockquote>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># options, also known as flags, are specified as a map</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">options</span><span class="p">:</span><span class="w">
+</span></span></span></code></pre>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="options">Options</h2><a aria-hidden="true" class="heading-anchor" href="#options" tabindex="-1">#</a>
+    </div>
+    <p>The <code>options</code> map describes the named options that may be passed to a command. Options require a <code>name</code> and a <code>description</code>. The <code>name</code> of the option will become available to commands through the environment variable named <code>MILPA_OPT_$NAME</code> where <code>$NAME</code> means the uppercased value of key for an option. For example, an option at the key <code>scheme</code> will be available as your command's environment variable <code>MILPA_OPT_SCHEME</code>.</p>
+    <blockquote>
+      <p>⚠️ Options are not available as positional arguments to your command. The same character restrictions as arguments apply to options.</p>
+    </blockquote>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c"># options, also known as flags, are specified as a map</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">options</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># this sets the --scheme option</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># it will be available to your script as the $MILPA_OPT_SCHEME environment variable</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># and may be specified on the command line as either `--scheme &#34;semver&#34;` or `--scheme=semver`.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># and may be specified on the command line as either `--scheme "semver"` or `--scheme=semver`.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">scheme</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># options require a description, this will show during completions and on the command&#39;s help page</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># options require a description, this will show during completions and on the command's help page</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">Determines the format of the tags for this repo.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># Sometimes, very commonly used flags might benefit from setting a short name</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># in this case, users would be able to use `-s calver`</span><span class="w">
@@ -434,56 +349,56 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l">semver</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># the values provided at the command line</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># flags can be boolean. Since environment variables can only be strings,</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># false values (the default) will be passed as an empty string &#34;&#34;, while</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># true values will be passed as the string &#34;true&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># false values (the default) will be passed as an empty string "", while</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># true values will be passed as the string "true"</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">bool</span><span class="w"> </span><span class="c"># or `string`</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># the `values` property specifies how to provide completions and perform validation on</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">values</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
-</span></span></span></code></pre></div><div class="content-header-wrapper">
-<h2 class="content-header" id="value-completion-and-validation">Value completion and validation</h2> <a aria-hidden="true" class="heading-anchor" href="#value-completion-and-validation" tabindex="-1">#</a>
-</div>
-<p>A <code>values</code> property may be specified for both arguments and options; <code>milpa</code> will provide completion and validation from the following sources:</p>
-<ul>
-<li>directories (with a matching prefix),</li>
-<li>files (with given extensions),</li>
-<li>stdout of any <code>milpa</code> sub-commands,</li>
-<li>stdout of any given bash script, and</li>
-<li>a static list of pre-defined values.</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="w">    </span><span class="c"># if specified for any `argument` or `option`</span><span class="w">
+</span></span></span></code></pre>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="value-completion-and-validation">Value completion and validation</h2><a aria-hidden="true" class="heading-anchor" href="#value-completion-and-validation" tabindex="-1">#</a>
+    </div>
+    <p>A <code>values</code> property may be specified for both arguments and options; <code>milpa</code> will provide completion and validation from the following sources:</p>
+    <ul>
+      <li>directories (with a matching prefix),</li>
+      <li>files (with given extensions),</li>
+      <li>stdout of any <code>milpa</code> sub-commands,</li>
+      <li>stdout of any given bash script, and</li>
+      <li>a static list of pre-defined values.</li>
+    </ul>
+    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="w">    </span><span class="c"># if specified for any `argument` or `option`</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c">#</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># `dirs`, `files`, `milpa`, `script`, or `static`</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">values</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># autocompletes directory names only. If a prefix is set, it&#39;ll be used as a</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># autocompletes directory names only. If a prefix is set, it'll be used as a</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># prefix to filter matches. In this example, it would offer directories with a name</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># that begins with `config` as completion values.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># Validation of provided values is never performed</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">dirs</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;config&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">dirs</span><span class="p">:</span><span class="w"> </span><span class="s2">"config"</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># autocompletes files with the given extensions, if any</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># Validation of provided values is never performed</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">files</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">yaml, json, hcl]</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># `milpa` runs the named milpa sub-command, offering a completion for every line of stdout</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># Options and arguments to sub-commands can be provided as go templates. For example,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># the following would run `milpa itself increments --scheme semver`</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># {{ Current }} will insert the argument&#39;s current value durint completion</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">milpa</span><span class="p">:</span><span class="w"> </span><span class="l">itself increments {{ Opt &#34;scheme&#34; }}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># script runs the provided command with `bash -c &#34;$script&#34;` and offers</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># {{ Current }} will insert the argument's current value durint completion</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">milpa</span><span class="p">:</span><span class="w"> </span><span class="l">itself increments {{ Opt "scheme" }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># script runs the provided command with `bash -c "$script"` and offers</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># each line of stdout as an option during autocomplete</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># go templates can be used in `script` as well</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l">git tag -l {{ Opt &#34;prefix&#34; }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l">git tag -l {{ Opt "prefix" }}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># values can be validated to be part of a given set of strings</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">static</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">micro, patch, minor, major]</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># when using `script` or `milpa` values, wait at most this amount of seconds</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># before erroring out during autocomplete or validation</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># only suggest values as completions but don&#39;t validate them before running</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># only suggest values as completions but don't validate them before running</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># has no effect for `dirs` or `files` as these are always suggestions and never validated</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">suggest-only</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># if enabled, will not add a space after suggestions during autocomplete</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">suggest-raw</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-</span></span></span></code></pre></div>
-
-    </main>
-<script src="https://milpa.dev/js/index.min.e8fb4266f19590f6cbf4007c65faa8e38a0e23bfbc40ef56ca24eed9d96fa64c.js"></script>
+</span></span></span></code></pre>
+  </main>
+  <script src="/static/js/index.js"></script>
 </body>
 </html>
