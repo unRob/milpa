@@ -33,10 +33,11 @@ jobs:
         run: |
           version="${GITHUB_REF##*/}"
           echo "version is $version"
-          echo "::group::install upx"
-          curl -LO https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz
-          tar xf upx-3.96-amd64_linux.tar.xz
-          sudo mv upx-3.96-amd64_linux/upx /usr/local/bin/upx
+          echo "::group::install tidy + htmlq"
+          apt-get install tidy
+          curl -LO https://github.com/mgdm/htmlq/releases/download/v0.4.0/htmlq-x86_64-linux.tar.gz
+          tar xf htmlq-x86_64-linux.tar.gz
+          sudo mv htmlq /usr/local/bin/htmlq
           echo "::endgroup::"
 
           echo "::group::build compa"

@@ -21,20 +21,14 @@ CGO_ENABLED=0 GOFLAGS="-trimpath" gox -osarch "${MILPA_ARG_TARGETS[*]}" \
 @milpa.log success "Build complete"
 
 
-@milpa.log info "Generating archives"
-for pair in "${MILPA_ARG_TARGETS[@]//\//-}"; do
+function generate_archive() {
+  local pair="$1"
   dist_dir="$output/tmp/$pair/milpa"
   package="$output/milpa-$pair.tgz"
 
   mkdir -p "$dist_dir"
   if [[ ! -f "$dist_dir/compa" ]]; then
-    if [[ "$pair" != "darwin-arm64" ]]; then
-      upx --no-progress --best -o "$dist_dir/compa" "$output/$pair" || @milpa.fail "Could not compress $dist_dir/compa"
-    else
-      @milpa.warning "UPX produces botched arm64 builds :/"
-      @milpa.warning https://github.com/upx/upx/issues/446
-      cp "$output/$pair" "$dist_dir/compa"
-    fi
+    cp "$output/$pair" "$dist_dir/compa"
     rm -rf "${output:?}/$pair"
   fi
 
@@ -42,7 +36,16 @@ for pair in "${MILPA_ARG_TARGETS[@]//\//-}"; do
   rm -rf "$package"
   tar -czf "$package" -C "$(dirname "$dist_dir")" milpa || @milpa.fail "Could not archive $package"
   openssl dgst -sha256 "$package" | awk '{print $2}' > "${package##.tgz}.shasum" || @milpa.fail "Could not generate shasum for $package"
+}
+
+@milpa.log info "Generating archives"
+pids=()
+for pair in "${MILPA_ARG_TARGETS[@]//\//-}"; do
+  generate_archive "$pair" &
+  pids+=("$!")
 done
+trap 'kill -9 "${pids[@]}"' ERR EXIT
+wait
 @milpa.log success "Archives generated"
 
 
