@@ -6,7 +6,7 @@ require (
 	git.rob.mx/nidito/chinampa v0.0.0-20230118042046-424ae202cd2d
 	github.com/alessio/shellescape v1.4.1
 	github.com/bmatcuk/doublestar/v4 v4.2.0
-	github.com/fatih/color v1.13.0
+	github.com/fatih/color v1.14.0
 	github.com/hashicorp/go-getter v1.6.2
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.6.1
