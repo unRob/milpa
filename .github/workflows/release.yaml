@@ -34,7 +34,7 @@ jobs:
           version="${GITHUB_REF##*/}"
           echo "version is $version"
           echo "::group::install tidy + htmlq"
-          apt-get install tidy
+          sudo apt-get install tidy
           curl -LO https://github.com/mgdm/htmlq/releases/download/v0.4.0/htmlq-x86_64-linux.tar.gz
           tar xf htmlq-x86_64-linux.tar.gz
           sudo mv htmlq /usr/local/bin/htmlq
