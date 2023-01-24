@@ -30,10 +30,11 @@ In your scripts, you may load utilities like so:
 
 There's a few utilities that come built-in to `milpa` and may be used by any bash scripts:
 
-- [log](log): Loaded by default, has output-related functions
-- [repo](repo): has functions related to milpa repositories
-- [shell](shell): has functions used by [`shell-init`](/.milpa/docs/milpa/repo/hooks/#shell-initsh) hook scripts
-- [tmp](tmp): has functions related to temporary files
+- [log](/.milpa/docs/milpa/util/log.md): Loaded by default, has output-related functions
+- [repo](/.milpa/docs/milpa/util/repo.md): has functions related to milpa repositories
+- [shell](/.milpa/docs/milpa/util/shell.md): has unctions related to interacting with terminal shells
+- [tmp](/.milpa/docs/milpa/util/tmp.md): has functions related to temporary files
+- [user-input](/.milpa/docs/milpa/util/user-input.md): has functions related to prompting the user for input
 
 ## Add your own
 

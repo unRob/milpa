@@ -39,7 +39,6 @@ Let's say you have this in your repo:
       releasing.md
   hooks/
     before-run.sh
-    shell-init.sh
   util/
     date.sh
     etc.sh

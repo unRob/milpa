@@ -2,31 +2,47 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
 
+# The @milpa.version internal utils are abstract interactions with milpa's versions
+
+# We check for milpa updates from this URL that returns the last-known version
+# undocumented since this is only useful for tests and forks. If you fork milpa
+# then might as well set this upstream or change this file (and bootstrap.sh).
 MILPA_UPDATE_URL="${MILPA_UPDATE_URL:-https://milpa.dev/.well-known/milpa/latest-version}"
+# check for new versions at most once every MILPA_UPDATE_PERIOD_DAYS days
 MILPA_UPDATE_PERIOD_DAYS="${MILPA_UPDATE_PERIOD_DAYS:-7}"
 MILPA_UPDATE_PERIOD_SECONDS=$(( MILPA_UPDATE_PERIOD_DAYS * 24 * 3600 ))
+
 MILPA_LOCAL_SHARE="${XDG_HOME_DATA:-$HOME/.local/share}/milpa"
 _milpa_last_checked_path="${MILPA_LOCAL_SHARE}/last-update-check"
-# sometimes milpa gets installed as root, but each use should use its own dir
+# sometimes milpa gets installed as root, but each user should get its own dir
 # to store update checkpoints
 [[ -d "${MILPA_LOCAL_SHARE}" ]] || mkdir -p "$MILPA_LOCAL_SHARE"
 
+# prints out the installed version
 function @milpa.version.installed () {
-  "$MILPA_COMPA" --version 2>&1 || {
+  DEBUG=0 "$MILPA_COMPA" --version 2>&1 || {
     if [[ "$?" != 42 ]]; then
-      @milpa.log debug "could not get installed version"
+      @milpa.log debug "could not get the installed version"
       return 1
     fi
   }
 }
 
+# prints out the latest known version
 function @milpa.version.latest () {
-  if ! curl --silent --fail -L --max-time 1 "$MILPA_UPDATE_URL"; then
+  # since this is called before running milpa we need to timeout and just
+  # keep going if version check takes longer than a second, but keep it configurable
+  # so `milpa itself upgrade` has less of a chance to say there's no upgrade
+  # available over slow connections. True story.
+  local timeout; timeout="${1:-1}"
+
+  if ! curl --silent --show-error --fail -L --max-time "$timeout" "$MILPA_UPDATE_URL"; then
     @milpa.log debug "Could not fetch latest version!"
     return 1
   fi
 }
 
+# tells if it's time for a new version check
 function @milpa.version.needs_check () {
   local now last_ping elapsed
   now=$(date +%s)
@@ -38,6 +54,8 @@ function @milpa.version.needs_check () {
   [[ "$elapsed" -ge "$MILPA_UPDATE_PERIOD_SECONDS" ]]
 }
 
+# tells if the latest version is installed
+# outputs the current and latest versions to stdout
 function @milpa.version.is_latest () {
   local installed latest
 
@@ -46,7 +64,7 @@ function @milpa.version.is_latest () {
     return 0
   fi
 
-  if ! latest=$(@milpa.version.latest); then
+  if ! latest=$(@milpa.version.latest "${1:-1}"); then
     @milpa.log debug "Failed looking up latest version"
     return 0
   fi
@@ -61,13 +79,14 @@ function @milpa.version.is_latest () {
   return 1
 }
 
+# called by `milpa` to check for updates on run
 function _milpa_check_for_updates_automagically () {
   local versions latest installed
   if [[ "$MILPA_COMMAND_NAME" == "itself upgrade" ]] || [[ "${MILPA_DISABLE_UPDATE_CHECKS}" != "" ]]; then
     return 0
   fi
 
-  if @milpa.version.needs_check && ! versions=$(@milpa.version.is_latest); then
+  if @milpa.version.needs_check && ! versions=$(@milpa.version.is_latest 1); then
     read -r latest installed <<<"$versions"
     MILPA_COMMAND_NAME=milpa @milpa.log warning "milpa $latest is available (you're running $installed), to upgrade run:"
     MILPA_COMMAND_NAME=milpa @milpa.log warning "milpa itself upgrade"

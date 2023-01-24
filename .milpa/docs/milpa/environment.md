@@ -80,6 +80,10 @@ If enabled, validation will be skipped for arguments and options. Also enabled w
 
 If set to a non-empty string, update checks will not be performed periodically before running commands.
 
+### `MILPA_UPDATE_PERIOD_DAYS`
+
+How often to check for new releases to `milpa` in days, by default `7`.
+
 ---
 
 ## Command Environment
