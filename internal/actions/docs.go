@@ -9,6 +9,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
 	"git.rob.mx/nidito/chinampa/pkg/env"
@@ -35,8 +36,13 @@ func startServer(listen, address string) error {
 	http.Handle("/static/", docs.StaticHandler())
 	http.HandleFunc("/", docs.RenderHandler(address))
 
+	server := &http.Server{
+		Addr:              listen,
+		ReadHeaderTimeout: 3 * time.Second,
+	}
+
 	dlog.Info("Starting help http server")
-	return http.ListenAndServe(listen, nil)
+	return server.ListenAndServe()
 }
 
 var Docs = &command.Command{
@@ -124,7 +130,7 @@ milpa help docs --server
 			if cmd.Options["server"].ToValue().(bool) {
 				listen := cmd.Options["listen"].ToString()
 				address := cmd.Options["base"].ToString()
-				dlog.Infof("Starting docs server at %s", listen)
+				dlog.Infof("Starting docs server at http://%s", listen)
 				return startServer(listen, address)
 			}
 			dlog.Debug("Rendering docs help page")
