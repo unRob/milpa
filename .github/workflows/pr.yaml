@@ -33,10 +33,10 @@ jobs:
             ${{ runner.OS }}-go-
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3.3.1
+        uses: golangci/golangci-lint-action@v3.4.0
         with:
           skip-pkg-cache: true
-          version: v1.47.3
+          version: v1.50.1
           args: --timeout 3m --verbose
 
       - name: shellcheck
