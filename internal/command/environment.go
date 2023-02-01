@@ -29,7 +29,7 @@ func ArgumentsToEnv(cmd *command.Command, dst *[]string, prefix string) {
 			}
 			*dst = append(*dst, fmt.Sprintf("declare -a %s=(%s)", envName, strings.Join(ret, " ")))
 		} else {
-			*dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, envName, arg.ToString()))
+			*dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, envName, shellescape.Quote(arg.ToString())))
 		}
 	}
 }
@@ -77,7 +77,7 @@ func OptionsToEnv(cmd *command.Command, dst *[]string, prefix string) {
 	cmd.Cobra.Flags().VisitAll(func(f *pflag.Flag) {
 		envName, value := envValue(cmd.Options, f)
 		if envName != nil && value != nil {
-			*dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, *envName, *value))
+			*dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, *envName, shellescape.Quote(*value)))
 		}
 	})
 }
