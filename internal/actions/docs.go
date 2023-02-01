@@ -167,7 +167,6 @@ var Docs = &command.Command{
 			if err != nil {
 				return err
 			}
-			AfterHelp(statuscode.RenderHelp)
 			dlog.Debug("Rendered docs help page")
 			return nil
 		}
@@ -210,11 +209,9 @@ var Docs = &command.Command{
 			return err
 		}
 
-		if _, err := cmd.Cobra.OutOrStderr().Write(doc); err != nil {
+		if _, err := cmd.Cobra.OutOrStdout().Write(doc); err != nil {
 			return err
 		}
-		AfterHelp(statuscode.RenderHelp)
-
 		return nil
 	},
 }

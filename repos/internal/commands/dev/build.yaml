@@ -1,4 +1,4 @@
-summary: Builds compa for dev or test
+summary: Builds milpa for dev or test
 description: |
   By default, using a git-generated version
 arguments:

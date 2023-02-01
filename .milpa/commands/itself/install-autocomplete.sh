@@ -16,10 +16,10 @@ case "$SHELL" in
       if [[ -d "$dst" ]]; then
         @milpa.log info "Found completion dir at $dst"
         if [[ -w "$dst" ]]; then
-          "$MILPA_COMPA" __generate_completions bash > "$dst/milpa" || @milpa.fail "Could not install completion script"
+          "$MILPA" __generate_completions bash > "$dst/milpa" || @milpa.fail "Could not install completion script"
         else
           @milpa.log warning "$dst does not look writeable for user $USER, using sudo"
-          "$MILPA_COMPA" __generate_completions bash | sudo tee "$dst/milpa" || @milpa.fail "Could not install completion script"
+          "$MILPA" __generate_completions bash | sudo tee "$dst/milpa" || @milpa.fail "Could not install completion script"
         fi
         @milpa.log success "Installed completion script to $dst/milpa"
         installed="true"
@@ -42,11 +42,11 @@ case "$SHELL" in
     @milpa.log info "Installing completions to $dst"
     if [[ -w "$dst" ]]; then
       [[ -f "$dst" ]] || mkdir -pv "$dst"
-      "$MILPA_COMPA" __generate_completions zsh > "${dst}/_milpa" || @milpa.fail "Could not install completions"
+      "$MILPA" __generate_completions zsh > "${dst}/_milpa" || @milpa.fail "Could not install completions"
     else
       @milpa.log warning "$dst does not look writeable for user $USER, using sudo"
       [[ -f "$dst" ]] || sudo mkdir -pv "$dst"
-      "$MILPA_COMPA" __generate_completions zsh | sudo tee "${dst}/_milpa" >/dev/null || @milpa.fail "Could not install completions"
+      "$MILPA" __generate_completions zsh | sudo tee "${dst}/_milpa" >/dev/null || @milpa.fail "Could not install completions"
     fi
 
     if ! zsh -c "source ~/.zshrc 2>/dev/null; command -v compinit >/dev/null" >/dev/null 2>&1; then
@@ -60,7 +60,7 @@ then reloading your shell'
   *fish)
     @milpa.log info "Fish detected"
     dst="$HOME/.config/fish/completions/milpa.fish"
-    "$MILPA_COMPA" __generate_completions fish > "$dst" || @milpa.fail "Could not install completions"
+    "$MILPA" __generate_completions fish > "$dst" || @milpa.fail "Could not install completions"
   ;;
   *)
     @milpa.fail "No completion script found for shell $SHELL"

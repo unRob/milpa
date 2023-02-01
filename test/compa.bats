@@ -8,26 +8,24 @@ setup () {
   _common_setup
 }
 
-@test "compa prints version" {
-  # compa only talks to stdout when talking to milpa
-  # compa parses flags, so it should parse the version flag
-  run --keep-empty-lines --separate-stderr compa --version
+@test "milpa prints version" {
+  run --keep-empty-lines --separate-stderr milpa --version
   assert_equal "$output" "$TEST_MILPA_VERSION"
   assert_equal "$stderr" ""
 
-  run --keep-empty-lines --separate-stderr compa __version
+  run --keep-empty-lines --separate-stderr milpa __version
   assert_equal "$stderr" "$TEST_MILPA_VERSION"
   assert_equal "$output" ""
 }
 
-@test "compa exits correctly on bad MILPA_ROOT" {
+@test "milpa exits correctly on bad MILPA_ROOT" {
   MILPA_ROOT="$BATS_TEST_FILENAME"
-  run -78 compa
+  run -78 milpa
 }
 
 
-@test "compa exits correctly on bad commands" {
-  run -127 --separate-stderr compa bad-command
+@test "milpa exits correctly on bad commands" {
+  run -127 --separate-stderr milpa bad-command
   assert_equal "$output" ""
   linecount=${#stderr_lines[@]}
   last_line=${stderr_lines[$(( linecount - 1))]}
@@ -35,8 +33,8 @@ setup () {
   echo "${last_line}" | grep -m1 "Unknown subcommand bad-command"
 }
 
-@test "compa exits correctly on bad arguments" {
-  run -64 --separate-stderr compa version --bad-flag
+@test "milpa exits correctly on bad arguments" {
+  run -64 --separate-stderr milpa version --bad-flag
   assert_equal "$output" ""
   linecount=${#stderr_lines[@]}
   last_line=${stderr_lines[$(( linecount - 1))]}

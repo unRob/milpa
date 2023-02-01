@@ -36,7 +36,7 @@ jobs:
           check_together: 'yes'
           ignore_paths: test/_helpers/bats-assert test/_helpers/bats-file test/_helpers/bats-support
 
-      - name: Build compa and environment
+      - name: Build milpa and environment
         run: |
           version="test-$(date -u "+%s")"
           echo "TEST_MILPA_VERSION=$version" >> $GITHUB_ENV
@@ -44,7 +44,7 @@ jobs:
           echo "MILPA_PATH=$(pwd)/internal" >> $GITHUB_ENV
           echo "MILPA_UPDATE_CHECK_DISABLED=1" >> $GITHUB_ENV
           echo "BATS_LIB_PATH=$(pwd)/test/_helpers" >> $GITHUB_ENV
-          go build -ldflags "-s -w -X main.version=${version}" -o compa -cover
+          go build -ldflags "-s -w -X main.version=${version}" -o milpa -cover
 
       - name: Unit tests
         run: |

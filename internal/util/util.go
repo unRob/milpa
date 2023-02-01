@@ -33,8 +33,9 @@ func IsTrueIsh(val string) bool {
 }
 
 // EnvironmentMap returns the resolved environment map.
-func EnvironmentMap(mp []string) map[string]string {
+func EnvironmentMap(mp []string, mr string) map[string]string {
 	res := map[string]string{
+		_c.EnvVarMilpaRoot:       mr,
 		_c.EnvVarMilpaPath:       strings.Join(mp, ":"),
 		_c.EnvVarMilpaPathParsed: "true",
 	}

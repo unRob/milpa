@@ -27,7 +27,6 @@ const EnvVarColorBitDepth = "COLORTERM"
 const EnvVarMilpaPath = "MILPA_PATH"
 const EnvVarMilpaPathParsed = "MILPA_PATH_PARSED"
 const EnvVarMilpaRoot = "MILPA_ROOT"
-const EnvVarCompaOut = "COMPA_OUT"
 const EnvVarDebug = "DEBUG"
 const EnvVarLookupGitDisabled = "MILPA_DISABLE_GIT"
 const EnvVarLookupUserReposDisabled = "MILPA_DISABLE_USER_REPOS" // nolint:gosec

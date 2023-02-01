@@ -10,6 +10,7 @@ import (
 )
 
 type Kind string
+type PosixShell Kind
 
 const (
 	KindUnknown    Kind = ""
@@ -17,7 +18,12 @@ const (
 	KindSource     Kind = "source"
 	KindVirtual    Kind = "virtual"
 	KindRoot       Kind = "root"
+	KindPosix      Kind = "posix"
 )
+
+func (k Kind) IsKnown() bool {
+	return k != KindUnknown
+}
 
 type Meta struct {
 	// Path is the filesystem path to this command
@@ -27,7 +33,8 @@ type Meta struct {
 	// Name is a list of words naming this command
 	Name []string `json:"name" yaml:"name"`
 	// Kind can be executable (a binary or executable file), source (.sh file), or virtual (a sub-command group)
-	Kind   Kind `json:"kind" yaml:"kind"`
+	Kind   Kind   `json:"kind" yaml:"kind"`
+	Shell  string `json:"shell" yaml:"shell"`
 	issues []error
 }
 
@@ -41,13 +48,19 @@ func metaForPath(path string, repo string) (meta Meta) {
 		meta.Kind = KindVirtual
 	} else {
 		meta.Path = path
-		name = strings.TrimSuffix(path, ".sh")
+		extension := filepath.Ext(path)
+		name = strings.TrimSuffix(path, extension)
 		name = strings.TrimPrefix(name, repo+"/")
 		name = strings.TrimPrefix(name, _c.RepoCommandFolderName+"/")
 
-		if strings.HasSuffix(path, ".sh") {
-			meta.Kind = KindSource
-		} else {
+		switch extension {
+		case ".zsh":
+			meta.Kind = KindPosix
+			meta.Shell = "zsh"
+		case ".sh", ".bash":
+			meta.Kind = KindPosix
+			meta.Shell = "bash"
+		default:
 			meta.Kind = KindExecutable
 		}
 	}
@@ -56,7 +69,7 @@ func metaForPath(path string, repo string) (meta Meta) {
 	meta.Name = strings.Split(name, "/")
 	meta.issues = []error{}
 
-	return
+	return meta
 }
 
 func (meta *Meta) ParsingErrors() []error {

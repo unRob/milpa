@@ -47,7 +47,8 @@ func HandleExit(cmd *cobra.Command, err error) error {
 	if err == nil {
 		ok, err := cmd.Flags().GetBool("help")
 		if cmd.Name() == "help" || err == nil && ok {
-			os.Exit(statuscode.RenderHelp)
+			// os.Exit(statuscode.RenderHelp)
+			os.Exit(statuscode.Ok)
 		}
 
 		os.Exit(statuscode.Ok)

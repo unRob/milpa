@@ -85,6 +85,8 @@ func AllSubCommands(returnOnError bool) error {
 			log.Debugf("Initialized %s", cmd.FullName())
 			chinampa.Register(cmd)
 		} else {
+			log.Debugf("Failed intitialization of %s: %s", cmd.FullName(), specErr)
+			// ret = specErr
 			if returnOnError {
 				cmd.Arguments = ccmd.Arguments{}
 				cmd.Options = ccmd.Options{}
@@ -93,7 +95,7 @@ func AllSubCommands(returnOnError bool) error {
 		}
 	}
 
-	return err
+	return nil
 }
 
 func AllDocs() ([]string, error) {

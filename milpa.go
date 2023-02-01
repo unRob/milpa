@@ -58,7 +58,7 @@ See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more informat
 
 	err = lookup.AllSubCommands(!isDoctor)
 	if err != nil && !isDoctor {
-		logger.Fatalf("Could not find subcommands: %s", err)
+		logger.Fatalf("milpa failed to boot during subcommand lookup: %s", err)
 	} else if err != nil {
 		logger.Error(err)
 	}

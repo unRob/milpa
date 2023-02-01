@@ -16,7 +16,8 @@ import (
 )
 
 // ToEnv writes shell variables to dst.
-func ArgumentsToEnv(cmd *command.Command, dst *[]string, prefix string) {
+func ArgumentsToEnv(cmd *command.Command, dst *[]string, prefix string) []string {
+	all := []string{}
 	for _, arg := range cmd.Arguments {
 		envName := fmt.Sprintf("%s%s", _c.OutputPrefixArg, arg.EnvName())
 
@@ -27,11 +28,28 @@ func ArgumentsToEnv(cmd *command.Command, dst *[]string, prefix string) {
 			for _, v := range vals {
 				ret = append(ret, shellescape.Quote(v))
 			}
+			all = append(all, ret...)
 			*dst = append(*dst, fmt.Sprintf("declare -a %s=(%s)", envName, strings.Join(ret, " ")))
 		} else {
 			*dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, envName, shellescape.Quote(arg.ToString())))
+			// all = append(all, arg.ToString())
+			// *dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, envName, arg.ToString()))
 		}
 	}
+	return all
+}
+
+func ArgumentsToSlice(cmd *command.Command) []string {
+	all := []string{}
+	for _, arg := range cmd.Arguments {
+		if arg.Variadic {
+			vals := arg.ToValue().([]string)
+			all = append(all, vals...)
+		} else {
+			all = append(all, arg.ToString())
+		}
+	}
+	return all
 }
 
 // FlagNames are flags also available as environment variables.
@@ -113,9 +131,9 @@ func EnvironmentMap(cmd *command.Command) map[string]string {
 	}
 }
 
-func ToEval(cmd *command.Command, args []string) string {
+func ToEval(cmd *command.Command) string {
 	output := []string{}
-	for name, value := range util.EnvironmentMap(bootstrap.MilpaPath) {
+	for name, value := range util.EnvironmentMap(bootstrap.MilpaPath, bootstrap.MilpaRoot) {
 		output = append(output, fmt.Sprintf("export %s=%s", name, shellescape.Quote(value)))
 	}
 
@@ -124,7 +142,7 @@ func ToEval(cmd *command.Command, args []string) string {
 	}
 
 	OptionsToEnv(cmd, &output, "export ")
-	ArgumentsToEnv(cmd, &output, "export ")
+	args := ArgumentsToEnv(cmd, &output, "export ")
 
 	for idx, arg := range args {
 		args[idx] = shellescape.Quote(arg)
@@ -135,7 +153,7 @@ func ToEval(cmd *command.Command, args []string) string {
 }
 
 func Env(cmd *command.Command, seed []string) []string {
-	for name, value := range util.EnvironmentMap(bootstrap.MilpaPath) {
+	for name, value := range util.EnvironmentMap(bootstrap.MilpaPath, bootstrap.MilpaRoot) {
 		seed = append(seed, fmt.Sprintf("%s=%s", name, shellescape.Quote(value)))
 	}
 

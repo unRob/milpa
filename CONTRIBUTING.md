@@ -14,11 +14,9 @@ curl -L https://milpa.dev/install.sh | bash -
 # once milpa is available, we can clone this repo
 git clone git@github.com:/unRob/milpa.git
 cd milpa
-# temporarily use stable compa to run HEAD milpa
-ln -sfv "$(dirname "$(which milpa)")/compa" $(pwd)/compa
 # install git hooks, submodules and go+bash dependencies
 # if asdf-vm is available, go will be installed too
-MILPA_ROOT=$(pwd) ./milpa dev setup
+MILPA_ROOT=$(pwd) milpa dev setup
 ```
 
 ## General flow
@@ -31,7 +29,7 @@ milpa dev test [integration|unit] [--coverage]
 milpa dev test coverage-report && open test/coverage.html
 # or all in one go
 milpa dev ci
-# build local compa binaries with
+# build local binaries with
 milpa dev build
 ```
 

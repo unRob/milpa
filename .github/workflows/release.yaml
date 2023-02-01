@@ -31,8 +31,8 @@ jobs:
           sudo mv htmlq /usr/local/bin/htmlq
           echo "::endgroup::"
 
-          echo "::group::build compa"
-          go build -ldflags "-s -w -X main.version=CI" -o compa
+          echo "::group::build milpa locally"
+          go build -ldflags "-s -w -X main.version=CI" -o milpa
           echo "::endgroup::"
 
           echo "::group::Release notes"

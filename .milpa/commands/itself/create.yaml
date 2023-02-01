@@ -8,7 +8,7 @@ arguments:
     variadic: true
     values:
       suggest-only: true
-      script: compa __command_tree --format autocomplete{{ if (index .Args "name") }} {{ Arg "name" }}{{ end }}
+      script: milpa __command_tree --format autocomplete{{ if (index .Args "name") }} {{ Arg "name" }}{{ end }}
 options:
   summary:
     description: a short summary of what this command does

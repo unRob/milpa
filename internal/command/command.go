@@ -5,14 +5,60 @@ package command
 import (
 	"fmt"
 	"os"
+	"os/exec"
+	"path/filepath"
 	"strings"
+	"syscall"
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
 	"git.rob.mx/nidito/chinampa/pkg/logger"
+	"github.com/sirupsen/logrus"
+	"github.com/unrob/milpa/internal/bootstrap"
 	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/unrob/milpa/internal/errors"
 	"gopkg.in/yaml.v3"
 )
+
+func posixSource(executable string, cmd *command.Command, meta Meta) error {
+	env := ToEval(cmd)
+
+	out, err := os.CreateTemp(os.TempDir(), "milpa-cmdenv-*")
+	if err != nil {
+		return err
+	}
+
+	_, err = out.Write([]byte(env))
+	if err != nil {
+		return fmt.Errorf("could not write to temporary file: %s", err)
+	}
+
+	itself, err := os.Executable()
+	if err != nil {
+		return fmt.Errorf("could not tell our executable path: %s", err)
+	}
+	cmdEnv := append(os.Environ(),
+		_c.EnvVarMilpaRoot+"="+bootstrap.MilpaRoot,
+		_c.OutputCommandPath+"="+meta.Path,
+		"MILPA="+itself,
+	)
+
+	beforeHook := meta.Repo + "/hooks/before-run.sh"
+	sources := strings.Join([]string{
+		"source '" + out.Name() + "'",
+		"source '" + bootstrap.MilpaRoot + "/.milpa/utils.sh'",
+		"[[ -f '" + beforeHook + "' ]] && source '" + beforeHook + "'",
+	}, ";") + ";"
+
+	args := []string{
+		executable,
+		"-c",
+		"set -o allexport;" + sources + "set +o allexport; rm " + out.Name() + "; source " + meta.Path + ";",
+	}
+
+	logrus.Debugf("calling %s", args)
+
+	return syscall.Exec(executable, args, cmdEnv)
+}
 
 func New(path string, repo string) (cmd *command.Command, err error) {
 	meta := metaForPath(path, repo)
@@ -23,25 +69,13 @@ func New(path string, repo string) (cmd *command.Command, err error) {
 	}
 
 	var spec string
-	if meta.Kind != "virtual" {
-		cmd.Action = func(cmd *command.Command) error {
-			if err := canRun(cmd); err != nil {
-				return err
-			}
-			logger.Main.Debugf("running command")
-
-			env := ToEval(cmd, []string{})
-
-			if os.Getenv(_c.EnvVarCompaOut) != "" {
-				return os.WriteFile(os.Getenv(_c.EnvVarCompaOut), []byte(env), 0600)
-			}
-
-			fmt.Println(env)
-			return nil
-		}
-		spec = strings.TrimSuffix(path, ".sh") + ".yaml"
-	} else {
+	switch meta.Kind {
+	case KindVirtual:
 		spec = path
+	case KindExecutable:
+		spec = path + ".yaml"
+	case KindPosix, KindSource:
+		spec = strings.TrimSuffix(path, filepath.Ext(path)) + ".yaml"
 	}
 
 	var contents []byte
@@ -69,7 +103,42 @@ Run ﹅milpa itself doctor﹅ to diagnose your installed commands.
 
 ---`
 		}
+		cmd.Action = canRun
+
 		return cmd, err
+	}
+
+	switch meta.Kind {
+	case KindPosix:
+		cmd.Action = func(cmd *command.Command) error {
+			if err := canRun(cmd); err != nil {
+				return err
+			}
+			logger.Main.Debugf("running command")
+
+			if meta.Shell == "" {
+				return fmt.Errorf("could not find a shell to run %s", path)
+			}
+
+			shell, err := exec.LookPath(meta.Shell)
+			if err != nil {
+				return fmt.Errorf("could not find an executable for %s: %s", shell, err)
+			}
+			return posixSource(shell, cmd, meta)
+		}
+	case KindExecutable:
+		cmd.Action = func(cmd *command.Command) error {
+			if err := canRun(cmd); err != nil {
+				return err
+			}
+			logger.Main.Debugf("running command")
+
+			cmdEnv := Env(cmd, os.Environ())
+			args := ArgumentsToSlice(cmd)
+
+			// Launch command with user provided arguments
+			return syscall.Exec(meta.Path, args, cmdEnv) // nolint:gosec
+		}
 	}
 
 	cmd.Meta = meta
