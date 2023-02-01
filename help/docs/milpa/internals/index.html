@@ -258,8 +258,8 @@
       <h3 class="content-header" id="milpa-sets-the-stage"><code>milpa</code> sets the stage</h3><a aria-hidden="true" class="heading-anchor" href="#milpa-sets-the-stage" tabindex="-1">#</a>
     </div>
     <ol>
-      <li>As it starts running, milpa will set <code>MILPA_ROOT</code>, exit unless it points to an existing directory,</li>
-      <li>We'll bail after setting the global environment if the user requested a completion (with the hidden <code>__complete</code> command).</li>
+      <li>As it starts running, milpa will set <code>MILPA_ROOT</code> or exit unless it points to an existing directory,</li>
+      <li>We'll hand off to <code>compa</code> after setting the global environment. If the user requested a completion (with the hidden <code>__complete</code> command), the version flag, or the doctor/help docs server commands, <code>milpa</code> exits immediately after <code>exec compa $@</code>.</li>
       <li><code>@milpa.load_util</code> is defined otherwise, and we'll immediately use it to load logging-related functions.</li>
       <li><code>@milpa.fail</code> is defined.</li>
       <li>A couple of temporary pipes are created (<code>COMPA_OUT</code> and <code>COMPA_ERR</code>), and compa is started</li>
@@ -278,8 +278,8 @@
       <h3 class="content-header" id="milpa-acts-on-the-resolved-intention"><code>milpa</code> acts on the resolved intention</h3><a aria-hidden="true" class="heading-anchor" href="#milpa-acts-on-the-resolved-intention" tabindex="-1">#</a>
     </div>
     <ol>
-      <li>If a non-zero exit code is returned by <code>compa</code>, <code>milpa</code> will print out <code>compa</code>'s <code>stdout</code>, formatting it with <code>less -FIRX</code> if help or docs are being rendered and exit with status code 0. Otherwise, we'll print out both pipes before removing them and exiting with <code>compa</code>'s original exit code.</li>
-      <li>Assuming things went well, we'll take <code>compa</code>'s output and <code>eval</code> it to set the command's environment. If an incomplete environment is found, we exit with status code 2, print debugging information and cleanup temporary pipes.</li>
+      <li>If a non-zero exit code is returned by <code>compa</code>, <code>milpa</code> will print out <code>compa</code>'s <code>stdout</code>, piping it through <code>less -FIRX</code> if help or docs are being rendered, and exit with status code 0. Otherwise, we'll print out both pipes before removing them and exiting with <code>compa</code>'s original exit code.</li>
+      <li>If <code>compa</code> returned 0, <code>milpa</code> evals the contents of <code>COMPA_OUT</code> to set the found sub-command's environment. If an incomplete environment is found, we exit with status code 2, print debugging information and cleanup temporary pipes.</li>
       <li>a version check is performed to nag the user to update to the latest available version</li>
       <li>if requested, debug information of this session is printed to stderr, and temporary pipes are removed.</li>
       <li><code>before-run</code> hooks are ran before finally invoking your script.</li>

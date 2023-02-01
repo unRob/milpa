@@ -33,14 +33,14 @@ function @info () {
   >&2 echo "${@}"
 }
 
-# a place to look for a well-known latest version
-MILPA_META_BASE="${MILPA_META_BASE:-https://milpa.dev/}/.well-known/milpa/"
+# a URL to fetch the latest available version from
+MILPA_UPDATE_URL="${MILPA_UPDATE_URL:-https://milpa.dev/.well-known/milpa/latest-version}"
 # a github repo to pull assets from
 ASSET_BASE="${MILPA_GITHUB_REPO:-"https://github.com/unRob/milpa"}/releases" #/latest/download/ASSET.ext
 # version can be set by specifying MILPA_VERSION, otherwise we'll find out from the internet
 if [[ "${MILPA_VERSION}" == "" ]]; then
-  >&2 echo "${_FMT_GRAY}No VERSION provided, querying for default${_FMT_RESET}"
-  MILPA_VERSION=$(curl --silent --fail --show-error -L "$MILPA_META_BASE/latest-version") || @fail "Could not fetch latest version!"
+  >&2 echo "${_FMT_GRAY}No VERSION provided, looking for latest available version...${_FMT_RESET}"
+  MILPA_VERSION=$(curl --silent --fail --show-error -L "$MILPA_UPDATE_URL") || @fail "Could not fetch latest version!"
 fi
 # Where the package gets installed to
 PREFIX="${PREFIX:-/usr/local/lib}/milpa"
@@ -62,7 +62,7 @@ case "$machine" in
 esac
 
 case "$ARCH" in
-  amd64|arm|arm64|mips) @info "Detected system: $OS/$ARCH";;
+  amd64|arm|arm64|mips|mips64) @info "Detected system: $OS/$ARCH";;
   *) @fail "No builds available for $OS/$ARCH"
 esac
 
@@ -112,20 +112,39 @@ fi
 @info "Installing symbolic links to $TARGET"
 if [[ -w "$PREFIX" ]]; then
   [[ -d "$TARGET" ]] || mkdir -p "$TARGET"
-  ln -sfv "$PREFIX/milpa" "$TARGET/milpa"
-  ln -sfv "$PREFIX/compa" "$TARGET/compa"
-  [[ -d "$globalRepos" ]] || mkdir -pv "$globalRepos"
 else
   [[ -d "$TARGET" ]] || sudo mkdir -p "$TARGET"
+fi
+
+if [[ -w "$PREFIX/milpa" ]]; then
+  ln -sfv "$PREFIX/milpa" "$TARGET/milpa"
+else
   sudo ln -sfv "$PREFIX/milpa" "$TARGET/milpa"
+fi
+
+if [[ -w "$PREFIX/compa" ]]; then
+  ln -sfv "$PREFIX/compa" "$TARGET/compa"
+else
   sudo ln -sfv "$PREFIX/compa" "$TARGET/compa"
-  [[ -d "$globalRepos" ]] || sudo mkdir -pv "$globalRepos"
+fi
+
+if ! [[ -d "$globalRepos" ]]; then
+  if [[ -w "$(dirname "$globalRepos")" ]]; then
+    mkdir -p "$globalRepos"
+  else
+    sudo mkdir -p "$globalRepos"
+  fi
+  @info "Created global repository directory at $globalRepos"
+fi
+
+if ! [[ -d "$localRepos" ]]; then
+  mkdir -p "$localRepos"
+  @info "Created local user repository directory at $localRepos"
 fi
 
 # recycle the bag
 rm -rf "$package"
 
-[[ -d "$localRepos" ]] || mkdir -pv "$localRepos"
 # update version so milpa doesn't look for updates innecessarily
 date "+%s" > "$milpaLocal/last-update-check"
 
