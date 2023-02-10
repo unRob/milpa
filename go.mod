@@ -7,7 +7,7 @@ require (
 	github.com/alecthomas/chroma/v2 v2.4.0
 	github.com/alessio/shellescape v1.4.1
 	github.com/bmatcuk/doublestar/v4 v4.6.0
-	github.com/fatih/color v1.14.0
+	github.com/fatih/color v1.14.1
 	github.com/hashicorp/go-getter v1.6.2
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.6.1
