@@ -1,17 +1,5 @@
-# see `milpa help docs command spec` for all the options
-summary: Does a thing
+summary: Creates a coverage report from previous test runs
 description: |
-  Works by doing a thing with another thing until the first thing looks about right
-# arguments:
-#   - name: something
-#     description: Sets SOMETHING
-#     required: true
-#     variadic: false
-#     values:
-#       script: whoami
-# options:
-#   option:
-#     description: sets OPTION
-#     default: fourty-two
-#     values:
-#       static: [one, two, fourty-two]
+  looks at test/coverage/* for output
+
+  see: https://go.dev/testing/coverage/

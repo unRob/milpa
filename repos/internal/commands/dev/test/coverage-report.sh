@@ -10,5 +10,7 @@ packages="$(IFS=, ; echo "${runs[*]}")"
 
 @milpa.log info "Building coverage report from runs: ${runs[*]}"
 go tool covdata textfmt -i="$packages" -o test/coverage.cov || @milpa.fail "could not merge runs"
-go tool covdata percent -i="$packages"
 go tool cover -html=test/coverage.cov -o test/coverage.html || @milpa.fail "could not build reports"
+
+@milpa.log complete "Coverage report built"
+go tool covdata percent -i="$packages"
