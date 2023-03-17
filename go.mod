@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	git.rob.mx/nidito/chinampa v0.0.0-20230123042918-20814bccd961
-	github.com/alecthomas/chroma/v2 v2.4.0
+	github.com/alecthomas/chroma/v2 v2.5.0
 	github.com/alessio/shellescape v1.4.1
 	github.com/bmatcuk/doublestar/v4 v4.6.0
 	github.com/fatih/color v1.14.0
