@@ -5,3 +5,7 @@ arguments:
   - name: version
     description: Sets a specific version
     default: auto
+options:
+  coverage:
+    type: bool
+    description: if provided, will output coverage reports

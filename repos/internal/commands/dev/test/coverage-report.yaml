@@ -1,0 +1,5 @@
+summary: Creates a coverage report from previous test runs
+description: |
+  looks at test/coverage/* for output
+
+  see: https://go.dev/testing/coverage/

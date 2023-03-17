@@ -1,3 +1,7 @@
 summary: Runs unit and integration tests
 description: |
   a wrapper for milpa dev test *
+options:
+  coverage:
+    type: bool
+    description: if provided, will output coverage reports

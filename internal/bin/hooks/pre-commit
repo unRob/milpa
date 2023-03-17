@@ -10,7 +10,7 @@ set -e errexit
 #shellcheck disable=2155
 export MILPA_ROOT=$(pwd)
 if [[ ! -x "$MILPA_ROOT/compa" ]]; then
-  milpa dev build --test
+  milpa dev build
 fi
 #shellcheck disable=2155
 export TEST_MILPA_VERSION="$("$MILPA_ROOT/compa" --version 2>&1)"

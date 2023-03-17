@@ -2,3 +2,4 @@
 compa
 dist
 test/coverage.*
+test/coverage
