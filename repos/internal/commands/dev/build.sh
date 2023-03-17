@@ -9,7 +9,15 @@ else
 fi
 cd "$MILPA_ROOT" || @milpa.fail "could not cd into $MILPA_ROOT"
 
+args=(
+  -ldflags "-s -w -X main.version=${VERSION}" -o compa
+)
+
+if [[ "${MILPA_OPT_COVERAGE}" ]]; then
+  args+=(-cover)
+fi
+
 @milpa.log info "Building compa version $VERSION"
-go build -ldflags "-s -w -X main.version=${VERSION}" -o compa || exit 2
+go build "${args[@]}" || exit 2
 @milpa.log complete "compa version $VERSION built"
 

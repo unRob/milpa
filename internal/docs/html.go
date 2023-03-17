@@ -47,7 +47,7 @@ func FixLinks(contents []byte) []byte {
 }
 
 func getHTMLLayout() (*template.Template, error) {
-	return template.New("html-help").Funcs(template.FuncMap(render.TemplateFuncs)).Parse(string(LayoutTemplate))
+	return template.New("html-help").Funcs(render.TemplateFuncs).Parse(string(LayoutTemplate))
 }
 
 func contentsForRequest(comps []string) ([]byte, string, error) {

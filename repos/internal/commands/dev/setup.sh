@@ -45,7 +45,7 @@ fi
 packages=(
   gotest.tools/gotestsum@v1.9.0
   github.com/mitchellh/gox@9f71238 # used to be 1.0.1 but there doesn't seem to be more releases?
-  github.com/golangci/golangci-lint/cmd/golangci-lint@v1.50.1
+  github.com/golangci/golangci-lint/cmd/golangci-lint@v1.51.2
 )
 
 for package in "${packages[@]}"; do

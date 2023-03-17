@@ -8,35 +8,26 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.18.x
+          go-version: 1.20.x
 
       - name: Setup BATS
         uses: mig4/setup-bats@v1
         with:
           bats-version: 1.8.2
 
-      - name: Checkout source
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-
-      - name: Cache go modules
-        uses: actions/cache@v3
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.OS }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.OS }}-go-${{ env.cache-name }}-
-            ${{ runner.OS }}-go-
-
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3.4.0
         with:
           skip-pkg-cache: true
-          version: v1.50.1
+          version: v1.51.2
           args: --timeout 3m --verbose
 
       - name: shellcheck
@@ -44,16 +35,6 @@ jobs:
         with:
           check_together: 'yes'
           ignore_paths: test/_helpers/bats-assert test/_helpers/bats-file test/_helpers/bats-support
-
-      - name: Unit tests
-        run: |
-          go install gotest.tools/gotestsum@latest
-          gotestsum --format testname -- ./... -coverprofile=test/coverage.cov --coverpkg=./...
-
-      - name: Send coverage
-        uses: shogo82148/actions-goveralls@v1
-        with:
-          path-to-profile: test/coverage.cov
 
       - name: Build compa and environment
         run: |
@@ -63,12 +44,26 @@ jobs:
           echo "MILPA_PATH=$(pwd)/internal" >> $GITHUB_ENV
           echo "MILPA_DISABLE_UPDATE_CHECKS=1" >> $GITHUB_ENV
           echo "BATS_LIB_PATH=$(pwd)/test/_helpers" >> $GITHUB_ENV
-          go build -ldflags "-s -w -X main.version=${version}" -o compa
+          go build -ldflags "-s -w -X main.version=${version}" -o compa -cover
+
+      - name: Unit tests
+        run: |
+          go install gotest.tools/gotestsum@latest
+          $(pwd)/milpa dev test unit --coverage
 
       - name: Integration tests
         run: |
-          bats --tap test/*.bats test/commands/**/*.bats
+          $(pwd)/milpa dev test integration --coverage
 
       - name: milpa doctor
         run: |
+          export GOCOVERPROFILE=$(pwd)/test/coverage/doctor
+          mkdir -p "$GOCOVERPROFILE"
           $(pwd)/milpa itself doctor
+          $(pwd)/milpa dev test coverage-report
+
+
+      - name: Send coverage
+        uses: shogo82148/actions-goveralls@v1
+        with:
+          path-to-profile: test/coverage.cov

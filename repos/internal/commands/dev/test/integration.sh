@@ -16,9 +16,14 @@ if [[ "${#MILPA_ARG_PATHS}" -eq 0 ]]; then
 fi
 
 cd "$MILPA_ROOT" || @milpa.fail "could not cd into $MILPA_ROOT"
+if [[ "${MILPA_OPT_COVERAGE}" ]]; then
+  export GOCOVERDIR="$MILPA_ROOT/test/coverage/integration"
+  rm -rf "$GOCOVERDIR"
+  mkdir -p "$GOCOVERDIR"
+fi
 # shellcheck disable=2155
 export TEST_MILPA_VERSION="$("$MILPA_ROOT/compa" --version 2>&1)"
 @milpa.log info "Running integration tests"
 export BATS_LIB_PATH="$MILPA_ROOT/test/_helpers"
-env bats --timing --formatter "$formatter" "${MILPA_ARG_PATHS[@]}" || exit 2
+env GOCOVERDIR="$GOCOVERDIR" bats --timing --formatter "$formatter" "${MILPA_ARG_PATHS[@]}" || exit 2
 @milpa.log complete "Integration tests passed"

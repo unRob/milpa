@@ -10,3 +10,6 @@ options:
     description: the format for test output
     default: auto
     values: {static: [pretty, auto, tap] }
+  coverage:
+    type: bool
+    description: if provided, will output coverage reports

@@ -1,6 +1,6 @@
 module github.com/unrob/milpa
 
-go 1.18
+go 1.20
 
 require (
 	git.rob.mx/nidito/chinampa v0.0.0-20230123042918-20814bccd961
