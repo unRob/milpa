@@ -57,8 +57,8 @@ jobs:
 
       - name: milpa doctor
         run: |
-          export GOCOVERPROFILE=$(pwd)/test/coverage/doctor
-          mkdir -p "$GOCOVERPROFILE"
+          export GOCOVERDIR=$(pwd)/test/coverage/doctor
+          mkdir -p "$GOCOVERDIR"
           $(pwd)/milpa itself doctor
           $(pwd)/milpa dev test coverage-report
 
