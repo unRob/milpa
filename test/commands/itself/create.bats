@@ -17,17 +17,18 @@ setup() {
 }
 
 @test "itself create something" {
-  run milpa --verbose itself create something
+  name="something-$(date -u '+%s')"
+  run milpa --verbose itself create "$name"
   assert_success
-  assert_output --partial "$LOCAL_REPO/commands/something.sh"
-  assert_file_exist "$LOCAL_REPO/commands/something.sh"
-  assert_file_exist "$LOCAL_REPO/commands/something.yaml"
-  assert_file_not_executable "$LOCAL_REPO/commands/something.sh"
+  assert_output --partial "$LOCAL_REPO/commands/$name.sh"
+  assert_file_exist "$LOCAL_REPO/commands/$name.sh"
+  assert_file_exist "$LOCAL_REPO/commands/$name.yaml"
+  assert_file_not_executable "$LOCAL_REPO/commands/$name.sh"
 
   run milpa itself command-tree
-  assert_output --partial "something"
+  assert_output --partial "$name"
 
-  run milpa something
+  run milpa "$name"
   assert_success
   assert_output ""
 }

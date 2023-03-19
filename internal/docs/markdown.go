@@ -12,7 +12,7 @@ import (
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
 	"git.rob.mx/nidito/chinampa/pkg/tree"
-	"github.com/sirupsen/logrus"
+	"github.com/unrob/milpa/internal/logger"
 	"github.com/unrob/milpa/internal/lookup"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
@@ -137,7 +137,7 @@ func (t *tocTransformer) Transform(doc *ast.Document, reader text.Reader, pctx p
 			}
 
 			if err := rdr.Render(&data, src, n); err != nil {
-				logrus.Errorf("could not render: %s", err)
+				logger.Errorf("could not render: %s", err)
 				return ast.WalkStop, nil
 			}
 			return ast.WalkSkipChildren, nil

@@ -3,7 +3,7 @@ module github.com/unrob/milpa
 go 1.20
 
 require (
-	git.rob.mx/nidito/chinampa v0.0.0-20230317025104-62aefa0e3bd1
+	git.rob.mx/nidito/chinampa v0.0.0-20230319015046-5b405d67475d
 	github.com/alecthomas/chroma/v2 v2.5.0
 	github.com/alessio/shellescape v1.4.1
 	github.com/bmatcuk/doublestar/v4 v4.6.0

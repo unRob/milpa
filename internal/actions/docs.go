@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"os/signal"
 	"regexp"
 	"strings"
 	"time"
@@ -16,7 +17,6 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/errors"
 	"git.rob.mx/nidito/chinampa/pkg/render"
 	"git.rob.mx/nidito/chinampa/pkg/statuscode"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/unrob/milpa/internal/docs"
 
@@ -31,7 +31,7 @@ var dlog = logger.Sub("action:docs")
 var AfterHelp = os.Exit
 
 func startServer(listen, address string) error {
-	logrus.Warnf("Using static resources at %s", os.Getenv("MILPA_ROOT")+"/internal/static")
+	dlog.Warnf("Using static resources at %s", os.Getenv("MILPA_ROOT")+"/internal/static")
 	os.Setenv(env.HelpUnstyled, "true")
 	http.Handle("/static/", docs.StaticHandler())
 	http.HandleFunc("/", docs.RenderHandler(address))
@@ -42,6 +42,12 @@ func startServer(listen, address string) error {
 	}
 
 	dlog.Info("Starting help http server")
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	go func() {
+		<-c
+		os.Exit(0)
+	}()
 	return server.ListenAndServe()
 }
 

@@ -25,5 +25,5 @@ fi
 export TEST_MILPA_VERSION="$("$MILPA_ROOT/compa" --version 2>&1)"
 @milpa.log info "Running integration tests"
 export BATS_LIB_PATH="$MILPA_ROOT/test/_helpers"
-env GOCOVERDIR="$GOCOVERDIR" bats --timing --formatter "$formatter" "${MILPA_ARG_PATHS[@]}" || exit 2
+env bats --timing --formatter "$formatter" "${MILPA_ARG_PATHS[@]}" || exit 2
 @milpa.log complete "Integration tests passed"

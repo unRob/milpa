@@ -14,7 +14,7 @@ args=(
 )
 
 if [[ "${MILPA_OPT_COVERAGE}" ]]; then
-  args+=(-cover)
+  args+=(-cover -coverpkg=./...)
 fi
 
 @milpa.log info "Building compa version $VERSION"
