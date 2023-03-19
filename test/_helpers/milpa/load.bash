@@ -36,3 +36,7 @@ function _suite_setup() {
 function _debug {
   echo "$@" >&3
 }
+
+function fixture() {
+  echo "$PROJECT_ROOT/test/fixtures/$1"
+}

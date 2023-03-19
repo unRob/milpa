@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head lang="en">
+  <meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en" />
+  <meta property="og:title" content="milpa help docs" />
+  <meta property="og:site_name" content="🌽 milpa" />
+  <meta property="og:description" content="Displays docs on TOPIC" />
+  <meta name="description" content="Displays docs on TOPIC" />
+  <meta property="og:url" content="http://localhost:4242/help/docs" />
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
+  <title>milpa help docs</title>
+
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2" />
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2" />
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2" />
+  <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2" />
+  <link rel="canonical" href="http://localhost:4242/help/docs">
+
+  <link rel="stylesheet" href="/static/css/highlight-light.css">
+  <link rel="stylesheet" href="/static/css/highlight-dark.css">
+  <link rel="stylesheet" href="/static/css/index.css">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap" rel="preload" as="style">
+  <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap" />
+  </noscript>
+</head>
+  <body>
+
+  <header role="banner">
+    <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
+    <h1 lang="es" ><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1>
+
+    <input
+      list="milpa-commands"
+      placeholder="type a milpa command"
+      type="text"
+      aria-label="milpa command selector"
+      id="command-selector"
+      pattern='|debug-env|help|help docs|help docs milpa|help docs milpa command|help docs milpa command spec|help docs milpa environment|help docs milpa internals|help docs milpa quick-guide|help docs milpa repo|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa support|help docs milpa use-case|help docs milpa util|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util user-input|itself|itself command-tree|itself create|itself doctor|itself install-autocomplete|itself repo|itself repo install|itself repo list|itself repo uninstall|itself upgrade|itself version'
+      value="help docs" />
+    <datalist id="milpa-commands">
+      <option value="debug-env"></option>
+      <option value="help"></option>
+      <option value="help docs"></option>
+      <option value="help docs milpa"></option>
+      <option value="help docs milpa quick-guide"></option>
+      <option value="help docs milpa use-case"></option>
+      <option value="help docs milpa environment"></option>
+      <option value="help docs milpa repo"></option>
+      <option value="help docs milpa repo docs"></option>
+      <option value="help docs milpa repo hooks"></option>
+      <option value="help docs milpa command"></option>
+      <option value="help docs milpa command spec"></option>
+      <option value="help docs milpa util"></option>
+      <option value="help docs milpa util log"></option>
+      <option value="help docs milpa util repo"></option>
+      <option value="help docs milpa util shell"></option>
+      <option value="help docs milpa util tmp"></option>
+      <option value="help docs milpa util user-input"></option>
+      <option value="help docs milpa internals"></option>
+      <option value="help docs milpa support"></option>
+      <option value="itself"></option>
+      <option value="itself command-tree"></option>
+      <option value="itself create"></option>
+      <option value="itself doctor"></option>
+      <option value="itself install-autocomplete"></option>
+      <option value="itself repo"></option>
+      <option value="itself repo install"></option>
+      <option value="itself repo list"></option>
+      <option value="itself repo uninstall"></option>
+      <option value="itself upgrade"></option>
+      <option value="itself version"></option>
+      </datalist>
+    <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewBox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg"><title>Menu Icon</title><g transform="translate(10.016 -803.03)"><g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336"><path d="m19.668 1032.7h250.65"/><path d="m19.668 932.69h250.65"/><path d="m19.668 832.69h250.65"/></g></g></svg></button>
+  </header>
+
+  <div id="sidebar" aria-hidden="false"><nav id="table-of-contents" aria-labelledby="toc-header">
+      <span class="heading" id="toc-header">In this page</span>
+      <ul>
+        <li>
+          <a href="#description-displays-docs-on-topic">description: Displays docs on TOPIC</a>
+        </li><li>
+          <a href="#usage">Usage</a>
+        </li><li>
+          <a href="#available-topics">Available topics:</a>
+        </li><li>
+          <a href="#description">Description</a>
+        </li><li>
+          <a href="#arguments">Arguments</a>
+        </li><li>
+          <a href="#options">Options</a>
+        </li><li>
+          <a href="#global-options">Global Options</a>
+        </li>
+      </ul>
+    </nav>
+
+
+    <nav id="commands" aria-labelledby="commands-header">
+      <span class="heading" id="commands-header">Commands</span>
+      <ul><li>
+            <a href="/debug-env/" class="">debug-env</a></li>
+        <li>
+            <a href="/help/" class="command-menu-selected-prefix">help</a>
+            <ul class="sub-menu" aria-label="help subcommands">
+              <li>
+            <strong class="command-menu-selected-prefix">docs</strong>
+            <ul class="sub-menu" aria-label="docs subcommands">
+              <li>
+            <a href="/help/docs/milpa/" class="">milpa</a>
+            <ul class="sub-menu" aria-label="milpa subcommands">
+              <li>
+            <a href="/help/docs/milpa/quick-guide/" class="">quick-guide</a></li>
+        <li>
+            <a href="/help/docs/milpa/use-case/" class="">use-case</a></li>
+        <li>
+            <a href="/help/docs/milpa/environment/" class="">environment</a></li>
+        <li>
+            <a href="/help/docs/milpa/repo/" class="">repo</a>
+            <ul class="sub-menu" aria-label="repo subcommands">
+              <li>
+            <a href="/help/docs/milpa/repo/docs/" class="">docs</a></li>
+        <li>
+            <a href="/help/docs/milpa/repo/hooks/" class="">hooks</a></li>
+        </ul>
+          </li>
+        <li>
+            <a href="/help/docs/milpa/command/" class="">command</a>
+            <ul class="sub-menu" aria-label="command subcommands">
+              <li>
+            <a href="/help/docs/milpa/command/spec/" class="">spec</a></li>
+        </ul>
+          </li>
+        <li>
+            <a href="/help/docs/milpa/util/" class="">util</a>
+            <ul class="sub-menu" aria-label="util subcommands">
+              <li>
+            <a href="/help/docs/milpa/util/log/" class="">log</a></li>
+        <li>
+            <a href="/help/docs/milpa/util/repo/" class="">repo</a></li>
+        <li>
+            <a href="/help/docs/milpa/util/shell/" class="">shell</a></li>
+        <li>
+            <a href="/help/docs/milpa/util/tmp/" class="">tmp</a></li>
+        <li>
+            <a href="/help/docs/milpa/util/user-input/" class="">user-input</a></li>
+        </ul>
+          </li>
+        <li>
+            <a href="/help/docs/milpa/internals/" class="">internals</a></li>
+        <li>
+            <a href="/help/docs/milpa/support/" class="">support</a></li>
+        </ul>
+          </li>
+        </ul>
+          </li>
+        </ul>
+          </li>
+        <li>
+            <a href="/itself/" class="">itself</a>
+            <ul class="sub-menu" aria-label="itself subcommands">
+              <li>
+            <a href="/itself/command-tree/" class="">command-tree</a></li>
+        <li>
+            <a href="/itself/create/" class="">create</a></li>
+        <li>
+            <a href="/itself/doctor/" class="">doctor</a></li>
+        <li>
+            <a href="/itself/install-autocomplete/" class="">install-autocomplete</a></li>
+        <li>
+            <a href="/itself/repo/" class="">repo</a>
+            <ul class="sub-menu" aria-label="repo subcommands">
+              <li>
+            <a href="/itself/repo/install/" class="">install</a></li>
+        <li>
+            <a href="/itself/repo/list/" class="">list</a></li>
+        <li>
+            <a href="/itself/repo/uninstall/" class="">uninstall</a></li>
+        </ul>
+          </li>
+        <li>
+            <a href="/itself/upgrade/" class="">upgrade</a></li>
+        <li>
+            <a href="/itself/version/" class="">version</a></li>
+        </ul>
+          </li>
+        </ul>
+    </nav>
+  </div>
+
+  <main id="content">
+    <h1 id="command-name-header" class="sr-only">milpa help docs</h1>
+    <hr>
+<div class="content-header-wrapper"><h2 class="content-header" id="description-displays-docs-on-topic">description: Displays docs on TOPIC</h2> <a aria-hidden="true" class="heading-anchor" href="#description-displays-docs-on-topic" tabindex="-1">#</a></div><p>Displays docs on TOPIC</p>
+<div class="content-header-wrapper"><h2 class="content-header" id="usage">Usage</h2> <a aria-hidden="true" class="heading-anchor" href="#usage" tabindex="-1">#</a></div><p><code>milpa help docs [options] [TOPIC...]</code></p>
+<div class="content-header-wrapper"><h2 class="content-header" id="available-topics">Available topics:</h2> <a aria-hidden="true" class="heading-anchor" href="#available-topics" tabindex="-1">#</a></div><ul>
+<li><a href="milpa">milpa</a></li>
+</ul>
+<div class="content-header-wrapper"><h2 class="content-header" id="description">Description</h2> <a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a></div><p>Shows markdown-formatted documentation from milpa repos. See <code>milpa help docs milpa repo docs</code> for more information on how to write your own.</p>
+<p>An HTTP server to browse documentation can be started by running:</p>
+<pre class="chroma"><code><span class="line"><span class="cl">milpa <span class="nb">help</span> docs --server
+</span></span></code></pre><div class="content-header-wrapper"><h2 class="content-header" id="arguments">Arguments</h2> <a aria-hidden="true" class="heading-anchor" href="#arguments" tabindex="-1">#</a></div><ul>
+<li><code>TOPIC...</code> - The topic to show docs for</li>
+</ul>
+<div class="content-header-wrapper"><h2 class="content-header" id="options">Options</h2> <a aria-hidden="true" class="heading-anchor" href="#options" tabindex="-1">#</a></div><ul>
+<li><code>--base</code> (<em>string</em>): A URL base to use for rendering html links. Default: <em>http://localhost:4242</em>.</li>
+<li><code>--listen</code> (<em>string</em>): The address to listen at when using <code>--server</code>. Default: <em>localhost:4242</em>.</li>
+<li><code>--server</code> (<em>bool</em>): Starts an http server at the specified address.</li>
+</ul>
+<div class="content-header-wrapper"><h2 class="content-header" id="global-options">Global Options</h2> <a aria-hidden="true" class="heading-anchor" href="#global-options" tabindex="-1">#</a></div><ul>
+<li><code>--color</code> (<em>bool</em>): Always print colors to stderr.</li>
+<li><code>--help</code> (<em>bool</em>): Display help for any command.</li>
+<li><code>--no-color</code> (<em>bool</em>): Disable printing of colors to stderr. Default: <em>true</em>.</li>
+<li><code>--silent</code> (<em>bool</em>): Silence non-error logging.</li>
+<li><code>--skip-validation</code> (<em>bool</em>): Do not validate any arguments or options.</li>
+<li><code>--verbose</code> (<em>bool</em>): Log verbose output to stderr.</li>
+<li><code>--version</code> (<em>bool</em>): Display program version and exit.</li>
+</ul>
+
+  </main>
+  <script src="/static/js/index.js"></script>
+
+</body>
+</html>

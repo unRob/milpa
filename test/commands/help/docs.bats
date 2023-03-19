@@ -11,6 +11,31 @@ setup() {
   mkdir -p .milpa/commands
 }
 
+@test "itself docs" {
+  run milpa help docs milpa
+  assert_success
+  assert_output "$(cat "$(fixture readme.txt)")"
+
+  run milpa help docs milpa environment
+  assert_success
+  assert_output "$(cat "$(fixture environment.txt)")"
+
+  run milpa __complete help docs ""
+  assert_success
+  assert_output "milpa
+_activeHelp_ The topic to show docs for
+:4
+Completion ended with directive: ShellCompDirectiveNoFileComp"
+
+  run milpa __complete help docs milpa "i"
+  assert_success
+  assert_output "index
+internals
+:4
+Completion ended with directive: ShellCompDirectiveNoFileComp"
+}
+
+
 @test "itself docs --server" {
   milpa help docs --server &
   server="$!"
@@ -24,12 +49,22 @@ setup() {
     echo "waiting for server to come up"
     sleep 1
   done
+  curl --max-time 2 --fail --silent --show-error http://localhost:4242/help/docs/ > "docs.html"
   curl --max-time 2 --fail --silent --show-error http://localhost:4242/help/docs/milpa/ > "readme.html"
+  curl --max-time 2 --fail --silent --show-error http://localhost:4242/help/docs/milpa/environment/ > "environment.html"
+  run -22 curl --max-time 2 --fail --silent --show-error http://localhost:4242/does-not-exist
+
   kill -SIGINT "$server"
 
-  run diff "index.html" "$PROJECT_ROOT/test/fixtures/index.html"
+  run diff "index.html" "$(fixture index.html)"
   assert_success
 
-  run diff "readme.html" "$PROJECT_ROOT/test/fixtures/readme.html"
+  run diff "readme.html" "$(fixture readme.html)"
+  assert_success
+
+  run diff "environment.html" "$(fixture environment.html)"
+  assert_success
+
+  run diff "docs.html" "$(fixture docs.html)"
   assert_success
 }

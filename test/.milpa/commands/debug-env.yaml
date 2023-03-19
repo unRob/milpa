@@ -9,3 +9,7 @@ options:
   match:
     description: if specified, will use `VAR` as a pattern to filter all environment variables
     type: bool
+  completion-test:
+    description: tests if milpa can call itself during completion
+    values:
+      milpa: debug-env MILPA_ROOT
