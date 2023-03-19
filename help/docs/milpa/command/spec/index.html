@@ -245,7 +245,7 @@
       <h2 class="content-header" id="example">Example</h2><a aria-hidden="true" class="heading-anchor" href="#example" tabindex="-1">#</a>
     </div>
     <p>If we wanted to have a command written in bash at <code>milpa release</code>, we'll need to create file at <code>.milpa/commands/release.sh</code> and its corresponding spec at <code>.milpa/commands/release.yaml</code>. Let's take a look at what such a spec might look like:</p>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l">Create a github release</span><span class="w">
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l">Create a github release</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">  This command shows you a changelog and waits for approval before generating and pushing a new tag, creating a github release, and opening the browser at the new release.
 </span></span></span><span class="line"><span class="cl"><span class="sd">
@@ -271,7 +271,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">static</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">semver, calver]</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">prefix</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
-</span></span></span><span class="line"><span class="cl"><span class="sd">      </span><span class="w">      </span><span class="l">An optional prefix to prepend to release identifiers. If `calver` is chosen as `scheme`, you may specify a combination of `YY`, `YYYY`, `MM`, and `DD` to be replaced with the corresponding values of the local date. The default in that case is `YY`.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="sd">      An optional prefix to prepend to release identifiers. If `calver` is chosen as `scheme`, you may specify a combination of `YY`, `YYYY`, `MM`, and `DD` to be replaced with the corresponding values of the local date. The default in that case is `YY`.</span><span class="w">      
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ask</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">Prompt for confirmation before creating a github release</span><span class="w">
@@ -281,7 +281,7 @@
     <div class="content-header-wrapper">
       <h2 class="content-header" id="the-basics">The Basics</h2><a aria-hidden="true" class="heading-anchor" href="#the-basics" tabindex="-1">#</a>
     </div>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c"># a summary is required. It shows up during autocomplete and command listings</span><span class="w">
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="c"># a summary is required. It shows up during autocomplete and command listings</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l">Create a github release</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="c"># a description is required as well, and describes how your command does its magic</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="c"># it may be formatted with markdown</span><span class="w">
@@ -307,7 +307,7 @@
     <blockquote>
       <p>⚠️ Argument names need to be valid as environment variable names, and characters <code>!$\/%^@#?:'"</code> are not allowed.</p>
     </blockquote>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c"># arguments is an ordered list of to arguments expected by your command</span><span class="w">
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="c"># arguments is an ordered list of to arguments expected by your command</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="nt">arguments</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># available in to the command as the MILPA_ARG_INCREMENT environment variable</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">increment</span><span class="w">
@@ -334,7 +334,7 @@
     <blockquote>
       <p>⚠️ Options are not available as positional arguments to your command. The same character restrictions as arguments apply to options.</p>
     </blockquote>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c"># options, also known as flags, are specified as a map</span><span class="w">
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="c"># options, also known as flags, are specified as a map</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="nt">options</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># this sets the --scheme option</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># it will be available to your script as the $MILPA_OPT_SCHEME environment variable</span><span class="w">
@@ -366,7 +366,7 @@
       <li>stdout of any given bash script, and</li>
       <li>a static list of pre-defined values.</li>
     </ul>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="w">    </span><span class="c"># if specified for any `argument` or `option`</span><span class="w">
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="w">    </span><span class="c"># if specified for any `argument` or `option`</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c">#</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># `dirs`, `files`, `milpa`, `script`, or `static`</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">values</span><span class="p">:</span><span class="w">

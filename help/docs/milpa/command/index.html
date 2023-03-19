@@ -256,7 +256,7 @@
       <h2 class="content-header" id="spec">Spec</h2><a aria-hidden="true" class="heading-anchor" href="#spec" tabindex="-1">#</a>
     </div>
     <p>A <strong>spec</strong> is a file named just like your <strong>script</strong>, except with a <code>.yaml</code> extension, with a few basic details about what your command does and what kinds of input it deals with. There's more details at <a href="/help/docs/milpa/command/spec/"><code>milpa help docs milpa command spec</code></a>, but here's a brief example:</p>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c"># .milpa/commands/greet.yaml</span><span class="w">
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="c"># .milpa/commands/greet.yaml</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l">a very well mannered program</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">greets you politely on stdout</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="nt">arguments</span><span class="p">:</span><span class="w">
@@ -272,7 +272,7 @@
       <h2 class="content-header" id="script">Script</h2><a aria-hidden="true" class="heading-anchor" href="#script" tabindex="-1">#</a>
     </div>
     <p>A <strong>script</strong> then, will be able to use the definitions from your <strong>spec</strong> and do fun stuff with them, for example:</p>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="cp">#!/bin/env bash
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="cp">#!/bin/env bash
 </span></span></span><span class="line"><span class="cl"><span class="c1"># .milpa/commands/greet.sh</span>
 </span></span><span class="line"><span class="cl"><span class="k">function</span> title_case<span class="o">()</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">  <span class="nb">set</span> <span class="si">${</span><span class="p">*,,</span><span class="si">}</span>
@@ -316,7 +316,7 @@
       <h3 class="content-header" id="arguments-milpa-arg-">Arguments: <code>MILPA_ARG_*</code></h3><a aria-hidden="true" class="heading-anchor" href="#arguments-milpa-arg-" tabindex="-1">#</a>
     </div>
     <p><strong>Arguments</strong> specified on your spec will show up as environment variables with the <code>MILPA_ARG_</code> prefix, followed by the name set in your spec. Names will be all uppercase, and dashes will be turned into underscores. See the <a href="/help/docs/milpa/command/spec/">command spec</a> for more information on <strong>arguments</strong>, and this abbreviated example below:</p>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c1"># when ran like this:</span>
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="c1"># when ran like this:</span>
 </span></span><span class="line"><span class="cl">milpa greet
 </span></span><span class="line"><span class="cl"><span class="c1"># would output:</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&gt; Quihúbole mi Grace</span>
@@ -330,7 +330,7 @@
       <h3 class="content-header" id="options-milpa-opt-">Options: <code>MILPA_OPT_*</code></h3><a aria-hidden="true" class="heading-anchor" href="#options-milpa-opt-" tabindex="-1">#</a>
     </div>
     <p><strong>Options</strong> show up on the environment with the <code>MILPA_OPT_</code> prefix followed by the name in your spec. Names will be all uppercase, and dashes will be turned into underscores. In the <a href="/help/docs/milpa/command/spec/">command spec</a> you'll find more details on how to set <strong>options</strong>.</p>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c1"># when ran like this:</span>
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="c1"># when ran like this:</span>
 </span></span><span class="line"><span class="cl">milpa greet --greeting Sup
 </span></span><span class="line"><span class="cl"><span class="c1"># would output:</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&gt; Sup Grace</span>
@@ -341,20 +341,20 @@
 </span></span><span class="line"><span class="cl"><span class="c1">#&gt; Oi João</span>
 </span></span></code></pre>
     <p><strong>Boolean</strong> type options have a special behavior, their value will be an empty string (<code>""</code>) if <code>false</code>, and <code>"true"</code> if <code>true</code>, so comparing them in bash is simpler (i.e. <code>if [[ "$MILPA_OPT_BOOL_FLAG" ]]</code> ), for example:</p>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c"># let's add options to the example above</span><span class="w">
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="c"># let's add options to the example above</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="nt">options</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">shout</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">boolean</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span></span></span></code></pre>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c1"># we modify the example above</span>
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="c1"># we modify the example above</span>
 </span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$MILPA_OPT_SHOUT</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
 </span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$MILPA_OPT_GREETING</span><span class="s2"> </span><span class="k">$(</span>title_case <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span><span class="k">)</span><span class="s2">!"</span> <span class="p">|</span> awk <span class="s1">'{print toupper($0)}'</span>
 </span></span><span class="line"><span class="cl"><span class="k">else</span>
 </span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$MILPA_ARG_GREETING</span><span class="s2"> </span><span class="k">$(</span>title_case <span class="s2">"</span><span class="si">${</span><span class="nv">MILPA_ARG_FULL_NAME</span><span class="p">[*]</span><span class="si">}</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span>
 </span></span><span class="line"><span class="cl"><span class="k">fi</span>
 </span></span></code></pre>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c1"># and run with</span>
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="c1"># and run with</span>
 </span></span><span class="line"><span class="cl">milpa greet --shout loud boi
 </span></span><span class="line"><span class="cl"><span class="c1"># to get</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#&gt; QUIHUBO MI LOUD BOI!</span>

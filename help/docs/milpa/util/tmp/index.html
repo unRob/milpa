@@ -247,7 +247,7 @@
     </div>
     <p><code>@tmp.file HANDLE</code></p>
     <p>Creates a temporary file (in <code>/tmp</code> with <code>HANDLE</code> as prefix) and exports a new variable named exactly like the value of <code>HANDLE</code> pointing to the path of this new temporary file. <code>HANDLE</code> should therefore be a valid variable name identifier.</p>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
 </span></span></span><span class="line"><span class="cl">@milpa.load_util tmp
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># create the file</span>
@@ -260,7 +260,7 @@
     </div>
     <p><code>@tmp.dir PREFIX</code></p>
     <p>Creates a temporary directory (in <code>/tmp</code> with <code>HANDLE</code> as prefix) and exports a new variable named exactly like the value of <code>HANDLE</code> with the path to this new directory. <code>HANDLE</code> should therefore be a valid variable name identifier.</p>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
 </span></span></span><span class="line"><span class="cl">@milpa.load_util tmp
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># create the directory</span>
@@ -275,7 +275,7 @@
     </div>
     <p><code>@tmp.cleanup</code></p>
     <p>Cleans up all temporary files created so far for all users of this utility.</p>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
 </span></span></span><span class="line"><span class="cl">@milpa.load_util tmp
 </span></span><span class="line"><span class="cl">@tmp.file my_tmp_file
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">"some data"</span> &gt;<span class="s2">"</span><span class="nv">$my_tmp_file</span><span class="s2">"</span>

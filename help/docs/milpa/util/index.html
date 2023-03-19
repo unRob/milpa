@@ -247,7 +247,7 @@
     </div>
     <p><code>@milpa.load_util UTIL_NAME...</code></p>
     <p>In your scripts, you may load utilities like so:</p>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
 </span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># loads the built-in util named `repo`</span>
 </span></span><span class="line"><span class="cl">@milpa.load_util repo
@@ -286,7 +286,7 @@
       <h3 class="content-header" id="example">Example</h3><a aria-hidden="true" class="heading-anchor" href="#example" tabindex="-1">#</a>
     </div>
     <p>Let's create a util at <code>.milpa/utils/voice.sh</code>:</p>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="c1"># .milpa/utils/voice.sh</span>
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="c1"># .milpa/utils/voice.sh</span>
 </span></span><span class="line"><span class="cl"><span class="k">function</span> yell<span class="o">()</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span> <span class="p">|</span> awk <span class="s1">'{print toupper($0)}'</span>
 </span></span><span class="line"><span class="cl"><span class="o">}</span>
@@ -296,7 +296,7 @@
 </span></span><span class="line"><span class="cl"><span class="o">}</span>
 </span></span></code></pre>
     <p>Then, on any of your repo's scripts, you can:</p>
-    <pre tabindex="0" class="chroma"><code><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
 </span></span></span><span class="line"><span class="cl">@milpa.load_util voice
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># and use whatever functions you put in there</span>
