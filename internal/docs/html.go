@@ -69,11 +69,11 @@ func contentsForRequest(comps []string) ([]byte, string, error) {
 		return contents, desc, fmt.Errorf("not found: %s", comps)
 	}
 
-	fuckingDocs := len(args) == 2 && (args[0] == "help" && args[1] == "docs")
-	if cmd.Name() == "docs" || fuckingDocs {
+	isDocsCommand := len(args) == 2 && (args[0] == "help" && args[1] == "docs")
+	if cmd.Name() == "docs" || isDocsCommand {
 		log.Debugf("Rendering docs for args %s", args)
 		helpMD.WriteString("\n")
-		if len(args) == 0 || fuckingDocs {
+		if len(args) == 0 || isDocsCommand {
 			log.Info("Rendering docs main help page")
 			cmd.SetOutput(&helpMD)
 			if err := cmd.Help(); err != nil {

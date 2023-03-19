@@ -33,7 +33,6 @@
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2" />
   <link rel="canonical" href="{{ .Permalink }}">
 
-  {{/* <link rel="stylesheet" href="https://milpa.dev/css/bundle.min.763d8f97db3def1b05ce9f80d740c56fe7a728b47d9bf6140bccdc4bec228fff.css"> */}}
   <link rel="stylesheet" href="/static/css/highlight-light.css">
   <link rel="stylesheet" href="/static/css/highlight-dark.css">
   <link rel="stylesheet" href="/static/css/index.css">
@@ -42,9 +41,9 @@
   https://css-tricks.com/how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy/
   https://fonts.gstatic.com is the font file origin
   It may not have the same origin as the CSS file (https://fonts.googleapis.com)
-   */}}
+   */ -}}
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  {{/* We use the full link to the CSS file in the rest of the tags */}}
+  {{/* We use the full link to the CSS file in the rest of the tags */ -}}
   <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap" rel="preload" as="style">
   <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript>
@@ -74,61 +73,60 @@
       {{- end -}}
       {{- end -}}
       {{- end -}}
-
       {{- range .Tree.Children -}}
       {{ template "command-autocomplete-list" . }}
-      {{ end -}}
+      {{- end -}}
     </datalist>
     <button id="menu-toggle" aria-label="Toggle navigation menu"><svg version="1.1" viewBox="0 0 310 259.34" xmlns="http://www.w3.org/2000/svg"><title>Menu Icon</title><g transform="translate(10.016 -803.03)"><g fill="none" stroke="#000" stroke-linecap="round" stroke-width="49.336"><path d="m19.668 1032.7h250.65"/><path d="m19.668 932.69h250.65"/><path d="m19.668 832.69h250.65"/></g></g></svg></button>
   </header>
 
   <div id="sidebar" aria-hidden="false">
-      {{ define "table-of-contents" -}}
-      <li>
-        <a href="#{{ .ID }}">{{ .Title }}</a>{{ if gt (len .Entries) 0 }}
-        <ul>
-        {{ range .Entries -}}
-        {{ template "table-of-contents" . }}
-        {{ end -}}
-        </ul>{{ end }}
-      </li>
-      {{- end }}
-    {{ if gt (len .TOC) 0 }}
+      {{- define "table-of-contents" -}}
+        <li>
+          <a href="#{{ .ID }}">{{ .Title }}</a>{{ if gt (len .Entries) 0 }}
+          <ul>
+            {{ range .Entries -}}
+              {{ template "table-of-contents" . }}
+            {{ end }}
+          </ul>{{ end }}
+        </li>
+      {{- end -}}
+    {{ if gt (len .TOC) 0 -}}
     <nav id="table-of-contents" aria-labelledby="toc-header">
       <span class="heading" id="toc-header">In this page</span>
       <ul>
-        {{ range .TOC }}
+        {{ range .TOC -}}
         {{ template "table-of-contents" . }}
-        {{ end }}
+        {{- end }}
       </ul>
     </nav>
-    {{ end }}
+    {{- end }}
 
 
     <nav id="commands" aria-labelledby="commands-header">
       <span class="heading" id="commands-header">Commands</span>
       <ul>
-        {{ define "command-menu-tree" -}}
-        {{- $page := index . 0 -}}
-        {{- $base := index . 1 -}}
-        <li>
-          {{ if eq $base $page.Path -}}
-          <strong class="command-menu-selected-prefix">{{ $page.Name }}</strong>
-          {{- else -}}
-          <a href="/{{ $page.Path }}/" class="{{ if hasPrefix $base $page.Path }}command-menu-selected-prefix{{end}}">{{ $page.Name }}</a>
-          {{- end }}
-        {{ if gt (len $page.Children) 0 }}
-          <ul class="sub-menu" aria-label="{{ $page.Name }} subcommands">
-            {{ range $page.Children }}
-            {{ template "command-menu-tree" (list . $base) }}
-            {{ end }}
-          </ul>
-        {{ end }}
-        </li>
-        {{- end }}
-        {{ range .Tree.Children }}
+        {{- define "command-menu-tree" -}}
+          {{- $page := index . 0 -}}
+          {{- $base := index . 1 -}}
+          <li>
+            {{ if eq $base $page.Path -}}
+            <strong class="command-menu-selected-prefix">{{ $page.Name }}</strong>
+            {{- else -}}
+            <a href="/{{ $page.Path }}/" class="{{ if hasPrefix $base $page.Path }}command-menu-selected-prefix{{end}}">{{ $page.Name }}</a>
+            {{- end -}}
+          {{- if gt (len $page.Children) 0 }}
+            <ul class="sub-menu" aria-label="{{ $page.Name }} subcommands">
+              {{ range $page.Children -}}
+              {{ template "command-menu-tree" (list . $base) }}
+              {{- end -}}
+            </ul>
+          {{ end -}}
+          </li>
+        {{ end -}}
+        {{ range .Tree.Children -}}
         {{ template "command-menu-tree" (list . $commandPath) }}
-        {{ end }}
+        {{- end -}}
       </ul>
     </nav>
   </div>

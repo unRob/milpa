@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-
+# SPDX-License-Identifier: Apache-2.0
+# Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
 
 runs=()
 while IFS=  read -r -d $'\0'; do

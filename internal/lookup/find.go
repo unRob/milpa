@@ -11,7 +11,6 @@ import (
 
 	"git.rob.mx/nidito/chinampa"
 	doublestar "github.com/bmatcuk/doublestar/v4"
-	"github.com/sirupsen/logrus"
 	"github.com/unrob/milpa/internal/bootstrap"
 	"github.com/unrob/milpa/internal/command"
 	_c "github.com/unrob/milpa/internal/constants"
@@ -28,23 +27,23 @@ func Scripts(query []string) (results map[string]string, err error) {
 		return
 	}
 
-	logrus.Debugf("looking for scripts in %s=%s", _c.EnvVarMilpaPath, strings.Join(bootstrap.MilpaPath, ":"))
+	log.Debugf("looking for scripts in %s=%s", _c.EnvVarMilpaPath, strings.Join(bootstrap.MilpaPath, ":"))
 	results = map[string]string{}
 	for _, path := range bootstrap.MilpaPath {
 		queryBase := strings.Join(append([]string{strings.TrimPrefix(path, "/"), _c.RepoCommandFolderName}, query...), "/")
 		matches, err := doublestar.Glob(DefaultFS, fmt.Sprintf("%s/*", queryBase), doublestar.WithFilesOnly())
 
 		if err != nil {
-			logrus.Debugf("errored while globbing")
+			log.Debugf("errored while globbing")
 			continue
 		}
 
-		logrus.Debugf("found %d potential matches in %s", len(matches), path)
+		log.Debugf("found %d potential matches in %s", len(matches), path)
 		for _, match := range matches {
 			extension := filepath.Ext(match)
 			if extension != "" && extension != ".sh" {
 				if extension != ".yaml" {
-					logrus.Debugf("ignoring /%s, unknown extension", match)
+					log.Debugf("ignoring /%s, unknown extension", match)
 				}
 				continue
 			}

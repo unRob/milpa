@@ -12,12 +12,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sirupsen/logrus"
 	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/unrob/milpa/internal/errors"
+	"github.com/unrob/milpa/internal/logger"
 	"github.com/unrob/milpa/internal/util"
 )
 
+var log = logger.Sub("bootstrap")
 var MilpaPath = ParseMilpaPath()
 
 // ParseMilpaPath turns MILPA_PATH into a string slice.
@@ -42,7 +43,7 @@ func Run() error {
 	if envRoot != "" {
 		MilpaRoot = envRoot
 	} else {
-		logrus.Debugf("%s is not set, using default %s", _c.EnvVarMilpaRoot, envRoot)
+		log.Debugf("%s is not set, using default %s", _c.EnvVarMilpaRoot, envRoot)
 	}
 
 	if !IsDir(MilpaRoot, false) {
@@ -51,21 +52,21 @@ func Run() error {
 
 	if len(MilpaPath) != 0 && MilpaPath[0] != "" {
 		if util.IsTrueIsh(os.Getenv(_c.EnvVarMilpaPathParsed)) {
-			logrus.Debugf("%s already parsed upstream. %d items found", _c.EnvVarMilpaPath, len(MilpaPath))
+			log.Debugf("%s already parsed upstream. %d items found", _c.EnvVarMilpaPath, len(MilpaPath))
 			return nil
 		}
 
-		logrus.Debugf("%s is has %d items, parsing", _c.EnvVarMilpaPath, len(MilpaPath))
+		log.Debugf("%s is has %d items, parsing", _c.EnvVarMilpaPath, len(MilpaPath))
 		for idx, p := range MilpaPath {
 			if p == "" || !IsDir(p, true) {
-				logrus.Debugf("Dropping non-directory <%s> from MILPA_PATH", p)
+				log.Debugf("Dropping non-directory <%s> from MILPA_PATH", p)
 				MilpaPath = append(MilpaPath[:idx], MilpaPath[idx+1:]...)
 				continue
 			}
 
 			if !strings.HasSuffix(p, _c.RepoRoot) {
 				p = filepath.Join(p, _c.RepoRoot)
-				logrus.Debugf("Updated path to %s", p)
+				log.Debugf("Updated path to %s", p)
 			}
 			pathMap.Add(0, p)
 		}
@@ -80,7 +81,7 @@ func Run() error {
 	if pwd, err := os.Getwd(); err == nil {
 		pwdRepo := filepath.Join(pwd, _c.RepoRoot)
 		if IsDir(pwdRepo, false) {
-			logrus.Debugf("Adding pwd repo %s", pwdRepo)
+			log.Debugf("Adding pwd repo %s", pwdRepo)
 			pathMap.Add(2, pwdRepo)
 		}
 	}
@@ -96,7 +97,7 @@ func Run() error {
 }
 
 func lookupGitRepo() []string {
-	logrus.Debugf("looking for a git repo")
+	log.Debugf("looking for a git repo")
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
@@ -112,7 +113,7 @@ func lookupGitRepo() []string {
 		repoRoot := strings.TrimSuffix(stdout.String(), "\n")
 		gitRepo := filepath.Join(repoRoot, _c.RepoRoot)
 		if IsDir(gitRepo, false) {
-			logrus.Debugf("Found repo from git: %s", gitRepo)
+			log.Debugf("Found repo from git: %s", gitRepo)
 			return []string{gitRepo}
 		}
 	}
@@ -120,7 +121,7 @@ func lookupGitRepo() []string {
 }
 
 func lookupUserRepos() []string {
-	logrus.Debugf("looking for user repos")
+	log.Debugf("looking for user repos")
 	found := []string{}
 	home := os.Getenv("XDG_DATA_HOME")
 
@@ -129,7 +130,7 @@ func lookupUserRepos() []string {
 	}
 
 	if home == "" {
-		logrus.Debugf("Ignoring user repo lookup, neither XDG_DATA_HOME nor HOME were found in the environment")
+		log.Debugf("Ignoring user repo lookup, neither XDG_DATA_HOME nor HOME were found in the environment")
 		return found
 	}
 
@@ -138,26 +139,26 @@ func lookupUserRepos() []string {
 		for _, file := range files {
 			userRepo := filepath.Join(userRepos, file.Name())
 			if IsDir(userRepo, true) {
-				logrus.Debugf("Found user repo: %s", userRepo)
+				log.Debugf("Found user repo: %s", userRepo)
 				found = append(found, userRepo)
 			}
 		}
 	} else {
-		logrus.Warnf("User repo directory not found: %s", userRepos)
+		log.Warnf("User repo directory not found: %s", userRepos)
 	}
 
 	return found
 }
 
 func lookupGlobalRepos() []string {
-	logrus.Debugf("looking for global repos")
+	log.Debugf("looking for global repos")
 	found := []string{}
 	globalRepos := filepath.Join(MilpaRoot, "repos")
 	if files, err := os.ReadDir(globalRepos); err == nil {
 		for _, file := range files {
 			globalRepo := filepath.Join(globalRepos, file.Name())
 			if IsDir(globalRepo, true) {
-				logrus.Debugf("Found global repo: %s", globalRepo)
+				log.Debugf("Found global repo: %s", globalRepo)
 				found = append(found, globalRepo)
 			}
 		}

@@ -12,17 +12,6 @@ import (
 	_c "github.com/unrob/milpa/internal/constants"
 )
 
-var falseIshValues = []string{
-	"",
-	"0",
-	"no",
-	"false",
-	"disable",
-	"disabled",
-	"off",
-	"never",
-}
-
 var trueIshValues = []string{
 	"1",
 	"yes",
@@ -31,16 +20,6 @@ var trueIshValues = []string{
 	"enabled",
 	"on",
 	"always",
-}
-
-func IsFalseIsh(val string) bool {
-	for _, negative := range falseIshValues {
-		if val == negative {
-			return true
-		}
-	}
-
-	return false
 }
 
 func IsTrueIsh(val string) bool {

@@ -8,9 +8,9 @@ import (
 	"strings"
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
-	"github.com/sirupsen/logrus"
 	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/unrob/milpa/internal/errors"
+	"github.com/unrob/milpa/internal/logger"
 	"gopkg.in/yaml.v3"
 )
 
@@ -22,7 +22,7 @@ func New(path string, repo string) (cmd *command.Command, err error) {
 			if err := canRun(cmd); err != nil {
 				return err
 			}
-			logrus.Debugf("running command %s", cmd.FullName())
+			logger.Sub(cmd.FullName()).Debugf("running command")
 
 			env := ToEval(cmd, []string{})
 

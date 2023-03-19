@@ -14,11 +14,31 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/render"
 	"git.rob.mx/nidito/chinampa/pkg/runtime"
 	"git.rob.mx/nidito/chinampa/pkg/tree"
-
-	"github.com/sirupsen/logrus"
+	milpaCmd "github.com/unrob/milpa/internal/command"
+	"github.com/unrob/milpa/internal/logger"
 
 	"gopkg.in/yaml.v3"
 )
+
+var ctLog = logger.Sub("itself command-tree")
+
+type serializar func(interface{}) ([]byte, error)
+
+func addMetaToTree(t *tree.CommandTree) {
+	if t.Command != nil && t.Command.Meta == nil {
+		meta := &milpaCmd.Meta{
+			Path: "",
+			Repo: "",
+			Name: t.Command.Path,
+			Kind: milpaCmd.KindVirtual,
+		}
+		t.Command.Meta = &meta
+	}
+
+	for _, subT := range t.Children {
+		addMetaToTree(subT)
+	}
+}
 
 var CommandTree = &command.Command{
 	Path:    []string{"__command_tree"},
@@ -85,15 +105,23 @@ var CommandTree = &command.Command{
 		depth := cmd.Options["depth"].ToValue().(int)
 		format := cmd.Options["format"].ToString()
 
-		logrus.Debugf("looking for commands at %s depth: %d", base.Name(), depth)
+		ctLog.Debugf("looking for commands at %s depth: %d", base.Name(), depth)
 		tree.Build(base, depth)
 
-		var serializationFn func(interface{}) ([]byte, error)
+		var serializationFn serializar
+		addMeta := func(res serializar) serializar {
+			return func(i interface{}) ([]byte, error) {
+				if t, ok := i.(*tree.CommandTree); ok {
+					addMetaToTree(t)
+				}
+				return res(i)
+			}
+		}
 		switch format {
 		case "yaml":
-			serializationFn = yaml.Marshal
+			serializationFn = addMeta(yaml.Marshal)
 		case "json":
-			serializationFn = func(t interface{}) ([]byte, error) { return json.MarshalIndent(t, "", "  ") }
+			serializationFn = addMeta(func(t interface{}) ([]byte, error) { return json.MarshalIndent(t, "", "  ") })
 		case "text":
 			outputTpl := cmd.Options["template"].ToString()
 

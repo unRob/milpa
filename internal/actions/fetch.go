@@ -10,8 +10,10 @@ import (
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
 	"github.com/hashicorp/go-getter"
-	"github.com/sirupsen/logrus"
+	"github.com/unrob/milpa/internal/logger"
 )
+
+var fetchLog = logger.Sub("itself repo install")
 
 func NormalizeRepoURI(src string) (uri *url.URL, scheme string, err error) {
 	fqurl, err := getter.Detect(src, os.Getenv("PWD"), getter.Detectors)
@@ -19,7 +21,7 @@ func NormalizeRepoURI(src string) (uri *url.URL, scheme string, err error) {
 		err = fmt.Errorf("could not detect source for uri %s: %w", src, err)
 		return
 	}
-	logrus.Debugf("Detected uri: %s", fqurl)
+	fetchLog.Debugf("Detected uri: %s", fqurl)
 
 	uri, err = url.Parse(fqurl)
 	if err != nil {
@@ -32,7 +34,7 @@ func NormalizeRepoURI(src string) (uri *url.URL, scheme string, err error) {
 	}
 
 	// remove git:: from git::ssh://git@github.com/...
-	logrus.Debugf("Unwrapping uri: %s", uri.Opaque[1:])
+	fetchLog.Debugf("Unwrapping uri: %s", uri.Opaque[1:])
 	uri, err = url.Parse(uri.Opaque[1:])
 	if err != nil {
 		err = fmt.Errorf("could not parse unwrapped URI %s: %w", uri.String(), err)
@@ -77,24 +79,21 @@ var Fetch = &command.Command{
 
 		uri, scheme, err := NormalizeRepoURI(src)
 		if err != nil {
-			logrus.Fatal(err)
+			fetchLog.Fatal(err)
 		}
 
 		if scheme == "file" {
-			logrus.Fatal("Refusing to copy local folder")
-			// fmt.Print(dst + "/" + folder)
-			// os.Exit(3)
-			// return nil
+			fetchLog.Fatal("Refusing to copy local folder")
 		}
 
 		folder := RepoFolderName(uri)
-		logrus.Debugf("Downloading %s to %s using %s", src, dst+"/"+folder, scheme)
+		fetchLog.Debugf("Downloading %s to %s using %s", src, dst+"/"+folder, scheme)
 
 		err = getter.Get(dst+"/"+folder, src)
 		if err != nil {
 			return err
 		}
-		logrus.Debug("Download complete")
+		fetchLog.Debug("Download complete")
 		fmt.Print(dst + "/" + folder)
 		return nil
 	},

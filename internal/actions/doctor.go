@@ -10,10 +10,12 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/command"
 	"git.rob.mx/nidito/chinampa/pkg/tree"
 	"github.com/fatih/color"
-	"github.com/sirupsen/logrus"
 	"github.com/unrob/milpa/internal/bootstrap"
 	_c "github.com/unrob/milpa/internal/constants"
+	"github.com/unrob/milpa/internal/logger"
 )
+
+var docLog = logger.Sub("itself doctor")
 
 func DoctorModeEnabled() bool {
 	if len(os.Args) < 3 {
@@ -69,7 +71,7 @@ var Doctor = &command.Command{
 			if cmd.Hidden {
 				continue
 			}
-			logrus.Debugf("Validating %s", cmd.FullName())
+			docLog.Debugf("Validating %s", cmd.FullName())
 			report := cmd.Validate()
 			message := ""
 

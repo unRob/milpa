@@ -41,3 +41,13 @@ setup () {
   assert_success
   assert_output "${BATS_SUITE_TMPDIR//\/\///}/somewhere/.milpa:$(readlink -f $MILPA_ROOT/.milpa):$(readlink -f $MILPA_ROOT/repos/test-suite)"
 }
+
+@test "milpa completes recursively" {
+  # path must have a milpa repo or it will be ignored!
+  run milpa __complete debug-env --completion-test ""
+  assert_success
+  assert_output "$MILPA_ROOT
+_activeHelp_ tests if milpa can call itself during completion
+:0
+Completion ended with directive: ShellCompDirectiveDefault"
+}

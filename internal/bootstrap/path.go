@@ -8,7 +8,6 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/sirupsen/logrus"
 	"github.com/unrob/milpa/internal/util"
 )
 
@@ -20,7 +19,7 @@ func IsDir(path string, warn bool) bool {
 	}
 
 	if warn {
-		logrus.Warnf("Discarding non-directory <%s> from MILPA_PATH", path)
+		log.Warnf("Discarding non-directory <%s> from MILPA_PATH", path)
 	}
 
 	return false

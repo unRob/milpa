@@ -5,6 +5,8 @@ arguments:
   - name: paths
     description: the paths to test, if none are passed, the whole suite runs
     variadic: true
+    values:
+      files: [bats]
 options:
   format:
     description: the format for test output
