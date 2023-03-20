@@ -14,12 +14,27 @@ setup () {
 }
 
 @test "milpa help exits cleanly" {
+  # shows help on the help command
   run milpa help
   assert_success
-  assert_output --regexp "## Usage"
+  assert_output --regexp "milpa help \[command\] SUBCOMMAND"
+  assert_output --regexp "Display usage information for any command"
 
+  # shows help on milpa itself
   run milpa --help
-  # assert_output --regexp "## Usage"
+  assert_success
+  assert_output --regexp "Runs commands found in .milpa folders"
+
+  # shows help on an existing sub command
+  run milpa help itself create
+  assert_success
+  assert_output --regexp '`milpa itself create'
+
+  # bad sub-command shows help of parent
+  run -127 milpa help itself typotypo
+  assert_failure 127
+  assert_output --regexp '`milpa itself SUBCOMMAND'
+  assert_output --regexp 'Unknown help topic \\"typotypo\\" for milpa itself'
 }
 
 @test "milpa with bad MILPA_ROOT" {

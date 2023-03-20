@@ -374,7 +374,7 @@ func buildSiteTree() (*Page, string, error) {
 	}
 
 	// Add commands to tree
-	tree.Build(command.Root.Cobra, 20)
+	tree.Build(command.Root.Cobra.Root(), 20)
 	_, err := tree.Serialize(func(t interface{}) ([]byte, error) {
 		tree := t.(*tree.CommandTree)
 		err := tree.Traverse(commandSerializer(pageTree, &names))

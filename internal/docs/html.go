@@ -54,15 +54,16 @@ func contentsForRequest(comps []string) ([]byte, string, error) {
 	var cmd *cobra.Command
 	var args []string
 	var err error
+	root := command.Root.Cobra.Root()
 	if len(comps) == 1 && comps[0] == "help" {
-		cmd = command.Root.Cobra
+		cmd, _, err = root.Find([]string{"help"})
 		args = []string{}
 	} else {
-		cmd, args, err = command.Root.Cobra.Find(comps)
+		cmd, args, err = root.Find(comps)
 	}
 
 	var helpMD bytes.Buffer
-	if err != nil || (cmd == cmd.Root() && len(args) > 0) {
+	if err != nil || (cmd == root && len(args) > 0) {
 		log.Infof("returning 404: %s, cmd: %s", comps, cmd.Name())
 		contents := []byte("# Not found\n\nThat is weird, if you have a second and a github account, [let me know](https://github.com/unRob/milpa/issues/new?labels=docs&title=Page+not+found&template=docs-page-not-found.yml).\n")
 		desc := "sub-command not found"
@@ -88,7 +89,7 @@ func contentsForRequest(comps []string) ([]byte, string, error) {
 			helpMD.Write(data)
 		}
 	} else {
-		log.Infof("Rendering command help for %s, args: %s", cmd.Use, args)
+		log.Infof("Rendering command help for %s, args: %s", cmd.Name(), args)
 		cmd.SetOutput(&helpMD)
 
 		if err := cmd.Help(); err != nil {
