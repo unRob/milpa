@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"git.rob.mx/nidito/chinampa/pkg/errors"
+	"git.rob.mx/nidito/chinampa/pkg/logger"
 	"github.com/unrob/milpa/internal/bootstrap"
-	"github.com/unrob/milpa/internal/logger"
 )
 
 var log = logger.Sub("documentation")

@@ -34,7 +34,7 @@ setup () {
   run -127 milpa help itself typotypo
   assert_failure 127
   assert_output --regexp '`milpa itself SUBCOMMAND'
-  assert_output --regexp 'Unknown help topic \\"typotypo\\" for milpa itself'
+  assert_output --regexp 'Unknown help topic \"typotypo\" for milpa itself'
 }
 
 @test "milpa with bad MILPA_ROOT" {

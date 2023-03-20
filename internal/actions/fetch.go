@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
+	"git.rob.mx/nidito/chinampa/pkg/logger"
 	"github.com/hashicorp/go-getter"
-	"github.com/unrob/milpa/internal/logger"
 )
 
 var fetchLog = logger.Sub("itself repo install")

@@ -11,11 +11,11 @@ import (
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
 	"git.rob.mx/nidito/chinampa/pkg/errors"
+	"git.rob.mx/nidito/chinampa/pkg/logger"
 	"git.rob.mx/nidito/chinampa/pkg/render"
 	"git.rob.mx/nidito/chinampa/pkg/runtime"
 	"git.rob.mx/nidito/chinampa/pkg/tree"
 	milpaCmd "github.com/unrob/milpa/internal/command"
-	"github.com/unrob/milpa/internal/logger"
 
 	"gopkg.in/yaml.v3"
 )

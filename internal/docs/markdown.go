@@ -11,8 +11,8 @@ import (
 	"strings"
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
+	"git.rob.mx/nidito/chinampa/pkg/logger"
 	"git.rob.mx/nidito/chinampa/pkg/tree"
-	"github.com/unrob/milpa/internal/logger"
 	"github.com/unrob/milpa/internal/lookup"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"

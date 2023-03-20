@@ -7,13 +7,13 @@ import (
 
 	"git.rob.mx/nidito/chinampa"
 	"git.rob.mx/nidito/chinampa/pkg/env"
+	"git.rob.mx/nidito/chinampa/pkg/logger"
 	"git.rob.mx/nidito/chinampa/pkg/runtime"
 	"git.rob.mx/nidito/chinampa/pkg/statuscode"
 	"github.com/unrob/milpa/internal/actions"
 	"github.com/unrob/milpa/internal/bootstrap"
 	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/unrob/milpa/internal/errors"
-	"github.com/unrob/milpa/internal/logger"
 	"github.com/unrob/milpa/internal/lookup"
 )
 
@@ -30,7 +30,7 @@ func logLevel() logger.Level {
 }
 
 func main() {
-	logger.Configure(false, runtime.ColorEnabled(), runtime.SilenceEnabled(), logLevel())
+	logger.Configure("milpa", logLevel())
 
 	isDoctor := actions.DoctorModeEnabled()
 	logger.Debugf("doctor mode enabled: %v", isDoctor)

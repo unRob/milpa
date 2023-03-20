@@ -8,11 +8,11 @@ import (
 	"strings"
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
+	"git.rob.mx/nidito/chinampa/pkg/logger"
 	"git.rob.mx/nidito/chinampa/pkg/tree"
 	"github.com/fatih/color"
 	"github.com/unrob/milpa/internal/bootstrap"
 	_c "github.com/unrob/milpa/internal/constants"
-	"github.com/unrob/milpa/internal/logger"
 )
 
 var docLog = logger.Sub("itself doctor")

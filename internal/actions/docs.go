@@ -21,9 +21,9 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/unrob/milpa/internal/docs"
 
+	"git.rob.mx/nidito/chinampa/pkg/logger"
 	milpaCommand "github.com/unrob/milpa/internal/command"
 	_c "github.com/unrob/milpa/internal/constants"
-	"github.com/unrob/milpa/internal/logger"
 	"github.com/unrob/milpa/internal/lookup"
 )
 
