@@ -282,7 +282,7 @@ func docsSerializer(pageTree *Page, names *[]string) error {
 		return err
 	}
 	sort.Strings(allDocs)
-	log.Infof("Found %d docs", len(allDocs))
+	log.Debugf("Found %d docs", len(allDocs))
 
 	for _, doc := range allDocs {
 		current := pageTree
@@ -378,7 +378,7 @@ func buildSiteTree() (*Page, string, error) {
 	_, err := tree.Serialize(func(t interface{}) ([]byte, error) {
 		tree := t.(*tree.CommandTree)
 		err := tree.Traverse(commandSerializer(pageTree, &names))
-		log.Infof("Found %d commands", len(names))
+		log.Debugf("Found %d commands", len(names))
 		return nil, err
 	})
 	if err != nil {

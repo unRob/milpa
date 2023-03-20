@@ -6,7 +6,9 @@ import (
 	"os"
 
 	"git.rob.mx/nidito/chinampa"
+	"git.rob.mx/nidito/chinampa/pkg/env"
 	"git.rob.mx/nidito/chinampa/pkg/runtime"
+	"git.rob.mx/nidito/chinampa/pkg/statuscode"
 	"github.com/unrob/milpa/internal/actions"
 	"github.com/unrob/milpa/internal/bootstrap"
 	_c "github.com/unrob/milpa/internal/constants"
@@ -17,8 +19,18 @@ import (
 
 var version = "beta"
 
+func logLevel() logger.Level {
+	if os.Getenv(env.Debug) == "trace" {
+		return logger.LevelTrace
+	} else if runtime.DebugEnabled() {
+		return logger.LevelDebug
+	}
+
+	return logger.LevelInfo
+}
+
 func main() {
-	logger.Configure(false, runtime.ColorEnabled(), runtime.SilenceEnabled(), runtime.DebugEnabled())
+	logger.Configure(false, runtime.ColorEnabled(), runtime.SilenceEnabled(), logLevel())
 
 	isDoctor := actions.DoctorModeEnabled()
 	logger.Debugf("doctor mode enabled: %v", isDoctor)
@@ -50,7 +62,7 @@ See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more informat
 	}
 
 	if err := chinampa.Execute(cfg); err != nil {
-		logger.Errorf("total failure: %s", err)
-		os.Exit(2)
+		logger.Errorf("Could not boot milpa: %s", err)
+		os.Exit(statuscode.ConfigError)
 	}
 }

@@ -16,7 +16,7 @@ function _suite_setup() {
   # shellcheck disable=2155
   export PROJECT_ROOT="$( cd "${BATS_TEST_FILENAME%%/test/*}" >/dev/null 2>&1 && pwd )"
   # make executables in src/ visible to PATH
-  export MILPA_DISABLE_UPDATE_CHECKS="yes"
+  export MILPA_UPDATE_CHECK_DISABLED="yes"
   export MILPA_ROOT="$XDG_DATA_HOME/var/lib/milpa"
   export PATH="$PROJECT_ROOT:$PATH"
   export NO_COLOR=1

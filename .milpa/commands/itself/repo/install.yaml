@@ -10,7 +10,7 @@ description: |
 
   ### Examples
 
-  - `github.com/unRob/milpa` would download the `.milpa` folder from the `unRob/milpa` github repo, using **http**, and prompting for credentials for private repos.
+  - `github.com/unRob/milpa` would download the `.milpa` folder from the `unRob/milpa` github repo, using **https**, and prompting for credentials for private repos.
   - `git::ssh://git@github.com/unRob/milpa.git//internal` would download the `internal/.milpa` folder from the `unRob/milpa` github repo using **ssh credentials**, useful for skipping credential prompts for private repos
   - `~/.dotfiles` would symlink `$HOME/.dotfiles/.milpa` to the target. An alternative to this is to set `MILPA_PATH` to `$HOME/.dotfiles` (see [`milpa help docs milpa environment`](/.milpa/docs/milpa/environment.md))
 

@@ -18,6 +18,7 @@ setup() {
 
 @test "itself create something" {
   name="something-$(date -u '+%s')"
+  unset MILPA_SILENT
   run milpa --verbose itself create "$name"
   assert_success
   assert_output --partial "$LOCAL_REPO/commands/$name.sh"

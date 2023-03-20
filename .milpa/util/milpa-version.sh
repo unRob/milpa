@@ -18,11 +18,15 @@ _milpa_last_checked_path="${MILPA_LOCAL_SHARE}/last-update-check"
 # to store update checkpoints
 [[ -d "${MILPA_LOCAL_SHARE}" ]] || mkdir -p "$MILPA_LOCAL_SHARE"
 
+function @milpa.version.log () {
+  MILPA_COMMAND_NAME=milpa @milpa.log "$@"
+}
+
 # prints out the installed version
 function @milpa.version.installed () {
   DEBUG=0 "$MILPA_COMPA" --version 2>&1 || {
     if [[ "$?" != 42 ]]; then
-      @milpa.log debug "could not get the installed version"
+      @milpa.version.log debug "could not get the installed version"
       return 1
     fi
   }
@@ -49,7 +53,7 @@ function @milpa.version.needs_check () {
   last_ping="$(cat "$_milpa_last_checked_path" 2>/dev/null || echo 0)"
   elapsed=$(( now - last_ping ))
 
-  @milpa.log debug "Looked for updates at $last_ping, $elapsed seconds ago"
+  @milpa.version.log debug "Looked for updates at $last_ping, $elapsed seconds ago"
 
   [[ "$elapsed" -ge "$MILPA_UPDATE_PERIOD_SECONDS" ]]
 }
@@ -60,12 +64,12 @@ function @milpa.version.is_latest () {
   local installed latest
 
   if ! installed=$(@milpa.version.installed); then
-    @milpa.log debug "Failed querying for current version"
+    @milpa.version.log debug "Failed querying for current version"
     return 0
   fi
 
   if ! latest=$(@milpa.version.latest "${1:-1}"); then
-    @milpa.log debug "Failed looking up latest version"
+    @milpa.version.log debug "Failed looking up latest version"
     return 0
   fi
 
@@ -82,13 +86,13 @@ function @milpa.version.is_latest () {
 # called by `milpa` to check for updates on run
 function _milpa_check_for_updates_automagically () {
   local versions latest installed
-  if [[ "$MILPA_COMMAND_NAME" == "itself upgrade" ]] || [[ "${MILPA_DISABLE_UPDATE_CHECKS}" != "" ]]; then
+  if [[ "$MILPA_COMMAND_NAME" == "itself upgrade" ]] || [[ "${MILPA_UPDATE_CHECK_DISABLED}" != "" ]]; then
     return 0
   fi
 
   if @milpa.version.needs_check && ! versions=$(@milpa.version.is_latest 1); then
     read -r latest installed <<<"$versions"
-    MILPA_COMMAND_NAME=milpa @milpa.log warning "milpa $latest is available (you're running $installed), to upgrade run:"
-    MILPA_COMMAND_NAME=milpa @milpa.log warning "milpa itself upgrade"
+    @milpa.version.log warning "milpa $latest is available (you're running $installed), to upgrade run:"
+    @milpa.version.log warning "milpa itself upgrade"
   fi
 }

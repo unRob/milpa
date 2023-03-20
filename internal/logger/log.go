@@ -10,19 +10,29 @@ func Sub(name string) *logrus.Entry {
 	return Main.WithField("milpa", name)
 }
 
-func Configure(timestamps bool, colors bool, silent, debug bool) {
+type Level int
+
+const (
+	LevelPanic Level = iota
+	LevelFatal
+	LevelError
+	LevelWarning
+	LevelInfo
+	LevelDebug
+	LevelTrace
+)
+
+func Configure(timestamps bool, colors bool, silent bool, level Level) {
 	Main.Logger.SetFormatter(&logrus.TextFormatter{
 		DisableLevelTruncation: true,
 		DisableTimestamp:       !timestamps,
 		ForceColors:            colors,
 	})
 
-	if !silent && debug {
-		Main.Logger.SetLevel(logrus.DebugLevel)
-	}
-
 	if silent {
 		Main.Logger.SetLevel(logrus.ErrorLevel)
+	} else {
+		Main.Logger.SetLevel(logrus.AllLevels[level])
 	}
 }
 

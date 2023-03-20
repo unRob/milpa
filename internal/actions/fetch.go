@@ -44,12 +44,34 @@ func NormalizeRepoURI(src string) (uri *url.URL, scheme string, err error) {
 	return
 }
 
+var extensions = []string{
+	"/",
+	".tar.gz",
+	".tgz",
+	".tar.bz2",
+	".tbz2",
+	".tar.xz",
+	".txz",
+	".zip",
+	".gz",
+	".bz2",
+	".xz",
+	".git",
+	"/.milpa",
+}
+
+func removeExtensions(path string) string {
+	for _, suffix := range extensions {
+		path = strings.TrimSuffix(path, suffix)
+	}
+	return path
+}
+
 func RepoFolderName(uri *url.URL) string {
-	path := strings.ReplaceAll(strings.TrimSuffix(strings.TrimPrefix(uri.Path, "/"), "/.milpa"), ".git", "")
 	return strings.ReplaceAll(
 		strings.Join([]string{
 			strings.ReplaceAll(uri.Host, ".", "-"),
-			strings.ReplaceAll(path, "/", "-"),
+			strings.ReplaceAll(removeExtensions(uri.Path), "/", "-"),
 		}, "-"),
 		"--",
 		"-",

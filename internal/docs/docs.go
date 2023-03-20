@@ -40,9 +40,10 @@ func FromQuery(query []string) ([]byte, error) {
 		}
 
 		if _, err := os.Stat(candidate); err == nil {
-			return []byte{}, errors.BadArguments{Msg: fmt.Sprintf("Missing topic for %s", strings.Join(query, " "))}
+			break
 		}
 	}
 
-	return nil, fmt.Errorf("doc not found")
+	missingPath := strings.Join(query, "/")
+	return nil, errors.BadArguments{Msg: fmt.Sprintf("Missing topic named <%s.md> or <%s/index.md> in any of %s", missingPath, missingPath, strings.Join(bootstrap.MilpaPath, ":"))}
 }
