@@ -46,7 +46,7 @@ func TestIsDir(t *testing.T) {
 		t.Fatalf("Unexpected warning\n wanted %s\n got %s", text, warn)
 	}
 
-	if !strings.Contains(warn, "warning") {
+	if !strings.Contains(warn, " WARNING ") {
 		t.Fatalf("Unexpected warning\n wanted %s\n got %s", "warning", warn)
 	}
 }

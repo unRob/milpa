@@ -105,7 +105,7 @@ var Fetch = &command.Command{
 		}
 
 		if scheme == "file" {
-			fetchLog.Fatal("Refusing to copy local folder")
+			fetchLog.Fatalf("Could not download %s: no such directory", uri.String())
 		}
 
 		folder := RepoFolderName(uri)

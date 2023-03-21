@@ -157,7 +157,9 @@ func TestArgumentsToEnv(t *testing.T) {
 		t.Run(c.Command.FullName(), func(t *testing.T) {
 			dst := []string{}
 			c.Command.SetBindings()
-			c.Command.Arguments.Parse(c.Args)
+			if err := c.Command.Arguments.Parse(c.Args); err != nil {
+				t.Fatal(err)
+			}
 			ArgumentsToEnv(c.Command, &dst, "export ")
 
 			err := c.Command.Arguments.AreValid()

@@ -18,6 +18,15 @@ arguments:
   - name: source
     description: A go-getter URL to fetch the repo from.
     required: true
+    values:
+      static:
+        - './'
+        - 'github.com/'
+        - 'git::ssh//'
+        - 'https://'
+        - 'http://'
+      suggest-raw: true
+      suggest-only: true
   - name: target
     description: The path where to place the resulting `.milpa` folder in
     values: {dirs: ""}
