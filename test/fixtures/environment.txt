@@ -38,8 +38,7 @@ If desired, you may set a `MILPA_PATH` for all shells by adding it to your shell
 
 ### `DEBUG`
 
-<!-- TODO: clean this up before beta, likely make logging more useful to hypothetical non-roberto users -->
-Set `DEBUG=1` and find out whatever roberto needed to debug before writing proper tests.
+Set `DEBUG=on` to have `milpa` produce debugging output on its behavior. Set `DEBUG=trace` to see even more output.
 
 ### `MILPA_VERBOSE`
 
@@ -73,7 +72,7 @@ If enabled, validation will be skipped for arguments and options. Also enabled w
 
 ## Auto-updates
 
-### `MILPA_DISABLE_UPDATE_CHECKS`
+### `MILPA_UPDATE_CHECK_DISABLED`
 
 If set to a non-empty string, update checks will not be performed periodically before running commands.
 

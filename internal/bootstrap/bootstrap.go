@@ -12,9 +12,9 @@ import (
 	"strings"
 	"time"
 
+	"git.rob.mx/nidito/chinampa/pkg/logger"
 	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/unrob/milpa/internal/errors"
-	"github.com/unrob/milpa/internal/logger"
 	"github.com/unrob/milpa/internal/util"
 )
 

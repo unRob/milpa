@@ -59,7 +59,7 @@ jobs:
         run: |
           version="${GITHUB_REF##*/}"
           export MILPA_ROOT=$(pwd)
-          export MILPA_DISABLE_UPDATE_CHECKS="1"
+          export MILPA_UPDATE_CHECK_DISABLED="1"
 
           export PATH="$PATH:$(pwd)"
           prerelease="false"

@@ -51,14 +51,19 @@ function _print_message () {
   local level command_name
   level=$1
   shift
-  date=""
-  if [[ "$MILPA_VERBOSE" != "" ]]; then
-    date=" $(date -u +"%FT%H:%M:%S")"
-  fi
+  prefix=""
   command_name=${MILPA_COMMAND_NAME:-milpa}
+  if [[ "$MILPA_VERBOSE" != "" ]]; then
+    prefix="${_FMT_DIM}$(date -u +"%FT%H:%M:%S") ${level} ${command_name// /:}${_FMT_RESET}"$'\t'
+  elif [[ "$level" == "error" ]]; then
+    prefix="ERROR: "
+    if @milpa.is_color_enabled; then
+      prefix="${_FMT_BG_RED}${_FMT_BOLD} ERROR ${_FMT_RESET} "
+    fi
+  fi
 
   [[ "$level" == "debug" ]] && [[ -z "${MILPA_VERBOSE+x}${DEBUG+x}" ]] && return
-  >&2 echo "${_FMT_DIM}[${level}:${command_name// /:}${date}]${_FMT_RESET} $*"
+  >&2 echo "$prefix$*"
 }
 
 function @milpa.log () {

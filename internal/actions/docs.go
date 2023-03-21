@@ -17,12 +17,13 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/errors"
 	"git.rob.mx/nidito/chinampa/pkg/render"
 	"git.rob.mx/nidito/chinampa/pkg/statuscode"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/unrob/milpa/internal/docs"
 
+	"git.rob.mx/nidito/chinampa/pkg/logger"
 	milpaCommand "github.com/unrob/milpa/internal/command"
 	_c "github.com/unrob/milpa/internal/constants"
-	"github.com/unrob/milpa/internal/logger"
 	"github.com/unrob/milpa/internal/lookup"
 )
 
@@ -31,9 +32,8 @@ var dlog = logger.Sub("action:docs")
 var AfterHelp = os.Exit
 
 func startServer(listen, address string) error {
-	dlog.Warnf("Using static resources at %s", os.Getenv("MILPA_ROOT")+"/internal/static")
 	os.Setenv(env.HelpUnstyled, "true")
-	http.Handle("/static/", docs.StaticHandler())
+	http.Handle("/static/", docs.EmbeddedStaticResourceHandler())
 	http.HandleFunc("/", docs.RenderHandler(address))
 
 	server := &http.Server{
@@ -41,7 +41,6 @@ func startServer(listen, address string) error {
 		ReadHeaderTimeout: 3 * time.Second,
 	}
 
-	dlog.Info("Starting help http server")
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	go func() {
@@ -136,7 +135,7 @@ milpa help docs --server
 			if cmd.Options["server"].ToValue().(bool) {
 				listen := cmd.Options["listen"].ToString()
 				address := cmd.Options["base"].ToString()
-				dlog.Infof("Starting docs server at http://%s", listen)
+				dlog.Infof("Starting docs server at http://%s, press CTRL-C to stop...", listen)
 				return startServer(listen, address)
 			}
 			dlog.Debug("Rendering docs help page")
@@ -153,9 +152,17 @@ milpa help docs --server
 		if err != nil {
 			switch err.(type) {
 			case errors.BadArguments:
-				return err
+				// when a doc is not found, let's show docs help,
+				// as error bubbling makes cobra think the calling command
+				// is milpa (since "docs" is a child of "help")
+				helpErr := cmd.Cobra.Help()
+				if helpErr != nil {
+					os.Exit(statuscode.ProgrammerError)
+				}
+				logrus.Error(err)
+				os.Exit(statuscode.Usage)
 			}
-			return errors.NotFound{Msg: "Unknown doc: " + err.Error()}
+			return errors.NotFound{Msg: err.Error()}
 		}
 
 		titleExp := regexp.MustCompile("^title: (.+)")

@@ -1,5 +1,7 @@
 # Contributing to `milpa`
 
+[![Coverage Status](https://coveralls.io/repos/github/unRob/milpa/badge.svg)](https://coveralls.io/github/unRob/milpa)
+
 ## Local setup
 
 Both `bash` and `golang` are required to work on milpa. `milpa dev setup` will help bootstrap these dependencies with the [asdf version manager](https://asdf-vm.com/), if available.
@@ -25,7 +27,8 @@ MILPA_ROOT=$(pwd) ./milpa dev setup
 eval "$(milpa dev env)"
 # then you're good to
 milpa dev lint [go|shell]
-milpa dev test [integration|unit]
+milpa dev test [integration|unit] [--coverage]
+milpa dev test coverage-report && open test/coverage.html
 # or all in one go
 milpa dev ci
 # build local compa binaries with

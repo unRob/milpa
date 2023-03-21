@@ -10,11 +10,11 @@ import (
 	"strings"
 
 	"git.rob.mx/nidito/chinampa"
+	"git.rob.mx/nidito/chinampa/pkg/logger"
 	doublestar "github.com/bmatcuk/doublestar/v4"
 	"github.com/unrob/milpa/internal/bootstrap"
 	"github.com/unrob/milpa/internal/command"
 	_c "github.com/unrob/milpa/internal/constants"
-	"github.com/unrob/milpa/internal/logger"
 )
 
 var log = logger.Sub("lookup")

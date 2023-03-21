@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"os"
 	"strings"
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
@@ -64,7 +65,7 @@ func contentsForRequest(comps []string) ([]byte, string, error) {
 
 	var helpMD bytes.Buffer
 	if err != nil || (cmd == root && len(args) > 0) {
-		log.Infof("returning 404: %s, cmd: %s", comps, cmd.Name())
+		log.Warnf("returning 404: %s, cmd: %s", comps, cmd.Name())
 		contents := []byte("# Not found\n\nThat is weird, if you have a second and a github account, [let me know](https://github.com/unRob/milpa/issues/new?labels=docs&title=Page+not+found&template=docs-page-not-found.yml).\n")
 		desc := "sub-command not found"
 		return contents, desc, fmt.Errorf("not found: %s", comps)
@@ -75,13 +76,13 @@ func contentsForRequest(comps []string) ([]byte, string, error) {
 		log.Debugf("Rendering docs for args %s", args)
 		helpMD.WriteString("\n")
 		if len(args) == 0 || isDocsCommand {
-			log.Info("Rendering docs main help page")
+			log.Trace("Rendering docs main help page")
 			cmd.SetOutput(&helpMD)
 			if err := cmd.Help(); err != nil {
 				return nil, "", fmt.Errorf("error: %s", err)
 			}
 		} else {
-			log.Infof("Rendering docs topic for %s", args)
+			log.Tracef("Rendering docs topic for %s", args)
 			data, err := FromQuery(args)
 			if err != nil {
 				return nil, "", fmt.Errorf("error: %s", err)
@@ -89,13 +90,13 @@ func contentsForRequest(comps []string) ([]byte, string, error) {
 			helpMD.Write(data)
 		}
 	} else {
-		log.Infof("Rendering command help for %s, args: %s", cmd.Name(), args)
+		log.Tracef("Rendering command help for %s, args: %s", cmd.Name(), args)
 		cmd.SetOutput(&helpMD)
 
 		if err := cmd.Help(); err != nil {
 			return nil, "", fmt.Errorf("error: %s", err)
 		}
-		log.Debugf("Rendered %s bytes for %s", helpMD.String(), cmd.Name())
+		log.Tracef("Rendered %s bytes for %s", helpMD.String(), cmd.Name())
 	}
 
 	desc := cmd.Short
@@ -130,9 +131,18 @@ func mdToHTML(md []byte) (bytes.Buffer, *Entries, error) {
 	return helpHTML, milpaHeadings.TOC.Entries, err
 }
 
-func StaticHandler() http.Handler {
+func EmbeddedStaticResourceHandler() http.Handler {
 	fs := http.FS(StaticFiles)
 	return http.FileServer(fs)
+}
+
+func DevelopmentStaticResourceHandler() http.Handler {
+	path := os.Getenv("MILPA_DOCS_STATIC_RESOURCES")
+	if path == "" {
+		path = os.Getenv("MILPA_ROOT") + "/internal/docs/static"
+	}
+	log.Warnf("Using static resources from %s", path)
+	return http.FileServer(http.Dir(path))
 }
 
 func RenderHandler(serverAddr string) func(http.ResponseWriter, *http.Request) {

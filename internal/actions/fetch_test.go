@@ -3,44 +3,49 @@
 package actions_test
 
 import (
-	"net/url"
-	"os"
 	"testing"
 
-	"github.com/hashicorp/go-getter"
-	"github.com/sirupsen/logrus"
+	"github.com/unrob/milpa/internal/actions"
 )
 
-func TestSomething(t *testing.T) {
-	fqurl, err := getter.Detect("git@github.com:unRob/milpa.git", os.Getenv("PWD"), getter.Detectors)
-	if err != nil {
-		logrus.Fatal(err)
-	}
-	logrus.Infof("Detected uri: %s", fqurl)
-
-	uri, err := url.Parse(fqurl)
-	if err != nil {
-		logrus.Fatal(err)
-	}
-
-	if uri.Scheme == "file" {
-		logrus.Fatal("Refusing to copy local folder")
-	}
-
-	if uri.Opaque != "" && uri.Opaque[0] == ':' {
-		logrus.Infof("Unwrapping uri: %s", uri.Opaque[1:])
-		uri2, err := url.Parse(uri.Opaque[1:])
-		if err != nil {
-			logrus.Fatal(err)
-		}
-
-		uri = uri2
+func TestFetchDetectors(t *testing.T) {
+	tests := []struct {
+		src    string
+		dst    string
+		folder string
+	}{
+		{
+			"git@github.com:unRob/milpa.git",
+			"ssh://git@github.com/unRob/milpa.git",
+			"github-com-unRob-milpa",
+		},
+		{
+			"github.com/unRob/milpa",
+			"https://github.com/unRob/milpa.git",
+			"github-com-unRob-milpa",
+		},
+		{
+			"https://github.com/unRob/milpa.tgz",
+			"https://github.com/unRob/milpa.tgz",
+			"github-com-unRob-milpa",
+		},
 	}
 
-	logrus.Infof("uri is: %s", uri)
+	for _, data := range tests {
+		t.Run(data.src, func(t *testing.T) {
+			uri, _, err := actions.NormalizeRepoURI(data.src)
+			if err != nil {
+				t.Fatal(err)
+			}
 
-	if uri.String() != "ssh://git@github.com/unRob/milpa.git" {
-		t.Fatal("Weird URI")
-		return
+			if uri.String() != data.dst {
+				t.Fatalf("Wanted uri %s got %s", data.dst, uri)
+			}
+
+			folder := actions.RepoFolderName(uri)
+			if folder != data.folder {
+				t.Fatalf("Wanted folder %s got %s", data.folder, folder)
+			}
+		})
 	}
 }
