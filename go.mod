@@ -3,10 +3,11 @@ module github.com/unrob/milpa
 go 1.20
 
 require (
-	git.rob.mx/nidito/chinampa v0.0.0-20230321041809-725347ec48c9
+	git.rob.mx/nidito/chinampa v0.0.0-20230321062825-4c0d40c631cc
 	github.com/alecthomas/chroma/v2 v2.5.0
 	github.com/alessio/shellescape v1.4.1
 	github.com/bmatcuk/doublestar/v4 v4.6.0
+	github.com/charmbracelet/glamour v0.6.0
 	github.com/fatih/color v1.15.0
 	github.com/hashicorp/go-getter v1.7.1
 	github.com/sirupsen/logrus v1.9.0
@@ -27,7 +28,6 @@ require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d // indirect
-	github.com/charmbracelet/glamour v0.6.0 // indirect
 	github.com/dlclark/regexp2 v1.8.1 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
