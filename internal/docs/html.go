@@ -14,7 +14,6 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/command"
 	"git.rob.mx/nidito/chinampa/pkg/render"
 	chromahtml "github.com/alecthomas/chroma/v2/formatters/html"
-	"github.com/charmbracelet/glamour"
 	"github.com/spf13/cobra"
 	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/yuin/goldmark"
@@ -22,32 +21,6 @@ import (
 
 	"github.com/yuin/goldmark/extension"
 )
-
-func stringptr(str string) *string {
-	return &str
-}
-
-func init() {
-	var zero uint
-	glamour.NoTTYStyleConfig.Document.Margin = &zero
-	glamour.NoTTYStyleConfig.Document.StylePrimitive.Color = nil
-
-	glamour.DarkStyleConfig.Document.Margin = &zero
-	glamour.DarkStyleConfig.Document.StylePrimitive.Color = nil
-	glamour.DarkStyleConfig.H1.StylePrimitive.Color = stringptr("#cefcd3")
-	glamour.DarkStyleConfig.H1.StylePrimitive.BackgroundColor = stringptr("#2b3c2d")
-	glamour.DarkStyleConfig.Heading.StylePrimitive.Color = stringptr("#c0e394")
-	glamour.DarkStyleConfig.Code.StylePrimitive.Color = stringptr("#96b452")
-	glamour.DarkStyleConfig.Code.StylePrimitive.BackgroundColor = stringptr("#132b17")
-
-	glamour.LightStyleConfig.Document.Margin = &zero
-	glamour.LightStyleConfig.Document.StylePrimitive.Color = nil
-	glamour.LightStyleConfig.H1.StylePrimitive.Color = stringptr("#cefcd3")
-	glamour.LightStyleConfig.H1.StylePrimitive.BackgroundColor = stringptr("#2b3c2d")
-	glamour.LightStyleConfig.Heading.StylePrimitive.Color = stringptr("#12731D")
-	glamour.LightStyleConfig.Code.StylePrimitive.Color = stringptr("#12731D")
-	glamour.LightStyleConfig.Code.StylePrimitive.BackgroundColor = stringptr("#cee3c4")
-}
 
 //go:embed template.html
 var LayoutTemplate []byte
@@ -166,7 +139,7 @@ func EmbeddedStaticResourceHandler() http.Handler {
 func DevelopmentStaticResourceHandler() http.Handler {
 	path := os.Getenv("MILPA_DOCS_STATIC_RESOURCES")
 	if path == "" {
-		path = os.Getenv("MILPA_ROOT") + "/internal/docs/static"
+		path = os.Getenv("MILPA_ROOT") + "/internal/docs"
 	}
 	log.Warnf("Using static resources from %s", path)
 	return http.FileServer(http.Dir(path))

@@ -6,7 +6,7 @@ weight: 2
 
 I built `milpa` with a few use cases in mind:
 
-- To **share groups of scripts** used by a group of folks in an engineering team (i.e. setup development environments, work with secrets/credentials)
+- To **share groups of scripts** like those needed by folks in an engineering team (i.e. setup development environments, work with secrets/credentials)
 - to **share context and code**, without having to ask folks to run stuff off READMEs (i.e. pull service logs, forward ports), and
 - to **quickly build scripts** that will be documented sufficiently well for my forgetful future-self.
 
@@ -63,8 +63,9 @@ There's some amazing tools out there, such as:
 - [Rerun](http://rerun.github.io/rerun/)
 - [Sub](https://github.com/basecamp/sub)
 - [Basher package manager](https://github.com/basherpm/basher)
+- [Criteo's command-launcher](https://github.com/criteo/command-launcher)
 
-These all serve different purposes, and there is some feature overlap with `milpa` and each of these.
+These all serve different purposes, and there is some feature overlap between `milpa` and each of these.
 
 `milpa` aims to provide the same level of support to non-bash scripts (hello applescript) without the need for another runtime to be installed. These projects are great for distributing and packaging software that may be used beyond your organization, while `milpa` aims to help smaller user bases, such as engineering teams, keep their shared scripts organized and up-to-date.
 
@@ -78,6 +79,6 @@ That being said, organizing makefiles and dealing with arguments is not somethin
 
 Building your own CLI is usually what ends up happening given a team with enough time and direction to invest in building a proper CLI with whatever language is already at use. Some teams use more than one language, which may complicate this approach. In the microservices world, many codebases come with their own CLIs that may follow slightly different conventions, are seldomly documented and often just end up calling other binaries through `exec`.
 
-In my limited experience with engineering teams of less than 300 folks, many of the bootstrapping tasks will involve operations that can easily (and more succintly) be expressed with a shell scripting language. `milpa` could also be a useful intermediate step, that could help teams avoid the dread of jira runbooks until it's a good time to build your own CLI.
+In my limited experience with engineering teams of less than 300 folks, many of the bootstrapping tasks will involve operations that can easily (and more succinctly) be expressed with a shell scripting language. `milpa` could also be a useful intermediate step, that could help teams avoid the dread of jira runbooks until it's a good time to build your own CLI.
 
-Building a CLI is something that happens to me somewhat often, and when golang is a good choice, I get most of `milpa`'s niceties by building my CLI on [chinampa](https://git.rob.mx/nidito/chinampa). `joao`, a configuration manager, is an exmaple of something that started as a [milpa repo](https://github.com/unRob/nidito/tree/0812e0caf6d81dd06b740701c3e95a2aeabd86de/.milpa/commands/nidito/config) that later became [it's own CLI](https://git.rob.mx/nidito/joao); getting it to work with `milpa` first was fundamental in figuring out _what_ it needed to do, and it only took a few hours.
+Building a CLI is something that happens to me somewhat often, and when golang is a good choice, I get most of `milpa`'s niceties by building my CLI on [chinampa](https://git.rob.mx/nidito/chinampa). `joao`, a configuration manager, is an example of something that started as a [milpa repo](https://github.com/unRob/nidito/tree/0812e0caf6d81dd06b740701c3e95a2aeabd86de/.milpa/commands/nidito/config) that later became [it's own CLI](https://git.rob.mx/nidito/joao); getting it to work with `milpa` first was fundamental in figuring out _what_ it needed to do, and it only took a few hours.

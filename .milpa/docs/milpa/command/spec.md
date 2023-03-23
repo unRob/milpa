@@ -85,7 +85,7 @@ arguments:
     # a default may be specified, it'll be passed to your command if none is provided
     default: patch
     # if marked as required, the command won't run unless this argument is provided
-    # An error will result if the argument is bothr required and has a default set
+    # An error will result if the argument is both required and has a default set
     required: true
     # arguments may be variadic, that is, all remaining arguments starting at this position
     # in this case, since there's only one argument, it would mean all arguments after
@@ -106,11 +106,12 @@ The `options` map describes the named options that may be passed to a command. O
 ```yaml
 # options, also known as flags, are specified as a map
 options:
-  # this sets the --scheme option
+  # this creates the --scheme option
   # it will be available to your script as the $MILPA_OPT_SCHEME environment variable
   # and may be specified on the command line as either `--scheme "semver"` or `--scheme=semver`.
   scheme:
-    # options require a description, this will show during completions and on the command's help page
+    # options require a description, this will show during completions
+    # and on the command's help page
     description: Determines the format of the tags for this repo.
     # Sometimes, very commonly used flags might benefit from setting a short name
     # in this case, users would be able to use `-s calver`
@@ -169,3 +170,23 @@ A `values` property may be specified for both arguments and options; `milpa` wil
       # if enabled, will not add a space after suggestions during autocomplete
       suggest-raw: false
 ```
+
+### Value completion script interpolation
+
+[go-template](https://pkg.go.dev/text/template#hdr-Actions) tags may be used within `milpa` and `script` value completions to interpolate already supplied values. The following tags are available:
+
+- `{{ Arg "name" }}`: the value (or default) for the named argument. A map of argument names to their string values is also available at `{{ index Args "name" }}`.
+- `{{ Opt "name" }}`: the value (or default) for the named option. A map of argument names to their string values is also available at `{{ index Opts "name" }}`.
+- `{{ Current }}`: the value currently being auto-completed. On a command line like `milpa song play joão⇥`, `{{ Current }}` would return `joão`.
+
+Additionally, the following Go functions are available:
+
+- `{{ contains "team" "ea" }}`: [`strings.Contains`](https://pkg.go.dev/strings#Contains)
+- `{{ hasSuffix "content" "ent" }}`: [`strings.HasSuffix`](https://pkg.go.dev/strings#HasSuffix)
+- `{{ hasPrefix "content" "con" }}`: [`strings.HasPrefix`](https://pkg.go.dev/strings#HasPrefix)
+- `{{ replace "file.yaml" ".yaml" ".sh" }}`: [`strings.ReplaceAll`](https://pkg.go.dev/strings#ReplaceAll)
+- `{{ toUpper "shout" }}`: [`strings.ToUpper`](https://pkg.go.dev/strings#ToUpper)
+- `{{ toLower "whisper" }}`: [`strings.ToLower`](https://pkg.go.dev/strings#ToLower)
+- `{{ trim " padded " }}`: [`strings.Trim`](https://pkg.go.dev/strings#Trim)
+- `{{ trimSuffix "content" "con" }}`: [`strings.TrimSuffix`](https://pkg.go.dev/strings#TrimSuffix)
+- `{{ trimPrefix "content" "ent" }}`: [`strings.TrimPrefix`](https://pkg.go.dev/strings#TrimPrefix)

@@ -33,6 +33,8 @@ var AfterHelp = os.Exit
 
 func startServer(listen, address string) error {
 	os.Setenv(env.HelpUnstyled, "true")
+	// Replace with DevelopmentStaticResourceHandler to use locally available
+	// static resources during development
 	http.Handle("/static/", docs.EmbeddedStaticResourceHandler())
 	http.HandleFunc("/", docs.RenderHandler(address))
 
@@ -50,17 +52,53 @@ func startServer(listen, address string) error {
 	return server.ListenAndServe()
 }
 
-var Docs = &command.Command{
-	Path:    []string{"help", "docs"},
-	Summary: "Displays docs on TOPIC",
-	Description: "Shows markdown-formatted documentation from milpa repos. See `" + _c.Milpa + " " + _c.HelpCommandName + " docs milpa repo docs` for more information on how to write your own." + `
+func init() {
+	// This convoluted piece of code will ensure `help docs` render
+	// the correct address in its own help
+	// as well as rendering available docs topics
+	Docs.HelpFunc = func(printLinks bool) string {
+		base := Docs.Options["base"].ToString()
+		listen := Docs.Options["listen"]
+		defaultListen := listen.Default.(string)
+		base = strings.ReplaceAll(base, defaultListen, listen.ToString())
+		dlog.Debug("showing docs help")
+		topics, err := lookup.Docs([]string{}, "", false)
+		if err != nil {
+			return ""
+		}
+		topicList := []string{}
+		for _, topic := range topics {
+			if printLinks {
+				topic = fmt.Sprintf("[%s](%s)", topic, topic)
+			}
+			topicList = append(topicList, "- "+topic)
+		}
+
+		return `### Server mode
 
 An HTTP server to browse documentation can be started by running:
 
 ﹅﹅﹅sh
 milpa help docs --server
+# then head to http://localhost:4242
 ﹅﹅﹅
-`,
+
+Command and docs are available at their names, replacing spaces with forward slashes ﹅/﹅, for example:
+
+- ` + base + `/help/docs will show this help page.
+- ` + base + `/itself/doctor shows documentation for the ﹅milpa itself doctor﹅ command.
+- ` + base + `/help/docs/milpa renders the file at .milpa/docs/milpa.md (or .milpa/docs/milpa/index.md).
+
+## Available topics:
+
+` + strings.Join(topicList, "\n")
+	}
+}
+
+var Docs = &command.Command{
+	Path:        []string{"help", "docs"},
+	Summary:     "Displays docs on TOPIC",
+	Description: "Shows markdown-formatted documentation from milpa repos. See `" + _c.Milpa + " " + _c.HelpCommandName + " docs milpa repo docs` for more information on how to write your own.",
 	Arguments: command.Arguments{
 		&command.Argument{
 			Name:        "topic",
@@ -112,29 +150,14 @@ milpa help docs --server
 		Repo: os.Getenv(_c.EnvVarMilpaRoot),
 		Kind: "docs",
 	},
-	HelpFunc: func(printLinks bool) string {
-		dlog.Debug("showing docs help")
-		topics, err := lookup.Docs([]string{}, "", false)
-		if err != nil {
-			return ""
-		}
-		topicList := []string{}
-		for _, topic := range topics {
-			if printLinks {
-				topic = fmt.Sprintf("[%s](%s)", topic, topic)
-			}
-			topicList = append(topicList, "- "+topic)
-		}
-
-		return "## Available topics:\n\n" + strings.Join(topicList, "\n")
-	},
 	Action: func(cmd *command.Command) error {
-		dlog.Debug("Rendering docs")
 		args := cmd.Arguments[0].ToValue().([]string)
 		if len(args) == 0 {
 			if cmd.Options["server"].ToValue().(bool) {
 				listen := cmd.Options["listen"].ToString()
-				address := cmd.Options["base"].ToString()
+				base := cmd.Options["base"]
+				defaultListen := cmd.Options["listen"].Default.(string)
+				address := strings.ReplaceAll(base.ToString(), defaultListen, listen)
 				dlog.Infof("Starting docs server at http://%s, press CTRL-C to stop...", listen)
 				return startServer(listen, address)
 			}

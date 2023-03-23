@@ -11,12 +11,12 @@ curl -L https://milpa.dev/install.sh | bash -
 
 You and your team write scripts and a little spec for each of them—use bash, or any other language—, and `milpa` provides:
 
-- argument and option **completions** from static sources, other `milpa` scripts or even other programs;
+- argument and option **completions** from static sources, files and directories, other `milpa` scripts or even other programs;
 - **nested sub-commands** as simple as the filesystem, organize them in folders and `milpa` does the rest;
 - **parsing** and **validation** for arguments and options, writing little to no code; and
 - **help** and **documentation** on the terminal and browser.
 
-There's [a few reasons why](/.milpa/docs/milpa/use-case.md) you and your team might wanna use `milpa`, but in summary, it's goal is to provide all those nice features above while making it easier to follow the [Command Line Interface Guidelines](https://clig.dev).
+There's [a few reasons why](/.milpa/docs/milpa/use-case.md) you and your team might wanna use `milpa`, but in summary, its goal is to provide all those nice features above while making it easier to follow the [Command Line Interface Guidelines](https://clig.dev).
 
 `milpa` is licensed under the Apache License 2.0, and its code is available at [github.com/unRob/milpa](https://github.com/unRob/milpa).
 

@@ -18,6 +18,7 @@ _FMT_RESET=$'\e[0m'
 _FMT_FG_DEFAULT=$'\e[39m'
 _FMT_FG_RED=$'\e[31m'
 _FMT_FG_GREEN=$'\e[32m'
+_FMT_FG_WHITE=$'\e[225m'
 _FMT_FG_YELLOW=$'\e[33m'
 _FMT_FG_GRAY=$'\e[37m'
 _FMT_BG_DEFAULT=$'\e[49m'
@@ -58,7 +59,7 @@ function _print_message () {
   elif [[ "$level" == "error" ]]; then
     prefix="ERROR: "
     if @milpa.is_color_enabled; then
-      prefix="${_FMT_BG_RED}${_FMT_BOLD} ERROR ${_FMT_RESET} "
+      prefix="${_FMT_BG_RED}${_FMT_FG_WHITE}${_FMT_BOLD} ERROR ${_FMT_RESET} "
     fi
   fi
 
