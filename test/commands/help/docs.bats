@@ -12,7 +12,8 @@ setup() {
 }
 
 @test "itself docs" {
-  # regenerate with MILPA_PLAIN_HELP=enabled MILPA_ROOT="$(pwd)" MILPA_PATH="$(pwd)/.milpa" MILPA_PATH_PARSED=true milpa help docs milpa | tee test/fixtures/readme.txt
+  # regenerate with
+  # MILPA_HELP_STYLE=markdown MILPA_ROOT="$(pwd)" MILPA_PATH="$(pwd)/.milpa" MILPA_PATH_PARSED=true milpa help docs milpa | tee test/fixtures/readme.txt
   run diff -u -L "live" <(milpa help docs milpa) -L "fixture" <(cat "$(fixture readme.txt)")
   assert_success
 
@@ -52,7 +53,7 @@ Completion ended with directive: ShellCompDirectiveNoFileComp"
     fi
 
     echo "waiting for server to come up"
-    sleep 1
+    sleep .1
   done
   curl --max-time 2 --fail --silent --show-error http://localhost:4242/help/docs/ > "docs.html"
   curl --max-time 2 --fail --silent --show-error http://localhost:4242/help/docs/milpa/ > "readme.html"

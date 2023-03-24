@@ -23,7 +23,11 @@ type EnvironmentError struct {
 }
 
 func (err ConfigError) Error() string {
-	return fmt.Sprintf("Invalid configuration %s: %v", err.Config, err.Err)
+	if err.Config != "" {
+		return fmt.Sprintf("Invalid configuration %s: %v", err.Config, err.Err)
+	}
+
+	return fmt.Sprintf("Invalid configuration: %v", err.Err)
 }
 
 func (err EnvironmentError) Error() string {
@@ -39,7 +43,7 @@ func showHelp(cmd *cobra.Command) {
 	}
 }
 
-func HandleCobraExit(cmd *cobra.Command, err error) error {
+func HandleExit(cmd *cobra.Command, err error) error {
 	if err == nil {
 		ok, err := cmd.Flags().GetBool("help")
 		if cmd.Name() == "help" || err == nil && ok {
@@ -59,7 +63,7 @@ func HandleCobraExit(cmd *cobra.Command, err error) error {
 		logrus.Error(err)
 		os.Exit(statuscode.NotFound)
 	case ConfigError:
-		showHelp(cmd)
+		logrus.Info("run `milpa itself doctor` to diagnose your command")
 		logrus.Error(err)
 		os.Exit(statuscode.ConfigError)
 	case EnvironmentError:

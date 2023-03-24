@@ -37,7 +37,8 @@ func main() {
 
 	err := bootstrap.Run()
 	if err != nil {
-		logger.Fatal(err)
+		errors.HandleExit(nil, err) // nolint: errcheck
+		return
 	}
 
 	cfg := chinampa.Config{
@@ -48,7 +49,7 @@ func main() {
 
 See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more information about ﹅milpa﹅.`,
 	}
-	chinampa.SetErrorHandler(errors.HandleCobraExit)
+	chinampa.SetErrorHandler(errors.HandleExit)
 	chinampa.SetVersionCommandName("__version")
 
 	chinampa.Register(actions.Doctor)

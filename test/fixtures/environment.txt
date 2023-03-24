@@ -54,11 +54,11 @@ By default, when stdout is a TTY, `milpa` will output color escape characters. I
 
 If either `--no-color` or `--color` options are provided, these will override both `COLOR` and `NO_COLOR` environment variables.
 
-### `MILPA_HELP_STYLE` / `MILPA_PLAIN_HELP`
+If `COLORTERM` is set to `truecolor`, 24-bit colors will be used instead of the default 256-color palette.
 
-`MILPA_HELP_STYLE` can be one of `auto`, `dark`, and `light` and specifies the theme to use when rendering help pages. This option has no effect if `--no-color` or `NO_COLOR=1` is specified.
+### `MILPA_HELP_STYLE`
 
-`MILPA_PLAIN_HELP` will not colorize help output at all, formatting help as plain markdown text instead.
+`MILPA_HELP_STYLE` controls the theme to use when rendering help pages, and must be one of `auto`, `dark`, `light`, and `markdown`.
 
 ---
 

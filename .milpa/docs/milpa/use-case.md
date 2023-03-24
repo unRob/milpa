@@ -54,7 +54,7 @@ These are great, as long as: a) you know the path to your script, b) it doesn't 
 
 `milpa` provides usability advantages over this approach which will come handy when any of the constraints listed before are not met. With `milpa`, scripts that change often get updated docs and autocomplete for free, and may be appreciated by new users and non-regulars alike. Coming back to rarely used commands is one `--help` away when these scripts are part of a `milpa` repo.
 
-### Bash tools
+### Other command launchers
 
 There's some amazing tools out there, such as:
 

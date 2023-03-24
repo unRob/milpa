@@ -15,3 +15,4 @@ go tool cover -html=test/coverage.cov -o test/coverage.html || @milpa.fail "coul
 
 @milpa.log complete "Coverage report built"
 go tool covdata percent -i="$packages"
+go tool cover -func=test/coverage.cov | tail -n 1

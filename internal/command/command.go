@@ -69,7 +69,9 @@ func canRun(cmd *command.Command) error {
 			issues = append(issues, i.Error())
 		}
 
-		return fmt.Errorf("refusing to run <%s>: %s", cmd.FullName(), strings.Join(issues, "\n"))
+		return errors.ConfigError{
+			Err: fmt.Errorf("cannot run command <%s>: %s", cmd.FullName(), strings.Join(issues, "\n")),
+		}
 	}
 	return nil
 }

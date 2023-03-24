@@ -42,6 +42,17 @@ setup () {
   run -78 milpa
 }
 
+@test "milpa errors on bad configs" {
+  repo="${BATS_SUITE_TMPDIR}/bad-config/.milpa"
+  mkdir -pv "$repo/commands"
+  echo "summary:"$'\n'"  int: - 1 :a\\" > "$repo/commands/bad-command.yaml"
+  echo "#!/usr/bin/env bash\necho not bad" > "$repo/commands/bad-command.sh"
+  export MILPA_PATH="${BATS_SUITE_TMPDIR}/bad-config"
+  run milpa bad-command
+  assert_output --regexp "run \`milpa itself doctor\` to diagnose your command
+ERROR: Invalid configuration: cannot run command <milpa bad-command>: Invalid configuration"
+}
+
 @test "milpa includes global repos in MILPA_PATH" {
   run milpa debug-env MILPA_PATH
   assert_success

@@ -32,7 +32,7 @@ var dlog = logger.Sub("action:docs")
 var AfterHelp = os.Exit
 
 func startServer(listen, address string) error {
-	os.Setenv(env.HelpUnstyled, "true")
+	os.Setenv(env.HelpStyle, "markdown")
 	// Replace with DevelopmentStaticResourceHandler to use locally available
 	// static resources during development
 	http.Handle("/static/", docs.EmbeddedStaticResourceHandler())

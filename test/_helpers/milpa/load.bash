@@ -20,7 +20,7 @@ function _suite_setup() {
   export MILPA_ROOT="$XDG_DATA_HOME/var/lib/milpa"
   export PATH="$PROJECT_ROOT:$PATH"
   export NO_COLOR=1
-  export MILPA_PLAIN_HELP=enabled
+  export MILPA_HELP_STYLE="markdown"
   export milpa="$MILPA_ROOT/milpa"
   mkdir -p "$XDG_DATA_HOME"
   [[ -f "$XDG_DATA_HOME/setup-complete" ]] && return 0

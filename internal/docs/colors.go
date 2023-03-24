@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/charmbracelet/glamour"
+	"github.com/unrob/milpa/internal/constants"
 )
 
 func stringptr(str string) *string {
@@ -34,8 +35,8 @@ func init() {
 	glamour.LightStyleConfig.Document.StylePrimitive.Color = nil
 	glamour.DarkStyleConfig.List.Margin = uintptr(2)
 
-	if os.Getenv("TERM_PROGRAM") == "Apple_Terminal" || os.Getenv("MILPA_COLOR_SCHEME") == "256-color" {
-		// Apple's Terminal.app does not support "true color", so we gotta stick with 256-color
+	if os.Getenv(constants.EnvVarColorBitDepth) != "truecolor" {
+		// Apple's Terminal.app does not support "true color", which is sad.
 		glamour.DarkStyleConfig.H1.StylePrimitive.Color = stringptr("193")
 		glamour.DarkStyleConfig.H1.StylePrimitive.BackgroundColor = stringptr("22")
 		glamour.DarkStyleConfig.Heading.StylePrimitive.Color = stringptr("193")
