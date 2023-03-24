@@ -17,7 +17,7 @@ setup () {
   # shows help on the help command
   run milpa help
   assert_success
-  assert_output --regexp "milpa help \[command\] SUBCOMMAND"
+  assert_output --regexp "milpa help SUBCOMMAND"
   assert_output --regexp "Display usage information for any command"
 
   # shows help on milpa itself

@@ -43,13 +43,17 @@ type TemplateContents struct {
 func FixLinks(contents []byte) []byte {
 	fixedLinks := bytes.ReplaceAll(contents, []byte("(/"+_c.RepoDocs), []byte("(/help/docs"))
 	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("(/"+_c.RepoCommands+"/"), []byte("(/"))
-	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("index.md"), []byte(""))
-	return bytes.ReplaceAll(fixedLinks, []byte(".md"), []byte("/"))
+	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("index.md)"), []byte(")"))
+	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("index.md#"), []byte("#"))
+	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte(".md)"), []byte("/)"))
+	return bytes.ReplaceAll(fixedLinks, []byte(".md#"), []byte("/#"))
 }
 
 func getHTMLLayout() (*template.Template, error) {
 	return template.New("html-help").Funcs(render.TemplateFuncs).Parse(string(LayoutTemplate))
 }
+
+var notFoundContents = []byte("# Not found\n\nThat is weird, if you have a second and a github account, [let me know](https://github.com/unRob/milpa/issues/new?labels=docs&title=Page+not+found&template=docs-page-not-found.yml).\n")
 
 func contentsForRequest(comps []string) ([]byte, string, error) {
 	var cmd *cobra.Command
@@ -66,9 +70,8 @@ func contentsForRequest(comps []string) ([]byte, string, error) {
 	var helpMD bytes.Buffer
 	if err != nil || (cmd == root && len(args) > 0) {
 		log.Warnf("returning 404: %s, cmd: %s", comps, cmd.Name())
-		contents := []byte("# Not found\n\nThat is weird, if you have a second and a github account, [let me know](https://github.com/unRob/milpa/issues/new?labels=docs&title=Page+not+found&template=docs-page-not-found.yml).\n")
 		desc := "sub-command not found"
-		return contents, desc, fmt.Errorf("not found: %s", comps)
+		return notFoundContents, desc, fmt.Errorf("not found: %s", comps)
 	}
 
 	isDocsCommand := len(args) == 2 && (args[0] == "help" && args[1] == "docs")
@@ -85,7 +88,8 @@ func contentsForRequest(comps []string) ([]byte, string, error) {
 			log.Tracef("Rendering docs topic for %s", args)
 			data, err := FromQuery(args)
 			if err != nil {
-				return nil, "", fmt.Errorf("error: %s", err)
+				desc := "documentation topic not found"
+				return notFoundContents, desc, fmt.Errorf("docs topic not found: %s", comps)
 			}
 			helpMD.Write(data)
 		}
@@ -162,11 +166,6 @@ func RenderHandler(serverAddr string) func(http.ResponseWriter, *http.Request) {
 
 		contents, desc, err := contentsForRequest(comps)
 		if err != nil {
-			if !strings.HasPrefix(err.Error(), "not found:") {
-				log.Errorf("could not get contents: %s", err)
-				w.WriteHeader(http.StatusInternalServerError)
-				return
-			}
 			log.Errorf("404: %s", comps)
 			w.WriteHeader(http.StatusNotFound)
 		}
