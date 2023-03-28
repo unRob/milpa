@@ -3,7 +3,7 @@ module github.com/unrob/milpa
 go 1.20
 
 require (
-	git.rob.mx/nidito/chinampa v0.0.0-20230321062825-4c0d40c631cc
+	git.rob.mx/nidito/chinampa v0.0.0-20230324064447-fef0a55288ea
 	github.com/alecthomas/chroma/v2 v2.5.0
 	github.com/alessio/shellescape v1.4.1
 	github.com/bmatcuk/doublestar/v4 v4.6.0
@@ -48,7 +48,7 @@ require (
 	github.com/leodido/go-urn v1.2.2 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.17 // indirect
+	github.com/mattn/go-isatty v0.0.18 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.23 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect

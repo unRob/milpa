@@ -12,7 +12,6 @@ const Milpa = "milpa"
 const HelpCommandName = "help"
 
 func init() {
-	env.HelpUnstyled = "MILPA_PLAIN_HELP"
 	env.HelpStyle = "MILPA_HELP_STYLE"
 	env.Verbose = "MILPA_VERBOSE"
 	env.Silent = "MILPA_SILENT"
@@ -20,6 +19,11 @@ func init() {
 }
 
 // Environment Variables.
+
+// EnvVarColorBitDepth is annoying because it's not set over ssh.
+// It's also the least annoying way to find out if truecolor support is available
+// see https://github.com/termstandard/colors#querying-the-terminal
+const EnvVarColorBitDepth = "COLORTERM"
 const EnvVarMilpaPath = "MILPA_PATH"
 const EnvVarMilpaPathParsed = "MILPA_PATH_PARSED"
 const EnvVarMilpaRoot = "MILPA_ROOT"

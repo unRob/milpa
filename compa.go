@@ -37,18 +37,19 @@ func main() {
 
 	err := bootstrap.Run()
 	if err != nil {
-		logger.Fatal(err)
+		errors.HandleExit(nil, err) // nolint: errcheck
+		return
 	}
 
 	cfg := chinampa.Config{
 		Name:    "milpa",
 		Version: version,
 		Summary: "Runs commands found in " + _c.RepoRoot + " folders",
-		Description: `﹅milpa﹅ is a command-line tool to care for one's own garden of scripts, its name comes from an agricultural method that combines multiple crops in close proximity. You and your team write scripts and a little spec for each command -use bash, or any other language-, and ﹅milpa﹅ provides autocomplete, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.
+		Description: `﹅milpa﹅ is a command-line tool to care for one's own garden of scripts, providing autocomplete, sub-commands, argument parsing and validation, along beautiful documentation—just add a simple YAML spec and a bash (or your language of choice) script.
 
-See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more information about ﹅milpa﹅`,
+See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more information about ﹅milpa﹅.`,
 	}
-	chinampa.SetErrorHandler(errors.HandleCobraExit)
+	chinampa.SetErrorHandler(errors.HandleExit)
 	chinampa.SetVersionCommandName("__version")
 
 	chinampa.Register(actions.Doctor)

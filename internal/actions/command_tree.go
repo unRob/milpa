@@ -128,6 +128,7 @@ var CommandTree = &command.Command{
 			tpl := template.Must(template.New("treeItem").Funcs(render.TemplateFuncs).Parse(outputTpl))
 			serializationFn = func(t interface{}) ([]byte, error) {
 				tree := t.(*tree.CommandTree)
+				addMetaToTree(tree)
 				var output bytes.Buffer
 				err := tree.Traverse(func(cmd *command.Command) error { return tpl.Execute(&output, cmd) })
 				return output.Bytes(), err

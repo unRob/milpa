@@ -12,13 +12,13 @@ setup() {
 }
 
 @test "itself docs" {
-  run milpa help docs milpa
+  # regenerate with
+  # MILPA_HELP_STYLE=markdown MILPA_ROOT="$(pwd)" MILPA_PATH="$(pwd)/.milpa" MILPA_PATH_PARSED=true milpa help docs milpa | tee test/fixtures/readme.txt
+  run diff -u -L "live" <(milpa help docs milpa) -L "fixture" <(cat "$(fixture readme.txt)")
   assert_success
-  assert_output "$(cat "$(fixture readme.txt)")"
 
-  run milpa help docs milpa environment
+  run diff -u -L "live" <(milpa help docs milpa environment) -L "fixture" <(cat "$(fixture environment.txt)")
   assert_success
-  assert_output "$(cat "$(fixture environment.txt)")"
 
   run milpa __complete help docs ""
   assert_success
@@ -37,6 +37,12 @@ Completion ended with directive: ShellCompDirectiveNoFileComp"
 
 
 @test "itself docs --server" {
+  # regenerate with
+  # MILPA_PATH="$(pwd)/.milpa:$(pwd)/test/.milpa" MILPA_PATH_PARSED=true milpa help docs --server
+  # curl http://localhost:4242/ > test/fixtures/index.html
+  # curl http://localhost:4242/help/docs/ > test/fixtures/docs.html
+  # curl http://localhost:4242/help/docs/milpa/ > test/fixtures/readme.html
+  # curl http://localhost:4242/help/docs/milpa/environment/ > test/fixtures/environment.html
   milpa help docs --server &
   server="$!"
   tries=0
@@ -47,7 +53,7 @@ Completion ended with directive: ShellCompDirectiveNoFileComp"
     fi
 
     echo "waiting for server to come up"
-    sleep 1
+    sleep .1
   done
   curl --max-time 2 --fail --silent --show-error http://localhost:4242/help/docs/ > "docs.html"
   curl --max-time 2 --fail --silent --show-error http://localhost:4242/help/docs/milpa/ > "readme.html"
@@ -56,15 +62,15 @@ Completion ended with directive: ShellCompDirectiveNoFileComp"
 
   kill -SIGINT "$server"
 
-  run diff "index.html" "$(fixture index.html)"
+  run diff -u -L fixture "$(fixture index.html)" "index.html"
   assert_success
 
-  run diff "readme.html" "$(fixture readme.html)"
+  run diff -u -L fixture "$(fixture readme.html)" "readme.html"
   assert_success
 
-  run diff "environment.html" "$(fixture environment.html)"
+  run diff -u -L fixture "$(fixture environment.html)" "environment.html"
   assert_success
 
-  run diff "docs.html" "$(fixture docs.html)"
+  run diff -u -L fixture "$(fixture docs.html)" "docs.html"
   assert_success
 }

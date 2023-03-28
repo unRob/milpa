@@ -38,7 +38,7 @@ func TestRenderDocsHelpMain(t *testing.T) {
 	out := bytes.Buffer{}
 	stderr := bytes.Buffer{}
 	cmd := &cobra.Command{Use: "asdf"}
-	os.Setenv(env.HelpUnstyled, "1")
+	os.Setenv(env.HelpStyle, "markdown")
 	cmd.SetHelpFunc(Docs.HelpRenderer(command.Root.Options))
 	cmd.SetOut(&out)
 	cmd.SetErr(&stderr)
@@ -50,7 +50,7 @@ func TestRenderDocsHelpMain(t *testing.T) {
 	}
 
 	expected := `
-## Available topics:
+## Available topics
 
 - [milpa](milpa)
 `
@@ -68,7 +68,7 @@ func TestRenderDocsRender(t *testing.T) {
 	out := bytes.Buffer{}
 	stderr := bytes.Buffer{}
 	cmd := &cobra.Command{Use: "asdf"}
-	os.Setenv(env.HelpUnstyled, "1")
+	os.Setenv(env.HelpStyle, "markdown")
 	cmd.SetHelpFunc(Docs.HelpRenderer(command.Root.Options))
 	cmd.SetOut(&out)
 	cmd.SetErr(&stderr)

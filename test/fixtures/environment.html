@@ -110,7 +110,7 @@
           <a href="#no-color--color"><code>NO_COLOR</code> / <code>COLOR</code></a>
         </li>
             <li>
-          <a href="#milpa-help-style--milpa-plain-help"><code>MILPA_HELP_STYLE</code> / <code>MILPA_PLAIN_HELP</code></a>
+          <a href="#milpa-help-style"><code>MILPA_HELP_STYLE</code></a>
         </li>
             
           </ul>
@@ -257,8 +257,8 @@
 <div class="content-header-wrapper"><h3 class="content-header" id="milpa-silent"><code>MILPA_SILENT</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpa-silent" tabindex="-1">#</a></div><p>Enabled by the <code>--silent</code> option, to hide <code>@milpa.log</code> messages completely. If <code>DEBUG</code> or <code>MILPA_VERBOSE</code> are enabled, these will override <code>MILPA_SILENT</code>.</p>
 <div class="content-header-wrapper"><h3 class="content-header" id="no-color--color"><code>NO_COLOR</code> / <code>COLOR</code></h3> <a aria-hidden="true" class="heading-anchor" href="#no-color--color" tabindex="-1">#</a></div><p>By default, when stdout is a TTY, <code>milpa</code> will output color escape characters. If <code>NO_COLOR</code> is set to any non-empty string, then no color will be output. If not connected to a TTY, and <code>COLOR=always</code> is set, then color escape characters will be printed.</p>
 <p>If either <code>--no-color</code> or <code>--color</code> options are provided, these will override both <code>COLOR</code> and <code>NO_COLOR</code> environment variables.</p>
-<div class="content-header-wrapper"><h3 class="content-header" id="milpa-help-style--milpa-plain-help"><code>MILPA_HELP_STYLE</code> / <code>MILPA_PLAIN_HELP</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpa-help-style--milpa-plain-help" tabindex="-1">#</a></div><p><code>MILPA_HELP_STYLE</code> can be one of <code>auto</code>, <code>dark</code>, and <code>light</code> and specifies the theme to use when rendering help pages. This option has no effect if <code>--no-color</code> or <code>NO_COLOR=1</code> is specified.</p>
-<p><code>MILPA_PLAIN_HELP</code> will not colorize help output at all, formatting help as plain markdown text instead.</p>
+<p>If <code>COLORTERM</code> is set to <code>truecolor</code>, 24-bit colors will be used instead of the default 256-color palette.</p>
+<div class="content-header-wrapper"><h3 class="content-header" id="milpa-help-style"><code>MILPA_HELP_STYLE</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpa-help-style" tabindex="-1">#</a></div><p><code>MILPA_HELP_STYLE</code> controls the theme to use when rendering help pages, and must be one of <code>auto</code>, <code>dark</code>, <code>light</code>, and <code>markdown</code>.</p>
 <hr>
 <div class="content-header-wrapper"><h2 class="content-header" id="input">Input</h2> <a aria-hidden="true" class="heading-anchor" href="#input" tabindex="-1">#</a></div><div class="content-header-wrapper"><h3 class="content-header" id="milpa-skip-validation"><code>MILPA_SKIP_VALIDATION</code></h3> <a aria-hidden="true" class="heading-anchor" href="#milpa-skip-validation" tabindex="-1">#</a></div><p>If enabled, validation will be skipped for arguments and options. Also enabled with <code>--skip-validation</code>. <strong>Skipping validation may be unsafe</strong>, but may be useful when validation depends on unavailable data or services.</p>
 <hr>

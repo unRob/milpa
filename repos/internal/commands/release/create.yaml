@@ -1,6 +1,6 @@
 summary: Creates a new tag and updates the changelog
 description: |
-  Automation might trigger a release if github is in a good mood
+  Figures out the next version by looking at pending changelog notes, then prompts to create a new tag. Automation might trigger a release if github is in a good mood.
 options:
   pre:
     values:

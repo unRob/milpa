@@ -17,7 +17,7 @@ setup () {
   # shows help on the help command
   run milpa help
   assert_success
-  assert_output --regexp "milpa help \[command\] SUBCOMMAND"
+  assert_output --regexp "milpa help SUBCOMMAND"
   assert_output --regexp "Display usage information for any command"
 
   # shows help on milpa itself
@@ -40,6 +40,17 @@ setup () {
 @test "milpa with bad MILPA_ROOT" {
   MILPA_ROOT="$BATS_TEST_FILENAME"
   run -78 milpa
+}
+
+@test "milpa errors on bad configs" {
+  repo="${BATS_SUITE_TMPDIR}/bad-config/.milpa"
+  mkdir -pv "$repo/commands"
+  echo "summary:"$'\n'"  int: - 1 :a\\" > "$repo/commands/bad-command.yaml"
+  echo "#!/usr/bin/env bash\necho not bad" > "$repo/commands/bad-command.sh"
+  export MILPA_PATH="${BATS_SUITE_TMPDIR}/bad-config"
+  run milpa bad-command
+  assert_output --regexp "run \`milpa itself doctor\` to diagnose your command
+ERROR: Invalid configuration: cannot run command <milpa bad-command>: Invalid configuration"
 }
 
 @test "milpa includes global repos in MILPA_PATH" {

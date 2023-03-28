@@ -20,6 +20,12 @@ setup () {
   assert_equal "$output" ""
 }
 
+@test "compa exits correctly on bad MILPA_ROOT" {
+  MILPA_ROOT="$BATS_TEST_FILENAME"
+  run -78 compa
+}
+
+
 @test "compa exits correctly on bad commands" {
   run -127 --separate-stderr compa bad-command
   assert_equal "$output" ""

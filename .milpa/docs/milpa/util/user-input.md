@@ -10,7 +10,7 @@ The `user-input` util contains shell functions related to the creation and clean
 
 `@milpa.ask PROMPT [DEFAULT]`
 
-Promts the user to enter a value. It will show the prompt, followed by the default value with no additional formatting. It outputs the entered value on success and asks again if no value was entered (and no default is set).
+Prompts the user to enter a value. It will show the prompt, followed by the default value with no additional formatting. It outputs the entered value on success and asks again if no value was entered (and no default is set).
 
 ```sh
 #!/usr/bin/env bash

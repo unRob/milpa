@@ -14,7 +14,6 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/command"
 	"git.rob.mx/nidito/chinampa/pkg/render"
 	chromahtml "github.com/alecthomas/chroma/v2/formatters/html"
-	"github.com/charmbracelet/glamour"
 	"github.com/spf13/cobra"
 	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/yuin/goldmark"
@@ -22,32 +21,6 @@ import (
 
 	"github.com/yuin/goldmark/extension"
 )
-
-func stringptr(str string) *string {
-	return &str
-}
-
-func init() {
-	var zero uint
-	glamour.NoTTYStyleConfig.Document.Margin = &zero
-	glamour.NoTTYStyleConfig.Document.StylePrimitive.Color = nil
-
-	glamour.DarkStyleConfig.Document.Margin = &zero
-	glamour.DarkStyleConfig.Document.StylePrimitive.Color = nil
-	glamour.DarkStyleConfig.H1.StylePrimitive.Color = stringptr("#cefcd3")
-	glamour.DarkStyleConfig.H1.StylePrimitive.BackgroundColor = stringptr("#2b3c2d")
-	glamour.DarkStyleConfig.Heading.StylePrimitive.Color = stringptr("#c0e394")
-	glamour.DarkStyleConfig.Code.StylePrimitive.Color = stringptr("#96b452")
-	glamour.DarkStyleConfig.Code.StylePrimitive.BackgroundColor = stringptr("#132b17")
-
-	glamour.LightStyleConfig.Document.Margin = &zero
-	glamour.LightStyleConfig.Document.StylePrimitive.Color = nil
-	glamour.LightStyleConfig.H1.StylePrimitive.Color = stringptr("#cefcd3")
-	glamour.LightStyleConfig.H1.StylePrimitive.BackgroundColor = stringptr("#2b3c2d")
-	glamour.LightStyleConfig.Heading.StylePrimitive.Color = stringptr("#12731D")
-	glamour.LightStyleConfig.Code.StylePrimitive.Color = stringptr("#12731D")
-	glamour.LightStyleConfig.Code.StylePrimitive.BackgroundColor = stringptr("#cee3c4")
-}
 
 //go:embed template.html
 var LayoutTemplate []byte
@@ -70,13 +43,17 @@ type TemplateContents struct {
 func FixLinks(contents []byte) []byte {
 	fixedLinks := bytes.ReplaceAll(contents, []byte("(/"+_c.RepoDocs), []byte("(/help/docs"))
 	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("(/"+_c.RepoCommands+"/"), []byte("(/"))
-	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("index.md"), []byte(""))
-	return bytes.ReplaceAll(fixedLinks, []byte(".md"), []byte("/"))
+	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("index.md)"), []byte(")"))
+	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte("index.md#"), []byte("#"))
+	fixedLinks = bytes.ReplaceAll(fixedLinks, []byte(".md)"), []byte("/)"))
+	return bytes.ReplaceAll(fixedLinks, []byte(".md#"), []byte("/#"))
 }
 
 func getHTMLLayout() (*template.Template, error) {
 	return template.New("html-help").Funcs(render.TemplateFuncs).Parse(string(LayoutTemplate))
 }
+
+var notFoundContents = []byte("# Not found\n\nThat is weird, if you have a second and a github account, [let me know](https://github.com/unRob/milpa/issues/new?labels=docs&title=Page+not+found&template=docs-page-not-found.yml).\n")
 
 func contentsForRequest(comps []string) ([]byte, string, error) {
 	var cmd *cobra.Command
@@ -93,9 +70,8 @@ func contentsForRequest(comps []string) ([]byte, string, error) {
 	var helpMD bytes.Buffer
 	if err != nil || (cmd == root && len(args) > 0) {
 		log.Warnf("returning 404: %s, cmd: %s", comps, cmd.Name())
-		contents := []byte("# Not found\n\nThat is weird, if you have a second and a github account, [let me know](https://github.com/unRob/milpa/issues/new?labels=docs&title=Page+not+found&template=docs-page-not-found.yml).\n")
 		desc := "sub-command not found"
-		return contents, desc, fmt.Errorf("not found: %s", comps)
+		return notFoundContents, desc, fmt.Errorf("not found: %s", comps)
 	}
 
 	isDocsCommand := len(args) == 2 && (args[0] == "help" && args[1] == "docs")
@@ -112,7 +88,8 @@ func contentsForRequest(comps []string) ([]byte, string, error) {
 			log.Tracef("Rendering docs topic for %s", args)
 			data, err := FromQuery(args)
 			if err != nil {
-				return nil, "", fmt.Errorf("error: %s", err)
+				desc := "documentation topic not found"
+				return notFoundContents, desc, fmt.Errorf("docs topic not found: %s", comps)
 			}
 			helpMD.Write(data)
 		}
@@ -166,7 +143,7 @@ func EmbeddedStaticResourceHandler() http.Handler {
 func DevelopmentStaticResourceHandler() http.Handler {
 	path := os.Getenv("MILPA_DOCS_STATIC_RESOURCES")
 	if path == "" {
-		path = os.Getenv("MILPA_ROOT") + "/internal/docs/static"
+		path = os.Getenv("MILPA_ROOT") + "/internal/docs"
 	}
 	log.Warnf("Using static resources from %s", path)
 	return http.FileServer(http.Dir(path))
@@ -189,18 +166,13 @@ func RenderHandler(serverAddr string) func(http.ResponseWriter, *http.Request) {
 
 		contents, desc, err := contentsForRequest(comps)
 		if err != nil {
-			if !strings.HasPrefix(err.Error(), "not found:") {
-				log.Errorf("could not get contents: %s", err)
-				w.WriteHeader(http.StatusInternalServerError)
-				return
-			}
 			log.Errorf("404: %s", comps)
 			w.WriteHeader(http.StatusNotFound)
 		}
 
 		md, toc, err := mdToHTML(contents)
 		if err != nil {
-			log.Errorf("could convert to html: %s", err)
+			log.Errorf("could not convert to html: %s", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
