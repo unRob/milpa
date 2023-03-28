@@ -125,7 +125,7 @@
               <a href="#regular-scripts-in-the-filesystem">Regular scripts in the filesystem</a>
             </li>
             <li>
-              <a href="#bash-tools">Bash tools</a>
+              <a href="#other-command-launchers">Other command launchers</a>
             </li>
             <li>
               <a href="#make">Make</a>
@@ -254,7 +254,7 @@
     <h1 id="command-name-header" class="sr-only">milpa help docs milpa use-case</h1>
     <p>I built <code>milpa</code> with a few use cases in mind:</p>
     <ul>
-      <li>To <strong>share groups of scripts</strong> used by a group of folks in an engineering team (i.e. setup development environments, work with secrets/credentials)</li>
+      <li>To <strong>share groups of scripts</strong> like those needed by folks in an engineering team (i.e. setup development environments, work with secrets/credentials)</li>
       <li>to <strong>share context and code</strong>, without having to ask folks to run stuff off READMEs (i.e. pull service logs, forward ports), and</li>
       <li>to <strong>quickly build scripts</strong> that will be documented sufficiently well for my forgetful future-self.</li>
     </ul>
@@ -263,9 +263,9 @@
       <h2 class="content-header" id="milpa-is-great-for"><code>milpa</code> is great for</h2><a aria-hidden="true" class="heading-anchor" href="#milpa-is-great-for" tabindex="-1">#</a>
     </div>
     <ul>
-      <li>working with small programs meant to be used as either building blocks for other programs, or user-facing collections of these blocks</li>
-      <li>sharing related commands using your team's source control versioning system, allowing anyone to mess with them and test them often</li>
-      <li>when writing shell scripts is the way to go. Maybe you're interacting with binaries in the system, or operating on files and directories and using your programming language of choice is overkill.</li>
+      <li>working with small programs meant to be used as either building blocks for other programs, or user-facing collections of these blocks;</li>
+      <li>sharing related commands using your team's source control versioning system, allowing anyone to mess with them and test them often;</li>
+      <li>when writing shell scripts is the way to go. Maybe you're interacting with binaries in the system, or operating on files and directories and using your programming language of choice is overkill; and</li>
       <li>turning runbooks into actionable, runnable scripts. Up-to-date remediation one <code>git pull &amp;& milpa runbook ...</code> away.</li>
     </ul>
     <p>Tasks like bootstrapping development environments are usually left out for the user to accomplish by following through a README or wiki with likely outdated links; <code>milpa</code> is great when these tasks can be accomplished by prompting for information, querying identity providers and then running configuration commands or modifying the filesystem directly.</p>
@@ -294,7 +294,7 @@
     </div>
     <p>I haven't tested the performance beyond dozens of repos with dozens of commands, and that being said, I can't see myself using <code>milpa</code> for anything more complex than that. I'd usually reach for another language to build a domain-specific CLI, specially if working with a team that is not very comfortable with shell scripting.</p>
     <p>When there's a need to distribute stand-alone CLI programs, <code>milpa</code> won't be the best method to package and distribute CLIs. While facilities to work with <code>milpa</code> repos exists (see <a href="/itself/repo/install"><code>milpa itself repo install</code></a>), it may be less than ideal since there's a dependency in <code>milpa</code>.</p>
-    <p><code>milpa</code> could be the wrong tool when the primary runner of commands is not gonna be a human. Sorry robot friends! <code>milpa</code>'s features are oriented primarily towards improving the experience of maintaining and running scripts by humans, and while there's nothing wrong with having an automated system (say CI, for example) run <code>milpa</code> commands, there is an overhead to consider by invoking <code>milpa</code> (both cognitive overhead and in terms of resource usage).</p>
+    <p><code>milpa</code> could be the wrong tool when the primary runner of commands is not gonna be a human. Sorry robot friends! <code>milpa</code>'s features are oriented primarily towards improving the experience of maintaining and running scripts by humans, and while there's nothing wrong with having an automated system (say CI, for example) run <code>milpa</code> commands, there is an overhead to consider (both cognitive, and in terms of resource usage).</p>
     <p>That being said, it can be done and it works fine (or, if you like writing bash scripts as much as I do, <em>beautifully</em>); check out <a href="https://github.com/unRob/smoked-by-the-house">unRob/smoked-by-the-house</a> where <code>milpa</code> orchestrated and operated a Raspberry Pi running an art installation for three months of 2022 at the Anahuacalli Museum in Mexico City.</p>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="alternatives-to-milpa">Alternatives to <code>milpa</code></h2><a aria-hidden="true" class="heading-anchor" href="#alternatives-to-milpa" tabindex="-1">#</a>
@@ -305,7 +305,7 @@
     <p>These are great, as long as: a) you know the path to your script, b) it doesn't consume many arguments/options, c) rarely changes, and/or d) is used only by the same few folks.</p>
     <p><code>milpa</code> provides usability advantages over this approach which will come handy when any of the constraints listed before are not met. With <code>milpa</code>, scripts that change often get updated docs and autocomplete for free, and may be appreciated by new users and non-regulars alike. Coming back to rarely used commands is one <code>--help</code> away when these scripts are part of a <code>milpa</code> repo.</p>
     <div class="content-header-wrapper">
-      <h3 class="content-header" id="bash-tools">Bash tools</h3><a aria-hidden="true" class="heading-anchor" href="#bash-tools" tabindex="-1">#</a>
+      <h3 class="content-header" id="other-command-launchers">Other command launchers</h3><a aria-hidden="true" class="heading-anchor" href="#other-command-launchers" tabindex="-1">#</a>
     </div>
     <p>There's some amazing tools out there, such as:</p>
     <ul>
@@ -324,8 +324,11 @@
       <li>
         <a href="https://github.com/basherpm/basher">Basher package manager</a>
       </li>
+      <li>
+        <a href="https://github.com/criteo/command-launcher">Criteo's command-launcher</a>
+      </li>
     </ul>
-    <p>These all serve different purposes, and there is some feature overlap with <code>milpa</code> and each of these.</p>
+    <p>These all serve different purposes, and there is some feature overlap between <code>milpa</code> and each of these.</p>
     <p><code>milpa</code> aims to provide the same level of support to non-bash scripts (hello applescript) without the need for another runtime to be installed. These projects are great for distributing and packaging software that may be used beyond your organization, while <code>milpa</code> aims to help smaller user bases, such as engineering teams, keep their shared scripts organized and up-to-date.</p>
     <div class="content-header-wrapper">
       <h3 class="content-header" id="make">Make</h3><a aria-hidden="true" class="heading-anchor" href="#make" tabindex="-1">#</a>
@@ -336,8 +339,8 @@
       <h3 class="content-header" id="byocli">BYOCLI</h3><a aria-hidden="true" class="heading-anchor" href="#byocli" tabindex="-1">#</a>
     </div>
     <p>Building your own CLI is usually what ends up happening given a team with enough time and direction to invest in building a proper CLI with whatever language is already at use. Some teams use more than one language, which may complicate this approach. In the microservices world, many codebases come with their own CLIs that may follow slightly different conventions, are seldomly documented and often just end up calling other binaries through <code>exec</code>.</p>
-    <p>In my limited experience with engineering teams of less than 300 folks, many of the bootstrapping tasks will involve operations that can easily (and more succintly) be expressed with a shell scripting language. <code>milpa</code> could also be a useful intermediate step, that could help teams avoid the dread of jira runbooks until it's a good time to build your own CLI.</p>
-    <p>Building a CLI is something that happens to me somewhat often, and when golang is a good choice, I get most of <code>milpa</code>'s niceties by building my CLI on <a href="https://git.rob.mx/nidito/chinampa">chinampa</a>. <code>joao</code>, a configuration manager, is an exmaple of something that started as a <a href="https://github.com/unRob/nidito/tree/0812e0caf6d81dd06b740701c3e95a2aeabd86de/.milpa/commands/nidito/config">milpa repo</a> that later became <a href="https://git.rob.mx/nidito/joao">it's own CLI</a>; getting it to work with <code>milpa</code> first was fundamental in figuring out <em>what</em> it needed to do, and it only took a few hours.</p>
+    <p>In my limited experience with engineering teams of less than 300 folks, many of the bootstrapping tasks will involve operations that can easily (and more succinctly) be expressed with a shell scripting language. <code>milpa</code> could also be a useful intermediate step, that could help teams avoid the dread of confluence/notion/google-docs runbooks until it's a good time to build your own CLI.</p>
+    <p>Building a CLI is something that happens to me somewhat often, and when golang is a good choice, I get most of <code>milpa</code>'s niceties by building my CLI on <a href="https://git.rob.mx/nidito/chinampa">chinampa</a>. <code>joao</code>, a configuration manager, is an example of something that started as a <a href="https://github.com/unRob/nidito/tree/0812e0caf6d81dd06b740701c3e95a2aeabd86de/.milpa/commands/nidito/config">milpa repo</a> that later became <a href="https://git.rob.mx/nidito/joao">it's own CLI</a>; getting it to work with <code>milpa</code> first was fundamental in figuring out <em>what</em> it needed to do, and it only took a few hours.</p>
   </main>
   <script src="/static/js/index.js"></script>
 </body>

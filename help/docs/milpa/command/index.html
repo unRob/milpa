@@ -117,7 +117,7 @@
           <a href="#arguments-options-and-environment">Arguments, Options and Environment</a>
           <ul>
             <li>
-              <a href="#command-milpa-command-">Command: <code>MILPA_COMMAND_*</code></a>
+              <a href="#command-metadata-milpa-command-">Command metadata: <code>MILPA_COMMAND_*</code></a>
             </li>
             <li>
               <a href="#arguments-milpa-arg-">Arguments: <code>MILPA_ARG_*</code></a>
@@ -246,12 +246,12 @@
   </div>
   <main id="content">
     <h1 id="command-name-header" class="sr-only">milpa help docs milpa command</h1>
-    <p><code>milpa</code> has two modes for running your scripts:</p>
+    <p><code>milpa</code> runs your scripts or executables, by matching passed arguments to files in <code>.milpa/commands</code> directories. It looks at a few of these, starting with the one where <code>milpa</code> was called from. Check out <code>MILPA_PATH</code> of <a href="/help/docs/environment/#MILPA_PATH"><code>milpa help docs milpa environment</code></a> to understand where <code>milpa</code> looks for <strong>commands</strong>. A collection of commands under a single <code>.milpa</code> folder is called a <strong>repo</strong>, and you can learn more reading <a href="/help/docs/milpa/repo/"><code>milpa help docs milpa repo</code></a></p>
+    <p>Your <strong>script</strong> or executable plus its corresponding <strong>spec</strong> is what we call a <code>milpa</code> <strong>command</strong>. Scripts can be:</p>
     <ol start="0">
       <li>bash scripts, with an <code>.sh</code> extension, or</li>
-      <li>executable files without an extension, written in whatever language you want.</li>
+      <li>executable files without an extension, written in whatever language you want. If your command does not have an extension, remember to set on the executable bit (<code>chmod +x .milpa/commands/your-command</code>)!</li>
     </ol>
-    <p>Your <strong>script</strong> or executable plus its corresponding <strong>spec</strong> is what we call a <code>milpa</code> <strong>command</strong>. If your command does not have an extension, remember to set the executable bit on (<code>chmod +x .milpa/commands/your-command</code>)!</p>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="spec">Spec</h2><a aria-hidden="true" class="heading-anchor" href="#spec" tabindex="-1">#</a>
     </div>
@@ -292,25 +292,28 @@
     <div class="content-header-wrapper">
       <h2 class="content-header" id="arguments-options-and-environment">Arguments, Options and Environment</h2><a aria-hidden="true" class="heading-anchor" href="#arguments-options-and-environment" tabindex="-1">#</a>
     </div>
-    <p>The <strong>arguments</strong> and <strong>options</strong> passed in the command line will be parsed and validated according to your spec. If valid, your script will receive numbered arguments as usual (<code>$1</code> and so on), without known options. Valid arguments and options will be available to your script as <strong>environment variables</strong> as well.</p>
+    <p>The <strong>arguments</strong> and <strong>options</strong> passed in the command line will be parsed and validated according to your spec. If valid, your script will receive numbered arguments as usual (<code>$1</code> and so on), excluding any supplied options (i.e. without <code>--option=value</code> "arguments"). Valid arguments and options will be available to your script as <strong>environment variables</strong> as well.</p>
+    <blockquote>
+      <p>⚠️ Unknown arguments and options will cause an error before your script executes!</p>
+    </blockquote>
     <p>The environment available to a <strong>script</strong> is composed of four groups:</p>
-    <ul>
+    <ol start="0">
       <li><code>MILPA_COMMAND_*</code> variables have information about the <strong>command</strong> called by the user,</li>
       <li><code>MILPA_ARG_*</code> variables hold values for every <strong>argument</strong> of the spec,</li>
       <li><code>MILPA_OPT_*</code> variables hold values for every <strong>option</strong> defined, and</li>
       <li>
         <a href="/help/docs/milpa/environment/">global environment variables</a> that affect <code>milpa</code>'s overall behavior.
       </li>
-    </ul>
+    </ol>
     <div class="content-header-wrapper">
-      <h3 class="content-header" id="command-milpa-command-">Command: <code>MILPA_COMMAND_*</code></h3><a aria-hidden="true" class="heading-anchor" href="#command-milpa-command-" tabindex="-1">#</a>
+      <h3 class="content-header" id="command-metadata-milpa-command-">Command metadata: <code>MILPA_COMMAND_*</code></h3><a aria-hidden="true" class="heading-anchor" href="#command-metadata-milpa-command-" tabindex="-1">#</a>
     </div>
     <p>Your script has access to the following variables set by <code>milpa</code> after parsing arguments and running validations:</p>
     <ul>
       <li><code>MILPA_COMMAND_NAME</code>: the space delimited name of your command, i.e. <code>db connect</code>;</li>
       <li><code>MILPA_COMMAND_KIND</code>: either <code>source</code> for <code>.sh</code> scripts, or <code>exec</code> for executables;</li>
       <li><code>MILPA_COMMAND_REPO</code>: the path to the repo containing this command, i.e. <code>/home/you/project/.milpa</code>; and</li>
-      <li><code>MILPA_COMMAND_PATH</code>: the full path to the executable being called</li>
+      <li><code>MILPA_COMMAND_PATH</code>: the full path to the executable being called.</li>
     </ul>
     <div class="content-header-wrapper">
       <h3 class="content-header" id="arguments-milpa-arg-">Arguments: <code>MILPA_ARG_*</code></h3><a aria-hidden="true" class="heading-anchor" href="#arguments-milpa-arg-" tabindex="-1">#</a>
@@ -329,7 +332,7 @@
     <div class="content-header-wrapper">
       <h3 class="content-header" id="options-milpa-opt-">Options: <code>MILPA_OPT_*</code></h3><a aria-hidden="true" class="heading-anchor" href="#options-milpa-opt-" tabindex="-1">#</a>
     </div>
-    <p><strong>Options</strong> show up on the environment with the <code>MILPA_OPT_</code> prefix followed by the name in your spec. Names will be all uppercase, and dashes will be turned into underscores. In the <a href="/help/docs/milpa/command/spec/">command spec</a> you'll find more details on how to set <strong>options</strong>.</p>
+    <p><strong>Options</strong> show up on the environment with the <code>MILPA_OPT_</code> prefix followed by the name in your spec. Names will be all uppercase, and dashes will be turned into underscores. In the <a href="/help/docs/milpa/command/spec/">command spec</a> you'll find more details on how to define <strong>options</strong>.</p>
     <pre class="chroma"><code><span class="line"><span class="cl"><span class="c1"># when ran like this:</span>
 </span></span><span class="line"><span class="cl">milpa greet --greeting Sup
 </span></span><span class="line"><span class="cl"><span class="c1"># would output:</span>
@@ -351,7 +354,7 @@
 </span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$MILPA_OPT_SHOUT</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
 </span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$MILPA_OPT_GREETING</span><span class="s2"> </span><span class="k">$(</span>title_case <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span><span class="k">)</span><span class="s2">!"</span> <span class="p">|</span> awk <span class="s1">'{print toupper($0)}'</span>
 </span></span><span class="line"><span class="cl"><span class="k">else</span>
-</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$MILPA_ARG_GREETING</span><span class="s2"> </span><span class="k">$(</span>title_case <span class="s2">"</span><span class="si">${</span><span class="nv">MILPA_ARG_FULL_NAME</span><span class="p">[*]</span><span class="si">}</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$MILPA_OPT_GREETING</span><span class="s2"> </span><span class="k">$(</span>title_case <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span>
 </span></span><span class="line"><span class="cl"><span class="k">fi</span>
 </span></span></code></pre>
     <pre class="chroma"><code><span class="line"><span class="cl"><span class="c1"># and run with</span>

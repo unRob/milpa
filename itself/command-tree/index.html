@@ -250,7 +250,7 @@
     <div class="content-header-wrapper">
       <h2 class="content-header" id="description">Description</h2><a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a>
     </div>
-    <p>Prints out command names and descriptions, or optionally all properties as <code>json</code> or <code>yaml</code>.</p>
+    <p>Prints out command names and descriptions, or optionally a nested representation of all properties of commands, serialized as <code>json</code> or <code>yaml</code>. Custom textual representations of commands can be obtained by using the <code>--template</code> option and specifying a <a href="https://pkg.go.dev/text/template#hdr-Actions">go-template</a> to be applied to every command. See <a href="https://pkg.go.dev/git.rob.mx/nidito/chinampa@v0.0.0-20230324015136-6ec1c56f0fc5/pkg/command#Command">chinampa/pkg.Command</a> and <a href="https://pkg.go.dev/github.com/unrob/milpa@v0.0.0-20230321064607-ee1825c67af7/internal/command#Meta">milpa/internal/command.Meta</a> for references on the structs available during template rendering.</p>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="examples">Examples</h2><a aria-hidden="true" class="heading-anchor" href="#examples" tabindex="-1">#</a>
     </div>
@@ -260,14 +260,14 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># print a tree of milpa itself sub-commands</span>
 </span></span><span class="line"><span class="cl">milpa itself command-tree itself
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># print out all commands, skipping groups</span>
-</span></span><span class="line"><span class="cl">milpa itself command-tree --template <span class="s1">'{{ if (not (eq .Meta.Kind "virtual")) }}{{ .FullName }}'$'\n''{{ end }}'</span>
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># get all commands as a json tree</span>
 </span></span><span class="line"><span class="cl">milpa itself command-tree --output json
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># same, but as the yaml representation of this command itself</span>
 </span></span><span class="line"><span class="cl">milpa itself command-tree --output json itself command-tree
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># print out all commands, skipping groups</span>
+</span></span><span class="line"><span class="cl">milpa itself command-tree --template <span class="s1">'{{ if (not (eq .Command.Meta.Kind "virtual")) }}{{ .Command.FullName }}'$'\n''{{ end }}'</span>
 </span></span></code></pre>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="arguments">Arguments</h2><a aria-hidden="true" class="heading-anchor" href="#arguments" tabindex="-1">#</a>
@@ -293,7 +293,6 @@
       <li><code>--silent</code> (<em>bool</em>): Silence non-error logging.</li>
       <li><code>--skip-validation</code> (<em>bool</em>): Do not validate any arguments or options.</li>
       <li><code>--verbose</code> (<em>bool</em>): Log verbose output to stderr.</li>
-      <li><code>--version</code> (<em>bool</em>): Display program version and exit.</li>
     </ul>
   </main>
   <script src="/static/js/index.js"></script>

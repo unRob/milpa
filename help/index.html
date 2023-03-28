@@ -9,8 +9,8 @@
   <meta property="og:locale" content="en">
   <meta property="og:title" content="milpa help">
   <meta property="og:site_name" content="🌽 milpa">
-  <meta property="og:description" content="Runs commands found in .milpa folders">
-  <meta name="description" content="Runs commands found in .milpa folders">
+  <meta property="og:description" content="Display usage information for any command">
+  <meta name="description" content="Display usage information for any command">
   <meta property="og:url" content="https://milpa.dev/help">
   <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   <title>milpa help</title>
@@ -112,12 +112,17 @@
         </li>
         <li>
           <a href="#description">Description</a>
+          <ul>
+            <li>
+              <a href="#colorized-output">Colorized output</a>
+            </li>
+          </ul>
         </li>
         <li>
           <a href="#subcommands">Subcommands</a>
         </li>
         <li>
-          <a href="#options">Options</a>
+          <a href="#global-options">Global Options</a>
         </li>
       </ul>
     </nav>
@@ -238,29 +243,29 @@
   </div>
   <main id="content">
     <h1 id="command-name-header" class="sr-only">milpa help</h1>
-    <p>Runs commands found in .milpa folders</p>
+    <p>Display usage information for any command</p>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="usage">Usage</h2><a aria-hidden="true" class="heading-anchor" href="#usage" tabindex="-1">#</a>
     </div>
-    <p><code>milpa [--silent|-v|--verbose] [--[no-]color] [-h|--help] [--version] SUBCOMMAND</code></p>
+    <p><code>milpa help SUBCOMMAND</code></p>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="description">Description</h2><a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a>
     </div>
-    <p><code>milpa</code> is a command-line tool to care for one's own garden of scripts, its name comes from an agricultural method that combines multiple crops in close proximity. You and your team write scripts and a little spec for each command -use bash, or any other language-, and <code>milpa</code> provides autocomplete, sub-commands, argument parsing and validation so you can skip the toil and focus on your scripts.</p>
-    <p>See <a href="/help/docs/milpa/"><code>milpa help docs milpa</code></a> for more information about <code>milpa</code></p>
+    <p>Provides documentation for any command known to <code>milpa</code>, including its known arguments and options.</p>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="colorized-output">Colorized output</h3><a aria-hidden="true" class="heading-anchor" href="#colorized-output" tabindex="-1">#</a>
+    </div>
+    <p>By default, and unless <code>NO_COLOR</code> is set, <code>milpa help</code> will query the environment variable <code>COLORFGBG</code> to decide which style to use when rendering help, unless if <code>HELP_STYLE</code> is set to any of the following values: <strong>light</strong>, <strong>dark</strong>, <strong>markdown</strong>, or <strong>auto</strong>. 24-bit color is available when <code>COLORTERM</code> is set to <code>truecolor</code>.</p>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="subcommands">Subcommands</h2><a aria-hidden="true" class="heading-anchor" href="#subcommands" tabindex="-1">#</a>
     </div>
     <ul>
       <li>
-        <a href="help/"><code>help</code></a> - Display usage information for any command
-      </li>
-      <li>
-        <a href="itself/"><code>itself</code></a> - itself subcommands
+        <a href="docs/"><code>docs</code></a> - Displays docs on TOPIC
       </li>
     </ul>
     <div class="content-header-wrapper">
-      <h2 class="content-header" id="options">Options</h2><a aria-hidden="true" class="heading-anchor" href="#options" tabindex="-1">#</a>
+      <h2 class="content-header" id="global-options">Global Options</h2><a aria-hidden="true" class="heading-anchor" href="#global-options" tabindex="-1">#</a>
     </div>
     <ul>
       <li><code>--color</code> (<em>bool</em>): Always print colors to stderr. Default: <em>true</em>.</li>
@@ -269,7 +274,6 @@
       <li><code>--silent</code> (<em>bool</em>): Silence non-error logging.</li>
       <li><code>--skip-validation</code> (<em>bool</em>): Do not validate any arguments or options.</li>
       <li><code>--verbose</code> (<em>bool</em>): Log verbose output to stderr.</li>
-      <li><code>--version</code> (<em>bool</em>): Display program version and exit.</li>
     </ul>
   </main>
   <script src="/static/js/index.js"></script>

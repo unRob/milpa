@@ -244,12 +244,12 @@
     <div class="content-header-wrapper">
       <h2 class="content-header" id="description">Description</h2><a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a>
     </div>
-    <p>Milpa can install repositories from remote locations at two different locations, depending on how it was instaled.</p>
+    <p><code>milpa</code> installs repositories from remote locations at two different locations:</p>
     <ul>
-      <li>In the <code>$MILPA_ROOT</code> (by default, /usr/local/lib/milpa)</li>
-      <li>In <code>$XDG_DATA_HOME/milpa</code> folder</li>
+      <li>machine-wide repositories are installed to <code>$MILPA_ROOT</code>, usually at <code>/usr/local/lib/milpa</code>,</li>
+      <li>user-specific repositories are installed to <code>$XDG_DATA_HOME/milpa</code> folder, usually <code>$HOME/.local/share/milpa/</code></li>
     </ul>
-    <p>For more information on installing packages, see <a href="/itself/repo/install/"><code>milpa itself repo install --help</code></a></p>
+    <p>For more information on installing packages, see <a href="/itself/repo/install/"><code>milpa itself repo install --help</code></a>.</p>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="options">Options</h2><a aria-hidden="true" class="heading-anchor" href="#options" tabindex="-1">#</a>
     </div>
@@ -266,7 +266,6 @@
       <li><code>--silent</code> (<em>bool</em>): Silence non-error logging.</li>
       <li><code>--skip-validation</code> (<em>bool</em>): Do not validate any arguments or options.</li>
       <li><code>--verbose</code> (<em>bool</em>): Log verbose output to stderr.</li>
-      <li><code>--version</code> (<em>bool</em>): Display program version and exit.</li>
     </ul>
   </main>
   <script src="/static/js/index.js"></script>

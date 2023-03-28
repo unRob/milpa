@@ -263,10 +263,10 @@
       <h3 class="content-header" id="examples">Examples</h3><a aria-hidden="true" class="heading-anchor" href="#examples" tabindex="-1">#</a>
     </div>
     <ul>
-      <li><code>github.com/unRob/milpa</code> would download the <code>.milpa</code> folder from the <code>unRob/milpa</code> github repo, using <strong>http</strong>, and prompting for credentials for private repos.</li>
-      <li><code>git::ssh://git@github.com/unRob/milpa.git//internal</code> would download the <code>internal/.milpa</code> folder from the <code>unRob/milpa</code> github repo using <strong>ssh credentials</strong>, useful for skipping credential prompts for private repos</li>
+      <li><code>github.com/unRob/milpa</code> would download the <code>.milpa</code> folder from the <code>unRob/milpa</code> github repo, using <strong>https</strong>, and prompting for credentials for private repos.</li>
+      <li><code>git::ssh://git@github.com/unRob/milpa.git//internal</code> would download the <code>internal/.milpa</code> folder from the <code>unRob/milpa</code> github repo using <strong>ssh credentials</strong>, useful for skipping credential prompts for private repos.</li>
       <li>
-        <code>~/.dotfiles</code> would symlink <code>$HOME/.dotfiles/.milpa</code> to the target. An alternative to this is to set <code>MILPA_PATH</code> to <code>$HOME/.dotfiles</code> (see <a href="/help/docs/milpa/environment/"><code>milpa help docs milpa environment</code></a>)
+        <code>~/.dotfiles</code> would symlink <code>$HOME/.dotfiles/.milpa</code> to the target. An alternative to this is to set <code>MILPA_PATH</code> to <code>$HOME/.dotfiles</code> (see <a href="/help/docs/milpa/environment/"><code>milpa help docs milpa environment</code></a>).
       </li>
     </ul>
     <div class="content-header-wrapper">
@@ -293,7 +293,6 @@
       <li><code>--silent</code> (<em>bool</em>): Silence non-error logging.</li>
       <li><code>--skip-validation</code> (<em>bool</em>): Do not validate any arguments or options.</li>
       <li><code>--verbose</code> (<em>bool</em>): Log verbose output to stderr.</li>
-      <li><code>--version</code> (<em>bool</em>): Display program version and exit.</li>
     </ul>
   </main>
   <script src="/static/js/index.js"></script>

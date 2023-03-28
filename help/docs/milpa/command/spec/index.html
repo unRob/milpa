@@ -121,6 +121,11 @@
         </li>
         <li>
           <a href="#value-completion-and-validation">Value completion and validation</a>
+          <ul>
+            <li>
+              <a href="#value-completion-script-interpolation">Value completion script interpolation</a>
+            </li>
+          </ul>
         </li>
       </ul>
     </nav>
@@ -316,7 +321,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># a default may be specified, it'll be passed to your command if none is provided</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l">patch</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># if marked as required, the command won't run unless this argument is provided</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># An error will result if the argument is bothr required and has a default set</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># An error will result if the argument is both required and has a default set</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># arguments may be variadic, that is, all remaining arguments starting at this position</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># in this case, since there's only one argument, it would mean all arguments after</span><span class="w">
@@ -336,11 +341,12 @@
     </blockquote>
     <pre class="chroma"><code><span class="line"><span class="cl"><span class="c"># options, also known as flags, are specified as a map</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="nt">options</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># this sets the --scheme option</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># this creates the --scheme option</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># it will be available to your script as the $MILPA_OPT_SCHEME environment variable</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># and may be specified on the command line as either `--scheme "semver"` or `--scheme=semver`.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">scheme</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># options require a description, this will show during completions and on the command's help page</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># options require a description, this will show during completions</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># and on the command's help page</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">Determines the format of the tags for this repo.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># Sometimes, very commonly used flags might benefit from setting a short name</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># in this case, users would be able to use `-s calver`</span><span class="w">
@@ -398,6 +404,45 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># if enabled, will not add a space after suggestions during autocomplete</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">suggest-raw</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span></span></span></code></pre>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="value-completion-script-interpolation">Value completion script interpolation</h3><a aria-hidden="true" class="heading-anchor" href="#value-completion-script-interpolation" tabindex="-1">#</a>
+    </div>
+    <p><a href="https://pkg.go.dev/text/template#hdr-Actions">go-template</a> tags may be used within <code>milpa</code> and <code>script</code> value completions to interpolate already supplied values. The following tags are available:</p>
+    <ul>
+      <li><code>{{ Arg "name" }}</code>: the value (or default) for the named argument. A map of argument names to their string values is also available at <code>{{ index Args "name" }}</code>.</li>
+      <li><code>{{ Opt "name" }}</code>: the value (or default) for the named option. A map of argument names to their string values is also available at <code>{{ index Opts "name" }}</code>.</li>
+      <li><code>{{ Current }}</code>: the value currently being auto-completed. On a command line like <code>milpa song play joão⇥</code>, <code>{{ Current }}</code> would return <code>joão</code>.</li>
+    </ul>
+    <p>Additionally, the following Go functions are available:</p>
+    <ul>
+      <li>
+        <code>{{ contains "team" "ea" }}</code>: <a href="https://pkg.go.dev/strings#Contains"><code>strings.Contains</code></a>
+      </li>
+      <li>
+        <code>{{ hasSuffix "content" "ent" }}</code>: <a href="https://pkg.go.dev/strings#HasSuffix"><code>strings.HasSuffix</code></a>
+      </li>
+      <li>
+        <code>{{ hasPrefix "content" "con" }}</code>: <a href="https://pkg.go.dev/strings#HasPrefix"><code>strings.HasPrefix</code></a>
+      </li>
+      <li>
+        <code>{{ replace "file.yaml" ".yaml" ".sh" }}</code>: <a href="https://pkg.go.dev/strings#ReplaceAll"><code>strings.ReplaceAll</code></a>
+      </li>
+      <li>
+        <code>{{ toUpper "shout" }}</code>: <a href="https://pkg.go.dev/strings#ToUpper"><code>strings.ToUpper</code></a>
+      </li>
+      <li>
+        <code>{{ toLower "whisper" }}</code>: <a href="https://pkg.go.dev/strings#ToLower"><code>strings.ToLower</code></a>
+      </li>
+      <li>
+        <code>{{ trim " padded " }}</code>: <a href="https://pkg.go.dev/strings#Trim"><code>strings.Trim</code></a>
+      </li>
+      <li>
+        <code>{{ trimSuffix "content" "con" }}</code>: <a href="https://pkg.go.dev/strings#TrimSuffix"><code>strings.TrimSuffix</code></a>
+      </li>
+      <li>
+        <code>{{ trimPrefix "content" "ent" }}</code>: <a href="https://pkg.go.dev/strings#TrimPrefix"><code>strings.TrimPrefix</code></a>
+      </li>
+    </ul>
   </main>
   <script src="/static/js/index.js"></script>
 </body>

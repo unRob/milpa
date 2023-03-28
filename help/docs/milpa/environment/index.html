@@ -134,7 +134,7 @@
               <a href="#no-color--color"><code>NO_COLOR</code> / <code>COLOR</code></a>
             </li>
             <li>
-              <a href="#milpa-help-style--milpa-plain-help"><code>MILPA_HELP_STYLE</code> / <code>MILPA_PLAIN_HELP</code></a>
+              <a href="#milpa-help-style"><code>MILPA_HELP_STYLE</code></a>
             </li>
           </ul>
         </li>
@@ -150,7 +150,7 @@
           <a href="#auto-updates">Auto-updates</a>
           <ul>
             <li>
-              <a href="#milpa-disable-update-checks"><code>MILPA_DISABLE_UPDATE_CHECKS</code></a>
+              <a href="#milpa-update-check-disabled"><code>MILPA_UPDATE_CHECK_DISABLED</code></a>
             </li>
             <li>
               <a href="#milpa-update-period-days"><code>MILPA_UPDATE_PERIOD_DAYS</code></a>
@@ -309,8 +309,8 @@
     </div>
     <div class="content-header-wrapper">
       <h3 class="content-header" id="debug"><code>DEBUG</code></h3><a aria-hidden="true" class="heading-anchor" href="#debug" tabindex="-1">#</a>
-    </div><!-- TODO: clean this up before beta, likely make logging more useful to hypothetical non-roberto users -->
-    <p>Set <code>DEBUG=1</code> and find out whatever roberto needed to debug before writing proper tests.</p>
+    </div>
+    <p>Set <code>DEBUG=on</code> to have <code>milpa</code> produce debugging output on its behavior. Set <code>DEBUG=trace</code> to see even more output.</p>
     <div class="content-header-wrapper">
       <h3 class="content-header" id="milpa-verbose"><code>MILPA_VERBOSE</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpa-verbose" tabindex="-1">#</a>
     </div>
@@ -324,11 +324,11 @@
     </div>
     <p>By default, when stdout is a TTY, <code>milpa</code> will output color escape characters. If <code>NO_COLOR</code> is set to any non-empty string, then no color will be output. If not connected to a TTY, and <code>COLOR=always</code> is set, then color escape characters will be printed.</p>
     <p>If either <code>--no-color</code> or <code>--color</code> options are provided, these will override both <code>COLOR</code> and <code>NO_COLOR</code> environment variables.</p>
+    <p>If <code>COLORTERM</code> is set to <code>truecolor</code>, 24-bit colors will be used instead of the default 256-color palette.</p>
     <div class="content-header-wrapper">
-      <h3 class="content-header" id="milpa-help-style--milpa-plain-help"><code>MILPA_HELP_STYLE</code> / <code>MILPA_PLAIN_HELP</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpa-help-style--milpa-plain-help" tabindex="-1">#</a>
+      <h3 class="content-header" id="milpa-help-style"><code>MILPA_HELP_STYLE</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpa-help-style" tabindex="-1">#</a>
     </div>
-    <p><code>MILPA_HELP_STYLE</code> can be one of <code>auto</code>, <code>dark</code>, and <code>light</code> and specifies the theme to use when rendering help pages. This option has no effect if <code>--no-color</code> or <code>NO_COLOR=1</code> is specified.</p>
-    <p><code>MILPA_PLAIN_HELP</code> will not colorize help output at all, formatting help as plain markdown text instead.</p>
+    <p><code>MILPA_HELP_STYLE</code> controls the theme to use when rendering help pages, and must be one of <code>auto</code>, <code>dark</code>, <code>light</code>, and <code>markdown</code>.</p>
     <hr>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="input">Input</h2><a aria-hidden="true" class="heading-anchor" href="#input" tabindex="-1">#</a>
@@ -342,7 +342,7 @@
       <h2 class="content-header" id="auto-updates">Auto-updates</h2><a aria-hidden="true" class="heading-anchor" href="#auto-updates" tabindex="-1">#</a>
     </div>
     <div class="content-header-wrapper">
-      <h3 class="content-header" id="milpa-disable-update-checks"><code>MILPA_DISABLE_UPDATE_CHECKS</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpa-disable-update-checks" tabindex="-1">#</a>
+      <h3 class="content-header" id="milpa-update-check-disabled"><code>MILPA_UPDATE_CHECK_DISABLED</code></h3><a aria-hidden="true" class="heading-anchor" href="#milpa-update-check-disabled" tabindex="-1">#</a>
     </div>
     <p>If set to a non-empty string, update checks will not be performed periodically before running commands.</p>
     <div class="content-header-wrapper">

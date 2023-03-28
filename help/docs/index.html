@@ -108,16 +108,18 @@
       <span class="heading" id="toc-header">In this page</span>
       <ul>
         <li>
-          <a href="#description-displays-docs-on-topic">description: Displays docs on TOPIC</a>
-        </li>
-        <li>
           <a href="#usage">Usage</a>
         </li>
         <li>
-          <a href="#available-topics">Available topics:</a>
+          <a href="#description">Description</a>
+          <ul>
+            <li>
+              <a href="#server-mode">Server mode</a>
+            </li>
+          </ul>
         </li>
         <li>
-          <a href="#description">Description</a>
+          <a href="#available-topics">Available topics</a>
         </li>
         <li>
           <a href="#arguments">Arguments</a>
@@ -247,30 +249,42 @@
   </div>
   <main id="content">
     <h1 id="command-name-header" class="sr-only">milpa help docs</h1>
-    <hr>
-    <div class="content-header-wrapper">
-      <h2 class="content-header" id="description-displays-docs-on-topic">description: Displays docs on TOPIC</h2><a aria-hidden="true" class="heading-anchor" href="#description-displays-docs-on-topic" tabindex="-1">#</a>
-    </div>
     <p>Displays docs on TOPIC</p>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="usage">Usage</h2><a aria-hidden="true" class="heading-anchor" href="#usage" tabindex="-1">#</a>
     </div>
     <p><code>milpa help docs [options] [TOPIC...]</code></p>
     <div class="content-header-wrapper">
-      <h2 class="content-header" id="available-topics">Available topics:</h2><a aria-hidden="true" class="heading-anchor" href="#available-topics" tabindex="-1">#</a>
+      <h2 class="content-header" id="description">Description</h2><a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a>
+    </div>
+    <p>Shows markdown-formatted documentation from milpa repos. See <code>milpa help docs milpa repo docs</code> for more information on how to write your own.</p>
+    <div class="content-header-wrapper">
+      <h3 class="content-header" id="server-mode">Server mode</h3><a aria-hidden="true" class="heading-anchor" href="#server-mode" tabindex="-1">#</a>
+    </div>
+    <p>An HTTP server to browse documentation can be started by running:</p>
+    <pre class="chroma"><code><span class="line"><span class="cl">milpa <span class="nb">help</span> docs --server
+</span></span><span class="line"><span class="cl"><span class="c1"># then head to http://localhost:4242</span>
+</span></span></code></pre>
+    <p>Command and docs are available at their names, replacing spaces with forward slashes <code>/</code>, for example:</p>
+    <ul>
+      <li>
+        <a href="https://milpa.dev/help/docs">https://milpa.dev/help/docs</a> will show this help page.
+      </li>
+      <li>
+        <a href="https://milpa.dev/itself/doctor">https://milpa.dev/itself/doctor</a> shows documentation for the <code>milpa itself doctor</code> command.
+      </li>
+      <li>
+        <a href="https://milpa.dev/help/docs/milpa">https://milpa.dev/help/docs/milpa</a> renders the file at <code>.milpa/docs/milpa.md</code> (or <code>.milpa/docs/milpa/index.md</code>).
+      </li>
+    </ul>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="available-topics">Available topics</h2><a aria-hidden="true" class="heading-anchor" href="#available-topics" tabindex="-1">#</a>
     </div>
     <ul>
       <li>
         <a href="milpa">milpa</a>
       </li>
     </ul>
-    <div class="content-header-wrapper">
-      <h2 class="content-header" id="description">Description</h2><a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a>
-    </div>
-    <p>Shows markdown-formatted documentation from milpa repos. See <code>milpa help docs milpa repo docs</code> for more information on how to write your own.</p>
-    <p>An HTTP server to browse documentation can be started by running:</p>
-    <pre class="chroma"><code><span class="line"><span class="cl">milpa <span class="nb">help</span> docs --server
-</span></span></code></pre>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="arguments">Arguments</h2><a aria-hidden="true" class="heading-anchor" href="#arguments" tabindex="-1">#</a>
     </div>
@@ -295,7 +309,6 @@
       <li><code>--silent</code> (<em>bool</em>): Silence non-error logging.</li>
       <li><code>--skip-validation</code> (<em>bool</em>): Do not validate any arguments or options.</li>
       <li><code>--verbose</code> (<em>bool</em>): Log verbose output to stderr.</li>
-      <li><code>--version</code> (<em>bool</em>): Display program version and exit.</li>
     </ul>
   </main>
   <script src="/static/js/index.js"></script>
