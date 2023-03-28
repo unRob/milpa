@@ -50,7 +50,7 @@ func TestRenderDocsHelpMain(t *testing.T) {
 	}
 
 	expected := `
-## Available topics:
+## Available topics
 
 - [milpa](milpa)
 `

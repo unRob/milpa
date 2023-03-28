@@ -172,7 +172,7 @@ func RenderHandler(serverAddr string) func(http.ResponseWriter, *http.Request) {
 
 		md, toc, err := mdToHTML(contents)
 		if err != nil {
-			log.Errorf("could convert to html: %s", err)
+			log.Errorf("could not convert to html: %s", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}

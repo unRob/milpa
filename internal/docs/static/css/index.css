@@ -82,6 +82,16 @@ header .emoji-maiz:hover::before {
   mix-blend-mode: normal;
 }
 
+
+::selection {
+  background-color: #CEFCD3;
+}
+
+header ::selection {
+  background-color: #5D7260;
+}
+
+
 #command-selector {
   font-size: 32px;
   margin: 0;
@@ -149,6 +159,7 @@ header .emoji-maiz:hover::before {
   height: calc(100vh - 73px);
   overflow-y: auto;
   z-index: 10;
+  background: #fff;
 }
 
 #table-of-contents {
@@ -376,6 +387,22 @@ hr {
     background-color: #2B3C2D;
   }
 
+  html {
+    scrollbar-color: #96b452 rgba(0,0,0,.1);
+    scrollbar-gutter: both-edges;
+  }
+
+  ::selection {
+    background-color: #5D7260;
+  }
+  ::-moz-selection {
+    background-color: #132b17;
+  }
+
+  header ::-moz-selection{
+    background-color: #132b17;
+  }
+
   #sidebar {
     background-color: #5D7260;
     color: #CEFCD3;
@@ -391,7 +418,7 @@ hr {
   }
 
   ::-webkit-scrollbar-track-piece {
-    background-color: rgba(0,0,0,.1);
+    background-color: ;
     border-radius: none;
   }
 

@@ -89,7 +89,7 @@ Command and docs are available at their names, replacing spaces with forward sla
 - ` + base + `/itself/doctor shows documentation for the ﹅milpa itself doctor﹅ command.
 - ` + base + `/help/docs/milpa renders the file at ﹅.milpa/docs/milpa.md﹅ (or ﹅.milpa/docs/milpa/index.md﹅).
 
-## Available topics:
+## Available topics
 
 ` + strings.Join(topicList, "\n")
 	}
