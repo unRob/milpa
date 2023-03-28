@@ -112,7 +112,8 @@ var Docs = &command.Command{
 					dlog.Debugf("looking for docs given %v and %s", args, currentValue)
 
 					cv := ""
-					if len(args) > 1 {
+					if len(args) > 1 && args[len(args)-1] == "" {
+						// remove last argument from docs path lookup base
 						cv = args[len(args)-1]
 						args = args[0 : len(args)-1]
 					}
