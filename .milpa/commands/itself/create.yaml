@@ -21,10 +21,10 @@ options:
     description: Open the script file in your current $EDITOR after creation
   executable:
     type: bool
-    description: Create an empty, executable command. Useful when you'd like using something other than bash.
+    description: Create an empty, executable command. Useful when you'd like using something other than bash
   repo:
     type: string
-    description: a path to the milpa repo to create this command in. By default, the nearest .milpa directory from `pwd` and up.
+    description: a path to the milpa repo to create this command in. By default, the nearest .milpa directory from `pwd` and up
     values:
       suggest-only: true
       script: find . -type d -maxdepth 1 && milpa itself repo list --paths-only

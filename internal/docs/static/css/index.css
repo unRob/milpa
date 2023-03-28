@@ -396,7 +396,7 @@ hr {
     background-color: #5D7260;
   }
   ::-moz-selection {
-    background-color: #132b17;
+    background-color: rgba(0,0,0,.6);
   }
 
   header ::-moz-selection{

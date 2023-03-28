@@ -5,7 +5,7 @@ description: |
     - machine-wide repositories are installed to `$MILPA_ROOT`, usually at `/usr/local/lib/milpa`,
     - user-specific repositories are installed to `$XDG_DATA_HOME/milpa` folder, usually `$HOME/.local/share/milpa/`
 
-  For more information on installing packages, see [`milpa itself repo install --help`](/.milpa/commands/itself/repo/install.md)
+  For more information on installing packages, see [`milpa itself repo install --help`](/.milpa/commands/itself/repo/install.md).
 options:
   paths-only:
     description: Only output the paths to repos with no decoration
