@@ -1,0 +1,2 @@
+summary: subcommands that operate on `milpa`, itself
+description: These commands are helpful to operate on milpa repos and the tool itself.

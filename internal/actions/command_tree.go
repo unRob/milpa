@@ -27,7 +27,7 @@ type serializar func(interface{}) ([]byte, error)
 func addMetaToTree(t *tree.CommandTree) {
 	if t.Command != nil && t.Command.Meta == nil {
 		meta := &milpaCmd.Meta{
-			Path: "",
+			Path: t.Command.Name(),
 			Repo: "",
 			Name: t.Command.Path,
 			Kind: milpaCmd.KindVirtual,

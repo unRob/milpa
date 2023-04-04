@@ -126,6 +126,7 @@ options:
     # the `values` property specifies how to provide completions and perform validation on
     values: {}
 ```
+---
 
 ## Value completion and validation
 
@@ -190,3 +191,26 @@ Additionally, the following Go functions are available:
 - `{{ trim " padded " }}`: [`strings.Trim`](https://pkg.go.dev/strings#Trim)
 - `{{ trimSuffix "content" "con" }}`: [`strings.TrimSuffix`](https://pkg.go.dev/strings#TrimSuffix)
 - `{{ trimPrefix "content" "ent" }}`: [`strings.TrimPrefix`](https://pkg.go.dev/strings#TrimPrefix)
+
+---
+
+## _Group Command_ Spec
+
+A _group command_, that is, a command whose only job is to serve as a grouping mechanism for other commands, can also have a limited spec. These are useful to provide clearer documentation on what that set of commands are to be used for, as well as setting group-level **options** (see above).
+
+Let's say we have a few commands under the group `milpa test`: `milpa test unit` and `milpa test integration`. A `summary`, `description` and `options` can be defined for this group by creating a spec at `.milpa/commands/test/_test.yaml`, that is, the name of the group (in this case `test`) prefixed by a single underscore (`_`) with.For example:
+
+```yaml
+# .milpa/commands/test/_test.yaml
+summary: Commands for running tests
+description: |
+  Holds commands to run unit tests and integration tests.
+# any options defined in a group command spec
+# will be available to any immediate children of `test`
+options:
+  coverage:
+    type: bool
+    description: generate coverage reports
+```
+
+> ⚠️ `arguments` are not allowed as part of a _group command_ spec.

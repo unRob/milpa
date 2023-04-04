@@ -235,7 +235,10 @@ func (me *milpaExtension) Extend(m goldmark.Markdown) {
 func commandSerializer(pageTree *Page, names *[]string) func(cmd *command.Command) error {
 	return func(cmd *command.Command) error {
 		current := pageTree
-		path := cmd.Path[1:]
+		path := cmd.Path
+		if path[0] == "milpa" {
+			path = path[1:]
+		}
 		log.Tracef("creating tree for %s, current: %d", path, len(*current.Children))
 		for idx, c := range path {
 			if len(path)-1 == idx {
@@ -244,7 +247,7 @@ func commandSerializer(pageTree *Page, names *[]string) func(cmd *command.Comman
 					Path:     strings.Join(path, "/"),
 					Children: &Pages{},
 				})
-				*names = append(*names, strings.Join(cmd.Path[1:], " "))
+				*names = append(*names, strings.Join(path, " "))
 				log.Tracef("inserted %s at %s (%d)", cmd.Name(), current.Path, len(*current.Children))
 				return nil
 			}
