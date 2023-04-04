@@ -198,6 +198,7 @@ func TestAllSubCommands(t *testing.T) {
 		list = append(list, cmd.FullName())
 	}
 	expected := []string{
+		"itself", // this virtual command is found since it has a defaults set
 		"itself command-tree",
 		"itself create",
 		"itself install-autocomplete",

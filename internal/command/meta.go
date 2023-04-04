@@ -3,6 +3,7 @@
 package command
 
 import (
+	"path/filepath"
 	"strings"
 
 	_c "github.com/unrob/milpa/internal/constants"
@@ -31,18 +32,26 @@ type Meta struct {
 }
 
 func metaForPath(path string, repo string) (meta Meta) {
-	meta.Path = path
+	var name string
+	if strings.HasSuffix(path, ".yaml") {
+		name = filepath.Dir(path)
+		name = strings.TrimPrefix(name, repo+"/"+_c.RepoCommandFolderName+"/")
+		meta.Path = name
+		meta.Kind = KindVirtual
+	} else {
+		meta.Path = path
+		name = strings.TrimSuffix(path, ".sh")
+		name = strings.TrimPrefix(name, repo+"/"+_c.RepoCommandFolderName+"/")
+
+		if strings.HasSuffix(path, ".sh") {
+			meta.Kind = KindSource
+		} else {
+			meta.Kind = KindExecutable
+		}
+	}
 	meta.Repo = repo
-	name := strings.TrimSuffix(path, ".sh")
-	name = strings.TrimPrefix(name, repo+"/"+_c.RepoCommandFolderName+"/")
 	meta.Name = strings.Split(name, "/")
 	meta.issues = []error{}
-
-	if strings.HasSuffix(path, ".sh") {
-		meta.Kind = "source"
-	} else {
-		meta.Kind = "exec"
-	}
 
 	return
 }

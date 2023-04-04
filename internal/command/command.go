@@ -17,8 +17,14 @@ import (
 func New(path string, repo string) (cmd *command.Command, err error) {
 	meta := metaForPath(path, repo)
 	cmd = &command.Command{
-		Path: meta.Name,
-		Action: func(cmd *command.Command) error {
+		Path:      meta.Name,
+		Arguments: []*command.Argument{},
+		Options:   command.Options{},
+	}
+
+	var spec string
+	if meta.Kind != "virtual" {
+		cmd.Action = func(cmd *command.Command) error {
 			if err := canRun(cmd); err != nil {
 				return err
 			}
@@ -32,12 +38,12 @@ func New(path string, repo string) (cmd *command.Command, err error) {
 
 			fmt.Println(env)
 			return nil
-		},
+		}
+		spec = strings.TrimSuffix(path, ".sh") + ".yaml"
+	} else {
+		spec = path
 	}
-	cmd.Arguments = []*command.Argument{}
-	cmd.Options = command.Options{}
 
-	spec := strings.TrimSuffix(path, ".sh") + ".yaml"
 	var contents []byte
 	if contents, err = os.ReadFile(spec); err == nil {
 		err = yaml.Unmarshal(contents, cmd)

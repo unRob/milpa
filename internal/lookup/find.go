@@ -45,6 +45,12 @@ func Scripts(query []string) (results map[string]string, err error) {
 				if extension != ".yaml" {
 					log.Debugf("ignoring /%s, unknown extension", match)
 				}
+
+				if "_"+filepath.Base(filepath.Dir(match))+".yaml" == filepath.Base(match) {
+					log.Debugf("found virtual command description: /%s", match)
+					results["/"+match] = path
+				}
+
 				continue
 			}
 

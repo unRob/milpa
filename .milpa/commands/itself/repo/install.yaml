@@ -16,7 +16,7 @@ description: |
 
 arguments:
   - name: source
-    description: A go-getter URL to fetch the repo from.
+    description: A go-getter URL to fetch the repo from
     required: true
     values:
       static:

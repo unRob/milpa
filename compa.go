@@ -45,7 +45,7 @@ func main() {
 		Name:    "milpa",
 		Version: version,
 		Summary: "Runs commands found in " + _c.RepoRoot + " folders",
-		Description: `﹅milpa﹅ is a command-line tool to care for one's own garden of scripts, providing autocomplete, sub-commands, argument parsing and validation, along beautiful documentation—just add a simple YAML spec and a bash (or your language of choice) script.
+		Description: `﹅milpa﹅ is a command-line tool to care for one's own garden of scripts, providing autocomplete, sub-commands, argument parsing and validation, along beautiful documentation—all it takes is a YAML spec and a script: bash or your language of choice.
 
 See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more information about ﹅milpa﹅.`,
 	}
