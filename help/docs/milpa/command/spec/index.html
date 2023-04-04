@@ -127,6 +127,9 @@
             </li>
           </ul>
         </li>
+        <li>
+          <a href="#-group-command--spec"><em>Group Command</em> Spec</a>
+        </li>
       </ul>
     </nav>
     <nav id="commands" aria-labelledby="commands-header">
@@ -361,6 +364,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># the `values` property specifies how to provide completions and perform validation on</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">values</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
 </span></span></span></code></pre>
+    <hr>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="value-completion-and-validation">Value completion and validation</h2><a aria-hidden="true" class="heading-anchor" href="#value-completion-and-validation" tabindex="-1">#</a>
     </div>
@@ -443,6 +447,26 @@
         <code>{{ trimPrefix "content" "ent" }}</code>: <a href="https://pkg.go.dev/strings#TrimPrefix"><code>strings.TrimPrefix</code></a>
       </li>
     </ul>
+    <hr>
+    <div class="content-header-wrapper">
+      <h2 class="content-header" id="-group-command--spec"><em>Group Command</em> Spec</h2><a aria-hidden="true" class="heading-anchor" href="#-group-command--spec" tabindex="-1">#</a>
+    </div>
+    <p>A <em>group command</em>, that is, a command whose only job is to serve as a grouping mechanism for other commands, can also have a limited spec. These are useful to provide clearer documentation on what that set of commands are to be used for, as well as setting group-level <strong>options</strong> (see above).</p>
+    <p>Let's say we have a few commands under the group <code>milpa test</code>: <code>milpa test unit</code> and <code>milpa test integration</code>. A <code>summary</code>, <code>description</code> and <code>options</code> can be defined for this group by creating a spec at <code>.milpa/commands/test/_test.yaml</code>, that is, the name of the group (in this case <code>test</code>) prefixed by a single underscore (<code>_</code>) with.For example:</p>
+    <pre class="chroma"><code><span class="line"><span class="cl"><span class="c"># .milpa/commands/test/_test.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l">Commands for running tests</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">  Holds commands to run unit tests and integration tests.</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="c"># any options defined in a group command spec</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># will be available to any immediate children of `test`</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">options</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">coverage</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">bool</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">generate coverage reports</span><span class="w">
+</span></span></span></code></pre>
+    <blockquote>
+      <p>⚠️ <code>arguments</code> are not allowed as part of a <em>group command</em> spec.</p>
+    </blockquote>
   </main>
   <script src="/static/js/index.js"></script>
 </body>
