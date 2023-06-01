@@ -10,7 +10,7 @@ require (
 	github.com/charmbracelet/glamour v0.6.0
 	github.com/fatih/color v1.15.0
 	github.com/hashicorp/go-getter v1.7.1
-	github.com/sirupsen/logrus v1.9.0
+	github.com/sirupsen/logrus v1.9.2
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/pflag v1.0.5
 	github.com/yuin/goldmark v1.5.4
