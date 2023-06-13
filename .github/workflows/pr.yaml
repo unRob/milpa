@@ -24,7 +24,7 @@ jobs:
           bats-version: 1.8.2
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3.4.0
+        uses: golangci/golangci-lint-action@v3.6.0
         with:
           skip-pkg-cache: true
           version: v1.51.2
