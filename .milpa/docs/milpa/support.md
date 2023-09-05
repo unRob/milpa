@@ -7,8 +7,8 @@ weight: 99
 `milpa` is currently alpha software. This means that while I've personally tested it for over a year:
 
 - test coverage is pretty lacking,
-- the command spec and script environment is subject to change, and
-- there's **no guarantee of stability** of any internal command or utility
+- the command spec and script environment is subject to change, and,
+- there's **no guarantee of stability** of any internal command or utility.
 
 ## ℹ️ Requesting help
 

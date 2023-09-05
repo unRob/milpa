@@ -87,4 +87,4 @@ How often to check for new releases to `milpa` in days, by default `7`.
 
 ## Command Environment
 
-Your commands will also have specific environment variables available, check out [milpa help docs milpa command](/.milpa/docs/milpa/command/index.md#arguments-options-and-environment)
+Your commands will also have specific environment variables available, check out [milpa help docs milpa command](/.milpa/docs/milpa/command/index.md#arguments-options-and-environment).
