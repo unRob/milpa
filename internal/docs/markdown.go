@@ -96,7 +96,7 @@ type tocTransformer struct {
 
 var _ parser.ASTTransformer = &tocTransformer{}
 
-func (t *tocTransformer) Transform(doc *ast.Document, reader text.Reader, pctx parser.Context) {
+func (t *tocTransformer) Transform(doc *ast.Document, reader text.Reader, _ parser.Context) {
 	root := &Entry{Entries: Entries{}}
 
 	current := []*Entry{root}

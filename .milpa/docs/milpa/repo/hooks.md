@@ -7,7 +7,7 @@ description: Hook points for milpa commands
 
 ## `before-run.sh`
 
-This hook runs before invoking any command from your repo, and may be useful to do additional validations or checks before actually calling any of your commands. The full [environment](/.milpa/docs/milpa/environment.md) is available for this hook. This hook must be a bash shell script with an `.sh` extension.
+This hook runs before invoking any command from your repo, and may be useful to do additional validations or checks before actually calling any of your commands. The full environment (see [`milpa docs milpa environment`](/.milpa/docs/milpa/environment.md)), including command [arguments, options and metadata](/.milpa/docs/milpa/command/index.md#arguments-options-and-environment), is available for this hook. This hook must be a bash shell script with an `.sh` extension.
 
 ## `post-install.sh`
 

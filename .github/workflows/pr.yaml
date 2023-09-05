@@ -21,13 +21,13 @@ jobs:
       - name: Setup BATS
         uses: mig4/setup-bats@v1
         with:
-          bats-version: 1.8.2
+          bats-version: 1.10.0
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3.7.0
         with:
           skip-pkg-cache: true
-          version: v1.51.2
+          version: v1.54.2
           args: --timeout 3m --verbose
 
       - name: shellcheck

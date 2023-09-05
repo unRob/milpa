@@ -112,6 +112,6 @@ var Doctor = &command.Command{
 			return fmt.Errorf("your milpa could use some help with the following commands:\n%s", strings.Join(failureReport, "\n"))
 		}
 
-		return
+		return nil
 	},
 }

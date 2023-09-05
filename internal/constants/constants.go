@@ -30,7 +30,7 @@ const EnvVarMilpaRoot = "MILPA_ROOT"
 const EnvVarCompaOut = "COMPA_OUT"
 const EnvVarDebug = "DEBUG"
 const EnvVarLookupGitDisabled = "MILPA_DISABLE_GIT"
-const EnvVarLookupUserReposDisabled = "MILPA_DISABLE_USER_REPOS"
+const EnvVarLookupUserReposDisabled = "MILPA_DISABLE_USER_REPOS" // nolint:gosec
 const EnvVarLookupGlobalReposDisabled = "MILPA_DISABLE_GLOBAL_REPOS"
 
 // Folder structure.
