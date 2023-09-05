@@ -43,9 +43,9 @@ fi
 
 @milpa.log info "Installing go packages"
 packages=(
-  gotest.tools/gotestsum@v1.9.0
+  gotest.tools/gotestsum@v1.10.1
   github.com/mitchellh/gox@9f71238 # used to be 1.0.1 but there doesn't seem to be more releases?
-  github.com/golangci/golangci-lint/cmd/golangci-lint@v1.51.2
+  github.com/golangci/golangci-lint/cmd/golangci-lint@v1.54.2
 )
 
 for package in "${packages[@]}"; do
@@ -68,6 +68,11 @@ go mod tidy || @milpa.fail "go mod tidy failed"
 ## shellcheck
 if ! command -v shellcheck >/dev/null; then
   @milpa.fail "Shellcheck is not installed, see https://github.com/koalaman/shellcheck#installing"
+fi
+
+## bats
+if ! command -v bats >/dev/null; then
+  @milpa.fail "bats is not installed, see https://bats-core.readthedocs.io/en/stable/installation.html"
 fi
 
 exec milpa dev build
