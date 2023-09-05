@@ -13,7 +13,7 @@ func stringptr(str string) *string {
 	return &str
 }
 
-func uintptr(number uint) *uint {
+func uintPointer(number uint) *uint {
 	return &number
 }
 
@@ -33,9 +33,9 @@ func init() {
 	glamour.DarkStyleConfig.Document.StylePrimitive.Color = nil
 	glamour.LightStyleConfig.Document.Margin = &zero
 	glamour.LightStyleConfig.Document.StylePrimitive.Color = nil
-	glamour.DarkStyleConfig.List.Margin = uintptr(2)
-	glamour.LightStyleConfig.List.Margin = uintptr(2)
-	glamour.NoTTYStyleConfig.List.Margin = uintptr(2)
+	glamour.DarkStyleConfig.List.Margin = uintPointer(2)
+	glamour.LightStyleConfig.List.Margin = uintPointer(2)
+	glamour.NoTTYStyleConfig.List.Margin = uintPointer(2)
 
 	if os.Getenv(constants.EnvVarColorBitDepth) != "truecolor" {
 		// Apple's Terminal.app does not support "true color", which is sad.

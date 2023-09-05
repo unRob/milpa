@@ -24,7 +24,7 @@ var DefaultFS = os.DirFS("/")
 func Scripts(query []string) (results map[string]string, err error) {
 	if len(bootstrap.MilpaPath) == 0 {
 		err = fmt.Errorf("no %s set on the environment", _c.EnvVarMilpaPath)
-		return
+		return results, err
 	}
 
 	log.Debugf("looking for scripts in %s=%s", _c.EnvVarMilpaPath, strings.Join(bootstrap.MilpaPath, ":"))
