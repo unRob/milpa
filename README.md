@@ -44,7 +44,7 @@ milpa help docs --server
 milpa itself doctor
 
 # Install whole groups of commands written by strangers on the internet!
-milpa itself repo install github.com/nidito/unRob
+milpa itself repo install git@github.com:/unRob/nidito.git
 # and use them like so:
 # milpa nidito dc list
 

@@ -202,14 +202,16 @@ func TestAllSubCommands(t *testing.T) {
 		"itself command-tree",
 		"itself create",
 		"itself install-autocomplete",
+		"itself repo",
 		"itself repo install",
 		"itself repo list",
 		"itself repo uninstall",
+		"itself repo upgrade",
 		"itself upgrade",
 		"itself version",
 	}
 	if len(list) != len(expected) || fmt.Sprintf("%s", expected) != fmt.Sprintf("%s", list) {
-		t.Fatalf("Did not find expected commands:\nwanted: %v\ngot: %v", expected, list)
+		t.Fatalf("Did not find expected commands:\nwanted: %+v\ngot: %+v", expected, list)
 	}
 }
 

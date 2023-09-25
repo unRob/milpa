@@ -10,3 +10,6 @@ options:
   paths-only:
     description: Only output the paths to repos with no decoration
     type: bool
+  cloned:
+    description: Only output cloned repos
+    type: bool

@@ -55,7 +55,6 @@ See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more informat
 	chinampa.Register(actions.Doctor)
 	chinampa.Register(actions.Docs)
 	chinampa.Register(actions.CommandTree)
-	chinampa.Register(actions.Fetch)
 
 	err = lookup.AllSubCommands(!isDoctor)
 	if err != nil && !isDoctor {

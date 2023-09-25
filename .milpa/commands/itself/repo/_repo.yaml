@@ -1,0 +1,3 @@
+summary: subcommands that operate with `milpa` repos
+description: |
+  Repositories are folders that contain a `.milpa` folder within. See [`milpa help docs milpa repo`](/.milpa/docs/milpa/repo/index.md) for more information on `milpa` repositories.
