@@ -7,18 +7,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="en">
-  <meta property="og:title" content="milpa help">
+  <meta property="og:title" content="milpa itself repo upgrade">
   <meta property="og:site_name" content="🌽 milpa">
-  <meta property="og:description" content="Display usage information for any command">
-  <meta name="description" content="Display usage information for any command">
-  <meta property="og:url" content="https://milpa.dev/help">
+  <meta property="og:description" content="Upgrades an installed milpa repo">
+  <meta name="description" content="Upgrades an installed milpa repo">
+  <meta property="og:url" content="https://milpa.dev/itself/repo/upgrade">
   <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
-  <title>milpa help</title>
+  <title>milpa itself repo upgrade</title>
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2">
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLight.woff2">
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBold.woff2">
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoBoldItalic.woff2">
-  <link rel="canonical" href="https://milpa.dev/help">
+  <link rel="canonical" href="https://milpa.dev/itself/repo/upgrade">
   <link rel="stylesheet" href="/static/css/highlight-light.css">
   <link rel="stylesheet" href="/static/css/highlight-dark.css">
   <link rel="stylesheet" href="/static/css/index.css">
@@ -30,7 +30,7 @@
 <body>
   <header role="banner">
     <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
-    <h1 lang="es"><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1><input list="milpa-commands" placeholder="type a milpa command" type="text" aria-label="milpa command selector" id="command-selector" pattern='|help|help docs|help docs milpa|help docs milpa changelog|help docs milpa command|help docs milpa command spec|help docs milpa environment|help docs milpa internals|help docs milpa quick-guide|help docs milpa repo|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa support|help docs milpa use-case|help docs milpa util|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util user-input|itself|itself command-tree|itself create|itself doctor|itself install-autocomplete|itself repo|itself repo install|itself repo list|itself repo uninstall|itself repo upgrade|itself upgrade|itself version' value="help"> <datalist id="milpa-commands">
+    <h1 lang="es"><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1><input list="milpa-commands" placeholder="type a milpa command" type="text" aria-label="milpa command selector" id="command-selector" pattern='|help|help docs|help docs milpa|help docs milpa changelog|help docs milpa command|help docs milpa command spec|help docs milpa environment|help docs milpa internals|help docs milpa quick-guide|help docs milpa repo|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa support|help docs milpa use-case|help docs milpa util|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util user-input|itself|itself command-tree|itself create|itself doctor|itself install-autocomplete|itself repo|itself repo install|itself repo list|itself repo uninstall|itself repo upgrade|itself upgrade|itself version' value="itself repo upgrade"> <datalist id="milpa-commands">
       <option value="help">
       </option>
       <option value="help docs">
@@ -114,14 +114,9 @@
         </li>
         <li>
           <a href="#description">Description</a>
-          <ul>
-            <li>
-              <a href="#colorized-output">Colorized output</a>
-            </li>
-          </ul>
         </li>
         <li>
-          <a href="#subcommands">Subcommands</a>
+          <a href="#arguments">Arguments</a>
         </li>
         <li>
           <a href="#global-options">Global Options</a>
@@ -132,7 +127,7 @@
       <span class="heading" id="commands-header">Commands</span>
       <ul>
         <li>
-          <strong class="command-menu-selected-prefix">help</strong>
+          <a href="/help/" class="">help</a>
           <ul class="sub-menu" aria-label="help subcommands">
             <li>
               <a href="/help/docs/" class="">docs</a>
@@ -204,7 +199,7 @@
           </ul>
         </li>
         <li>
-          <a href="/itself/" class="">itself</a>
+          <a href="/itself/" class="command-menu-selected-prefix">itself</a>
           <ul class="sub-menu" aria-label="itself subcommands">
             <li>
               <a href="/itself/command-tree/" class="">command-tree</a>
@@ -219,7 +214,7 @@
               <a href="/itself/install-autocomplete/" class="">install-autocomplete</a>
             </li>
             <li>
-              <a href="/itself/repo/" class="">repo</a>
+              <a href="/itself/repo/" class="command-menu-selected-prefix">repo</a>
               <ul class="sub-menu" aria-label="repo subcommands">
                 <li>
                   <a href="/itself/repo/install/" class="">install</a>
@@ -230,9 +225,7 @@
                 <li>
                   <a href="/itself/repo/uninstall/" class="">uninstall</a>
                 </li>
-                <li>
-                  <a href="/itself/repo/upgrade/" class="">upgrade</a>
-                </li>
+                <li><strong class="command-menu-selected-prefix">upgrade</strong></li>
               </ul>
             </li>
             <li>
@@ -247,27 +240,21 @@
     </nav>
   </div>
   <main id="content">
-    <h1 id="command-name-header" class="sr-only">milpa help</h1>
-    <p>Display usage information for any command</p>
+    <h1 id="command-name-header" class="sr-only">milpa itself repo upgrade</h1>
+    <p>Upgrades an installed milpa repo</p>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="usage">Usage</h2><a aria-hidden="true" class="heading-anchor" href="#usage" tabindex="-1">#</a>
     </div>
-    <p><code>milpa help SUBCOMMAND</code></p>
+    <p><code>milpa itself repo upgrade [options] [PATH]</code></p>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="description">Description</h2><a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a>
     </div>
-    <p>Provides documentation for any command known to <code>milpa</code>, including its known arguments and options.</p>
+    <p>Upgrades a milpa repo by PATH, or all git-cloned repos if no PATH provided. See <a href="/itself/repo/list/"><code>milpa itself repo list --help</code></a> for a list of available repos.</p>
     <div class="content-header-wrapper">
-      <h3 class="content-header" id="colorized-output">Colorized output</h3><a aria-hidden="true" class="heading-anchor" href="#colorized-output" tabindex="-1">#</a>
-    </div>
-    <p>By default, and unless <code>NO_COLOR</code> is set, <code>milpa help</code> will query the environment variable <code>COLORFGBG</code> to decide which style to use when rendering help, unless if <code>HELP_STYLE</code> is set to any of the following values: <strong>light</strong>, <strong>dark</strong>, <strong>markdown</strong>, or <strong>auto</strong>. 24-bit color is available when <code>COLORTERM</code> is set to <code>truecolor</code>.</p>
-    <div class="content-header-wrapper">
-      <h2 class="content-header" id="subcommands">Subcommands</h2><a aria-hidden="true" class="heading-anchor" href="#subcommands" tabindex="-1">#</a>
+      <h2 class="content-header" id="arguments">Arguments</h2><a aria-hidden="true" class="heading-anchor" href="#arguments" tabindex="-1">#</a>
     </div>
     <ul>
-      <li>
-        <a href="docs/"><code>docs</code></a> - Displays docs on TOPIC
-      </li>
+      <li><code>PATH</code> - The repo path to upgrade</li>
     </ul>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="global-options">Global Options</h2><a aria-hidden="true" class="heading-anchor" href="#global-options" tabindex="-1">#</a>

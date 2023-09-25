@@ -30,7 +30,7 @@
 <body>
   <header role="banner">
     <a tabindex="0" id="skip-to-content" class="sr-only" href="#content">Skip to content</a>
-    <h1 lang="es"><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1><input list="milpa-commands" placeholder="type a milpa command" type="text" aria-label="milpa command selector" id="command-selector" pattern='|help|help docs|help docs milpa|help docs milpa changelog|help docs milpa command|help docs milpa command spec|help docs milpa environment|help docs milpa internals|help docs milpa quick-guide|help docs milpa repo|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa support|help docs milpa use-case|help docs milpa util|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util user-input|itself|itself command-tree|itself create|itself doctor|itself install-autocomplete|itself repo|itself repo install|itself repo list|itself repo uninstall|itself upgrade|itself version' value="itself repo install"> <datalist id="milpa-commands">
+    <h1 lang="es"><a aria-label="Go to the home page" class="emoji-maiz" href="/">milpa</a></h1><input list="milpa-commands" placeholder="type a milpa command" type="text" aria-label="milpa command selector" id="command-selector" pattern='|help|help docs|help docs milpa|help docs milpa changelog|help docs milpa command|help docs milpa command spec|help docs milpa environment|help docs milpa internals|help docs milpa quick-guide|help docs milpa repo|help docs milpa repo docs|help docs milpa repo hooks|help docs milpa support|help docs milpa use-case|help docs milpa util|help docs milpa util log|help docs milpa util repo|help docs milpa util shell|help docs milpa util tmp|help docs milpa util user-input|itself|itself command-tree|itself create|itself doctor|itself install-autocomplete|itself repo|itself repo install|itself repo list|itself repo uninstall|itself repo upgrade|itself upgrade|itself version' value="itself repo install"> <datalist id="milpa-commands">
       <option value="help">
       </option>
       <option value="help docs">
@@ -88,6 +88,8 @@
       <option value="itself repo list">
       </option>
       <option value="itself repo uninstall">
+      </option>
+      <option value="itself repo upgrade">
       </option>
       <option value="itself upgrade">
       </option>
@@ -229,6 +231,9 @@
                 <li>
                   <a href="/itself/repo/uninstall/" class="">uninstall</a>
                 </li>
+                <li>
+                  <a href="/itself/repo/upgrade/" class="">upgrade</a>
+                </li>
               </ul>
             </li>
             <li>
@@ -248,23 +253,23 @@
     <div class="content-header-wrapper">
       <h2 class="content-header" id="usage">Usage</h2><a aria-hidden="true" class="heading-anchor" href="#usage" tabindex="-1">#</a>
     </div>
-    <p><code>milpa itself repo install [options] SOURCE [TARGET]</code></p>
+    <p><code>milpa itself repo install [options] SOURCE</code></p>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="description">Description</h2><a aria-hidden="true" class="heading-anchor" href="#description" tabindex="-1">#</a>
     </div>
-    <p>Fetches a milpa repo and installs it to any of three locations:</p>
+    <p>Installs a milpa repo from a local directory or remote git repository into either:</p>
     <ul>
-      <li>The path specified by the <code>TARGET</code> argument, if provided,</li>
-      <li>In the <code>$MILPA_ROOT</code> (by default, /usr/local/lib/milpa), if <code>--global</code> is specified, or</li>
-      <li>In <code>$XDG_DATA_HOME/milpa</code> folder, if <code>--user</code> is specified.</li>
+      <li><code>$XDG_DATA_HOME/milpa</code> (usually <code>$HOME/.local/share</code>): by default, or if <code>--user</code> is specified, or</li>
+      <li><code>$MILPA_ROOT</code> (usually, /usr/local/lib/milpa), if <code>--global</code> is specified.</li>
     </ul>
-    <p>Repos will be fetched from the <code>.milpa</code> subdirectory of <code>SOURCE</code>, which must be an URL as specified by <a href="https://github.com/hashicorp/go-getter#url-format">go-getter</a>. Basically, an https, git, hg, s3 or gcs URL. If <code>SOURCE</code> is a path to a local directory on the system, it'll be symlinked to the <code>TARGET</code> accordingly.</p>
+    <p>When <code>SOURCE</code> points to a local path (either a folder containing a <code>.milpa</code> folder, or the <code>.milpa</code> folder itself), <code>milpa repo install</code> will symlink it into the local or global repositories.</p>
+    <p>Oherwise,<code>SOURCE</code> will be interpreted as a <a href="https://www.git-scm.com/docs/git-clone#_git_urls">git URL</a>, and a shallow clone will be performed against the <code>.milpa</code> folder of the repo only.</p>
     <div class="content-header-wrapper">
       <h3 class="content-header" id="examples">Examples</h3><a aria-hidden="true" class="heading-anchor" href="#examples" tabindex="-1">#</a>
     </div>
     <ul>
-      <li><code>github.com/unRob/milpa</code> would download the <code>.milpa</code> folder from the <code>unRob/milpa</code> github repo, using <strong>https</strong>, and prompting for credentials for private repos.</li>
-      <li><code>git::ssh://git@github.com/unRob/milpa.git//internal</code> would download the <code>internal/.milpa</code> folder from the <code>unRob/milpa</code> github repo using <strong>ssh credentials</strong>, useful for skipping credential prompts for private repos.</li>
+      <li><code>https://github.com/unRob/dotfiles.git</code> would download the <code>.milpa</code> folder from the <code>unRob/dotfiles</code> github repo, using <strong>https</strong>, and prompting for credentials for private repos.</li>
+      <li><code>git@git.rob.mx/unRob/dotfiles.git</code> would download the <code>.milpa</code> folder from the <code>unRob/dotfiles</code> git repo using <strong>ssh credentials</strong>, useful for skipping credential prompts for private repos.</li>
       <li>
         <code>~/.dotfiles</code> would symlink <code>$HOME/.dotfiles/.milpa</code> to the target. An alternative to this is to set <code>MILPA_PATH</code> to <code>$HOME/.dotfiles</code> (see <a href="/help/docs/milpa/environment/"><code>milpa help docs milpa environment</code></a>).
       </li>
@@ -273,8 +278,7 @@
       <h2 class="content-header" id="arguments">Arguments</h2><a aria-hidden="true" class="heading-anchor" href="#arguments" tabindex="-1">#</a>
     </div>
     <ul>
-      <li><code>SOURCE</code> <em>required</em> - A go-getter URL to fetch the repo from</li>
-      <li><code>TARGET</code> - The path where to place the resulting <code>.milpa</code> folder in</li>
+      <li><code>SOURCE</code> <em>required</em> - A path or git clone URL to install</li>
     </ul>
     <div class="content-header-wrapper">
       <h2 class="content-header" id="options">Options</h2><a aria-hidden="true" class="heading-anchor" href="#options" tabindex="-1">#</a>
