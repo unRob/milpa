@@ -1,0 +1,8 @@
+summary: Upgrades an installed milpa repo
+description: |
+  Upgrades a milpa repo by PATH, or all git-cloned repos if no PATH provided. See [`milpa itself repo list --help`](/.milpa/commands/itself/repo/list.md) for a list of available repos.
+arguments:
+  - name: path
+    description: The repo path to upgrade
+    values:
+      milpa: itself repo list --cloned --paths-only

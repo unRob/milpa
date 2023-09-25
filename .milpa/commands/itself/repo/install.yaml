@@ -1,35 +1,24 @@
 summary: Installs a milpa repo
 description: |
-  Fetches a milpa repo and installs it to any of three locations:
+  Installs a milpa repo from a local directory or remote git repository into either:
 
-  - The path specified by the `TARGET` argument, if provided,
-  - In the `$MILPA_ROOT` (by default, /usr/local/lib/milpa), if `--global` is specified, or
-  - In `$XDG_DATA_HOME/milpa` folder, if `--user` is specified.
+  - `$XDG_DATA_HOME/milpa` (usually `$HOME/.local/share`): by default, or if `--user` is specified, or
+  - `$MILPA_ROOT` (usually, /usr/local/lib/milpa), if `--global` is specified.
 
-  Repos will be fetched from the `.milpa` subdirectory of `SOURCE`, which must be an URL as specified by [go-getter](https://github.com/hashicorp/go-getter#url-format). Basically, an https, git, hg, s3 or gcs URL. If `SOURCE` is a path to a local directory on the system, it'll be symlinked to the `TARGET` accordingly.
+  When `SOURCE` points to a local path (either a folder containing a `.milpa` folder, or the `.milpa` folder itself), `milpa repo install` will symlink it into the local or global repositories.
+
+  Oherwise,`SOURCE` will be interpreted as a [git URL](https://www.git-scm.com/docs/git-clone#_git_urls), and a shallow clone will be performed against the `.milpa` folder of the repo only.
 
   ### Examples
 
-  - `github.com/unRob/milpa` would download the `.milpa` folder from the `unRob/milpa` github repo, using **https**, and prompting for credentials for private repos.
-  - `git::ssh://git@github.com/unRob/milpa.git//internal` would download the `internal/.milpa` folder from the `unRob/milpa` github repo using **ssh credentials**, useful for skipping credential prompts for private repos.
+  - `https://github.com/unRob/dotfiles.git` would download the `.milpa` folder from the `unRob/dotfiles` github repo, using **https**, and prompting for credentials for private repos.
+  - `git@git.rob.mx/unRob/dotfiles.git` would download the `.milpa` folder from the `unRob/dotfiles` git repo using **ssh credentials**, useful for skipping credential prompts for private repos.
   - `~/.dotfiles` would symlink `$HOME/.dotfiles/.milpa` to the target. An alternative to this is to set `MILPA_PATH` to `$HOME/.dotfiles` (see [`milpa help docs milpa environment`](/.milpa/docs/milpa/environment.md)).
 
 arguments:
   - name: source
-    description: A go-getter URL to fetch the repo from
+    description: A path or git clone URL to install
     required: true
-    values:
-      static:
-        - './'
-        - 'github.com/'
-        - 'git::ssh//'
-        - 'https://'
-        - 'http://'
-      suggest-raw: true
-      suggest-only: true
-  - name: target
-    description: The path where to place the resulting `.milpa` folder in
-    values: {dirs: ""}
 options:
   global:
     short-name: g

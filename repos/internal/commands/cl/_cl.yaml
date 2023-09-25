@@ -1,0 +1,10 @@
+summary: operations for git repo changelogs
+description: |
+  These commands provide an interface to manage a changelog, storing individual entries for changes in git notes. Semantic versioning is supported by marking changes as one of the following categories:
+
+  - `breaking-change`: triggers a major release.
+  - `bug`: a defect being fixed.
+  - `deprecation`: a feaure being deprecated.
+  - `feature`:  a new feature added to the product, triggers a minor release.
+  - `improvement`: a refinement of an existing feature.
+  - `note`: additional notes for a release.
