@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"git.rob.mx/nidito/chinampa"
+	ccmd "git.rob.mx/nidito/chinampa/pkg/command"
 	"git.rob.mx/nidito/chinampa/pkg/logger"
 	doublestar "github.com/bmatcuk/doublestar/v4"
 	"github.com/unrob/milpa/internal/bootstrap"
@@ -80,14 +81,16 @@ func AllSubCommands(returnOnError bool) error {
 	for _, path := range keys {
 		repo := files[path]
 		cmd, specErr := command.New(path, repo)
-		if specErr != nil {
+		if specErr == nil {
+			log.Debugf("Initialized %s", cmd.FullName())
+			chinampa.Register(cmd)
+		} else {
 			if returnOnError {
-				return specErr
+				cmd.Arguments = ccmd.Arguments{}
+				cmd.Options = ccmd.Options{}
 			}
+			chinampa.Register(cmd)
 		}
-
-		log.Debugf("Initialized %s", cmd.FullName())
-		chinampa.Register(cmd)
 	}
 
 	return err

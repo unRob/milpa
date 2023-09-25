@@ -56,6 +56,20 @@ func New(path string, repo string) (cmd *command.Command, err error) {
 			Config: spec,
 		}
 		meta.issues = append(meta.issues, err)
+		cmd.Meta = meta
+		cmd.HelpFunc = func(printLinks bool) string {
+			return `---
+# ⚠️ Could not validate spec ⚠️
+
+Looks like the spec for this command has errors that prevented parsing:
+
+**` + fmt.Sprint(err) + `**
+
+Run ﹅milpa itself doctor﹅ to diagnose your installed commands.
+
+---`
+		}
+		return cmd, err
 	}
 
 	cmd.Meta = meta

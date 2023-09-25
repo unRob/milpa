@@ -59,6 +59,8 @@ See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more informat
 	err = lookup.AllSubCommands(!isDoctor)
 	if err != nil && !isDoctor {
 		logger.Fatalf("Could not find subcommands: %s", err)
+	} else if err != nil {
+		logger.Error(err)
 	}
 
 	if err := chinampa.Execute(cfg); err != nil {

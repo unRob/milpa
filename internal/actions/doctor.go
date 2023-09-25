@@ -12,6 +12,7 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/tree"
 	"github.com/fatih/color"
 	"github.com/unrob/milpa/internal/bootstrap"
+	mcmd "github.com/unrob/milpa/internal/command"
 	_c "github.com/unrob/milpa/internal/constants"
 )
 
@@ -72,10 +73,27 @@ var Doctor = &command.Command{
 				continue
 			}
 			docLog.Debugf("Validating %s", cmd.FullName())
-			report := cmd.Validate()
+
 			message := ""
 
 			hasFailures := false
+			report := map[string]int{}
+			if meta, ok := cmd.Meta.(mcmd.Meta); ok {
+				// fmt.Println("hasmeta")
+				parsingErrors := meta.ParsingErrors()
+				if len(parsingErrors) > 0 {
+					hasFailures = true
+
+					for _, err := range parsingErrors {
+						failures[cmd.FullName()]++
+						message += fail.Sprintf("  - %s\n", err)
+					}
+				} else {
+					report = cmd.Validate()
+				}
+			} else {
+				report = cmd.Validate()
+			}
 			for property, status := range report {
 				formatter := success
 				if status == 1 {
@@ -106,7 +124,11 @@ var Doctor = &command.Command{
 		if failedOverall {
 			failureReport := []string{}
 			for cmd, count := range failures {
-				failureReport = append(failureReport, fmt.Sprintf("%s - %d issues", cmd, count))
+				plural := ""
+				if count > 1 {
+					plural = "s"
+				}
+				failureReport = append(failureReport, fmt.Sprintf("%s - %d issue%s", cmd, count, plural))
 			}
 
 			return fmt.Errorf("your milpa could use some help with the following commands:\n%s", strings.Join(failureReport, "\n"))
