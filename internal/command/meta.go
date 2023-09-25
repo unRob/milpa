@@ -55,3 +55,7 @@ func metaForPath(path string, repo string) (meta Meta) {
 
 	return
 }
+
+func (meta *Meta) ParsingErrors() []error {
+	return meta.issues
+}
