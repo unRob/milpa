@@ -12,6 +12,7 @@
   <meta property="og:description" content="Use-cases and alternatives when using milpa">
   <meta name="description" content="Use-cases and alternatives when using milpa">
   <meta property="og:url" content="https://milpa.dev/help/docs/milpa/use-case">
+  <meta property="og:image" content="https://milpa.dev/ogp.jpg">
   <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   <title>milpa help docs milpa use-case</title>
   <link rel="preload" as="font" href="https://cdn.rob.mx/fonts/AesteticoLightItalic.woff2">
@@ -275,7 +276,7 @@
     </ul>
     <p>Tasks like bootstrapping development environments are usually left out for the user to accomplish by following through a README or wiki with likely outdated links; <code>milpa</code> is great when these tasks can be accomplished by prompting for information, querying identity providers and then running configuration commands or modifying the filesystem directly.</p>
     <blockquote>
-      <p>⚠️ <code>milpa</code> is still under development and is currently on alpha!</p>
+      <p>⚠️ <code>milpa</code> is still under development and is currently on beta!</p>
     </blockquote>
     <div class="content-header-wrapper">
       <h3 class="content-header" id="examples">Examples</h3><a aria-hidden="true" class="heading-anchor" href="#examples" tabindex="-1">#</a>
@@ -285,7 +286,7 @@
       <li>for <strong>managing homelab services</strong> (i.e. <a href="https://github.com/unRob/nidito/tree/master/.milpa">unRob/nidito</a>): building and deploying them, looking at their status and logs. From my personal device or CI.
       </li>
       <li>
-        <strong>bootstrapping engineering laptops</strong> (i.e. <a href="https://github.com/unRob/dotfiles/tree/master/.milpa/commands/computar">unRob/dotfiles</a>): no need to follow a README, you get the right development environment for your os/arch, your credentials setup and the code ready for you to dive in.
+        <strong>bootstrapping workstations</strong> (i.e. <a href="https://github.com/unRob/dotfiles/tree/master/.milpa/commands/computar">unRob/dotfiles</a>): no need to follow a README, you get the right development environment for your os/arch, your credentials setup and the code ready for you to dive in.
       </li>
       <li>
         <strong>every-day dev workflow</strong> (i.e. <a href="https://github.com/unRob/milpa/tree/main/repos/internal/commands/">unRob/milpa</a>): lint and test a codebase, connect to vpn, get credentials to resources, maybe <code>--connect</code> to them, abstract away APIs (internal, cloud provider and SaaS) and CLIs, toggle feature gates, build reports and update google sheets with the results.
@@ -343,7 +344,7 @@
     <div class="content-header-wrapper">
       <h3 class="content-header" id="byocli">BYOCLI</h3><a aria-hidden="true" class="heading-anchor" href="#byocli" tabindex="-1">#</a>
     </div>
-    <p>Building your own CLI is usually what ends up happening given a team with enough time and direction to invest in building a proper CLI with whatever language is already at use. Some teams use more than one language, which may complicate this approach. In the microservices world, many codebases come with their own CLIs that may follow slightly different conventions, are seldomly documented and often just end up calling other binaries through <code>exec</code>.</p>
+    <p>Building your own CLI is usually what ends up happening given a team with enough time and direction to invest in building a proper CLI with whatever language is already at use. Some teams use more than one language, which may complicate this approach. In the micro-services world, many codebases come with their own CLIs that may follow slightly different conventions, are seldomly documented and often just end up calling other binaries through <code>exec</code>.</p>
     <p>In my limited experience with engineering teams of less than 300 folks, many of the bootstrapping tasks will involve operations that can easily (and more succinctly) be expressed with a shell scripting language. <code>milpa</code> could also be a useful intermediate step, that could help teams avoid the dread of confluence/notion/google-docs runbooks until it's a good time to build your own CLI.</p>
     <p>Building a CLI is something that happens to me somewhat often, and when golang is a good choice, I get most of <code>milpa</code>'s niceties by building my CLI on <a href="https://git.rob.mx/nidito/chinampa">chinampa</a>. <code>joao</code>, a configuration manager, is an example of something that started as a <a href="https://github.com/unRob/nidito/tree/0812e0caf6d81dd06b740701c3e95a2aeabd86de/.milpa/commands/nidito/config">milpa repo</a> that later became <a href="https://git.rob.mx/nidito/joao">it's own CLI</a>; getting it to work with <code>milpa</code> first was fundamental in figuring out <em>what</em> it needed to do, and it only took a few hours.</p>
   </main>
