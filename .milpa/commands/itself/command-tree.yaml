@@ -1,6 +1,6 @@
 summary: Prints a tree of known commands
 description: |
-  Prints out command names and descriptions, or optionally a nested representation of all properties of commands, serialized as `json` or `yaml`. Custom textual representations of commands can be obtained by using the `--template` option and specifying a [go-template](https://pkg.go.dev/text/template#hdr-Actions) to be applied to every command. See [chinampa/pkg.Command](https://pkg.go.dev/git.rob.mx/nidito/chinampa@v0.0.0-20230324015136-6ec1c56f0fc5/pkg/command#Command) and [milpa/internal/command.Meta](https://pkg.go.dev/github.com/unrob/milpa@v0.0.0-20230321064607-ee1825c67af7/internal/command#Meta) for references on the structs available during template rendering.
+  Prints out command names and descriptions, or optionally a nested representation of all properties of commands, serialized as `json` or `yaml`. Custom textual representations of commands can be obtained by using the `--template` option and specifying a [go-template](https://pkg.go.dev/text/template#hdr-Actions) to be applied to every command. See [chinampa/pkg.Command](https://pkg.go.dev/git.rob.mx/nidito/chinampa/pkg/command#Command) and [milpa/internal/command.Meta](https://pkg.go.dev/github.com/unrob/milpa/internal/command#Meta) for references on the structs available during template rendering.
 
   ## Examples
 

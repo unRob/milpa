@@ -4,15 +4,11 @@ description: how to deal with bugs in milpa
 weight: 99
 ---
 
-`milpa` is currently alpha software. This means that while I've personally tested it for over a year:
-
-- test coverage is pretty lacking,
-- the command spec and script environment is subject to change, and,
-- there's **no guarantee of stability** of any internal command or utility.
+`milpa` is currently beta software: the tool is mostly feature-complete, but these features are likely to contain bugs, not be properly covered by the test suite nor fully documented. Bug reports, code contributions and general questions are welcome!
 
 ## ℹ️ Requesting help
 
-Please [open a support request](https://github.com/unRob/milpa/issues/new?assignees=&labels=help-requested&template=help-request.yml&title=%5Bhelp%5D%3A+) on github, and I'll do my best to help.
+Please [open a support request](https://github.com/unRob/milpa/issues/new?assignees=&labels=help-requested&template=help-request.yml&title=%5Bhelp%5D%3A+) on Github, and I'll do my best to help.
 
 
 ## 🐛 Reporting bugs

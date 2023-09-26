@@ -33,6 +33,9 @@ func addMetaToTree(t *tree.CommandTree) {
 			Kind: milpaCmd.KindVirtual,
 		}
 		t.Command.Meta = &meta
+		if t.Command.Path[0] != "milpa" {
+			t.Command.Path = append([]string{"milpa"}, t.Command.Path...)
+		}
 	}
 
 	for _, subT := range t.Children {
@@ -130,6 +133,9 @@ var CommandTree = &command.Command{
 				tree := t.(*tree.CommandTree)
 				addMetaToTree(tree)
 				var output bytes.Buffer
+				if err := tpl.Execute(&output, tree.Command); err != nil {
+					return output.Bytes(), err
+				}
 				err := tree.Traverse(func(cmd *command.Command) error { return tpl.Execute(&output, cmd) })
 				return output.Bytes(), err
 			}
