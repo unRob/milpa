@@ -35,13 +35,15 @@ func metaForPath(path string, repo string) (meta Meta) {
 	var name string
 	if strings.HasSuffix(path, ".yaml") {
 		name = filepath.Dir(path)
-		name = strings.TrimPrefix(name, repo+"/"+_c.RepoCommandFolderName+"/")
+		name = strings.TrimPrefix(name, repo+"/")
+		name = strings.TrimPrefix(name, _c.RepoCommandFolderName+"/")
 		meta.Path = name
 		meta.Kind = KindVirtual
 	} else {
 		meta.Path = path
 		name = strings.TrimSuffix(path, ".sh")
-		name = strings.TrimPrefix(name, repo+"/"+_c.RepoCommandFolderName+"/")
+		name = strings.TrimPrefix(name, repo+"/")
+		name = strings.TrimPrefix(name, _c.RepoCommandFolderName+"/")
 
 		if strings.HasSuffix(path, ".sh") {
 			meta.Kind = KindSource
@@ -49,6 +51,7 @@ func metaForPath(path string, repo string) (meta Meta) {
 			meta.Kind = KindExecutable
 		}
 	}
+
 	meta.Repo = repo
 	meta.Name = strings.Split(name, "/")
 	meta.issues = []error{}

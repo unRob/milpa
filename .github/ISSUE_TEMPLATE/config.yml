@@ -1,6 +1,12 @@
 blank_issues_enabled: true
-# contact_links:
-#   - name: Twitter
-#     url: https://twitter.com/unRob
-#     about: Got thoughts and a twitter account?
+contact_links:
+  - name: Docs
+    url: https://milpa.dev/
+    about: Documentation on using `milpa`
+  - name: Fediverse
+    url: https://club.pati.to/@rob
+    about: Got thoughts and a twitter account?
+  - name: Twitter
+    url: https://twitter.com/unRob
+    about: Got thoughts and a twitter account?
 

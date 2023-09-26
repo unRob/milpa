@@ -7,6 +7,8 @@ For a brief introductory tutorial, check out [`milpa help docs milpa quick-guide
 ```sh
 # install on mac and linux with:
 curl -L https://milpa.dev/install.sh | bash -
+# or with homebrew
+brew install unRob/formulas/milpa
 ```
 
 You and your team write scripts and a little spec for each of them—use bash, or any other language—, and `milpa` provides:

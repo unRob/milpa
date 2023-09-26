@@ -22,14 +22,14 @@ My goal with `milpa` is to make following the [Command Line Interface Guidelines
 
 Tasks like bootstrapping development environments are usually left out for the user to accomplish by following through a README or wiki with likely outdated links; `milpa` is great when these tasks can be accomplished by prompting for information, querying identity providers and then running configuration commands or modifying the filesystem directly.
 
-> ⚠️ `milpa` is still under development and is currently on alpha!
+> ⚠️ `milpa` is still under development and is currently on beta!
 
 ### Examples
 
 Here's some examples of how I've used used `milpa` so far:
 
 - for **managing homelab services** (i.e. [unRob/nidito](https://github.com/unRob/nidito/tree/master/.milpa)): building and deploying them, looking at their status and logs. From my personal device or CI.
-- **bootstrapping engineering laptops** (i.e. [unRob/dotfiles](https://github.com/unRob/dotfiles/tree/master/.milpa/commands/computar)): no need to follow a README, you get the right development environment for your os/arch, your credentials setup and the code ready for you to dive in.
+- **bootstrapping workstations** (i.e. [unRob/dotfiles](https://github.com/unRob/dotfiles/tree/master/.milpa/commands/computar)): no need to follow a README, you get the right development environment for your os/arch, your credentials setup and the code ready for you to dive in.
 - **every-day dev workflow** (i.e. [unRob/milpa](https://github.com/unRob/milpa/tree/main/repos/internal/commands/)): lint and test a codebase, connect to vpn, get credentials to resources, maybe `--connect` to them, abstract away APIs (internal, cloud provider and SaaS) and CLIs, toggle feature gates, build reports and update google sheets with the results.
 - as a way to organize all those odd, one-off-but-not-really commands: found a nice home for [shell scripts](https://github.com/unRob/dotfiles/blob/master/.milpa/commands/code/todo.sh), quick ruby scripts, perl hacks and [jq monstrosities](https://github.com/unRob/dotfiles/blob/master/.milpa/commands/creds.sh) that used to live in my `~/.zsh_history`.
 
@@ -77,7 +77,7 @@ That being said, organizing makefiles and dealing with arguments is not somethin
 
 ### BYOCLI
 
-Building your own CLI is usually what ends up happening given a team with enough time and direction to invest in building a proper CLI with whatever language is already at use. Some teams use more than one language, which may complicate this approach. In the microservices world, many codebases come with their own CLIs that may follow slightly different conventions, are seldomly documented and often just end up calling other binaries through `exec`.
+Building your own CLI is usually what ends up happening given a team with enough time and direction to invest in building a proper CLI with whatever language is already at use. Some teams use more than one language, which may complicate this approach. In the micro-services world, many codebases come with their own CLIs that may follow slightly different conventions, are seldomly documented and often just end up calling other binaries through `exec`.
 
 In my limited experience with engineering teams of less than 300 folks, many of the bootstrapping tasks will involve operations that can easily (and more succinctly) be expressed with a shell scripting language. `milpa` could also be a useful intermediate step, that could help teams avoid the dread of confluence/notion/google-docs runbooks until it's a good time to build your own CLI.
 
