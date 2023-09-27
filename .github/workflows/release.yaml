@@ -93,3 +93,10 @@ jobs:
         with:
           branch: gh-pages
           folder: dist/milpa.dev
+
+      - name: update homebrew formulas
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: version-bump
+          repo: unRob/homebrew-formulas
+          inputs: '{ "formula": "Formula/milpa.rb" }'

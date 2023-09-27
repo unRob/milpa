@@ -123,18 +123,19 @@ func lookupGitRepo() []string {
 func lookupUserRepos() []string {
 	log.Debugf("looking for user repos")
 	found := []string{}
-	home := os.Getenv("XDG_DATA_HOME")
 
-	if home == "" {
+	var userRepos string
+	if home := os.Getenv("XDG_DATA_HOME"); home == "" {
 		home = os.Getenv("HOME")
+		userRepos = filepath.Join(home, ".local", "share", "milpa", "repos")
+		if home == "" {
+			log.Debugf("Ignoring user repo lookup, neither XDG_DATA_HOME nor HOME were found in the environment")
+			return found
+		}
+	} else {
+		userRepos = filepath.Join(home, "milpa", "repos")
 	}
 
-	if home == "" {
-		log.Debugf("Ignoring user repo lookup, neither XDG_DATA_HOME nor HOME were found in the environment")
-		return found
-	}
-
-	userRepos := filepath.Join(home, ".local", "share", "milpa", "repos")
 	if files, err := os.ReadDir(userRepos); err == nil {
 		for _, file := range files {
 			userRepo := filepath.Join(userRepos, file.Name())
