@@ -317,7 +317,7 @@ func TestBootstrapWithUserRepo(t *testing.T) {
 		os.Setenv(_c.EnvVarLookupGlobalReposDisabled, "true")
 		os.Unsetenv(_c.EnvVarLookupUserReposDisabled)
 		os.Unsetenv("HOME")
-		os.Setenv("XDG_DATA_HOME", home)
+		os.Setenv("XDG_DATA_HOME", home+"/.local/share")
 
 		buff := &bytes.Buffer{}
 		logrus.SetOutput(buff)

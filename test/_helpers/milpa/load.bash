@@ -28,7 +28,7 @@ function _suite_setup() {
   ln -sf "$PROJECT_ROOT/milpa" "$MILPA_ROOT/milpaa"
   ln -sf "$PROJECT_ROOT/compa" "$MILPA_ROOT/compa"
   ln -sf "$PROJECT_ROOT/.milpa" "$MILPA_ROOT/.milpa"
-  mkdir -p "$XDG_DATA_HOME/.local/share/milpa/repos"
+  mkdir -p "$XDG_DATA_HOME/milpa/repos"
   ln -sf "$PROJECT_ROOT/test/.milpa" "$MILPA_ROOT/repos/test-suite"
   touch "$XDG_DATA_HOME/setup-complete"
 }
