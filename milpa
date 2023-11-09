@@ -138,7 +138,7 @@ fi
 
 # Run the subcommand
 case "$MILPA_COMMAND_KIND" in
-  exec)
+  executable)
     exec "$MILPA_COMMAND_PATH" "$@" ;;
   source)
     # shellcheck disable=1090

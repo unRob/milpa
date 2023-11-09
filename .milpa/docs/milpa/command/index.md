@@ -72,7 +72,7 @@ The environment available to a **script** is composed of four groups:
 Your script has access to the following variables set by `milpa` after parsing arguments and running validations:
 
 - `MILPA_COMMAND_NAME`: the space delimited name of your command, i.e. `db connect`;
-- `MILPA_COMMAND_KIND`: either `source` for `.sh` scripts, or `exec` for executables;
+- `MILPA_COMMAND_KIND`: either `source` for `.sh` scripts, or `executable` for executables;
 - `MILPA_COMMAND_REPO`: the path to the repo containing this command, i.e. `/home/you/project/.milpa`; and
 - `MILPA_COMMAND_PATH`: the full path to the executable being called.
 
