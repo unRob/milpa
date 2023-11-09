@@ -98,9 +98,14 @@ jobs:
       - name: update homebrew formulas
         # re-enable when we only wanna build for stable releases
         # if: ${{ steps.build.outputs.prerelease == "false" }}
-        uses: unRob/homebrew-formulas@latest
-        secrets:
-          token: ${{ secrets.FORMULAS_PAT }}
-        with:
-          version: ${{ steps.build.outputs.version }}
-          formula: milpa
+        env:
+          GITHUB_TOKEN: ${{ secrets.FORMULAS_PAT }}
+          VERSION: ${{ steps.build.outputs.version }}
+        run: |
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/unRob/homebrew-formulas/actions/workflows/version-bump.yml/dispatches \
+            -d '{"ref":"main","inputs":{ "formula": "Formula/milpa.rb", "version": "'"$VERSION"'" }}'
