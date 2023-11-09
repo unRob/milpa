@@ -98,7 +98,7 @@ jobs:
       - name: update homebrew formulas
         # re-enable when we only wanna build for stable releases
         # if: ${{ steps.build.outputs.prerelease == "false" }}
-        uses: unRob/homebrew-formulas
+        uses: unRob/homebrew-formulas@latest
         secrets:
           token: ${{ secrets.FORMULAS_PAT }}
         with:
