@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	git.rob.mx/nidito/chinampa v0.1.4
-	github.com/alecthomas/chroma/v2 v2.11.1
+	github.com/alecthomas/chroma/v2 v2.12.0
 	github.com/alessio/shellescape v1.4.2
 	github.com/bmatcuk/doublestar/v4 v4.6.1
 	github.com/charmbracelet/glamour v0.6.0
