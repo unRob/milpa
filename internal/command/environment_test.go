@@ -183,3 +183,115 @@ func TestArgumentsToEnv(t *testing.T) {
 		})
 	}
 }
+
+func TestOptionsToEnv(t *testing.T) {
+	cases := []struct {
+		Command *command.Command
+		Args    []string
+		Expect  []string
+		Env     []string
+	}{
+		{
+			Args:   []string{"test", "string", "--first", "something"},
+			Expect: []string{"export MILPA_OPT_FIRST=something"},
+			Command: &command.Command{
+				Meta: Meta{
+					Name: []string{"test", "string"},
+				},
+				Options: command.Options{
+					"first": &command.Option{
+						Type: command.ValueTypeString,
+					},
+				},
+			},
+		},
+		{
+			Args:   []string{"test", "int", "--first", "1"},
+			Expect: []string{"export MILPA_OPT_FIRST=1"},
+			Command: &command.Command{
+				Meta: Meta{
+					Name: []string{"test", "int"},
+				},
+				Options: command.Options{
+					"first": &command.Option{
+						Type: command.ValueTypeInt,
+					},
+				},
+			},
+		},
+		{
+			Args:   []string{"test", "bool", "--first"},
+			Expect: []string{"export MILPA_OPT_FIRST=true"},
+			Command: &command.Command{
+				Meta: Meta{
+					Name: []string{"test", "bool"},
+				},
+				Options: command.Options{
+					"first": &command.Option{
+						Type: command.ValueTypeBoolean,
+					},
+				},
+			},
+		},
+		{
+			Args:   []string{"test", "bool-false", "--first", "false"},
+			Expect: []string{"export MILPA_OPT_FIRST="},
+			Command: &command.Command{
+				Meta: Meta{
+					Name: []string{"test", "bool-false"},
+				},
+				Options: command.Options{
+					"first": &command.Option{
+						Type: command.ValueTypeBoolean,
+					},
+				},
+			},
+		},
+		{
+			Args:   []string{"test", "repeated", "--pato", "quem", "--pato", "quem quem"},
+			Expect: []string{"export MILPA_OPT_PATO=( quem 'quem quem' )"},
+			Command: &command.Command{
+				Meta: Meta{
+					Name: []string{"test", "repeated"},
+				},
+				Options: command.Options{
+					"pato": &command.Option{
+						Type:     command.ValueTypeString,
+						Repeated: true,
+					},
+				},
+			},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.Command.FullName(), func(t *testing.T) {
+			dst := []string{}
+			c.Command.SetBindings()
+			err := c.Command.FlagSet().Parse(c.Args)
+			if err != nil {
+				t.Fatalf("Could not parse test arguments (%+v): %s", c.Args, err)
+			}
+			c.Command.Options.Parse(c.Command.FlagSet())
+			OptionsToEnv(c.Command, &dst, "export ")
+
+			if err := c.Command.Options.AreValid(); err != nil {
+				t.Fatalf("Unexpected failure validating: %s", err)
+			}
+
+			for _, expected := range c.Expect {
+				found := false
+				for _, actual := range dst {
+					if strings.HasPrefix(actual, expected) {
+						found = true
+						break
+					}
+				}
+
+				if !found {
+					t.Fatalf("Expected line %v not found in %v", expected, dst)
+				}
+			}
+		})
+	}
+}

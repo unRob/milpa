@@ -66,6 +66,8 @@ The environment available to a **script** is composed of four groups:
 2. `MILPA_OPT_*` variables hold values for every **option** defined, and
 3. [global environment variables](/.milpa/docs/milpa/environment.md) that affect `milpa`'s overall behavior.
 
+> ℹ️ `variadic` arguments and `repeated` options are passed an array of values (i.e. read with `${MILPA_OPT_THING[@]}`)
+
 
 ### Command metadata: `MILPA_COMMAND_*`
 

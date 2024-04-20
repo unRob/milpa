@@ -80,8 +80,8 @@ The `arguments` list describes the positional arguments that may be passed to a 
 arguments:
   # available in to the command as the MILPA_ARG_INCREMENT environment variable
   - name: increment
-    # this description shows up during auto-completion and in the command's help page
-    descrption: the increment to apply to the last git version
+    # this description shows up when rendering the command's help
+    description: the increment to apply to the last git version
     # a default may be specified, it'll be passed to your command if none is provided
     default: patch
     # if marked as required, the command won't run unless this argument is provided
@@ -99,7 +99,7 @@ arguments:
 
 ## Options
 
-The `options` map describes the named options that may be passed to a command. Options require a `name` and a `description`. The `name` of the option will become available to commands through the environment variable named `MILPA_OPT_$NAME` where `$NAME` means the uppercased value of key for an option. For example, an option at the key `scheme` will be available as your command's environment variable `MILPA_OPT_SCHEME`.
+The `options` map describes the named options that may be passed to a command (i.e. `--name value`). Options require a `name` and a `description`. The `name` of the option will become available to commands through the environment variable named `MILPA_OPT_$NAME` where `$NAME` means the uppercased value of key for an option. For example, an option at the key `scheme` will be available as your command's environment variable `MILPA_OPT_SCHEME`.
 
 > ⚠️ Options are not available as positional arguments to your command. The same character restrictions as arguments apply to options.
 
@@ -110,20 +110,22 @@ options:
   # it will be available to your script as the $MILPA_OPT_SCHEME environment variable
   # and may be specified on the command line as either `--scheme "semver"` or `--scheme=semver`.
   scheme:
-    # options require a description, this will show during completions
-    # and on the command's help page
+    # options require a description, this will show when rendering the command's help
     description: Determines the format of the tags for this repo.
     # Sometimes, very commonly used flags might benefit from setting a short name
     # in this case, users would be able to use `-s calver`
     short-name: s
     # a default value may be passed to the command if none is provided by the user
     default: semver
-    # the values provided at the command line
     # flags can be boolean. Since environment variables can only be strings,
     # false values (the default) will be passed as an empty string "", while
     # true values will be passed as the string "true"
-    type: bool # or `string`
+    type: string # or `bool`
+    # string flags may be repeated multiple times
+    # should an option be repeated, it's `default:` then must also be a list!
+    repeated: false
     # the `values` property specifies how to provide completions and perform validation on
+    # the values provided at the command line
     values: {}
 ```
 ---

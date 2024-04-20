@@ -61,7 +61,15 @@ func envValue(opts command.Options, f *pflag.Flag) (*string, *string) {
 	envName = fmt.Sprintf("%s%s", _c.OutputPrefixOpt, strings.ToUpper(strings.ReplaceAll(name, "-", "_")))
 
 	if opt := opts[name]; opt != nil {
-		value = opt.ToString()
+		if opt.Repeated {
+			temp := []string{}
+			for _, v := range opt.ToValue().([]string) {
+				temp = append(temp, shellescape.Quote(v))
+			}
+			value = fmt.Sprintf("( %s )", strings.Join(temp, " "))
+		} else {
+			value = opt.ToString()
+		}
 	}
 
 	if value == "false" && f.Value.Type() == "bool" {
@@ -74,10 +82,14 @@ func envValue(opts command.Options, f *pflag.Flag) (*string, *string) {
 
 // ToEnv writes shell variables to dst.
 func OptionsToEnv(cmd *command.Command, dst *[]string, prefix string) {
-	cmd.Cobra.Flags().VisitAll(func(f *pflag.Flag) {
+	cmd.FlagSet().VisitAll(func(f *pflag.Flag) {
 		envName, value := envValue(cmd.Options, f)
 		if envName != nil && value != nil {
-			*dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, *envName, shellescape.Quote(*value)))
+			if opt := cmd.Options[f.Name]; opt != nil && opt.Repeated {
+				*dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, *envName, *value))
+			} else {
+				*dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, *envName, shellescape.Quote(*value)))
+			}
 		}
 	})
 }
