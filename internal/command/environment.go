@@ -82,7 +82,7 @@ func envValue(opts command.Options, f *pflag.Flag) (*string, *string) {
 
 // ToEnv writes shell variables to dst.
 func OptionsToEnv(cmd *command.Command, dst *[]string, prefix string) {
-	cmd.Cobra.Flags().VisitAll(func(f *pflag.Flag) {
+	cmd.FlagSet().VisitAll(func(f *pflag.Flag) {
 		envName, value := envValue(cmd.Options, f)
 		if envName != nil && value != nil {
 			if opt := cmd.Options[f.Name]; opt != nil && opt.Repeated {

@@ -9,7 +9,7 @@ if [[ "$MILPA_OPT_COVERAGE" ]]; then
   milpa dev test unit --coverage
   milpa dev test integration --coverage
   mkdir -p "$MILPA_ROOT/test/coverage/doctor"
-  GOCOVERDIR="$MILPA_ROOT/test/coverage/doctor" milpa itself doctor
+  MILPA_PATH="$(pwd)/.milpa" MILPA_PATH_PARSED=true GOCOVERDIR="$MILPA_ROOT/test/coverage/doctor" milpa itself doctor
   milpa dev test coverage-report
   milpa dev build
 else
