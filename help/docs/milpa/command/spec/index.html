@@ -325,8 +325,8 @@
 </span></span></span><span class="line"><span class="cl"><span class="nt">arguments</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># available in to the command as the MILPA_ARG_INCREMENT environment variable</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">increment</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># this description shows up during auto-completion and in the command's help page</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">descrption</span><span class="p">:</span><span class="w"> </span><span class="l">the increment to apply to the last git version</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># this description shows up when rendering the command's help</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">the increment to apply to the last git version</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># a default may be specified, it'll be passed to your command if none is provided</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l">patch</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># if marked as required, the command won't run unless this argument is provided</span><span class="w">
@@ -344,7 +344,7 @@
     <div class="content-header-wrapper">
       <h2 class="content-header" id="options">Options</h2><a aria-hidden="true" class="heading-anchor" href="#options" tabindex="-1">#</a>
     </div>
-    <p>The <code>options</code> map describes the named options that may be passed to a command. Options require a <code>name</code> and a <code>description</code>. The <code>name</code> of the option will become available to commands through the environment variable named <code>MILPA_OPT_$NAME</code> where <code>$NAME</code> means the uppercased value of key for an option. For example, an option at the key <code>scheme</code> will be available as your command's environment variable <code>MILPA_OPT_SCHEME</code>.</p>
+    <p>The <code>options</code> map describes the named options that may be passed to a command (i.e. <code>--name value</code>). Options require a <code>name</code> and a <code>description</code>. The <code>name</code> of the option will become available to commands through the environment variable named <code>MILPA_OPT_$NAME</code> where <code>$NAME</code> means the uppercased value of key for an option. For example, an option at the key <code>scheme</code> will be available as your command's environment variable <code>MILPA_OPT_SCHEME</code>.</p>
     <blockquote>
       <p>⚠️ Options are not available as positional arguments to your command. The same character restrictions as arguments apply to options.</p>
     </blockquote>
@@ -354,20 +354,22 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># it will be available to your script as the $MILPA_OPT_SCHEME environment variable</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># and may be specified on the command line as either `--scheme "semver"` or `--scheme=semver`.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">scheme</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># options require a description, this will show during completions</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># and on the command's help page</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># options require a description, this will show when rendering the command's help</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">Determines the format of the tags for this repo.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># Sometimes, very commonly used flags might benefit from setting a short name</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># in this case, users would be able to use `-s calver`</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">short-name</span><span class="p">:</span><span class="w"> </span><span class="l">s</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># a default value may be passed to the command if none is provided by the user</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l">semver</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># the values provided at the command line</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># flags can be boolean. Since environment variables can only be strings,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># false values (the default) will be passed as an empty string "", while</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># true values will be passed as the string "true"</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">bool</span><span class="w"> </span><span class="c"># or `string`</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">string</span><span class="w"> </span><span class="c"># or `bool`</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># string flags may be repeated multiple times</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># should an option be repeated, it's `default:` then must also be a list!</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">repeated</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># the `values` property specifies how to provide completions and perform validation on</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># the values provided at the command line</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">values</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
 </span></span></span></code></pre>
     <hr>
