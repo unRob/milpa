@@ -5,6 +5,10 @@ linters-settings:
     case:
       rules:
         yaml: kebab
+  revive:
+    rules:
+      - name: dot-imports
+        disabled: true
 
 linters:
   fast: false
