@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	git.rob.mx/nidito/chinampa v0.2.2
-	github.com/alecthomas/chroma/v2 v2.13.0
+	github.com/alecthomas/chroma/v2 v2.14.0
 	github.com/alessio/shellescape v1.4.2
 	github.com/bmatcuk/doublestar/v4 v4.6.1
 	github.com/charmbracelet/glamour v0.7.0
