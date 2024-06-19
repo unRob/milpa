@@ -44,7 +44,7 @@ jobs:
           echo "MILPA_PATH=$(pwd)/internal" >> $GITHUB_ENV
           echo "MILPA_UPDATE_CHECK_DISABLED=1" >> $GITHUB_ENV
           echo "BATS_LIB_PATH=$(pwd)/test/_helpers" >> $GITHUB_ENV
-          go build -ldflags "-s -w -X main.version=${version}" -o milpa -cover
+          go build -ldflags "-X main.version=${version}" -tags coverage -o milpa -cover
 
       - name: Unit tests
         run: |
