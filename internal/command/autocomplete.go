@@ -12,6 +12,7 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/exec"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/unrob/milpa/internal/command/runtime"
 )
 
 func MilpaComplete(cmd *command.Command, currentValue string, config string) (values []string, flag cobra.ShellCompDirective, err error) {
@@ -21,7 +22,7 @@ func MilpaComplete(cmd *command.Command, currentValue string, config string) (va
 	}
 
 	args := append([]string{"milpa"}, strings.Split(cmdLine, " ")...)
-	envMap := EnvironmentMap(cmd)
+	envMap := runtime.EnvironmentMap(cmd)
 	env := os.Environ()
 	for k, v := range envMap {
 		env = append(env, fmt.Sprintf("%s=%s", k, v))

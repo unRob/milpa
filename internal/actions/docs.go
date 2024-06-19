@@ -19,10 +19,10 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/statuscode"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/unrob/milpa/internal/command/meta"
 	"github.com/unrob/milpa/internal/docs"
 
 	"git.rob.mx/nidito/chinampa/pkg/logger"
-	milpaCommand "github.com/unrob/milpa/internal/command"
 	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/unrob/milpa/internal/lookup"
 )
@@ -145,7 +145,7 @@ var Docs = &command.Command{
 			Default:     "http://localhost:4242",
 		},
 	},
-	Meta: milpaCommand.Meta{
+	Meta: meta.Meta{
 		Path: os.Getenv(_c.EnvVarMilpaRoot) + "/milpa/docs",
 		Name: []string{_c.HelpCommandName, "docs"},
 		Repo: os.Getenv(_c.EnvVarMilpaRoot),

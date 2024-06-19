@@ -17,6 +17,7 @@ fi
 
 cd "$MILPA_ROOT" || @milpa.fail "could not cd into $MILPA_ROOT"
 if [[ "${MILPA_OPT_COVERAGE}" ]]; then
+  @milpa.log info "setting up coverage for integration tests"
   export GOCOVERDIR="$MILPA_ROOT/test/coverage/integration"
   rm -rf "$GOCOVERDIR"
   mkdir -p "$GOCOVERDIR"

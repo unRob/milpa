@@ -13,6 +13,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type ProgrammerError struct {
+	Err error
+}
+
 type ConfigError struct {
 	Err    error
 	Config string
@@ -32,6 +36,10 @@ func (err ConfigError) Error() string {
 
 func (err EnvironmentError) Error() string {
 	return fmt.Sprintf("Invalid MILPA_ environment: %v", err.Err)
+}
+
+func (err ProgrammerError) Error() string {
+	return fmt.Sprintf("Programmer error: %v", err.Err)
 }
 
 func showHelp(cmd *cobra.Command) {
@@ -70,6 +78,9 @@ func HandleExit(cmd *cobra.Command, err error) error {
 	case EnvironmentError:
 		logrus.Error(err)
 		os.Exit(statuscode.ConfigError)
+	case ProgrammerError:
+		logrus.Error(err)
+		os.Exit(statuscode.ProgrammerError)
 	default:
 		if strings.HasPrefix(err.Error(), "unknown command") {
 			showHelp(cmd)

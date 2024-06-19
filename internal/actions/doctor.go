@@ -12,7 +12,7 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/tree"
 	"github.com/fatih/color"
 	"github.com/unrob/milpa/internal/bootstrap"
-	mcmd "github.com/unrob/milpa/internal/command"
+	"github.com/unrob/milpa/internal/command/meta"
 	_c "github.com/unrob/milpa/internal/constants"
 )
 
@@ -78,7 +78,7 @@ var Doctor = &command.Command{
 
 			hasFailures := false
 			report := map[string]int{}
-			if meta, ok := cmd.Meta.(mcmd.Meta); ok {
+			if meta, ok := cmd.Meta.(meta.Meta); ok {
 				// fmt.Println("hasmeta")
 				parsingErrors := meta.ParsingErrors()
 				if len(parsingErrors) > 0 {

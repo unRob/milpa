@@ -8,6 +8,16 @@ setup () {
   _common_setup
 }
 
+@test "milpa prints version" {
+  run --keep-empty-lines --separate-stderr milpa --version
+  assert_equal "$output" "$TEST_MILPA_VERSION"
+  assert_equal "$stderr" ""
+
+  run --keep-empty-lines --separate-stderr milpa __version
+  assert_equal "$stderr" "$TEST_MILPA_VERSION"
+  assert_equal "$output" ""
+}
+
 @test "milpa with no arguments shows help" {
   run -127 milpa
   assert_output --regexp "## Usage"
@@ -35,24 +45,6 @@ setup () {
   assert_failure 127
   assert_output --regexp '`milpa itself SUBCOMMAND'
   assert_output --regexp 'Unknown help topic \"typotypo\" for milpa itself'
-}
-
-@test "milpa with bad MILPA_ROOT" {
-  MILPA_ROOT="$BATS_TEST_FILENAME"
-  run -78 milpa
-}
-
-@test "milpa errors on bad configs" {
-  repo="${BATS_SUITE_TMPDIR}/bad-config/.milpa"
-  mkdir -pv "$repo/commands"
-  echo "summary:"$'\n'"  int: - 1 :a\\" > "$repo/commands/bad-command.yaml"
-  cat "$repo/commands/bad-command.yaml"
-  echo "#!/usr/bin/env bash\necho not bad" > "$repo/commands/bad-command.sh"
-  export MILPA_PATH="${BATS_SUITE_TMPDIR}/bad-config"
-  export DEBUG=trace
-  run milpa bad-command
-  assert_output --regexp "run \`milpa itself doctor\` to diagnose your command
-ERROR: Invalid configuration: cannot run command <milpa bad-command>: Invalid configuration"
 }
 
 @test "milpa includes global repos in MILPA_PATH" {

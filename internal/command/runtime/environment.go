@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
-package command
+package runtime
 
 import (
 	"fmt"
@@ -11,6 +11,7 @@ import (
 	"github.com/alessio/shellescape"
 	"github.com/spf13/pflag"
 	"github.com/unrob/milpa/internal/bootstrap"
+	"github.com/unrob/milpa/internal/command/meta"
 	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/unrob/milpa/internal/util"
 )
@@ -122,7 +123,7 @@ func OptionsEnvMap(cmd *command.Command, dst *map[string]string) {
 }
 
 func EnvironmentMap(cmd *command.Command) map[string]string {
-	meta := cmd.Meta.(Meta)
+	meta := cmd.Meta.(meta.Meta)
 	return map[string]string{
 		_c.OutputCommandName: cmd.FullName(),
 		_c.OutputCommandKind: string(meta.Kind),

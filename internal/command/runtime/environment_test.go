@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
-package command_test
+package runtime_test
 
 import (
 	"strings"
 	"testing"
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
-	. "github.com/unrob/milpa/internal/command"
+	"github.com/unrob/milpa/internal/command/meta"
+	"github.com/unrob/milpa/internal/command/runtime"
 )
 
 func TestArgumentsToEnv(t *testing.T) {
@@ -21,7 +22,7 @@ func TestArgumentsToEnv(t *testing.T) {
 			Args:   []string{"something"},
 			Expect: []string{"export MILPA_ARG_FIRST=something"},
 			Command: &command.Command{
-				Meta: Meta{
+				Meta: meta.Meta{
 					Name: []string{"test", "required", "present"},
 				},
 				Arguments: []*command.Argument{
@@ -36,7 +37,7 @@ func TestArgumentsToEnv(t *testing.T) {
 			Args:   []string{},
 			Expect: []string{"export MILPA_ARG_FIRST=default"},
 			Command: &command.Command{
-				Meta: Meta{
+				Meta: meta.Meta{
 					Name: []string{"test", "default", "present"},
 				},
 				Arguments: []*command.Argument{
@@ -54,7 +55,7 @@ func TestArgumentsToEnv(t *testing.T) {
 				"declare -a MILPA_ARG_VARIADIC=(one two three)",
 			},
 			Command: &command.Command{
-				Meta: Meta{
+				Meta: meta.Meta{
 					Name: []string{"test", "variadic"},
 				},
 				Arguments: []*command.Argument{
@@ -76,7 +77,7 @@ func TestArgumentsToEnv(t *testing.T) {
 				"declare -a MILPA_ARG_VARIADIC=('one and stuff' two three)",
 			},
 			Command: &command.Command{
-				Meta: Meta{
+				Meta: meta.Meta{
 					Name: []string{"test", "variadic"},
 				},
 				Arguments: []*command.Argument{
@@ -95,7 +96,7 @@ func TestArgumentsToEnv(t *testing.T) {
 			Args:   []string{},
 			Expect: []string{"export MILPA_ARG_FIRST=default"},
 			Command: &command.Command{
-				Meta: Meta{
+				Meta: meta.Meta{
 					Name: []string{"test", "static", "default"},
 				},
 				Arguments: []*command.Argument{
@@ -116,7 +117,7 @@ func TestArgumentsToEnv(t *testing.T) {
 			Args:   []string{"good"},
 			Expect: []string{"export MILPA_ARG_FIRST=good"},
 			Command: &command.Command{
-				Meta: Meta{
+				Meta: meta.Meta{
 					Name: []string{"test", "static", "good"},
 				},
 				Arguments: []*command.Argument{
@@ -137,7 +138,7 @@ func TestArgumentsToEnv(t *testing.T) {
 			Args:   []string{"good"},
 			Expect: []string{"export MILPA_ARG_FIRST=good"},
 			Command: &command.Command{
-				Meta: Meta{
+				Meta: meta.Meta{
 					Name: []string{"test", "script", "good"},
 				},
 				Arguments: []*command.Argument{
@@ -160,7 +161,7 @@ func TestArgumentsToEnv(t *testing.T) {
 			if err := c.Command.Arguments.Parse(c.Args); err != nil {
 				t.Fatal(err)
 			}
-			ArgumentsToEnv(c.Command, &dst, "export ")
+			runtime.ArgumentsToEnv(c.Command, &dst, "export ")
 
 			err := c.Command.Arguments.AreValid()
 			if err != nil {
@@ -195,7 +196,7 @@ func TestOptionsToEnv(t *testing.T) {
 			Args:   []string{"test", "string", "--first", "something"},
 			Expect: []string{"export MILPA_OPT_FIRST=something"},
 			Command: &command.Command{
-				Meta: Meta{
+				Meta: meta.Meta{
 					Name: []string{"test", "string"},
 				},
 				Options: command.Options{
@@ -209,7 +210,7 @@ func TestOptionsToEnv(t *testing.T) {
 			Args:   []string{"test", "int", "--first", "1"},
 			Expect: []string{"export MILPA_OPT_FIRST=1"},
 			Command: &command.Command{
-				Meta: Meta{
+				Meta: meta.Meta{
 					Name: []string{"test", "int"},
 				},
 				Options: command.Options{
@@ -223,7 +224,7 @@ func TestOptionsToEnv(t *testing.T) {
 			Args:   []string{"test", "bool", "--first"},
 			Expect: []string{"export MILPA_OPT_FIRST=true"},
 			Command: &command.Command{
-				Meta: Meta{
+				Meta: meta.Meta{
 					Name: []string{"test", "bool"},
 				},
 				Options: command.Options{
@@ -237,7 +238,7 @@ func TestOptionsToEnv(t *testing.T) {
 			Args:   []string{"test", "bool-false", "--first", "false"},
 			Expect: []string{"export MILPA_OPT_FIRST="},
 			Command: &command.Command{
-				Meta: Meta{
+				Meta: meta.Meta{
 					Name: []string{"test", "bool-false"},
 				},
 				Options: command.Options{
@@ -251,7 +252,7 @@ func TestOptionsToEnv(t *testing.T) {
 			Args:   []string{"test", "repeated", "--pato", "quem", "--pato", "quem quem"},
 			Expect: []string{"export MILPA_OPT_PATO=( quem 'quem quem' )"},
 			Command: &command.Command{
-				Meta: Meta{
+				Meta: meta.Meta{
 					Name: []string{"test", "repeated"},
 				},
 				Options: command.Options{
@@ -273,7 +274,7 @@ func TestOptionsToEnv(t *testing.T) {
 				t.Fatalf("Could not parse test arguments (%+v): %s", c.Args, err)
 			}
 			c.Command.Options.Parse(c.Command.FlagSet())
-			OptionsToEnv(c.Command, &dst, "export ")
+			runtime.OptionsToEnv(c.Command, &dst, "export ")
 
 			if err := c.Command.Options.AreValid(); err != nil {
 				t.Fatalf("Unexpected failure validating: %s", err)
