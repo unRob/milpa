@@ -55,6 +55,15 @@ setup() {
   run milpa itself create something-executable --executable
   assert_failure 2
   assert_output --partial "Command already exists"
+
+  echo '#!/usr/bin/env bash' >"$LOCAL_REPO/commands/something-executable"
+  echo 'env | grep ^MILPA | sort' >>"$LOCAL_REPO/commands/something-executable"
+
+  run milpa something-executable
+  assert_output --partial "MILPA_COMMAND_KIND=executable"
+  assert_output --partial "MILPA_COMMAND_NAME=milpa something-executable"
+  refute_output --partial "MILPA_OPT_"
+  refute_output --partial "MILPA_ARG_"
 }
 
 @test "itself create something-elsewhere --repo somewhere-else" {

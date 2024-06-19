@@ -12,7 +12,6 @@ import (
 	"testing/fstest"
 
 	"git.rob.mx/nidito/chinampa/pkg/tree"
-	"github.com/sirupsen/logrus"
 	"github.com/unrob/milpa/internal/bootstrap"
 	. "github.com/unrob/milpa/internal/lookup"
 )
@@ -129,7 +128,6 @@ func TestScripts(t *testing.T) {
 		"nested/executable.yaml",
 	}
 	mfs := setupFS(selected, allCommands, noDocs)
-	logrus.SetLevel(logrus.DebugLevel)
 	files, err := Scripts([]string{"**"})
 	if err != nil {
 		t.Fatalf("Could not find scripts: %v", err)
@@ -169,10 +167,10 @@ func TestScripts(t *testing.T) {
 
 		fileInfo, err := fs.Stat(DefaultFS, efile)
 		if err != nil {
-			logrus.Debugf("ignoring %s, failed to stat: %v", efile, err)
+			fmt.Printf("ignoring %s, failed to stat: %v", efile, err)
 			continue
 		} else if fileInfo.IsDir() {
-			// logrus.Debugf("ignoring directory %s", match)
+			// fmt.Printf("ignoring directory %s", match)
 			continue
 		}
 
@@ -183,7 +181,6 @@ func TestScripts(t *testing.T) {
 }
 
 func TestAllSubCommands(t *testing.T) {
-	logrus.SetLevel(logrus.DebugLevel)
 	root := fromProjectRoot()
 	DefaultFS = os.DirFS("/")
 	bootstrap.MilpaPath = []string{root + "/.milpa"}
@@ -216,7 +213,6 @@ func TestAllSubCommands(t *testing.T) {
 }
 
 func TestDocsFind(t *testing.T) {
-	logrus.SetLevel(logrus.DebugLevel)
 	root := fromProjectRoot()
 	bootstrap.MilpaPath = []string{root + "/.milpa"}
 
@@ -270,7 +266,6 @@ func TestDocsFind(t *testing.T) {
 }
 
 func TestDocsFindAll(t *testing.T) {
-	logrus.SetLevel(logrus.DebugLevel)
 	root := fromProjectRoot()
 	bootstrap.MilpaPath = []string{root + "/.milpa"}
 

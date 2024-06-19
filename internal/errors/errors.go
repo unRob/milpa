@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"git.rob.mx/nidito/chinampa/pkg/errors"
+	"git.rob.mx/nidito/chinampa/pkg/logger"
 	"git.rob.mx/nidito/chinampa/pkg/statuscode"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -65,21 +65,21 @@ func HandleExit(cmd *cobra.Command, err error) error {
 	switch err.(type) {
 	case errors.BadArguments:
 		showHelp(cmd)
-		logrus.Error(err)
+		logger.Error(err)
 		os.Exit(statuscode.Usage)
 	case errors.NotFound:
 		showHelp(cmd)
-		logrus.Error(err)
+		logger.Error(err)
 		os.Exit(statuscode.NotFound)
 	case ConfigError:
-		logrus.Info("run `milpa itself doctor` to diagnose your command")
-		logrus.Error(err)
+		logger.Info("run `milpa itself doctor` to diagnose your command")
+		logger.Error(err)
 		os.Exit(statuscode.ConfigError)
 	case EnvironmentError:
-		logrus.Error(err)
+		logger.Error(err)
 		os.Exit(statuscode.ConfigError)
 	case ProgrammerError:
-		logrus.Error(err)
+		logger.Error(err)
 		os.Exit(statuscode.ProgrammerError)
 	default:
 		if strings.HasPrefix(err.Error(), "unknown command") {
@@ -87,12 +87,12 @@ func HandleExit(cmd *cobra.Command, err error) error {
 			os.Exit(statuscode.NotFound)
 		} else if strings.HasPrefix(err.Error(), "unknown flag") || strings.HasPrefix(err.Error(), "unknown shorthand flag") {
 			showHelp(cmd)
-			logrus.Error(err)
+			logger.Error(err)
 			os.Exit(statuscode.Usage)
 		}
 	}
 
-	logrus.Errorf("Unknown error: %s", err)
+	logger.Errorf("Unknown error: %s", err)
 	os.Exit(2)
 	return err
 }

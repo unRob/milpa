@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/sirupsen/logrus"
+	"git.rob.mx/nidito/chinampa/pkg/logger"
 	. "github.com/unrob/milpa/internal/bootstrap"
 	_c "github.com/unrob/milpa/internal/constants"
 	merrors "github.com/unrob/milpa/internal/errors"
@@ -320,7 +320,7 @@ func TestBootstrapWithUserRepo(t *testing.T) {
 		os.Setenv("XDG_DATA_HOME", home+"/.local/share")
 
 		buff := &bytes.Buffer{}
-		logrus.SetOutput(buff)
+		logger.SetOutput(buff)
 		if err := Run(); err != nil {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 		}
@@ -344,7 +344,7 @@ func TestBootstrapWithUserRepo(t *testing.T) {
 		os.Setenv("HOME", home)
 
 		buff := &bytes.Buffer{}
-		logrus.SetOutput(buff)
+		logger.SetOutput(buff)
 		if err := Run(); err != nil {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 		}

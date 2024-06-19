@@ -3,13 +3,12 @@ module github.com/unrob/milpa
 go 1.22
 
 require (
-	git.rob.mx/nidito/chinampa v1.0.0-rc.0
+	git.rob.mx/nidito/chinampa v1.0.0-rc.1
 	github.com/alecthomas/chroma/v2 v2.14.0
 	github.com/alessio/shellescape v1.4.2
 	github.com/bmatcuk/doublestar/v4 v4.6.1
 	github.com/charmbracelet/glamour v0.7.0
 	github.com/fatih/color v1.17.0
-	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.5
 	github.com/yuin/goldmark v1.7.2
@@ -37,6 +36,7 @@ require (
 	github.com/muesli/termenv v0.15.2 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
+	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/yuin/goldmark-emoji v1.0.2 // indirect
 	golang.org/x/crypto v0.24.0 // indirect
 	golang.org/x/net v0.26.0 // indirect

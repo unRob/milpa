@@ -17,7 +17,6 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/errors"
 	"git.rob.mx/nidito/chinampa/pkg/render"
 	"git.rob.mx/nidito/chinampa/pkg/statuscode"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/unrob/milpa/internal/command/meta"
 	"github.com/unrob/milpa/internal/docs"
@@ -182,7 +181,7 @@ var Docs = &command.Command{
 				if helpErr != nil {
 					os.Exit(statuscode.ProgrammerError)
 				}
-				logrus.Error(err)
+				logger.Error(err)
 				os.Exit(statuscode.Usage)
 			}
 			return errors.NotFound{Msg: err.Error()}

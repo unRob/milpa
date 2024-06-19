@@ -12,7 +12,6 @@ import (
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
 	"git.rob.mx/nidito/chinampa/pkg/env"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	. "github.com/unrob/milpa/internal/actions"
 	"github.com/unrob/milpa/internal/bootstrap"
@@ -43,7 +42,6 @@ func TestRenderDocsHelpMain(t *testing.T) {
 	cmd.SetOut(&out)
 	cmd.SetErr(&stderr)
 	Docs.Cobra = cmd
-	logrus.SetLevel(logrus.DebugLevel)
 	err := Docs.Run(cmd, []string{})
 	if err != nil {
 		t.Fatalf("did not run: %s", out.String())
@@ -73,7 +71,6 @@ func TestRenderDocsRender(t *testing.T) {
 	cmd.SetOut(&out)
 	cmd.SetErr(&stderr)
 	Docs.Cobra = cmd
-	logrus.SetLevel(logrus.DebugLevel)
 	err := Docs.Run(cmd, []string{"milpa"})
 	if err != nil {
 		t.Fatalf("did not run: %s", err)

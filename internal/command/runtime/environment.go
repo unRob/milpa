@@ -4,6 +4,7 @@ package runtime
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
@@ -32,9 +33,8 @@ func ArgumentsToEnv(cmd *command.Command, dst *[]string, prefix string) []string
 			all = append(all, ret...)
 			*dst = append(*dst, fmt.Sprintf("declare -a %s=(%s)", envName, strings.Join(ret, " ")))
 		} else {
+			all = append(all, arg.ToString())
 			*dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, envName, shellescape.Quote(arg.ToString())))
-			// all = append(all, arg.ToString())
-			// *dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, envName, arg.ToString()))
 		}
 	}
 	return all
@@ -166,4 +166,29 @@ func Env(cmd *command.Command, seed []string) []string {
 	ArgumentsToEnv(cmd, &seed, "")
 
 	return seed
+}
+
+func BaseEnv(m meta.Meta) []string {
+	itself, err := os.Executable()
+	if err != nil {
+		log.Debugf("could not determine milpa's executable path: %s", err)
+	}
+
+	env := []string{
+		_c.EnvVarMilpaRoot + "=" + bootstrap.MilpaRoot,
+		_c.OutputCommandPath + "=" + m.Path,
+		"MILPA=" + itself,
+	}
+	for _, kv := range os.Environ() {
+		parts := strings.SplitN(kv, "=", 2)
+		if strings.HasPrefix(parts[0], "MILPA_COMMAND_") ||
+			strings.HasPrefix(parts[0], "MILPA_ARG_") ||
+			strings.HasPrefix(parts[0], "MILPA_OPT_") ||
+			parts[0] == _c.EnvVarMilpaRoot ||
+			parts[0] == _c.OutputCommandPath {
+			continue
+		}
+		env = append(env, kv)
+	}
+	return env
 }
