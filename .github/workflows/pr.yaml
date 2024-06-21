@@ -35,6 +35,8 @@ jobs:
         with:
           check_together: 'yes'
           ignore_paths: test/_helpers/bats-assert test/_helpers/bats-file test/_helpers/bats-support
+          # unsure why action picks up zsh scripts, but it shouldn't
+          ignore_names: runtime.zsh
 
       - name: Build milpa and environment
         run: |

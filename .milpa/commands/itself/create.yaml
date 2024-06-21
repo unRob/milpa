@@ -21,7 +21,7 @@ options:
     description: Open the script file in your current $EDITOR after creation
   kind:
     type: string
-    description: Create an empty, executable command. Useful when you'd like using something other than bash
+    description: The kind of command to create
     default: bash
     values:
       static: [executable, bash, fish, zsh]
