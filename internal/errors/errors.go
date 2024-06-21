@@ -9,6 +9,7 @@ import (
 
 	"git.rob.mx/nidito/chinampa/pkg/errors"
 	"git.rob.mx/nidito/chinampa/pkg/logger"
+	"git.rob.mx/nidito/chinampa/pkg/render"
 	"git.rob.mx/nidito/chinampa/pkg/statuscode"
 	"github.com/spf13/cobra"
 )
@@ -20,6 +21,7 @@ type ProgrammerError struct {
 type ConfigError struct {
 	Err    error
 	Config string
+	Help   string
 }
 
 type EnvironmentError struct {
@@ -32,6 +34,19 @@ func (err ConfigError) Error() string {
 	}
 
 	return fmt.Sprintf("Invalid configuration: %v", err.Err)
+}
+
+func (err ConfigError) Render() {
+	if err.Help != "" {
+		if text, e := render.Markdown([]byte(err.Help), true); e == nil {
+			fmt.Println(string(text))
+		} else {
+			logger.Errorf("help render failed: %s", e)
+		}
+	} else {
+		logger.Info("run `milpa itself doctor` to diagnose your command")
+		logger.Error(err)
+	}
 }
 
 func (err EnvironmentError) Error() string {
@@ -62,7 +77,7 @@ func HandleExit(cmd *cobra.Command, err error) error {
 		os.Exit(statuscode.Ok)
 	}
 
-	switch err.(type) {
+	switch e := err.(type) {
 	case errors.BadArguments:
 		showHelp(cmd)
 		logger.Error(err)
@@ -72,8 +87,7 @@ func HandleExit(cmd *cobra.Command, err error) error {
 		logger.Error(err)
 		os.Exit(statuscode.NotFound)
 	case ConfigError:
-		logger.Info("run `milpa itself doctor` to diagnose your command")
-		logger.Error(err)
+		e.Render()
 		os.Exit(statuscode.ConfigError)
 	case EnvironmentError:
 		logger.Error(err)

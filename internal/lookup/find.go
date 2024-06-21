@@ -42,7 +42,7 @@ func Scripts(query []string) (results map[string]string, err error) {
 		log.Debugf("found %d potential matches in %s", len(matches), path)
 		for _, match := range matches {
 			extension := filepath.Ext(match)
-			if extension != "" && extension != ".sh" {
+			if extension != "" && extension != ".sh" && extension != ".bash" && extension != ".zsh" && extension != ".fish" {
 				if extension != ".yaml" {
 					log.Debugf("ignoring /%s, unknown extension", match)
 				}

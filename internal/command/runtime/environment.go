@@ -3,7 +3,6 @@
 package runtime
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -18,32 +17,15 @@ import (
 )
 
 // ToEnv writes shell variables to dst.
-func ArgumentsToEnv(cmd *command.Command, dst *[]string, prefix string) []string {
+func ArgumentsToEnv(cmd *command.Command, dst *[]string) []string {
+	m := cmd.Meta.(meta.Meta)
 	all := []string{}
 	for _, arg := range cmd.Arguments {
-		envName := fmt.Sprintf("%s%s", _c.OutputPrefixArg, arg.EnvName())
+		envVarName := envVarName(arg.EnvName(), _c.OutputPrefixArg)
+		value := envVarPair(*envVarName, arg, m)
+		*dst = append(*dst, *value)
 
-		if arg.Variadic {
-			vals := arg.ToValue().([]string)
-
-			ret := []string{}
-			for _, v := range vals {
-				ret = append(ret, shellescape.Quote(v))
-			}
-			all = append(all, ret...)
-			*dst = append(*dst, fmt.Sprintf("declare -a %s=(%s)", envName, strings.Join(ret, " ")))
-		} else {
-			all = append(all, arg.ToString())
-			*dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, envName, shellescape.Quote(arg.ToString())))
-		}
-	}
-	return all
-}
-
-func ArgumentsToSlice(cmd *command.Command) []string {
-	all := []string{}
-	for _, arg := range cmd.Arguments {
-		if arg.Variadic {
+		if arg.Repeats() {
 			vals := arg.ToValue().([]string)
 			all = append(all, vals...)
 		} else {
@@ -62,62 +44,33 @@ var flagNames = map[string]string{
 	"skip-validation": env.ValidationDisabled,
 }
 
-func envValue(opts command.Options, f *pflag.Flag) (*string, *string) {
-	name := f.Name
-	if name == _c.HelpCommandName {
-		return nil, nil
-	}
-	envName := ""
-	value := f.Value.String()
-
-	if cname, ok := flagNames[name]; ok {
-		if value == "false" {
-			return nil, nil
-		}
-		return &cname, &value
-	}
-
-	envName = fmt.Sprintf("%s%s", _c.OutputPrefixOpt, strings.ToUpper(strings.ReplaceAll(name, "-", "_")))
-
-	if opt := opts[name]; opt != nil {
-		if opt.Repeated {
-			temp := []string{}
-			for _, v := range opt.ToValue().([]string) {
-				temp = append(temp, shellescape.Quote(v))
-			}
-			value = fmt.Sprintf("( %s )", strings.Join(temp, " "))
-		} else {
-			value = opt.ToString()
-		}
-	}
-
-	if value == "false" && f.Value.Type() == "bool" {
-		// makes dealing with false flags in shell easier
-		value = ""
-	}
-
-	return &envName, &value
-}
-
 // ToEnv writes shell variables to dst.
-func OptionsToEnv(cmd *command.Command, dst *[]string, prefix string) {
+func OptionsToEnv(cmd *command.Command, dst *[]string) {
+	m := cmd.Meta.(meta.Meta)
 	cmd.FlagSet().VisitAll(func(f *pflag.Flag) {
-		envName, value := envValue(cmd.Options, f)
-		if envName != nil && value != nil {
-			if opt := cmd.Options[f.Name]; opt != nil && opt.Repeated {
-				*dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, *envName, *value))
-			} else {
-				*dst = append(*dst, fmt.Sprintf("%s%s=%s", prefix, *envName, shellescape.Quote(*value)))
-			}
+		name := f.Name
+		if name == _c.HelpCommandName {
+			return
 		}
-	})
-}
+		envVar := envVarName(name, _c.OutputPrefixOpt)
 
-func OptionsEnvMap(cmd *command.Command, dst *map[string]string) {
-	cmd.Cobra.Flags().VisitAll(func(f *pflag.Flag) {
-		envName, value := envValue(cmd.Options, f)
-		if envName != nil && value != nil {
-			(*dst)[*envName] = *value
+		// check if part of global flags
+		if _, ok := flagNames[name]; ok {
+			value := f.Value.String()
+			if value == "false" {
+				return
+			}
+			*dst = append(*dst, *envVarValue(m, *envVar, value))
+			return
+		}
+
+		if opt := cmd.Options[name]; opt != nil {
+			if f.Value.Type() == "bool" && opt.ToString() == "false" {
+				return
+			}
+
+			value := envVarPair(*envVar, opt, m)
+			*dst = append(*dst, *value)
 		}
 	})
 }
@@ -132,40 +85,44 @@ func EnvironmentMap(cmd *command.Command) map[string]string {
 	}
 }
 
+// ToEval returns a sequence of commands to be interpreted by a shell.
 func ToEval(cmd *command.Command) string {
+	m := cmd.Meta.(meta.Meta)
 	output := []string{}
 	for name, value := range util.EnvironmentMap(bootstrap.MilpaPath, bootstrap.MilpaRoot) {
-		output = append(output, fmt.Sprintf("export %s=%s", name, shellescape.Quote(value)))
+		output = append(output, *envVarValue(m, name, value))
 	}
 
 	for name, value := range EnvironmentMap(cmd) {
-		output = append(output, fmt.Sprintf("export %s=%s", name, shellescape.Quote(value)))
+		output = append(output, *envVarValue(m, name, value))
 	}
 
-	OptionsToEnv(cmd, &output, "export ")
-	args := ArgumentsToEnv(cmd, &output, "export ")
+	OptionsToEnv(cmd, &output)
+	args := ArgumentsToEnv(cmd, &output)
 
 	for idx, arg := range args {
 		args[idx] = shellescape.Quote(arg)
 	}
 	output = append(output, "set -- "+strings.Join(args, " "))
 
-	return strings.Join(output, "\n")
+	res := strings.Join(output, "\n")
+	return res
 }
 
-func Env(cmd *command.Command, seed []string) []string {
+func Env(cmd *command.Command, seed []string) ([]string, []string) {
+	m := cmd.Meta.(meta.Meta)
 	for name, value := range util.EnvironmentMap(bootstrap.MilpaPath, bootstrap.MilpaRoot) {
-		seed = append(seed, fmt.Sprintf("%s=%s", name, shellescape.Quote(value)))
+		seed = append(seed, *envVarValue(m, name, value))
 	}
 
 	for name, value := range EnvironmentMap(cmd) {
-		seed = append(seed, fmt.Sprintf("%s=%s", name, value))
+		seed = append(seed, *envVarValue(m, name, value))
 	}
 
-	OptionsToEnv(cmd, &seed, "")
-	ArgumentsToEnv(cmd, &seed, "")
+	OptionsToEnv(cmd, &seed)
+	args := ArgumentsToEnv(cmd, &seed)
 
-	return seed
+	return seed, args
 }
 
 func BaseEnv(m meta.Meta) []string {

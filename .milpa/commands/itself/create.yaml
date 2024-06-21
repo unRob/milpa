@@ -19,9 +19,12 @@ options:
   open:
     type: bool
     description: Open the script file in your current $EDITOR after creation
-  executable:
-    type: bool
+  kind:
+    type: string
     description: Create an empty, executable command. Useful when you'd like using something other than bash
+    default: bash
+    values:
+      static: [executable, bash, fish, zsh]
   repo:
     type: string
     description: a path to the milpa repo to create this command in. By default, the nearest .milpa directory from `pwd` and up

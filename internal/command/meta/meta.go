@@ -18,8 +18,8 @@ type Meta struct {
 	// Name is a list of words naming this command
 	Name []string `json:"name" yaml:"name"`
 	// Kind can be executable (a binary or executable file), source (.sh file), or virtual (a sub-command group)
-	Kind   kind.Kind `json:"kind" yaml:"kind"`
-	Shell  string    `json:"shell" yaml:"shell"`
+	Kind   kind.Kind  `json:"kind" yaml:"kind"`
+	Shell  kind.Shell `json:"shell" yaml:"shell"`
 	Issues []error
 }
 
@@ -39,14 +39,18 @@ func ForPath(path string, repo string) (meta Meta) {
 		name = strings.TrimPrefix(name, _c.RepoCommandFolderName+"/")
 
 		switch extension {
-		case ".zsh":
-			meta.Kind = kind.Posix
-			meta.Shell = "zsh"
 		case ".sh", ".bash":
-			meta.Kind = kind.Posix
-			meta.Shell = "bash"
+			meta.Kind = kind.ShellScript
+			meta.Shell = kind.ShellBash
+		case ".fish":
+			meta.Kind = kind.ShellScript
+			meta.Shell = kind.ShellFish
+		case ".zsh":
+			meta.Kind = kind.ShellScript
+			meta.Shell = kind.ShellZSH
 		default:
 			meta.Kind = kind.Executable
+			meta.Shell = kind.ShellUnknown
 		}
 	}
 

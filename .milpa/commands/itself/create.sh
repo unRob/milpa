@@ -16,22 +16,42 @@ fi
 command_name=${MILPA_ARG_NAME[*]}
 command_path="$repo_path/commands/${command_name// //}"
 
-[[ "${MILPA_OPT_EXECUTABLE}" ]] || command_path="$command_path.sh"
+function createOrExit() {
+  [[ -f "$1" ]] && @milpa.fail "Command already exists at $1"
 
-[[ -f "$command_path" ]] && @milpa.fail "Command already exists at $command_path"
+  @milpa.log info "Creating command $(@milpa.fmt bold "${command_name}") at $1"
+  mkdir -p "$(dirname "$1")"
+}
 
-@milpa.log info "Creating command $(@milpa.fmt bold "${command_name}") at $command_path"
-mkdir -p "$(dirname "$command_path")"
-
-if [[ "${MILPA_OPT_EXECUTABLE}" ]]; then
-  touch "$command_path" || @milpa.fail "could not create $command_path"
-  chmod +x "$command_path"
-else
-  echo "#!/usr/bin/env bash" >> "$command_path" || @milpa.fail "could not create $command_path"
-fi
+case "${MILPA_OPT_KIND}" in
+  bash)
+    spec="${command_path}.yaml"
+    command_path="$command_path.sh"
+    createOrExit "$command_path"
+    echo "#!/usr/bin/env bash" >> "$command_path" || @milpa.fail "could not create $command_path"
+    ;;
+  zsh)
+    spec="${command_path}.yaml"
+    command_path="$command_path.zsh"
+    createOrExit "$command_path"
+    echo "#!/usr/bin/env zsh" >> "$command_path" || @milpa.fail "could not create $command_path"
+    ;;
+  fish)
+    spec="${command_path}.yaml"
+    command_path="$command_path.fish"
+    createOrExit "$command_path"
+    echo "#!/usr/bin/env fish" >> "$command_path" || @milpa.fail "could not create $command_path"
+    ;;
+  executable)
+    createOrExit "$command_path"
+    touch "$command_path" || @milpa.fail "could not create $command_path"
+    chmod +x "$command_path"
+    spec="${command_path}.yaml"
+    ;;
+esac
 
 # shellcheck disable=2001
-cat > "${command_path%.sh}.yaml" <<YAML
+cat > "$spec" <<YAML
 # see \`milpa help docs command spec\` for all the options
 summary: ${MILPA_OPT_SUMMARY}
 description: |

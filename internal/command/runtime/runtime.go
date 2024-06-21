@@ -3,10 +3,11 @@
 package runtime
 
 import (
+	"bytes"
 	"fmt"
 	"os"
-	"os/exec"
 	"strings"
+	"text/template"
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
 	"git.rob.mx/nidito/chinampa/pkg/logger"
@@ -17,6 +18,22 @@ import (
 )
 
 var log = logger.Sub("runtime")
+
+var posixEntrypoint = template.Must(template.New("").Parse(`set -o allexport;
+source "{{ .env }}";
+set +o allexport;
+rm "{{ .env }}";
+source "{{ .milpaRoot }}/.milpa/runtime.{{ .shell }}";
+[[ -f "{{ .repo }}//hooks/before-run.sh" ]] && source "{{ .repo }}/hooks/before-run.sh";
+source "{{ .path }}";`))
+
+var fishEntrypoint = template.Must(template.New("").Parse(`source "{{ .env }}"
+rm "{{ .env }}"
+source "{{ .milpaRoot }}/.milpa/runtime.fish";
+if test -f "{{ .repo }}/hooks/before-run.fish"
+  source "{{ .repo }}/hooks/before-run.fish"
+end
+source "{{ .path }}"`))
 
 // CanRun is the last runtime check before actually calling a command.
 func CanRun(cmd *command.Command) error {
@@ -35,6 +52,10 @@ func CanRun(cmd *command.Command) error {
 
 	if len(meta.Issues) > 0 {
 		issues := []string{}
+		cErr, ok := meta.Issues[0].(errors.ConfigError)
+		if len(meta.Issues) == 1 && ok {
+			return cErr
+		}
 		for _, i := range meta.Issues {
 			issues = append(issues, i.Error())
 		}
@@ -56,7 +77,7 @@ func Run(cmd *command.Command) error {
 	switch m.Kind {
 	case kind.Executable:
 		return Executable(cmd)
-	case kind.Posix, kind.Source:
+	case kind.ShellScript, kind.Source:
 		return Shell(cmd)
 	}
 
@@ -66,39 +87,72 @@ func Run(cmd *command.Command) error {
 // Shell replaces the current process with a shell invocation for a command.
 func Shell(cmd *command.Command) error {
 	m := cmd.Meta.(meta.Meta)
-	shell, err := exec.LookPath(m.Shell)
-	if err != nil {
-		return fmt.Errorf("could not find an executable for %s: %s", m.Shell, err)
-	}
-
-	env := ToEval(cmd)
-
-	out, err := os.CreateTemp(os.TempDir(), "milpa-cmdenv-*")
+	shell, err := m.Shell.Path()
 	if err != nil {
 		return err
 	}
 
-	_, err = out.Write([]byte(env))
-	if err != nil {
-		return fmt.Errorf("could not write to temporary file: %s", err)
-	}
-
 	cmdEnv := BaseEnv(m)
 
-	beforeHook := m.Repo + "/hooks/before-run.sh"
-	sources := strings.Join([]string{
-		"source '" + out.Name() + "'",
-		"source '" + bootstrap.MilpaRoot + "/.milpa/utils.sh'",
-		"[[ -f '" + beforeHook + "' ]] && source '" + beforeHook + "'",
-	}, ";") + ";"
+	args := []string{}
+	switch m.Shell {
+	case kind.ShellBash, kind.ShellZSH:
+		env := ToEval(cmd)
 
-	args := []string{
-		shell,
-		"-c",
-		"set -o allexport;" + sources + "set +o allexport; rm " + out.Name() + "; source " + m.Path + ";",
+		out, err := os.CreateTemp(os.TempDir(), "milpa-cmdenv-*")
+		if err != nil {
+			return err
+		}
+
+		_, err = out.Write([]byte(env))
+		if err != nil {
+			return fmt.Errorf("could not write to temporary file: %s", err)
+		}
+
+		buf := &bytes.Buffer{}
+		err = template.Must(posixEntrypoint.Clone()).Execute(buf, map[string]string{
+			"env":       out.Name(),
+			"repo":      m.Repo,
+			"milpaRoot": bootstrap.MilpaRoot,
+			"path":      m.Path,
+			"shell":     string(m.Shell),
+		})
+		if err != nil {
+			return err
+		}
+
+		rt := buf.String()
+		log.Tracef("bash runtime: %s", rt)
+
+		args = []string{shell, "-c", rt}
+	case kind.ShellFish:
+		env := ToEval(cmd)
+
+		out, err := os.CreateTemp(os.TempDir(), "milpa-cmdenv-*")
+		if err != nil {
+			return err
+		}
+
+		_, err = out.Write([]byte(env))
+		if err != nil {
+			return fmt.Errorf("could not write to temporary file: %s", err)
+		}
+		buf := &bytes.Buffer{}
+		err = template.Must(fishEntrypoint.Clone()).Execute(buf, map[string]string{
+			"env":       out.Name(),
+			"repo":      m.Repo,
+			"milpaRoot": bootstrap.MilpaRoot,
+			"path":      m.Path,
+			"shell":     string(m.Shell),
+		})
+		if err != nil {
+			return err
+		}
+
+		args = []string{shell, "-c", buf.String()}
 	}
 
-	log.Debugf("calling shell command %s", args)
+	log.Debugf("calling shell %s (%s) with command %s", m.Shell, shell, args)
 
 	return fork(shell, args, cmdEnv)
 }
@@ -107,8 +161,7 @@ func Shell(cmd *command.Command) error {
 func Executable(cmd *command.Command) error {
 	m := cmd.Meta.(meta.Meta)
 
-	cmdEnv := Env(cmd, BaseEnv(m))
-	args := ArgumentsToSlice(cmd)
+	cmdEnv, args := Env(cmd, BaseEnv(m))
 
 	log.Debugf("calling executable command %s", args)
 	// Launch command with user provided arguments

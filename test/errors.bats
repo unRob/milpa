@@ -20,10 +20,10 @@ setup () {
   cat "$repo/commands/bad-command.yaml"
   echo "#!/usr/bin/env bash\necho not bad" > "$repo/commands/bad-command.sh"
   export MILPA_PATH="${BATS_SUITE_TMPDIR}/bad-config"
-  export DEBUG=trace
   run milpa bad-command
-  assert_output --regexp "run \`milpa itself doctor\` to diagnose your command
-ERROR: Invalid configuration: cannot run command <milpa bad-command>: Invalid configuration"
+  assert_output --regexp "Run \`milpa itself doctor\` to diagnose your installed commands."
+  assert_output --regexp "milpa bad-command"
+  assert_output --regexp "$repo/commands/bad-command.yaml"
 }
 
 

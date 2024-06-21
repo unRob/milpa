@@ -2,8 +2,12 @@ module github.com/unrob/milpa
 
 go 1.22
 
+// Chinampa came from this repo, and we're the primary consumer
+// keeping this comment handy to debug
+// replace git.rob.mx/nidito/chinampa => ../chinampa
+
 require (
-	git.rob.mx/nidito/chinampa v1.0.0-rc.1
+	git.rob.mx/nidito/chinampa v1.0.0-rc.2
 	github.com/alecthomas/chroma/v2 v2.14.0
 	github.com/alessio/shellescape v1.4.2
 	github.com/bmatcuk/doublestar/v4 v4.6.1
