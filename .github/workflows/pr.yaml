@@ -55,7 +55,7 @@ jobs:
 
       - name: Integration tests
         run: |
-          apt-get install zsh fish
+          sudo apt-get install zsh fish
           $(pwd)/milpa dev test integration --coverage
 
       - name: milpa doctor
