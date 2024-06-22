@@ -18,9 +18,9 @@ type Meta struct {
 	// Name is a list of words naming this command
 	Name []string `json:"name" yaml:"name"`
 	// Kind can be executable (a binary or executable file), source (.sh file), or virtual (a sub-command group)
-	Kind   kind.Kind  `json:"kind" yaml:"kind"`
-	Shell  kind.Shell `json:"shell" yaml:"shell"`
-	Issues []error
+	Kind  kind.Kind  `json:"kind" yaml:"kind"`
+	Shell kind.Shell `json:"shell" yaml:"shell"`
+	Error error
 }
 
 func ForPath(path string, repo string) (meta Meta) {
@@ -56,11 +56,6 @@ func ForPath(path string, repo string) (meta Meta) {
 
 	meta.Repo = repo
 	meta.Name = strings.Split(name, "/")
-	meta.Issues = []error{}
 
 	return meta
-}
-
-func (meta *Meta) ParsingErrors() []error {
-	return meta.Issues
 }

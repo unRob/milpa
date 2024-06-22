@@ -14,8 +14,8 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/env"
 	"github.com/spf13/cobra"
 	. "github.com/unrob/milpa/internal/actions"
-	"github.com/unrob/milpa/internal/bootstrap"
 	"github.com/unrob/milpa/internal/lookup"
+	"github.com/unrob/milpa/internal/repo"
 )
 
 func fromProjectRoot() string {
@@ -31,7 +31,7 @@ func fromProjectRoot() string {
 func TestRenderDocsHelpMain(t *testing.T) {
 	lookup.DefaultFS = os.DirFS("/")
 	root := fromProjectRoot()
-	bootstrap.MilpaPath = []string{root + "/.milpa"}
+	repo.Path = []string{root + "/.milpa"}
 	AfterHelp = func(code int) {}
 	Docs.SetBindings()
 	out := bytes.Buffer{}
@@ -60,7 +60,7 @@ func TestRenderDocsHelpMain(t *testing.T) {
 func TestRenderDocsRender(t *testing.T) {
 	lookup.DefaultFS = os.DirFS("/")
 	root := fromProjectRoot()
-	bootstrap.MilpaPath = []string{root + "/.milpa"}
+	repo.Path = []string{root + "/.milpa"}
 	AfterHelp = func(code int) {}
 	Docs.SetBindings()
 	out := bytes.Buffer{}

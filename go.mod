@@ -7,7 +7,7 @@ go 1.22
 // replace git.rob.mx/nidito/chinampa => ../chinampa
 
 require (
-	git.rob.mx/nidito/chinampa v1.0.0-rc.2
+	git.rob.mx/nidito/chinampa v1.0.0-rc.3
 	github.com/alecthomas/chroma/v2 v2.14.0
 	github.com/alessio/shellescape v1.4.2
 	github.com/bmatcuk/doublestar/v4 v4.6.1

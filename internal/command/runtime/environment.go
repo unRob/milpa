@@ -4,17 +4,46 @@ package runtime
 
 import (
 	"os"
+	"strconv"
 	"strings"
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
 	"git.rob.mx/nidito/chinampa/pkg/env"
+	"git.rob.mx/nidito/chinampa/pkg/runtime"
 	"github.com/alessio/shellescape"
 	"github.com/spf13/pflag"
-	"github.com/unrob/milpa/internal/bootstrap"
 	"github.com/unrob/milpa/internal/command/meta"
 	_c "github.com/unrob/milpa/internal/constants"
+	"github.com/unrob/milpa/internal/repo"
 	"github.com/unrob/milpa/internal/util"
 )
+
+func rootEnv() map[string]string {
+	res := map[string]string{
+		_c.EnvVarMilpaRoot:       repo.Root,
+		_c.EnvVarMilpaPath:       strings.Join(repo.Path, ":"),
+		_c.EnvVarMilpaPathParsed: "true",
+	}
+	trueString := strconv.FormatBool(true)
+
+	if !runtime.ColorEnabled() {
+		res[env.NoColor] = trueString
+	} else if util.IsTrueIsh(os.Getenv(env.ForceColor)) {
+		res[env.ForceColor] = "always"
+	}
+
+	if runtime.DebugEnabled() {
+		res[env.Debug] = trueString
+	}
+
+	if runtime.VerboseEnabled() {
+		res[env.Verbose] = trueString
+	} else if util.IsTrueIsh(os.Getenv(env.Silent)) {
+		res[env.Silent] = trueString
+	}
+
+	return res
+}
 
 // ToEnv writes shell variables to dst.
 func ArgumentsToEnv(cmd *command.Command, dst *[]string) []string {
@@ -89,7 +118,7 @@ func EnvironmentMap(cmd *command.Command) map[string]string {
 func ToEval(cmd *command.Command) string {
 	m := cmd.Meta.(meta.Meta)
 	output := []string{}
-	for name, value := range util.EnvironmentMap(bootstrap.MilpaPath, bootstrap.MilpaRoot) {
+	for name, value := range rootEnv() {
 		output = append(output, *envVarValue(m, name, value))
 	}
 
@@ -111,7 +140,7 @@ func ToEval(cmd *command.Command) string {
 
 func Env(cmd *command.Command, seed []string) ([]string, []string) {
 	m := cmd.Meta.(meta.Meta)
-	for name, value := range util.EnvironmentMap(bootstrap.MilpaPath, bootstrap.MilpaRoot) {
+	for name, value := range rootEnv() {
 		seed = append(seed, *envVarValue(m, name, value))
 	}
 
@@ -132,7 +161,7 @@ func BaseEnv(m meta.Meta) []string {
 	}
 
 	env := []string{
-		_c.EnvVarMilpaRoot + "=" + bootstrap.MilpaRoot,
+		_c.EnvVarMilpaRoot + "=" + repo.Root,
 		_c.OutputCommandPath + "=" + m.Path,
 		"MILPA=" + itself,
 	}

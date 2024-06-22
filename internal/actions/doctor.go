@@ -11,9 +11,10 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/logger"
 	"git.rob.mx/nidito/chinampa/pkg/tree"
 	"github.com/fatih/color"
-	"github.com/unrob/milpa/internal/bootstrap"
 	"github.com/unrob/milpa/internal/command/meta"
 	_c "github.com/unrob/milpa/internal/constants"
+	"github.com/unrob/milpa/internal/errors"
+	"github.com/unrob/milpa/internal/repo"
 )
 
 var docLog = logger.Sub("itself doctor")
@@ -50,7 +51,7 @@ var Doctor = &command.Command{
 		summarize := cmd.Options["summary"].ToValue().(bool)
 
 		var milpaRoot string
-		if mp := os.Getenv(_c.EnvVarMilpaRoot); mp != "" {
+		if mp := repo.Root; mp != "" {
 			milpaRoot = strings.Join(strings.Split(mp, ":"), "\n")
 		} else {
 			milpaRoot = warn.Sprint("empty")
@@ -60,7 +61,7 @@ var Doctor = &command.Command{
 		var milpaPath string
 		bold.Fprintf(out, "%s is: ", _c.EnvVarMilpaPath)
 		if mp := os.Getenv(_c.EnvVarMilpaPath); mp != "" {
-			milpaPath = "\n" + strings.Join(bootstrap.MilpaPath, "\n")
+			milpaPath = "\n" + strings.Join(repo.Path, "\n")
 		} else {
 			milpaPath = warn.Sprint("empty")
 		}
@@ -78,20 +79,24 @@ var Doctor = &command.Command{
 
 			hasFailures := false
 			report := map[string]int{}
-			if meta, ok := cmd.Meta.(meta.Meta); ok {
-				// fmt.Println("hasmeta")
-				parsingErrors := meta.ParsingErrors()
-				if len(parsingErrors) > 0 {
+			if m, ok := cmd.Meta.(meta.Meta); ok {
+				docLog.Debugf("found meta")
+				if m.Error != nil {
+					docLog.Debugf("found meta error")
 					hasFailures = true
 
-					for _, err := range parsingErrors {
-						failures[cmd.FullName()]++
-						message += fail.Sprintf("  - %s\n", err)
+					err := m.Error
+					failures[cmd.FullName()]++
+					if e, ok := err.(errors.SpecError); ok {
+						// render underlying error during doctor, not the rendered markdown help
+						err = e.Doctor()
 					}
+					message += fail.Sprintf("  - %s\n", err)
 				} else {
 					report = cmd.Validate()
 				}
 			} else {
+				docLog.Debugf("no meta")
 				report = cmd.Validate()
 			}
 			for property, status := range report {
@@ -131,7 +136,9 @@ var Doctor = &command.Command{
 				failureReport = append(failureReport, fmt.Sprintf("%s - %d issue%s", cmd, count, plural))
 			}
 
-			return fmt.Errorf("your milpa could use some help with the following commands:\n%s", strings.Join(failureReport, "\n"))
+			return errors.ProgrammerError{
+				Err: fmt.Errorf("your milpa could use some help with the following commands:\n%s", strings.Join(failureReport, "\n")),
+			}
 		}
 
 		return nil

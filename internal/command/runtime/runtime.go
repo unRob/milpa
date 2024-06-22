@@ -6,15 +6,14 @@ import (
 	"bytes"
 	"fmt"
 	"os"
-	"strings"
 	"text/template"
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
 	"git.rob.mx/nidito/chinampa/pkg/logger"
-	"github.com/unrob/milpa/internal/bootstrap"
 	"github.com/unrob/milpa/internal/command/kind"
 	"github.com/unrob/milpa/internal/command/meta"
 	"github.com/unrob/milpa/internal/errors"
+	"github.com/unrob/milpa/internal/repo"
 )
 
 var log = logger.Sub("runtime")
@@ -39,32 +38,18 @@ source "{{ .path }}"`))
 func CanRun(cmd *command.Command) error {
 	if cmd.Meta == nil {
 		return errors.ProgrammerError{
-			Err: fmt.Errorf("unknown meta: %s", cmd.Path),
+			Err: fmt.Errorf("unknown meta for command: %s", cmd.FullName()),
 		}
 	}
 
-	meta, ok := cmd.Meta.(meta.Meta)
+	m, ok := cmd.Meta.(meta.Meta)
 	if !ok {
 		return errors.ProgrammerError{
-			Err: fmt.Errorf("meta of unknown kind for %s: %+v", cmd.Path, cmd.Meta),
+			Err: fmt.Errorf("unknown meta type for command %s: %T", cmd.FullName(), cmd.Meta),
 		}
 	}
 
-	if len(meta.Issues) > 0 {
-		issues := []string{}
-		cErr, ok := meta.Issues[0].(errors.ConfigError)
-		if len(meta.Issues) == 1 && ok {
-			return cErr
-		}
-		for _, i := range meta.Issues {
-			issues = append(issues, i.Error())
-		}
-
-		return errors.ConfigError{
-			Err: fmt.Errorf("cannot run command <%s>: %s", cmd.FullName(), strings.Join(issues, "\n")),
-		}
-	}
-	return nil
+	return m.Error
 }
 
 // Run is the chinampa action to be take on a valid command.
@@ -113,7 +98,7 @@ func Shell(cmd *command.Command) error {
 		err = template.Must(posixEntrypoint.Clone()).Execute(buf, map[string]string{
 			"env":       out.Name(),
 			"repo":      m.Repo,
-			"milpaRoot": bootstrap.MilpaRoot,
+			"milpaRoot": repo.Root,
 			"path":      m.Path,
 			"shell":     string(m.Shell),
 		})
@@ -141,7 +126,7 @@ func Shell(cmd *command.Command) error {
 		err = template.Must(fishEntrypoint.Clone()).Execute(buf, map[string]string{
 			"env":       out.Name(),
 			"repo":      m.Repo,
-			"milpaRoot": bootstrap.MilpaRoot,
+			"milpaRoot": repo.Root,
 			"path":      m.Path,
 			"shell":     string(m.Shell),
 		})

@@ -71,3 +71,16 @@ _activeHelp_ tests if milpa can call itself during completion
 :0
 Completion ended with directive: ShellCompDirectiveDefault"
 }
+
+@test "milpa renders properly with/out truecolor enabled" {
+  sameError='\\E\[1;41;37m ERROR \\E\[22;0;0m Unknown subcommand bad-command'
+  run bash -c 'printf '%q' "$(COLORTERM="terminal.app" NO_COLOR="" COLOR=always MILPA_HELP_STYLE=auto milpa bad-command 2>&1)"'
+  assert_success
+  assert_output --regexp "$sameError"
+  assert_output --regexp '\\E\[38;5;193;1m\\E\[0m\\E\[38;5;193;1m\\E\[0m\\E\[38;5;193;1m## \\E\[0m\\E\[38;5;193;1mUsage\\E\[0m'
+
+  run bash -c 'printf '%q' "$(COLORTERM="truecolor" NO_COLOR="" COLOR=always MILPA_HELP_STYLE=auto milpa bad-command 2>&1)"'
+  assert_success
+  assert_output --regexp "$sameError"
+  assert_output --regexp '\\E\[38;2;192;227;147;1m\\E\[0m\\E\[38;2;192;227;147;1m\\E\[0m\\E\[38;2;192;227;147;1m## \\E\[0m\\E\[38;2;192;227;147;1mUsage\\E\[0m'
+}

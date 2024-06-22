@@ -17,7 +17,7 @@ import (
 	"github.com/unrob/milpa/internal/lookup"
 )
 
-var version = "beta"
+var version = "dev"
 
 func logLevel() logger.Level {
 	if os.Getenv(env.Debug) == "trace" {

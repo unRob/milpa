@@ -15,9 +15,8 @@ setup () {
 
 @test "milpa errors on bad configs" {
   repo="${BATS_SUITE_TMPDIR}/bad-config/.milpa"
-  mkdir -pv "$repo/commands"
+  mkdir -p "$repo/commands"
   echo "summary:"$'\n'"  int: - 1 :a\\" > "$repo/commands/bad-command.yaml"
-  cat "$repo/commands/bad-command.yaml"
   echo "#!/usr/bin/env bash\necho not bad" > "$repo/commands/bad-command.sh"
   export MILPA_PATH="${BATS_SUITE_TMPDIR}/bad-config"
   run milpa bad-command

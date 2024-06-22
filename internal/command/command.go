@@ -17,19 +17,6 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const badSpecTpl = `---
-# ⚠️ Could not validate spec ⚠️
-
-Looks like the spec for this command has errors that prevented parsing:
-
-- command: **milpa %s**
-- path:  **%s**
-- error: **%s**
-
-Run ﹅milpa itself doctor﹅ to diagnose your installed commands.
-
----`
-
 func New(path string, repo string) (cmd *command.Command, err error) {
 	m := meta.ForPath(path, repo)
 	cmd = &command.Command{
@@ -64,22 +51,15 @@ func New(path string, repo string) (cmd *command.Command, err error) {
 
 	if err != nil {
 		// todo: output better errors, decode yaml.TypeError
-		retErr := errors.ConfigError{
-			Err:    err,
-			Config: spec,
-			Help:   fmt.Sprintf(badSpecTpl, cmd.FullName(), spec, err),
+		m.Error = errors.SpecError{
+			Err:         err,
+			Path:        spec,
+			CommandName: cmd.FullName(),
 		}
-		logger.Error("failing from new")
-		m.Issues = append(m.Issues, retErr)
-		cmd.Meta = m
 		cmd.HelpFunc = func(printLinks bool) string {
-			return fmt.Sprintf(retErr.Help, err)
+			return m.Error.Error()
 		}
-		cmd.Action = runtime.CanRun
-
-		return cmd, retErr
 	}
-
 	cmd.Meta = m
 	return cmd.SetBindings(), nil
 }

@@ -20,6 +20,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/unrob/milpa/internal/command/meta"
 	"github.com/unrob/milpa/internal/docs"
+	"github.com/unrob/milpa/internal/repo"
 
 	"git.rob.mx/nidito/chinampa/pkg/logger"
 	_c "github.com/unrob/milpa/internal/constants"
@@ -145,9 +146,9 @@ var Docs = &command.Command{
 		},
 	},
 	Meta: meta.Meta{
-		Path: os.Getenv(_c.EnvVarMilpaRoot) + "/milpa/docs",
+		Path: repo.Root + "/milpa/docs",
 		Name: []string{_c.HelpCommandName, "docs"},
-		Repo: os.Getenv(_c.EnvVarMilpaRoot),
+		Repo: repo.Root,
 		Kind: "docs",
 	},
 	Action: func(cmd *command.Command) error {

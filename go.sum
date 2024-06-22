@@ -1,5 +1,5 @@
-git.rob.mx/nidito/chinampa v1.0.0-rc.2 h1:UBHFY2ye+9RuXSxjtVS+QD8lQ42zifXPyviDuQWKhXg=
-git.rob.mx/nidito/chinampa v1.0.0-rc.2/go.mod h1:m+9+dIJRhyfkKao7KlEscLEUXVwfTt2nytM6P+GDKmM=
+git.rob.mx/nidito/chinampa v1.0.0-rc.3 h1:6WDJCqFRTNrzhCJpmP88vgfc3VB9CfLx6JMgpOjkQZ0=
+git.rob.mx/nidito/chinampa v1.0.0-rc.3/go.mod h1:kXsJ0I25WU5t4NoCLKalsI8NlVA0uJ0kdJYqOYB1UnE=
 github.com/alecthomas/assert/v2 v2.7.0 h1:QtqSACNS3tF7oasA8CU6A6sXZSBDqnm7RfpLl9bZqbE=
 github.com/alecthomas/assert/v2 v2.7.0/go.mod h1:Bze95FyfUr7x34QZrjL+XP+0qgp/zg8yS+TtBj1WA3k=
 github.com/alecthomas/chroma/v2 v2.2.0/go.mod h1:vf4zrexSH54oEjJ7EdB65tGNHmH3pGZmVkgTP5RHvAs=
