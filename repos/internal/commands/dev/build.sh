@@ -10,14 +10,20 @@ fi
 cd "$MILPA_ROOT" || @milpa.fail "could not cd into $MILPA_ROOT"
 
 args=(
-  -ldflags "-s -w -X main.version=${VERSION}" -o compa
+  -ldflags "-X main.version=${VERSION}" -o milpa
 )
 
 if [[ "${MILPA_OPT_COVERAGE}" ]]; then
-  args+=(-cover -coverpkg=./...)
+  # args+=(-cover "-coverpkg=$(go list -f '{{if not .Standard}}{{.ImportPath}}{{end}}' -deps . |
+  #   grep -E '(milpa|chinampa)' |
+  #   paste -sd "," -)" )
+  @milpa.log info "Collecting coverage"
+  args+=( -cover -coverpkg=./... -tags coverage )
 fi
 
-@milpa.log info "Building compa version $VERSION"
+@milpa.log info "Building milpa version $VERSION"
 go build "${args[@]}" || exit 2
-@milpa.log complete "compa version $VERSION built"
+# account older milpa versions depending on bash entrypoint
+ln -sfv milpa compa
+@milpa.log complete "milpa version $VERSION built"
 

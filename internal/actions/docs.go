@@ -17,12 +17,12 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/errors"
 	"git.rob.mx/nidito/chinampa/pkg/render"
 	"git.rob.mx/nidito/chinampa/pkg/statuscode"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/unrob/milpa/internal/command/meta"
 	"github.com/unrob/milpa/internal/docs"
+	"github.com/unrob/milpa/internal/repo"
 
 	"git.rob.mx/nidito/chinampa/pkg/logger"
-	milpaCommand "github.com/unrob/milpa/internal/command"
 	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/unrob/milpa/internal/lookup"
 )
@@ -145,10 +145,10 @@ var Docs = &command.Command{
 			Default:     "http://localhost:4242",
 		},
 	},
-	Meta: milpaCommand.Meta{
-		Path: os.Getenv(_c.EnvVarMilpaRoot) + "/milpa/docs",
+	Meta: meta.Meta{
+		Path: repo.Root + "/milpa/docs",
 		Name: []string{_c.HelpCommandName, "docs"},
-		Repo: os.Getenv(_c.EnvVarMilpaRoot),
+		Repo: repo.Root,
 		Kind: "docs",
 	},
 	Action: func(cmd *command.Command) error {
@@ -167,7 +167,6 @@ var Docs = &command.Command{
 			if err != nil {
 				return err
 			}
-			AfterHelp(statuscode.RenderHelp)
 			dlog.Debug("Rendered docs help page")
 			return nil
 		}
@@ -183,7 +182,7 @@ var Docs = &command.Command{
 				if helpErr != nil {
 					os.Exit(statuscode.ProgrammerError)
 				}
-				logrus.Error(err)
+				logger.Error(err)
 				os.Exit(statuscode.Usage)
 			}
 			return errors.NotFound{Msg: err.Error()}
@@ -210,11 +209,9 @@ var Docs = &command.Command{
 			return err
 		}
 
-		if _, err := cmd.Cobra.OutOrStderr().Write(doc); err != nil {
+		if _, err := cmd.Cobra.OutOrStdout().Write(doc); err != nil {
 			return err
 		}
-		AfterHelp(statuscode.RenderHelp)
-
 		return nil
 	},
 }

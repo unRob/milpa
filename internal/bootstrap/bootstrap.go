@@ -15,52 +15,37 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/logger"
 	_c "github.com/unrob/milpa/internal/constants"
 	"github.com/unrob/milpa/internal/errors"
+	"github.com/unrob/milpa/internal/repo"
 	"github.com/unrob/milpa/internal/util"
 )
 
 var log = logger.Sub("bootstrap")
-var MilpaPath = ParseMilpaPath()
-
-// ParseMilpaPath turns MILPA_PATH into a string slice.
-func ParseMilpaPath() []string {
-	return strings.Split(os.Getenv(_c.EnvVarMilpaPath), ":")
-}
-
-func CheckMilpaPathSet() error {
-	if len(MilpaPath) == 0 {
-		return fmt.Errorf("no %s set on the environment", _c.EnvVarMilpaPath)
-	}
-	return nil
-}
-
-// MilpaRoot points to the system's milpa installation.
-var MilpaRoot = "/usr/local/lib/milpa"
 
 func Run() error {
 	envRoot := os.Getenv(_c.EnvVarMilpaRoot)
-	pathMap := NewPathBuilder()
 
 	if envRoot != "" {
-		MilpaRoot = envRoot
+		repo.Root = envRoot
 	} else {
 		log.Debugf("%s is not set, using default %s", _c.EnvVarMilpaRoot, envRoot)
 	}
 
-	if !IsDir(MilpaRoot, false) {
-		return errors.EnvironmentError{Err: fmt.Errorf("%s (%s) is not a directory", _c.EnvVarMilpaRoot, MilpaRoot)}
+	if !IsDir(repo.Root, false) {
+		return errors.EnvironmentError{Err: fmt.Errorf("%s (%s) is not a directory", _c.EnvVarMilpaRoot, repo.Root)}
 	}
 
-	if len(MilpaPath) != 0 && MilpaPath[0] != "" {
+	pathMap := NewPathBuilder()
+	if len(repo.Path) != 0 && repo.Path[0] != "" {
 		if util.IsTrueIsh(os.Getenv(_c.EnvVarMilpaPathParsed)) {
-			log.Debugf("%s already parsed upstream. %d items found", _c.EnvVarMilpaPath, len(MilpaPath))
+			log.Debugf("%s already parsed upstream. %d items found", _c.EnvVarMilpaPath, len(repo.Path))
 			return nil
 		}
 
-		log.Debugf("%s is has %d items, parsing", _c.EnvVarMilpaPath, len(MilpaPath))
-		for idx, p := range MilpaPath {
+		log.Debugf("%s is has %d items, parsing", _c.EnvVarMilpaPath, len(repo.Path))
+		for idx, p := range repo.Path {
 			if p == "" || !IsDir(p, true) {
 				log.Debugf("Dropping non-directory <%s> from MILPA_PATH", p)
-				MilpaPath = append(MilpaPath[:idx], MilpaPath[idx+1:]...)
+				repo.Path = append(repo.Path[:idx], repo.Path[idx+1:]...)
 				continue
 			}
 
@@ -72,7 +57,7 @@ func Run() error {
 		}
 	}
 
-	rootRepo := filepath.Join(MilpaRoot, _c.RepoRoot)
+	rootRepo := filepath.Join(repo.Root, _c.RepoRoot)
 	if !IsDir(rootRepo, false) {
 		return errors.EnvironmentError{Err: fmt.Errorf("milpa's built-in repo at %s is not a directory", rootRepo)}
 	}
@@ -90,8 +75,8 @@ func Run() error {
 	pathMap.AddLookup(_c.EnvVarLookupUserReposDisabled, lookupUserRepos)
 	pathMap.AddLookup(_c.EnvVarLookupGlobalReposDisabled, lookupGlobalRepos)
 
-	MilpaPath = pathMap.Ordered()
-	os.Setenv(_c.EnvVarMilpaPath, strings.Join(MilpaPath, ":"))
+	repo.Path = pathMap.Ordered()
+	os.Setenv(_c.EnvVarMilpaPath, strings.Join(repo.Path, ":"))
 
 	return nil
 }
@@ -154,7 +139,7 @@ func lookupUserRepos() []string {
 func lookupGlobalRepos() []string {
 	log.Debugf("looking for global repos")
 	found := []string{}
-	globalRepos := filepath.Join(MilpaRoot, "repos")
+	globalRepos := filepath.Join(repo.Root, "repos")
 	if files, err := os.ReadDir(globalRepos); err == nil {
 		for _, file := range files {
 			globalRepo := filepath.Join(globalRepos, file.Name())

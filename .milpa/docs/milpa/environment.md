@@ -9,7 +9,7 @@ There's a few environment variables that control the behavior of `milpa`.
 
 ### `MILPA_ROOT`
 
-`MILPA_ROOT` points to the installed milpa _kernel_, by default `/usr/local/lib/milpa`. This folder contains a milpa repo, the `milpa` executable, and a helper binary named `compa`, along a copy of the license and the source repo's README.
+`MILPA_ROOT` points to the installed milpa _kernel_, by default `/usr/local/lib/milpa`. This folder contains a the built-in milpa repo, the `milpa` executable, and a copy of the license and the source repo's README.
 
 You can set it to a local installation, like a fork, and run `$MILPA_ROOT/milpa` to use that fork's scripts instead of an installed version.
 

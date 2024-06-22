@@ -9,14 +9,14 @@ function files_touched () {
 set -e errexit
 #shellcheck disable=2155
 export MILPA_ROOT=$(pwd)
-if [[ ! -x "$MILPA_ROOT/compa" ]]; then
+if [[ ! -x "$MILPA_ROOT/milpa" ]]; then
   milpa dev build
 fi
 #shellcheck disable=2155
-export TEST_MILPA_VERSION="$("$MILPA_ROOT/compa" --version 2>&1)"
+export TEST_MILPA_VERSION="$("$MILPA_ROOT/milpa" --version 2>&1)"
 
 # things checked by golangci-lint run and gotestsum
-GO_DEPS=( compa.go go.mod go.sum internal/**/*.go )
+GO_DEPS=( milpa.go go.mod go.sum internal/**/*.go )
 # things checked by shellcheck
 SHELL_DEPS=( bootstrap.sh .milpa/**/*.sh repos/internal/**/*.sh )
 # things checked bats

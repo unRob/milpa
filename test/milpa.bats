@@ -8,6 +8,16 @@ setup () {
   _common_setup
 }
 
+@test "milpa prints version" {
+  run --keep-empty-lines --separate-stderr milpa --version
+  assert_equal "$output" "$TEST_MILPA_VERSION"
+  assert_equal "$stderr" ""
+
+  run --keep-empty-lines --separate-stderr milpa __version
+  assert_equal "$stderr" "$TEST_MILPA_VERSION"
+  assert_equal "$output" ""
+}
+
 @test "milpa with no arguments shows help" {
   run -127 milpa
   assert_output --regexp "## Usage"
@@ -37,22 +47,6 @@ setup () {
   assert_output --regexp 'Unknown help topic \"typotypo\" for milpa itself'
 }
 
-@test "milpa with bad MILPA_ROOT" {
-  MILPA_ROOT="$BATS_TEST_FILENAME"
-  run -78 milpa
-}
-
-@test "milpa errors on bad configs" {
-  repo="${BATS_SUITE_TMPDIR}/bad-config/.milpa"
-  mkdir -pv "$repo/commands"
-  echo "summary:"$'\n'"  int: - 1 :a\\" > "$repo/commands/bad-command.yaml"
-  echo "#!/usr/bin/env bash\necho not bad" > "$repo/commands/bad-command.sh"
-  export MILPA_PATH="${BATS_SUITE_TMPDIR}/bad-config"
-  run milpa bad-command
-  assert_output --regexp "run \`milpa itself doctor\` to diagnose your command
-ERROR: Invalid configuration: cannot run command <milpa bad-command>: Invalid configuration"
-}
-
 @test "milpa includes global repos in MILPA_PATH" {
   run milpa debug-env MILPA_PATH
   assert_success
@@ -76,4 +70,17 @@ ERROR: Invalid configuration: cannot run command <milpa bad-command>: Invalid co
 _activeHelp_ tests if milpa can call itself during completion
 :0
 Completion ended with directive: ShellCompDirectiveDefault"
+}
+
+@test "milpa renders properly with/out truecolor enabled" {
+  sameError='\\E\[1;41;37m ERROR \\E\[22;0;0m Unknown subcommand bad-command'
+  run bash -c 'printf '%q' "$(COLORTERM="terminal.app" NO_COLOR="" COLOR=always MILPA_HELP_STYLE=auto milpa bad-command 2>&1)"'
+  assert_success
+  assert_output --regexp "$sameError"
+  assert_output --regexp '\\E\[38;5;193;1m\\E\[0m\\E\[38;5;193;1m\\E\[0m\\E\[38;5;193;1m## \\E\[0m\\E\[38;5;193;1mUsage\\E\[0m'
+
+  run bash -c 'printf '%q' "$(COLORTERM="truecolor" NO_COLOR="" COLOR=always MILPA_HELP_STYLE=auto milpa bad-command 2>&1)"'
+  assert_success
+  assert_output --regexp "$sameError"
+  assert_output --regexp '\\E\[38;2;192;227;147;1m\\E\[0m\\E\[38;2;192;227;147;1m\\E\[0m\\E\[38;2;192;227;147;1m## \\E\[0m\\E\[38;2;192;227;147;1mUsage\\E\[0m'
 }

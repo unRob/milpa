@@ -45,16 +45,66 @@ setup() {
   assert_output ""
 }
 
-@test "itself create something-executable --executable" {
-  run milpa itself create something-executable --executable
+@test "itself create --kind executable something-executable" {
+  run milpa itself create --kind executable something-executable
   assert_success
   assert_file_exist "$LOCAL_REPO/commands/something-executable"
   assert_file_exist "$LOCAL_REPO/commands/something-executable.yaml"
   assert_file_executable "$LOCAL_REPO/commands/something-executable"
 
-  run milpa itself create something-executable --executable
+  run milpa itself create --kind executable something-executable
   assert_failure 2
   assert_output --partial "Command already exists"
+
+  echo '#!/usr/bin/env bash' >"$LOCAL_REPO/commands/something-executable"
+  echo 'env | grep ^MILPA | sort' >>"$LOCAL_REPO/commands/something-executable"
+
+  run milpa something-executable
+  assert_output --partial "MILPA_COMMAND_KIND=executable"
+  assert_output --partial "MILPA_COMMAND_NAME=milpa something-executable"
+  refute_output --partial "MILPA_OPT_"
+  refute_output --partial "MILPA_ARG_"
+}
+
+@test "itself create --kind zsh" {
+  run milpa itself create --kind zsh zsh-thing
+  assert_success
+  assert_file_exist "$LOCAL_REPO/commands/zsh-thing.zsh"
+  assert_file_exist "$LOCAL_REPO/commands/zsh-thing.yaml"
+
+  run milpa itself create --kind zsh zsh-thing
+  assert_failure 2
+  assert_output --partial "Command already exists"
+
+  echo 'env | grep ^MILPA | sort' >>"$LOCAL_REPO/commands/zsh-thing.zsh"
+
+  run milpa zsh-thing
+  assert_success
+  assert_output --partial "MILPA_COMMAND_KIND=shell-script"
+  assert_output --partial "MILPA_COMMAND_NAME=milpa zsh-thing"
+  refute_output --partial "MILPA_OPT_"
+  refute_output --partial "MILPA_ARG_"
+}
+
+@test "itself create --kind fish" {
+  run milpa itself create --kind fish fish-thing
+  assert_success
+  assert_file_exist "$LOCAL_REPO/commands/fish-thing.fish"
+  assert_file_exist "$LOCAL_REPO/commands/fish-thing.yaml"
+
+  run milpa itself create --kind fish fish-thing
+  assert_failure 2
+  assert_output --partial "Command already exists"
+
+  echo 'env | grep ^MILPA | sort' >>"$LOCAL_REPO/commands/fish-thing.fish"
+  cat "$LOCAL_REPO/commands/fish-thing.fish"
+
+  run milpa fish-thing
+  assert_success
+  assert_output --partial "MILPA_COMMAND_KIND=shell-script"
+  assert_output --partial "MILPA_COMMAND_NAME=milpa fish-thing"
+  refute_output --partial "MILPA_OPT_"
+  refute_output --partial "MILPA_ARG_"
 }
 
 @test "itself create something-elsewhere --repo somewhere-else" {
