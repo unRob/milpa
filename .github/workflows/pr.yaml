@@ -16,7 +16,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v5
         with:
-          go-version: 1.22.x
+          go-version: 1.23.x
 
       - name: Setup BATS
         uses: mig4/setup-bats@v1
@@ -24,7 +24,7 @@ jobs:
           bats-version: 1.10.0
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v6.0.1
+        uses: golangci/golangci-lint-action@v6.1.0
         with:
           skip-pkg-cache: true
           version: v1.58.2
