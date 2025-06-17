@@ -3,84 +3,68 @@
 package errors
 
 import (
+	"bytes"
 	"fmt"
-	"os"
-	"strings"
+	"text/template"
 
-	"git.rob.mx/nidito/chinampa/pkg/errors"
-	"git.rob.mx/nidito/chinampa/pkg/statuscode"
-	"github.com/sirupsen/logrus"
-	"github.com/spf13/cobra"
+	"git.rob.mx/nidito/chinampa/pkg/logger"
+	"git.rob.mx/nidito/chinampa/pkg/render"
+	"git.rob.mx/nidito/chinampa/pkg/runtime"
 )
 
-type ConfigError struct {
-	Err    error
-	Config string
+var BadSpecTpl = template.Must(template.New("").Parse(`---
+# ⚠️ Could not validate spec ⚠️
+
+Looks like the spec at **{{ .Path }}** for the command **milpa {{ .CommandName }}** has errors that prevented parsing:
+
+**{{ .Err }}**
+
+Run ﹅milpa itself doctor﹅ to diagnose your installed commands.
+
+---`))
+
+// ProgrammerError happens when either I or the repo developer did something to upset milpa.
+type ProgrammerError struct {
+	Err error
 }
 
+func (err ProgrammerError) Error() string {
+	return err.Err.Error()
+}
+
+// SpecError happens when a command's spec is somehow invalid.
+type SpecError struct {
+	// Err is the upstream error that prevented parsing.
+	Err error
+	// Path is the filesystem path to the failing spec.
+	Path string
+	// CommandName is the name of the command with the broken spec.
+	CommandName string
+}
+
+func (err SpecError) Doctor() error {
+	return fmt.Errorf("could not validate spec at %s: %s", err.Path, err.Err.Error())
+}
+
+func (err SpecError) Error() string {
+	buf := bytes.Buffer{}
+	if e := template.Must(BadSpecTpl.Clone()).Execute(&buf, err); e == nil {
+		if text, e := render.Markdown(buf.Bytes(), runtime.ColorEnabled()); e == nil {
+			return string(text)
+		}
+		logger.Errorf("help render failed: %s", e)
+	} else {
+		logger.Errorf("could not interpolate template: %s", e)
+	}
+
+	return err.Doctor().Error()
+}
+
+// EnvironmentError happens when the environment variables and folders expected by milpa are off.
 type EnvironmentError struct {
 	Err error
 }
 
-func (err ConfigError) Error() string {
-	if err.Config != "" {
-		return fmt.Sprintf("Invalid configuration %s: %v", err.Config, err.Err)
-	}
-
-	return fmt.Sprintf("Invalid configuration: %v", err.Err)
-}
-
 func (err EnvironmentError) Error() string {
 	return fmt.Sprintf("Invalid MILPA_ environment: %v", err.Err)
-}
-
-func showHelp(cmd *cobra.Command) {
-	if cmd.Name() != "help" {
-		err := cmd.Help()
-		if err != nil {
-			os.Exit(statuscode.ProgrammerError)
-		}
-	}
-}
-
-func HandleExit(cmd *cobra.Command, err error) error {
-	if err == nil {
-		ok, err := cmd.Flags().GetBool("help")
-		if cmd.Name() == "help" || err == nil && ok {
-			os.Exit(statuscode.RenderHelp)
-		}
-
-		os.Exit(statuscode.Ok)
-	}
-
-	switch err.(type) {
-	case errors.BadArguments:
-		showHelp(cmd)
-		logrus.Error(err)
-		os.Exit(statuscode.Usage)
-	case errors.NotFound:
-		showHelp(cmd)
-		logrus.Error(err)
-		os.Exit(statuscode.NotFound)
-	case ConfigError:
-		logrus.Info("run `milpa itself doctor` to diagnose your command")
-		logrus.Error(err)
-		os.Exit(statuscode.ConfigError)
-	case EnvironmentError:
-		logrus.Error(err)
-		os.Exit(statuscode.ConfigError)
-	default:
-		if strings.HasPrefix(err.Error(), "unknown command") {
-			showHelp(cmd)
-			os.Exit(statuscode.NotFound)
-		} else if strings.HasPrefix(err.Error(), "unknown flag") || strings.HasPrefix(err.Error(), "unknown shorthand flag") {
-			showHelp(cmd)
-			logrus.Error(err)
-			os.Exit(statuscode.Usage)
-		}
-	}
-
-	logrus.Errorf("Unknown error: %s", err)
-	os.Exit(2)
-	return err
 }

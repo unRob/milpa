@@ -1,22 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright © 2021 Roberto Hidalgo <milpa@un.rob.mx>
-package command
+package meta
 
 import (
 	"path/filepath"
 	"strings"
 
+	"github.com/unrob/milpa/internal/command/kind"
 	_c "github.com/unrob/milpa/internal/constants"
-)
-
-type Kind string
-
-const (
-	KindUnknown    Kind = ""
-	KindExecutable Kind = "executable"
-	KindSource     Kind = "source"
-	KindVirtual    Kind = "virtual"
-	KindRoot       Kind = "root"
 )
 
 type Meta struct {
@@ -27,38 +18,44 @@ type Meta struct {
 	// Name is a list of words naming this command
 	Name []string `json:"name" yaml:"name"`
 	// Kind can be executable (a binary or executable file), source (.sh file), or virtual (a sub-command group)
-	Kind   Kind `json:"kind" yaml:"kind"`
-	issues []error
+	Kind  kind.Kind  `json:"kind" yaml:"kind"`
+	Shell kind.Shell `json:"shell" yaml:"shell"`
+	Error error
 }
 
-func metaForPath(path string, repo string) (meta Meta) {
+func ForPath(path string, repo string) (meta Meta) {
 	var name string
 	if strings.HasSuffix(path, ".yaml") {
 		name = filepath.Dir(path)
 		name = strings.TrimPrefix(name, repo+"/")
 		name = strings.TrimPrefix(name, _c.RepoCommandFolderName+"/")
 		meta.Path = name
-		meta.Kind = KindVirtual
+		meta.Kind = kind.Virtual
 	} else {
 		meta.Path = path
-		name = strings.TrimSuffix(path, ".sh")
+		extension := filepath.Ext(path)
+		name = strings.TrimSuffix(path, extension)
 		name = strings.TrimPrefix(name, repo+"/")
 		name = strings.TrimPrefix(name, _c.RepoCommandFolderName+"/")
 
-		if strings.HasSuffix(path, ".sh") {
-			meta.Kind = KindSource
-		} else {
-			meta.Kind = KindExecutable
+		switch extension {
+		case ".sh", ".bash":
+			meta.Kind = kind.ShellScript
+			meta.Shell = kind.ShellBash
+		case ".fish":
+			meta.Kind = kind.ShellScript
+			meta.Shell = kind.ShellFish
+		case ".zsh":
+			meta.Kind = kind.ShellScript
+			meta.Shell = kind.ShellZSH
+		default:
+			meta.Kind = kind.Executable
+			meta.Shell = kind.ShellUnknown
 		}
 	}
 
 	meta.Repo = repo
 	meta.Name = strings.Split(name, "/")
-	meta.issues = []error{}
 
-	return
-}
-
-func (meta *Meta) ParsingErrors() []error {
-	return meta.issues
+	return meta
 }

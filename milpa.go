@@ -17,7 +17,7 @@ import (
 	"github.com/unrob/milpa/internal/lookup"
 )
 
-var version = "beta"
+var version = "dev"
 
 func logLevel() logger.Level {
 	if os.Getenv(env.Debug) == "trace" {
@@ -58,7 +58,7 @@ See [﹅milpa help docs milpa﹅](/.milpa/docs/milpa/index.md) for more informat
 
 	err = lookup.AllSubCommands(!isDoctor)
 	if err != nil && !isDoctor {
-		logger.Fatalf("Could not find subcommands: %s", err)
+		logger.Fatalf("milpa failed to boot during subcommand lookup: %s", err)
 	} else if err != nil {
 		logger.Error(err)
 	}

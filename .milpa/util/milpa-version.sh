@@ -24,7 +24,7 @@ function @milpa.version.log () {
 
 # prints out the installed version
 function @milpa.version.installed () {
-  DEBUG=0 "$MILPA_COMPA" --version 2>&1 || {
+  DEBUG=0 "$MILPA" --version 2>&1 || {
     if [[ "$?" != 42 ]]; then
       @milpa.version.log debug "could not get the installed version"
       return 1

@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/sirupsen/logrus"
+	"git.rob.mx/nidito/chinampa/pkg/logger"
 	. "github.com/unrob/milpa/internal/bootstrap"
 )
 
@@ -35,7 +35,7 @@ func TestIsDir(t *testing.T) {
 
 	buff := &bytes.Buffer{}
 	fakePath := tdp("layer0/cuarenta-y-dos")
-	logrus.SetOutput(buff)
+	logger.SetOutput(buff)
 	if IsDir(fakePath, true) {
 		t.Fatalf("Fake directory marked as real")
 	}

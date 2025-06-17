@@ -9,13 +9,13 @@ import (
 
 	"git.rob.mx/nidito/chinampa/pkg/errors"
 	"git.rob.mx/nidito/chinampa/pkg/logger"
-	"github.com/unrob/milpa/internal/bootstrap"
+	"github.com/unrob/milpa/internal/repo"
 )
 
 var log = logger.Sub("documentation")
 
 func FromQuery(query []string) ([]byte, error) {
-	if err := bootstrap.CheckMilpaPathSet(); err != nil {
+	if err := repo.CheckPathSet(); err != nil {
 		return []byte{}, err
 	}
 
@@ -25,7 +25,7 @@ func FromQuery(query []string) ([]byte, error) {
 
 	queryString := strings.Join(query, "/")
 
-	for _, path := range bootstrap.MilpaPath {
+	for _, path := range repo.Path {
 		candidate := path + "/docs/" + queryString
 		log.Debugf("looking for doc named %s", candidate)
 		_, err := os.Lstat(candidate + ".md")
@@ -45,5 +45,5 @@ func FromQuery(query []string) ([]byte, error) {
 	}
 
 	missingPath := strings.Join(query, "/")
-	return nil, errors.BadArguments{Msg: fmt.Sprintf("Missing topic named <%s.md> or <%s/index.md> in any of %s", missingPath, missingPath, strings.Join(bootstrap.MilpaPath, ":"))}
+	return nil, errors.BadArguments{Msg: fmt.Sprintf("Missing topic named <%s.md> or <%s/index.md> in any of %s", missingPath, missingPath, strings.Join(repo.Path, ":"))}
 }

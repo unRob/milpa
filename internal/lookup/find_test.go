@@ -12,9 +12,8 @@ import (
 	"testing/fstest"
 
 	"git.rob.mx/nidito/chinampa/pkg/tree"
-	"github.com/sirupsen/logrus"
-	"github.com/unrob/milpa/internal/bootstrap"
 	. "github.com/unrob/milpa/internal/lookup"
+	"github.com/unrob/milpa/internal/repo"
 )
 
 func fromProjectRoot() string {
@@ -98,16 +97,16 @@ func setupFS(filenames []string, pool map[string]*fstest.MapFile, docs map[strin
 		fs[fsBase+"/.milpa/docs/"+path] = f
 	}
 
-	bootstrap.MilpaPath = []string{fsBase + "/.milpa"}
+	repo.Path = []string{fsBase + "/.milpa"}
 	DefaultFS = &fs
 	return &fs
 }
 
 func TestScripts(t *testing.T) {
 	t.Run("errors without milpa_path set", func(t *testing.T) {
-		mp := bootstrap.MilpaPath
-		defer func() { bootstrap.MilpaPath = mp }()
-		bootstrap.MilpaPath = []string{}
+		mp := repo.Path
+		defer func() { repo.Path = mp }()
+		repo.Path = []string{}
 		if _, err := Scripts([]string{"**"}); err == nil {
 			t.Fatalf("did not error as expected")
 		}
@@ -129,7 +128,6 @@ func TestScripts(t *testing.T) {
 		"nested/executable.yaml",
 	}
 	mfs := setupFS(selected, allCommands, noDocs)
-	logrus.SetLevel(logrus.DebugLevel)
 	files, err := Scripts([]string{"**"})
 	if err != nil {
 		t.Fatalf("Could not find scripts: %v", err)
@@ -169,10 +167,10 @@ func TestScripts(t *testing.T) {
 
 		fileInfo, err := fs.Stat(DefaultFS, efile)
 		if err != nil {
-			logrus.Debugf("ignoring %s, failed to stat: %v", efile, err)
+			fmt.Printf("ignoring %s, failed to stat: %v", efile, err)
 			continue
 		} else if fileInfo.IsDir() {
-			// logrus.Debugf("ignoring directory %s", match)
+			// fmt.Printf("ignoring directory %s", match)
 			continue
 		}
 
@@ -183,11 +181,10 @@ func TestScripts(t *testing.T) {
 }
 
 func TestAllSubCommands(t *testing.T) {
-	logrus.SetLevel(logrus.DebugLevel)
 	root := fromProjectRoot()
 	DefaultFS = os.DirFS("/")
-	bootstrap.MilpaPath = []string{root + "/.milpa"}
-	bootstrap.ParseMilpaPath()
+	repo.Path = []string{root + "/.milpa"}
+	repo.ParsePath()
 
 	if err := AllSubCommands(true); err != nil {
 		t.Fatalf("did not find all subcommands: %s", err)
@@ -216,9 +213,8 @@ func TestAllSubCommands(t *testing.T) {
 }
 
 func TestDocsFind(t *testing.T) {
-	logrus.SetLevel(logrus.DebugLevel)
 	root := fromProjectRoot()
-	bootstrap.MilpaPath = []string{root + "/.milpa"}
+	repo.Path = []string{root + "/.milpa"}
 
 	t.Run("top-level", func(t *testing.T) {
 		topics, err := Docs([]string{}, "", false)
@@ -270,9 +266,8 @@ func TestDocsFind(t *testing.T) {
 }
 
 func TestDocsFindAll(t *testing.T) {
-	logrus.SetLevel(logrus.DebugLevel)
 	root := fromProjectRoot()
-	bootstrap.MilpaPath = []string{root + "/.milpa"}
+	repo.Path = []string{root + "/.milpa"}
 
 	paths, err := AllDocs()
 	if err != nil {

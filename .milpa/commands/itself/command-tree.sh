@@ -16,7 +16,7 @@ function get_tree () {
     args=( "--template=${2}" )
   fi
   args+=( "${MILPA_ARG_PREFIX[@]}" )
-  "$MILPA_COMPA" __command_tree \
+  "$MILPA" __command_tree \
     --depth "$MILPA_OPT_DEPTH" \
     --format "$1" \
     "${args[@]}"

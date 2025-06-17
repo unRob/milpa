@@ -27,8 +27,8 @@ function generate_archive() {
   package="$output/milpa-$pair.tgz"
 
   mkdir -p "$dist_dir"
-  if [[ ! -f "$dist_dir/compa" ]]; then
-    cp "$output/$pair" "$dist_dir/compa"
+  if [[ ! -f "$dist_dir/milpa" ]]; then
+    cp "$output/$pair" "$dist_dir/milpa"
     rm -rf "${output:?}/$pair"
   fi
 
@@ -77,7 +77,7 @@ weight: 100
 ---
 
 YAML
-MILPA_PATH="" "$MILPA_COMPA" help docs --server --base "$MILPA_ARG_HOSTNAME" &
+MILPA_PATH="" "$MILPA" help docs --server --base "$MILPA_ARG_HOSTNAME" &
 pid=$!
 @milpa.log info "started server at pid $pid"
 trap 'rm "$MILPA_ROOT/.milpa/docs/milpa/changelog.md"; kill -9 "$pid"' ERR EXIT

@@ -122,12 +122,6 @@ else
   sudo ln -sfv "$PREFIX/milpa" "$TARGET/milpa"
 fi
 
-if [[ -w "$PREFIX/compa" ]]; then
-  ln -sfv "$PREFIX/compa" "$TARGET/compa"
-else
-  sudo ln -sfv "$PREFIX/compa" "$TARGET/compa"
-fi
-
 if ! [[ -d "$globalRepos" ]]; then
   if [[ -w "$(dirname "$globalRepos")" ]]; then
     mkdir -p "$globalRepos"

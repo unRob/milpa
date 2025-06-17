@@ -24,9 +24,8 @@ function _suite_setup() {
   export milpa="$MILPA_ROOT/milpa"
   mkdir -p "$XDG_DATA_HOME"
   [[ -f "$XDG_DATA_HOME/setup-complete" ]] && return 0
-  mkdir -pv "$MILPA_ROOT/repos"
+  mkdir -p "$MILPA_ROOT/repos"
   ln -sf "$PROJECT_ROOT/milpa" "$MILPA_ROOT/milpaa"
-  ln -sf "$PROJECT_ROOT/compa" "$MILPA_ROOT/compa"
   ln -sf "$PROJECT_ROOT/.milpa" "$MILPA_ROOT/.milpa"
   mkdir -p "$XDG_DATA_HOME/milpa/repos"
   ln -sf "$PROJECT_ROOT/test/.milpa" "$MILPA_ROOT/repos/test-suite"

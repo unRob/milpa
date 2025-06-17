@@ -3,13 +3,12 @@ description: |
   Creates a folder, by default `dist` with:
 
   - `packages/milpa-$os-$arch.tgz`: the packaged milpa kernel
-  - `packages/compa-$os-$arch.shasum`: the shasum signature for each supported arch
+  - `packages/milpa-$os-$arch.shasum`: the shasum signature for each supported arch
   - `milpa.dev`: html docs for commands, utils, and usage
 
   The packaged milpa kernel contains:
 
   - the `milpa` executable,
-  - the `compa` binary,
   - the base command repository,
   - readme, license, documentation, and changelog
 arguments:

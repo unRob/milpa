@@ -5,45 +5,45 @@ package command
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
 	"git.rob.mx/nidito/chinampa/pkg/logger"
-	_c "github.com/unrob/milpa/internal/constants"
+	"github.com/unrob/milpa/internal/command/kind"
+	"github.com/unrob/milpa/internal/command/meta"
+	"github.com/unrob/milpa/internal/command/runtime"
 	"github.com/unrob/milpa/internal/errors"
 	"gopkg.in/yaml.v3"
 )
 
 func New(path string, repo string) (cmd *command.Command, err error) {
-	meta := metaForPath(path, repo)
+	m := meta.ForPath(path, repo)
 	cmd = &command.Command{
-		Path:      meta.Name,
+		Path:      m.Name,
 		Arguments: []*command.Argument{},
 		Options:   command.Options{},
 	}
 
 	var spec string
-	if meta.Kind != "virtual" {
-		cmd.Action = func(cmd *command.Command) error {
-			if err := canRun(cmd); err != nil {
-				return err
-			}
-			logger.Main.Debugf("running command")
-
-			env := ToEval(cmd, []string{})
-
-			if os.Getenv(_c.EnvVarCompaOut) != "" {
-				return os.WriteFile(os.Getenv(_c.EnvVarCompaOut), []byte(env), 0600)
-			}
-
-			fmt.Println(env)
-			return nil
-		}
-		spec = strings.TrimSuffix(path, ".sh") + ".yaml"
-	} else {
+	switch m.Kind {
+	case kind.Virtual:
 		spec = path
+	case kind.Executable:
+		cmd.Action = runtime.Run
+		spec = path + ".yaml"
+	case kind.ShellScript, kind.Source:
+		cmd.Action = runtime.Run
+		spec = strings.TrimSuffix(path, filepath.Ext(path)) + ".yaml"
+		logger.Main.Debugf("inner spec %s", spec)
+		if m.Shell == kind.ShellUnknown {
+			return cmd, fmt.Errorf("could not find a shell to run %s", path)
+		}
+	default:
+		logger.Main.Fatalf("unknown kind: %s", m.Kind)
 	}
 
+	logger.Main.Debugf("loading spec: %s (%s)", strings.TrimSuffix(path, filepath.Ext(path))+".yaml", spec)
 	var contents []byte
 	if contents, err = os.ReadFile(spec); err == nil {
 		err = yaml.Unmarshal(contents, cmd)
@@ -51,47 +51,15 @@ func New(path string, repo string) (cmd *command.Command, err error) {
 
 	if err != nil {
 		// todo: output better errors, decode yaml.TypeError
-		err = errors.ConfigError{
-			Err:    err,
-			Config: spec,
+		m.Error = errors.SpecError{
+			Err:         err,
+			Path:        spec,
+			CommandName: cmd.FullName(),
 		}
-		meta.issues = append(meta.issues, err)
-		cmd.Meta = meta
 		cmd.HelpFunc = func(printLinks bool) string {
-			return `---
-# ⚠️ Could not validate spec ⚠️
-
-Looks like the spec for this command has errors that prevented parsing:
-
-**` + fmt.Sprint(err) + `**
-
-Run ﹅milpa itself doctor﹅ to diagnose your installed commands.
-
----`
+			return m.Error.Error()
 		}
-		return cmd, err
 	}
-
-	cmd.Meta = meta
+	cmd.Meta = m
 	return cmd.SetBindings(), nil
-}
-
-func canRun(cmd *command.Command) error {
-	if cmd.Meta == nil {
-		return fmt.Errorf("unknown meta: %s", cmd.Path)
-	}
-
-	meta := cmd.Meta.(Meta)
-
-	if len(meta.issues) > 0 {
-		issues := []string{}
-		for _, i := range meta.issues {
-			issues = append(issues, i.Error())
-		}
-
-		return errors.ConfigError{
-			Err: fmt.Errorf("cannot run command <%s>: %s", cmd.FullName(), strings.Join(issues, "\n")),
-		}
-	}
-	return nil
 }

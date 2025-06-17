@@ -14,10 +14,10 @@ setup() {
 @test "itself docs" {
   # regenerate with
   # MILPA_HELP_STYLE=markdown MILPA_ROOT="$(pwd)" MILPA_PATH="$(pwd)/.milpa" MILPA_PATH_PARSED=true milpa help docs milpa | tee test/fixtures/readme.txt
-  run diff -u -L "live" <(milpa help docs milpa) -L "fixture" <(cat "$(fixture readme.txt)")
+  run diff -u -L "live" <(milpa help docs milpa) -L "fixtures/readme.txt" <(cat "$(fixture readme.txt)")
   assert_success
 
-  run diff -u -L "live" <(milpa help docs milpa environment) -L "fixture" <(cat "$(fixture environment.txt)")
+  run diff -u -L "live" <(milpa help docs milpa environment) -L "fixtures/environment.txt" <(cat "$(fixture environment.txt)")
   assert_success
 
   run milpa __complete help docs ""

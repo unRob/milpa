@@ -13,9 +13,9 @@ import (
 	ccmd "git.rob.mx/nidito/chinampa/pkg/command"
 	"git.rob.mx/nidito/chinampa/pkg/logger"
 	doublestar "github.com/bmatcuk/doublestar/v4"
-	"github.com/unrob/milpa/internal/bootstrap"
 	"github.com/unrob/milpa/internal/command"
 	_c "github.com/unrob/milpa/internal/constants"
+	"github.com/unrob/milpa/internal/repo"
 )
 
 var log = logger.Sub("lookup")
@@ -23,14 +23,14 @@ var log = logger.Sub("lookup")
 var DefaultFS = os.DirFS("/")
 
 func Scripts(query []string) (results map[string]string, err error) {
-	if len(bootstrap.MilpaPath) == 0 {
+	if len(repo.Path) == 0 {
 		err = fmt.Errorf("no %s set on the environment", _c.EnvVarMilpaPath)
 		return results, err
 	}
 
-	log.Debugf("looking for scripts in %s=%s", _c.EnvVarMilpaPath, strings.Join(bootstrap.MilpaPath, ":"))
+	log.Debugf("looking for scripts in %s=%s", _c.EnvVarMilpaPath, strings.Join(repo.Path, ":"))
 	results = map[string]string{}
-	for _, path := range bootstrap.MilpaPath {
+	for _, path := range repo.Path {
 		queryBase := strings.Join(append([]string{strings.TrimPrefix(path, "/"), _c.RepoCommandFolderName}, query...), "/")
 		matches, err := doublestar.Glob(DefaultFS, fmt.Sprintf("%s/*", queryBase), doublestar.WithFilesOnly())
 
@@ -42,7 +42,7 @@ func Scripts(query []string) (results map[string]string, err error) {
 		log.Debugf("found %d potential matches in %s", len(matches), path)
 		for _, match := range matches {
 			extension := filepath.Ext(match)
-			if extension != "" && extension != ".sh" {
+			if extension != "" && extension != ".sh" && extension != ".bash" && extension != ".zsh" && extension != ".fish" {
 				if extension != ".yaml" {
 					log.Debugf("ignoring /%s, unknown extension", match)
 				}
@@ -78,6 +78,7 @@ func AllSubCommands(returnOnError bool) error {
 	}
 	sort.Strings(keys)
 
+	var ret error
 	for _, path := range keys {
 		repo := files[path]
 		cmd, specErr := command.New(path, repo)
@@ -85,26 +86,29 @@ func AllSubCommands(returnOnError bool) error {
 			log.Debugf("Initialized %s", cmd.FullName())
 			chinampa.Register(cmd)
 		} else {
+			log.Debugf("Failed intitialization of %s: %s", cmd.FullName(), specErr)
+			ret = specErr
 			if returnOnError {
 				cmd.Arguments = ccmd.Arguments{}
 				cmd.Options = ccmd.Options{}
+				return specErr
 			}
 			chinampa.Register(cmd)
 		}
 	}
 
-	return err
+	return ret
 }
 
 func AllDocs() ([]string, error) {
 	results := []string{}
-	if err := bootstrap.CheckMilpaPathSet(); err != nil {
+	if err := repo.CheckPathSet(); err != nil {
 		return results, err
 	}
 
-	log.WithField("kind", "docs").Debugf("looking for all docs in %s", bootstrap.MilpaPath)
+	log.WithField("kind", "docs").Debugf("looking for all docs in %s", repo.Path)
 
-	for _, path := range bootstrap.MilpaPath {
+	for _, path := range repo.Path {
 		q := path + "/" + _c.RepoDocsFolderName + "/**/*.md"
 
 		log.WithField("kind", "docs").Debugf("looking for all docs matching %s", q)
@@ -132,17 +136,17 @@ func AllDocs() ([]string, error) {
 func Docs(query []string, needle string, returnPaths bool) ([]string, error) {
 	results := []string{}
 	found := map[string]bool{}
-	if err := bootstrap.CheckMilpaPathSet(); err != nil {
+	if err := repo.CheckPathSet(); err != nil {
 		return results, err
 	}
 
-	log.WithField("kind", "docs").Debugf("looking for docs in %s with", bootstrap.MilpaPath)
+	log.WithField("kind", "docs").Debugf("looking for docs in %s with", repo.Path)
 	queryString := ""
 	if len(query) > 0 {
 		queryString = strings.Join(query, "/")
 	}
 
-	for _, path := range bootstrap.MilpaPath {
+	for _, path := range repo.Path {
 		qbase := path + "/" + _c.RepoDocsFolderName
 		if len(query) > 0 {
 			qbase += "/" + queryString

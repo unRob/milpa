@@ -15,7 +15,8 @@ import (
 	"git.rob.mx/nidito/chinampa/pkg/render"
 	"git.rob.mx/nidito/chinampa/pkg/runtime"
 	"git.rob.mx/nidito/chinampa/pkg/tree"
-	milpaCmd "github.com/unrob/milpa/internal/command"
+	"github.com/unrob/milpa/internal/command/kind"
+	"github.com/unrob/milpa/internal/command/meta"
 
 	"gopkg.in/yaml.v3"
 )
@@ -26,13 +27,13 @@ type serializar func(interface{}) ([]byte, error)
 
 func addMetaToTree(t *tree.CommandTree) {
 	if t.Command != nil && t.Command.Meta == nil {
-		meta := &milpaCmd.Meta{
+		m := &meta.Meta{
 			Path: t.Command.Name(),
 			Repo: "",
 			Name: t.Command.Path,
-			Kind: milpaCmd.KindVirtual,
+			Kind: kind.Virtual,
 		}
-		t.Command.Meta = &meta
+		t.Command.Meta = &m
 		if t.Command.Path[0] != "milpa" {
 			t.Command.Path = append([]string{"milpa"}, t.Command.Path...)
 		}

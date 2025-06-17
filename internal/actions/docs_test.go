@@ -12,11 +12,10 @@ import (
 
 	"git.rob.mx/nidito/chinampa/pkg/command"
 	"git.rob.mx/nidito/chinampa/pkg/env"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	. "github.com/unrob/milpa/internal/actions"
-	"github.com/unrob/milpa/internal/bootstrap"
 	"github.com/unrob/milpa/internal/lookup"
+	"github.com/unrob/milpa/internal/repo"
 )
 
 func fromProjectRoot() string {
@@ -32,7 +31,7 @@ func fromProjectRoot() string {
 func TestRenderDocsHelpMain(t *testing.T) {
 	lookup.DefaultFS = os.DirFS("/")
 	root := fromProjectRoot()
-	bootstrap.MilpaPath = []string{root + "/.milpa"}
+	repo.Path = []string{root + "/.milpa"}
 	AfterHelp = func(code int) {}
 	Docs.SetBindings()
 	out := bytes.Buffer{}
@@ -43,7 +42,6 @@ func TestRenderDocsHelpMain(t *testing.T) {
 	cmd.SetOut(&out)
 	cmd.SetErr(&stderr)
 	Docs.Cobra = cmd
-	logrus.SetLevel(logrus.DebugLevel)
 	err := Docs.Run(cmd, []string{})
 	if err != nil {
 		t.Fatalf("did not run: %s", out.String())
@@ -62,7 +60,7 @@ func TestRenderDocsHelpMain(t *testing.T) {
 func TestRenderDocsRender(t *testing.T) {
 	lookup.DefaultFS = os.DirFS("/")
 	root := fromProjectRoot()
-	bootstrap.MilpaPath = []string{root + "/.milpa"}
+	repo.Path = []string{root + "/.milpa"}
 	AfterHelp = func(code int) {}
 	Docs.SetBindings()
 	out := bytes.Buffer{}
@@ -73,7 +71,6 @@ func TestRenderDocsRender(t *testing.T) {
 	cmd.SetOut(&out)
 	cmd.SetErr(&stderr)
 	Docs.Cobra = cmd
-	logrus.SetLevel(logrus.DebugLevel)
 	err := Docs.Run(cmd, []string{"milpa"})
 	if err != nil {
 		t.Fatalf("did not run: %s", err)

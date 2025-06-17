@@ -12,14 +12,14 @@ setup() {
 }
 
 @test "itself command-tree (autocomplete)" {
-  run compa __command_tree --format autocomplete
+  run milpa __command_tree --format autocomplete
   assert_success
   assert_output "debug-env
 itself"
 }
 
 @test "itself command-tree --output json" {
-  milpa itself command-tree --depth 1 --output json > cmdtree.json
+  milpa itself command-tree --depth 1 --output json | tee cmdtree.json
 
   run jq -e '(.children | length) == 2' cmdtree.json
   assert_success

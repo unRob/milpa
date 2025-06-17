@@ -8,7 +8,7 @@ arguments:
     variadic: true
     values:
       suggest-only: true
-      script: compa __command_tree --format autocomplete{{ if (index .Args "name") }} {{ Arg "name" }}{{ end }}
+      script: milpa __command_tree --format autocomplete{{ if (index .Args "name") }} {{ Arg "name" }}{{ end }}
 options:
   summary:
     description: a short summary of what this command does
@@ -19,9 +19,12 @@ options:
   open:
     type: bool
     description: Open the script file in your current $EDITOR after creation
-  executable:
-    type: bool
-    description: Create an empty, executable command. Useful when you'd like using something other than bash
+  kind:
+    type: string
+    description: The kind of command to create
+    default: bash
+    values:
+      static: [executable, bash, fish, zsh]
   repo:
     type: string
     description: a path to the milpa repo to create this command in. By default, the nearest .milpa directory from `pwd` and up

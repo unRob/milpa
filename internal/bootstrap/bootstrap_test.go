@@ -12,10 +12,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/sirupsen/logrus"
+	"git.rob.mx/nidito/chinampa/pkg/logger"
 	. "github.com/unrob/milpa/internal/bootstrap"
 	_c "github.com/unrob/milpa/internal/constants"
 	merrors "github.com/unrob/milpa/internal/errors"
+	"github.com/unrob/milpa/internal/repo"
 )
 
 func fromProjectRoot() string {
@@ -31,18 +32,18 @@ func fromProjectRoot() string {
 func resetMilpaPath() {
 	os.Unsetenv(_c.EnvVarMilpaPathParsed)
 	os.Unsetenv(_c.EnvVarMilpaPath)
-	MilpaPath = []string{}
+	repo.Path = []string{}
 }
 
 func TestCheckMilpaPathSet(t *testing.T) {
-	MilpaPath = []string{"a", "b"}
+	repo.Path = []string{"a", "b"}
 
-	if err := CheckMilpaPathSet(); err != nil {
+	if err := repo.CheckPathSet(); err != nil {
 		t.Fatalf("Got error with set MILPA_PATH: %v", err)
 	}
 
-	MilpaPath = []string{}
-	if err := CheckMilpaPathSet(); err == nil {
+	repo.Path = []string{}
+	if err := repo.CheckPathSet(); err == nil {
 		t.Fatalf("Got no error with unset MILPA_PATH")
 	}
 }
@@ -75,7 +76,7 @@ func TestBootstrapErrorsOnIncompleteMilpaRoot(t *testing.T) {
 	err := Run()
 	expected := merrors.EnvironmentError{Err: fmt.Errorf("milpa's built-in repo at %s/internal/.milpa is not a directory", root)}
 	if err == nil {
-		t.Fatalf("incomplete directory did not raise error, MilpaPath is %s", MilpaPath)
+		t.Fatalf("incomplete directory did not raise error, MilpaPath is %s", repo.Path)
 	}
 
 	if cErr, ok := err.(merrors.EnvironmentError); !ok {
@@ -102,8 +103,8 @@ func TestBootstrapWithMilpaPath(t *testing.T) {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 		}
 
-		if len(MilpaPath) != 1 && MilpaPath[0] != root {
-			t.Fatalf("Unexpected milpa path: %s", MilpaPath)
+		if len(repo.Path) != 1 && repo.Path[0] != root {
+			t.Fatalf("Unexpected milpa path: %s", repo.Path)
 		}
 	})
 
@@ -114,15 +115,15 @@ func TestBootstrapWithMilpaPath(t *testing.T) {
 		os.Setenv(_c.EnvVarLookupGitDisabled, "true")
 		os.Setenv(_c.EnvVarLookupGlobalReposDisabled, "true")
 		os.Setenv(_c.EnvVarLookupUserReposDisabled, "true")
-		MilpaPath = ParseMilpaPath()
+		repo.Path = repo.ParsePath()
 
 		err := Run()
 		if err != nil {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 		}
 
-		if len(MilpaPath) != 1 || MilpaPath[0] != root+"/.milpa" {
-			t.Fatalf("Unexpected milpa path: %s", MilpaPath)
+		if len(repo.Path) != 1 || repo.Path[0] != root+"/.milpa" {
+			t.Fatalf("Unexpected milpa path: %s", repo.Path)
 		}
 	})
 
@@ -135,15 +136,15 @@ func TestBootstrapWithMilpaPath(t *testing.T) {
 		os.Setenv(_c.EnvVarLookupUserReposDisabled, "true")
 
 		expected := []string{root + "/repos/internal/.milpa", root + "/.milpa"}
-		MilpaPath = ParseMilpaPath()
+		repo.Path = repo.ParsePath()
 
 		err := Run()
 		if err != nil {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 		}
 
-		if !reflect.DeepEqual(MilpaPath, expected) {
-			t.Fatalf("Unexpected milpa path: wanted %s, got: %s", expected, MilpaPath)
+		if !reflect.DeepEqual(repo.Path, expected) {
+			t.Fatalf("Unexpected milpa path: wanted %s, got: %s", expected, repo.Path)
 		}
 	})
 
@@ -155,7 +156,7 @@ func TestBootstrapWithMilpaPath(t *testing.T) {
 		os.Setenv(_c.EnvVarLookupGitDisabled, "true")
 		os.Setenv(_c.EnvVarLookupGlobalReposDisabled, "true")
 		os.Setenv(_c.EnvVarLookupUserReposDisabled, "true")
-		MilpaPath = ParseMilpaPath()
+		repo.Path = repo.ParsePath()
 		expected := []string{root, root + "/repos/fake"}
 		err := Run()
 
@@ -163,8 +164,8 @@ func TestBootstrapWithMilpaPath(t *testing.T) {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 		}
 
-		if !reflect.DeepEqual(MilpaPath, expected) {
-			t.Fatalf("Unexpected milpa path: wanted %s, got: %s", expected, MilpaPath)
+		if !reflect.DeepEqual(repo.Path, expected) {
+			t.Fatalf("Unexpected milpa path: wanted %s, got: %s", expected, repo.Path)
 		}
 	})
 
@@ -172,14 +173,14 @@ func TestBootstrapWithMilpaPath(t *testing.T) {
 		resetMilpaPath()
 		os.Unsetenv(_c.EnvVarMilpaRoot)
 		// update default var though, because otherwise we'd need milpa installed locally
-		MilpaRoot = root
+		repo.Root = root
 		err := Run()
 		if err != nil {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 		}
 
-		if len(MilpaPath) != 1 || MilpaPath[0] != root+"/.milpa" {
-			t.Fatalf("Unexpected milpa path: %s", MilpaPath)
+		if len(repo.Path) != 1 || repo.Path[0] != root+"/.milpa" {
+			t.Fatalf("Unexpected milpa path: %s", repo.Path)
 		}
 	})
 }
@@ -197,20 +198,20 @@ func TestBootstrapOkOnRepo(t *testing.T) {
 		t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 	}
 
-	if len(MilpaPath) != 1 || MilpaPath[0] != root+"/.milpa" {
-		t.Fatalf("Unexpected milpa path: %s", MilpaPath)
+	if len(repo.Path) != 1 || repo.Path[0] != root+"/.milpa" {
+		t.Fatalf("Unexpected milpa path: %s", repo.Path)
 	}
 
 	// no MILPA_ROOT
 	resetMilpaPath()
 	os.Unsetenv(_c.EnvVarMilpaRoot)
-	MilpaRoot = root
+	repo.Root = root
 	if err := Run(); err != nil {
 		t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 	}
 
-	if len(MilpaPath) != 1 || MilpaPath[0] != root+"/.milpa" {
-		t.Fatalf("Unexpected milpa path: %s", MilpaPath)
+	if len(repo.Path) != 1 || repo.Path[0] != root+"/.milpa" {
+		t.Fatalf("Unexpected milpa path: %s", repo.Path)
 	}
 }
 
@@ -226,8 +227,8 @@ func TestBootstrapWithGit(t *testing.T) {
 		t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 	}
 
-	if len(MilpaPath) != 1 && MilpaPath[0] != root {
-		t.Fatalf("Unexpected milpa path: %s", MilpaPath)
+	if len(repo.Path) != 1 && repo.Path[0] != root {
+		t.Fatalf("Unexpected milpa path: %s", repo.Path)
 	}
 }
 
@@ -250,8 +251,8 @@ func TestBootstrapWithoutGit(t *testing.T) {
 		t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 	}
 
-	if len(MilpaPath) != 1 && MilpaPath[0] != root {
-		t.Fatalf("Unexpected milpa path: %s", MilpaPath)
+	if len(repo.Path) != 1 && repo.Path[0] != root {
+		t.Fatalf("Unexpected milpa path: %s", repo.Path)
 	}
 }
 
@@ -268,8 +269,8 @@ func TestBootstrapWithGlobalRepo(t *testing.T) {
 		t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 	}
 
-	if len(MilpaPath) != 2 && MilpaPath[0] != wd && MilpaPath[0] != wd+"/repos/internal" {
-		t.Fatalf("Unexpected milpa path: %s", MilpaPath)
+	if len(repo.Path) != 2 && repo.Path[0] != wd && repo.Path[0] != wd+"/repos/internal" {
+		t.Fatalf("Unexpected milpa path: %s", repo.Path)
 	}
 }
 
@@ -289,8 +290,8 @@ func TestBootstrapWithUserRepoAndNoHome(t *testing.T) {
 		t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 	}
 
-	if len(MilpaPath) != 1 && MilpaPath[0] != wd {
-		t.Fatalf("Unexpected milpa path: %s", MilpaPath)
+	if len(repo.Path) != 1 && repo.Path[0] != wd {
+		t.Fatalf("Unexpected milpa path: %s", repo.Path)
 	}
 
 	resetMilpaPath()
@@ -299,16 +300,16 @@ func TestBootstrapWithUserRepoAndNoHome(t *testing.T) {
 		t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 	}
 
-	if len(MilpaPath) != 1 && MilpaPath[0] != wd {
-		t.Fatalf("Unexpected milpa path: %s", MilpaPath)
+	if len(repo.Path) != 1 && repo.Path[0] != wd {
+		t.Fatalf("Unexpected milpa path: %s", repo.Path)
 	}
 }
 
 func TestBootstrapWithUserRepo(t *testing.T) {
 	root := fromProjectRoot()
 	home := root + "/internal/bootstrap/testdata/home"
-	repo := home + "/.local/share/milpa/repos/user-repo"
-	expected := []string{root + "/.milpa", repo}
+	userRepo := home + "/.local/share/milpa/repos/user-repo"
+	expected := []string{root + "/.milpa", userRepo}
 
 	t.Run("with XDG_DATA_HOME", func(t *testing.T) {
 		resetMilpaPath()
@@ -320,7 +321,7 @@ func TestBootstrapWithUserRepo(t *testing.T) {
 		os.Setenv("XDG_DATA_HOME", home+"/.local/share")
 
 		buff := &bytes.Buffer{}
-		logrus.SetOutput(buff)
+		logger.SetOutput(buff)
 		if err := Run(); err != nil {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 		}
@@ -329,8 +330,8 @@ func TestBootstrapWithUserRepo(t *testing.T) {
 			t.Fatalf("repo bootstrap printed unexpected output: %s", buff)
 		}
 
-		if !reflect.DeepEqual(MilpaPath, expected) {
-			t.Fatalf("Unexpected milpa path: wanted %s, got %s", expected, MilpaPath)
+		if !reflect.DeepEqual(repo.Path, expected) {
+			t.Fatalf("Unexpected milpa path: wanted %s, got %s", expected, repo.Path)
 		}
 	})
 
@@ -344,7 +345,7 @@ func TestBootstrapWithUserRepo(t *testing.T) {
 		os.Setenv("HOME", home)
 
 		buff := &bytes.Buffer{}
-		logrus.SetOutput(buff)
+		logger.SetOutput(buff)
 		if err := Run(); err != nil {
 			t.Fatalf("repo bootstrap raised unexpected error: %s", err)
 		}
@@ -353,8 +354,8 @@ func TestBootstrapWithUserRepo(t *testing.T) {
 			t.Fatalf("repo bootstrap printed unexpected output: %s", buff)
 		}
 
-		if !reflect.DeepEqual(MilpaPath, expected) {
-			t.Fatalf("Unexpected milpa path: wanted %s, got %s", expected, MilpaPath)
+		if !reflect.DeepEqual(repo.Path, expected) {
+			t.Fatalf("Unexpected milpa path: wanted %s, got %s", expected, repo.Path)
 		}
 	})
 }
