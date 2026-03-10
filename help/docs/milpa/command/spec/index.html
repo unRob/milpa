@@ -268,7 +268,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="sd">  You may choose between [semver](https://semver.org) and [calver](https://calver.org). Their composition is as follows:
 </span></span></span><span class="line"><span class="cl"><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">  - **semver**: `{major}.{minor}.{patch}`, i.e. `3.14.1592`
-</span></span></span><span class="line"><span class="cl"><span class="sd">  - **calver**: `{date}.{minor}.{micro}`, where date is derived from the `prefix` option; for example `16.18.339`.</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="sd">  - **calver**: `{date}.{minor}.{micro}`, where date is derived from the `prefix` option; for example `16.18.339`.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="nt">arguments</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">increment</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">descrption</span><span class="p">:</span><span class="w"> </span><span class="l">the increment to apply to the last git version</span><span class="w">
@@ -285,7 +285,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">static</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">semver, calver]</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">prefix</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
-</span></span></span><span class="line"><span class="cl"><span class="sd">      An optional prefix to prepend to release identifiers. If `calver` is chosen as `scheme`, you may specify a combination of `YY`, `YYYY`, `MM`, and `DD` to be replaced with the corresponding values of the local date. The default in that case is `YY`.</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="sd">      An optional prefix to prepend to release identifiers. If `calver` is chosen as `scheme`, you may specify a combination of `YY`, `YYYY`, `MM`, and `DD` to be replaced with the corresponding values of the local date. The default in that case is `YY`.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ask</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">Prompt for confirmation before creating a github release</span><span class="w">
@@ -307,7 +307,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="sd">  You may choose between [semver](https://semver.org) and [calver](https://calver.org). Their composition is as follows:
 </span></span></span><span class="line"><span class="cl"><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">  - **semver**: `{major}.{minor}.{patch}`, i.e. `3.14.1592`
-</span></span></span><span class="line"><span class="cl"><span class="sd">  - **calver**: `{date}.{minor}.{micro}`, where date is derived from the `prefix` option; for example `16.18.339`.</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="sd">  - **calver**: `{date}.{minor}.{micro}`, where date is derived from the `prefix` option; for example `16.18.339`.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="c"># a list of arguments expected by your command, if any</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="c"># as well as a map of options</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="c"># see below for more details on options and arguments</span><span class="w">
@@ -464,7 +464,7 @@
     <pre class="chroma"><code><span class="line"><span class="cl"><span class="c"># .milpa/commands/test/_test.yaml</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l">Commands for running tests</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
-</span></span></span><span class="line"><span class="cl"><span class="sd">  Holds commands to run unit tests and integration tests.</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="sd">  Holds commands to run unit tests and integration tests.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="c"># any options defined in a group command spec</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="c"># will be available to any immediate children of `test`</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="nt">options</span><span class="p">:</span><span class="w">
