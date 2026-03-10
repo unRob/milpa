@@ -12,7 +12,7 @@ import (
 )
 
 func IsDir(path string, warn bool) bool {
-	if fi, err := os.Stat(path); err == nil {
+	if fi, err := os.Stat(path); err == nil { // nolint: gosec
 		if fi.Mode().IsDir() {
 			return true
 		}

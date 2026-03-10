@@ -80,7 +80,8 @@ func contentsForRequest(comps []string) ([]byte, string, error) {
 		helpMD.WriteString("\n")
 		if len(args) == 0 || isDocsCommand {
 			log.Trace("Rendering docs main help page")
-			cmd.SetOutput(&helpMD)
+			cmd.SetOut(&helpMD)
+			cmd.SetErr(&helpMD)
 			if err := cmd.Help(); err != nil {
 				return nil, "", fmt.Errorf("error: %s", err)
 			}
@@ -95,7 +96,8 @@ func contentsForRequest(comps []string) ([]byte, string, error) {
 		}
 	} else {
 		log.Tracef("Rendering command help for %s, args: %s", cmd.Name(), args)
-		cmd.SetOutput(&helpMD)
+		cmd.SetOut(&helpMD)
+		cmd.SetErr(&helpMD)
 
 		if err := cmd.Help(); err != nil {
 			return nil, "", fmt.Errorf("error: %s", err)

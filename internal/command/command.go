@@ -33,7 +33,7 @@ func New(path string, repo string) (cmd *command.Command, err error) {
 			env := ToEval(cmd, []string{})
 
 			if os.Getenv(_c.EnvVarCompaOut) != "" {
-				return os.WriteFile(os.Getenv(_c.EnvVarCompaOut), []byte(env), 0600)
+				return os.WriteFile(os.Getenv(_c.EnvVarCompaOut), []byte(env), 0600) // nolint: gosec
 			}
 
 			fmt.Println(env)

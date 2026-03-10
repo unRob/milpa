@@ -1,40 +1,49 @@
-linters-settings:
-  gocyclo:
-    min-complexity: 18
-  tagliatelle:
-    case:
-      rules:
-        yaml: kebab
-  revive:
-    rules:
-      - name: dot-imports
-        disabled: true
-
+version: "2"
 linters:
-  fast: false
   enable:
-    - errcheck
-    - exportloopref
     - goconst
     - gocritic
     - gocyclo
     - godot
-    - gofmt
-    - goimports
     - gosec
-    - gosimple
-    - govet
-    - ineffassign
     - misspell
     - nakedret
     - nilerr
-    - prealloc
     - revive
     - staticcheck
-    - stylecheck
     - tagliatelle
-    - typecheck
     - unconvert
     - unparam
-    - unused
     - whitespace
+  settings:
+    gocyclo:
+      min-complexity: 18
+    revive:
+      rules:
+        - name: dot-imports
+          disabled: true
+    tagliatelle:
+      case:
+        rules:
+          yaml: kebab
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$

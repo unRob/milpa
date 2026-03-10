@@ -96,11 +96,12 @@ var Doctor = &command.Command{
 			}
 			for property, status := range report {
 				formatter := success
-				if status == 1 {
+				switch status {
+				case 1:
 					hasFailures = true
 					failures[cmd.FullName()]++
 					formatter = fail
-				} else if status == 2 {
+				case 2:
 					formatter = warn
 				}
 

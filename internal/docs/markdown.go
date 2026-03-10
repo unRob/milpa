@@ -180,7 +180,7 @@ func (r *milpaRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
 
 func (r *milpaRenderer) renderHeading(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
 	hn := node.(*ast.Heading)
-	text := string(hn.Text(source))
+	text := string(hn.Lines().Value(source))
 
 	slug, ok := node.AttributeString("id")
 	if !ok {
@@ -190,8 +190,8 @@ func (r *milpaRenderer) renderHeading(w util.BufWriter, source []byte, node ast.
 
 	if entering {
 		node.SetAttribute([]byte("id"), slug)
-		log.Tracef("entering header %s (%d)", node.Text(source), node.ChildCount())
-		_, err := w.WriteString(fmt.Sprintf(`<div class="content-header-wrapper"><h%d class="content-header" id="%s">`, hn.Level, slug))
+		log.Tracef("entering header %s (%d)", node.Lines().Value(source), node.ChildCount())
+		_, err := fmt.Fprintf(w, `<div class="content-header-wrapper"><h%d class="content-header" id="%s">`, hn.Level, slug)
 		if err != nil {
 			log.Errorf("Error writing header: %s", err)
 		}
@@ -200,7 +200,7 @@ func (r *milpaRenderer) renderHeading(w util.BufWriter, source []byte, node ast.
 
 	log.Tracef("closing header %s (%d)", text, node.ChildCount())
 
-	_, err := w.WriteString(fmt.Sprintf(`</h%d> <a aria-hidden="true" class="heading-anchor" href="#%s" tabindex="-1">#</a></div>`, hn.Level, slug))
+	_, err := fmt.Fprintf(w, `</h%d> <a aria-hidden="true" class="heading-anchor" href="#%s" tabindex="-1">#</a></div>`, hn.Level, slug)
 	if err != nil {
 		log.Errorf("Error writing header: %s", err)
 	}
