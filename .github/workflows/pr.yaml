@@ -16,10 +16,10 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v5
         with:
-          go-version: 1.25.x
+          go-version: 1.25.8
 
       - name: Setup BATS
-        uses: mig4/setup-bats@v1
+        uses: bats-core/bats-action@4.0.0
         with:
           bats-version: 1.13.0
 
