@@ -43,9 +43,9 @@ fi
 
 @milpa.log info "Installing go packages"
 packages=(
-  gotest.tools/gotestsum@v1.10.1
+  gotest.tools/gotestsum@v1.13.0
   github.com/mitchellh/gox@9f71238 # used to be 1.0.1 but there doesn't seem to be more releases?
-  github.com/golangci/golangci-lint/cmd/golangci-lint@v1.54.2
+  github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.11.2
 )
 
 for package in "${packages[@]}"; do

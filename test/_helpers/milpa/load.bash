@@ -12,7 +12,7 @@ function _suite_setup() {
   bats_load_library 'bats-assert'
 
   unset XDG_DATA_HOME MILPA_ROOT MILPA_PATH MILPA_PATH_PARSED DEBUG
-  export XDG_DATA_HOME="${BATS_SUITE_TMPDIR//\/\///}"
+  export XDG_DATA_HOME="${BATS_SUITE_TMPDIR:-$BATS_TMPDIR}"
   # shellcheck disable=2155
   export PROJECT_ROOT="$( cd "${BATS_TEST_FILENAME%%/test/*}" >/dev/null 2>&1 && pwd )"
   # make executables in src/ visible to PATH

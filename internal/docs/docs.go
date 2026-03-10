@@ -28,18 +28,18 @@ func FromQuery(query []string) ([]byte, error) {
 	for _, path := range bootstrap.MilpaPath {
 		candidate := path + "/docs/" + queryString
 		log.Debugf("looking for doc named %s", candidate)
-		_, err := os.Lstat(candidate + ".md")
+		_, err := os.Lstat(candidate + ".md") // nolint: gosec
 		if err == nil {
 			log.Debugf("found doc for %s", candidate)
-			return os.ReadFile(candidate + ".md")
+			return os.ReadFile(candidate + ".md") // nolint: gosec
 		}
 
-		if _, err := os.Lstat(candidate + "/index.md"); err == nil {
+		if _, err := os.Lstat(candidate + "/index.md"); err == nil { // nolint: gosec
 			log.Debugf("found index doc for %s", candidate)
-			return os.ReadFile(candidate + "/index.md")
+			return os.ReadFile(candidate + "/index.md") // nolint: gosec
 		}
 
-		if _, err := os.Stat(candidate); err == nil {
+		if _, err := os.Stat(candidate); err == nil { // nolint: gosec
 			break
 		}
 	}

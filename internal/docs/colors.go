@@ -5,63 +5,380 @@ package docs
 import (
 	"os"
 
-	"github.com/charmbracelet/glamour"
+	"github.com/charmbracelet/glamour/ansi"
+	"github.com/charmbracelet/glamour/styles"
+
 	"github.com/unrob/milpa/internal/constants"
 )
 
-func stringptr(str string) *string {
-	return &str
+func stringptr(str string) *string { return &str }
+
+func uintPointer(number uint) *uint { return &number }
+
+func boolptr(b bool) *bool { return &b }
+
+var MilpaNoTTY = ansi.StyleConfig{
+	Document: ansi.StyleBlock{
+		Margin: uintPointer(0),
+		StylePrimitive: ansi.StylePrimitive{
+			Color:       nil,
+			BlockPrefix: "\n",
+			BlockSuffix: "\n",
+		},
+	},
+	List: ansi.StyleList{
+		LevelIndent: 2,
+		StyleBlock: ansi.StyleBlock{
+			Margin: uintPointer(2),
+		},
+	},
+	Item: ansi.StylePrimitive{
+		BlockPrefix: "• ",
+	},
+	Strikethrough: ansi.StylePrimitive{
+		CrossedOut: boolptr(true),
+	},
+	Emph: ansi.StylePrimitive{
+		Italic: boolptr(false),
+	},
+	Strong: ansi.StylePrimitive{
+		Bold: boolptr(false),
+	},
+	Link: ansi.StylePrimitive{
+		Underline: boolptr(false),
+	},
+	LinkText: ansi.StylePrimitive{
+		Bold: boolptr(false),
+	},
+	H1: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Bold:   boolptr(false),
+			Prefix: "# ",
+			Suffix: "",
+		},
+	},
+	H2: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "## ",
+		},
+	},
+	H3: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "### ",
+		},
+	},
+	H4: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "#### ",
+		},
+	},
+	H5: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "##### ",
+		},
+	},
+	H6: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "###### ",
+			Bold:   boolptr(false),
+		},
+	},
+	Heading: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			BlockSuffix: "\n",
+			Bold:        boolptr(false),
+		},
+	},
+	Code: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "`",
+			Suffix: "`",
+		},
+	},
 }
 
-func uintPointer(number uint) *uint {
-	return &number
+var MilpaTrueColorDark = ansi.StyleConfig{
+	Document: ansi.StyleBlock{
+		Margin: uintPointer(0),
+		StylePrimitive: ansi.StylePrimitive{
+			Color:       nil,
+			BlockPrefix: "\n",
+			BlockSuffix: "\n",
+		},
+	},
+	List: ansi.StyleList{
+		LevelIndent: 2,
+		StyleBlock: ansi.StyleBlock{
+			Margin: uintPointer(2),
+		},
+	},
+	Item: ansi.StylePrimitive{
+		BlockPrefix: "• ",
+	},
+	Strikethrough: ansi.StylePrimitive{
+		CrossedOut: boolptr(true),
+	},
+	Emph: ansi.StylePrimitive{
+		Italic: boolptr(true),
+	},
+	Strong: ansi.StylePrimitive{
+		Bold: boolptr(true),
+	},
+	Link: ansi.StylePrimitive{
+		Color:     stringptr("30"),
+		Underline: boolptr(true),
+	},
+	LinkText: ansi.StylePrimitive{
+		Color: stringptr("35"),
+		Bold:  boolptr(true),
+	},
+	H1: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Color:           stringptr("#cefcd3"),
+			BackgroundColor: stringptr("#2b3c2d"),
+			Bold:            boolptr(true),
+			Prefix:          " ",
+			Suffix:          " ",
+		},
+	},
+	H2: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "## ",
+		},
+	},
+	H3: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "### ",
+		},
+	},
+	H4: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "#### ",
+		},
+	},
+	H5: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "##### ",
+		},
+	},
+	H6: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "###### ",
+			Color:  stringptr("35"),
+			Bold:   boolptr(false),
+		},
+	},
+	Heading: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			BlockSuffix: "\n",
+			Color:       stringptr("#c0e394"),
+			Bold:        boolptr(true),
+		},
+	},
+	Code: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix:          " ",
+			Suffix:          " ",
+			Color:           stringptr("#96b452"),
+			BackgroundColor: stringptr("#132b17"),
+		},
+	},
 }
 
-type StyleName string
+var MilpaTrueColorLight = ansi.StyleConfig{
+	Document: ansi.StyleBlock{
+		Margin: uintPointer(0),
+		StylePrimitive: ansi.StylePrimitive{
+			Color:       nil,
+			BlockPrefix: "\n",
+			BlockSuffix: "\n",
+		},
+	},
+	List: ansi.StyleList{
+		LevelIndent: 2,
+		StyleBlock: ansi.StyleBlock{
+			Margin: uintPointer(2),
+		},
+	},
+	Item: ansi.StylePrimitive{
+		BlockPrefix: "• ",
+	},
+	Strikethrough: ansi.StylePrimitive{
+		CrossedOut: boolptr(true),
+	},
+	Emph: ansi.StylePrimitive{
+		Italic: boolptr(true),
+	},
+	Strong: ansi.StylePrimitive{
+		Bold: boolptr(true),
+	},
+	Link: ansi.StylePrimitive{
+		Color:     stringptr("30"),
+		Underline: boolptr(true),
+	},
+	LinkText: ansi.StylePrimitive{
+		Color: stringptr("35"),
+		Bold:  boolptr(true),
+	},
+	H1: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Color:           stringptr("#cefcd3"),
+			BackgroundColor: stringptr("#2b3c2d"),
+			Bold:            boolptr(true),
+			Prefix:          " ",
+			Suffix:          " ",
+		},
+	},
+	H2: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "## ",
+		},
+	},
+	H3: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "### ",
+		},
+	},
+	H4: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "#### ",
+		},
+	},
+	H5: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "##### ",
+		},
+	},
+	H6: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "###### ",
+			Color:  stringptr("35"),
+			Bold:   boolptr(false),
+		},
+	},
+	Heading: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			BlockSuffix: "\n",
+			Color:       stringptr("#12731D"),
+			Bold:        boolptr(true),
+		},
+	},
+	Code: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix:          " ",
+			Suffix:          " ",
+			Color:           stringptr("#12731D"),
+			BackgroundColor: stringptr("#cee3c4"),
+		},
+	},
+}
 
-const (
-	StyleDark  StyleName = "dark"
-	StyleLight StyleName = "light"
-	StylePlain StyleName = "plain"
-)
+var MilpaDark = ansi.StyleConfig{
+	Document: ansi.StyleBlock{
+		Margin: uintPointer(0),
+		StylePrimitive: ansi.StylePrimitive{
+			Color:       nil,
+			BlockPrefix: "\n",
+			BlockSuffix: "\n",
+		},
+	},
+	List: ansi.StyleList{
+		StyleBlock: ansi.StyleBlock{
+			Margin: uintPointer(2),
+		},
+	},
+	H1: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Color:           stringptr("193"),
+			BackgroundColor: stringptr("22"),
+			Bold:            boolptr(true),
+		},
+	},
+	Heading: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Color: stringptr("193"),
+			Bold:  boolptr(true),
+		},
+	},
+	Code: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Color:           stringptr("230"),
+			BackgroundColor: stringptr("22"),
+		},
+	},
+}
+
+var MilpaLight = ansi.StyleConfig{
+	Document: ansi.StyleBlock{
+		Margin: uintPointer(0),
+		StylePrimitive: ansi.StylePrimitive{
+			Color:       nil,
+			BlockPrefix: "\n",
+			BlockSuffix: "\n",
+		},
+	},
+	List: ansi.StyleList{
+		StyleBlock: ansi.StyleBlock{
+			Margin: uintPointer(2),
+		},
+	},
+	H1: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Color:           stringptr("193"),
+			BackgroundColor: stringptr("22"),
+			Bold:            boolptr(true),
+			Prefix:          " ",
+			Suffix:          " ",
+		},
+	},
+	H2: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "## ",
+		},
+	},
+	H3: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "### ",
+		},
+	},
+	H4: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "#### ",
+		},
+	},
+	H5: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "##### ",
+		},
+	},
+	H6: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Prefix: "###### ",
+			Color:  stringptr("35"),
+			Bold:   boolptr(false),
+		},
+	},
+	Heading: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Color:       stringptr("28"),
+			Bold:        boolptr(true),
+			BlockSuffix: "\n",
+		},
+	},
+	Code: ansi.StyleBlock{
+		StylePrimitive: ansi.StylePrimitive{
+			Color:           stringptr("22"),
+			BackgroundColor: stringptr("194"),
+		},
+	},
+}
 
 func init() {
-	var zero uint
-	glamour.NoTTYStyleConfig.Document.Margin = &zero
-	glamour.NoTTYStyleConfig.Document.StylePrimitive.Color = nil
-	glamour.DarkStyleConfig.Document.Margin = &zero
-	glamour.DarkStyleConfig.Document.StylePrimitive.Color = nil
-	glamour.LightStyleConfig.Document.Margin = &zero
-	glamour.LightStyleConfig.Document.StylePrimitive.Color = nil
-	glamour.DarkStyleConfig.List.Margin = uintPointer(2)
-	glamour.LightStyleConfig.List.Margin = uintPointer(2)
-	glamour.NoTTYStyleConfig.List.Margin = uintPointer(2)
-
+	styles.LightStyleConfig = MilpaTrueColorLight
+	styles.DarkStyleConfig = MilpaTrueColorDark
+	styles.NoTTYStyleConfig = MilpaNoTTY
 	if os.Getenv(constants.EnvVarColorBitDepth) != "truecolor" {
-		// Apple's Terminal.app does not support "true color", which is sad.
-		glamour.DarkStyleConfig.H1.StylePrimitive.Color = stringptr("193")
-		glamour.DarkStyleConfig.H1.StylePrimitive.BackgroundColor = stringptr("22")
-		glamour.DarkStyleConfig.Heading.StylePrimitive.Color = stringptr("193")
-		glamour.DarkStyleConfig.Code.StylePrimitive.Color = stringptr("230")
-		glamour.DarkStyleConfig.Code.StylePrimitive.BackgroundColor = stringptr("22")
-
-		glamour.LightStyleConfig.H1.StylePrimitive.Color = stringptr("193")
-		glamour.LightStyleConfig.H1.StylePrimitive.BackgroundColor = stringptr("22")
-		glamour.LightStyleConfig.Heading.StylePrimitive.Color = stringptr("28")
-		glamour.LightStyleConfig.Code.StylePrimitive.Color = stringptr("22")
-		glamour.LightStyleConfig.Code.StylePrimitive.BackgroundColor = stringptr("194")
-		return
+		styles.LightStyleConfig = MilpaLight
+		styles.DarkStyleConfig = MilpaDark
 	}
-
-	glamour.DarkStyleConfig.H1.StylePrimitive.Color = stringptr("#cefcd3")
-	glamour.DarkStyleConfig.H1.StylePrimitive.BackgroundColor = stringptr("#2b3c2d")
-	glamour.DarkStyleConfig.Heading.StylePrimitive.Color = stringptr("#c0e394")
-	glamour.DarkStyleConfig.Code.StylePrimitive.Color = stringptr("#96b452")
-	glamour.DarkStyleConfig.Code.StylePrimitive.BackgroundColor = stringptr("#132b17")
-
-	glamour.LightStyleConfig.H1.StylePrimitive.Color = stringptr("#cefcd3")
-	glamour.LightStyleConfig.H1.StylePrimitive.BackgroundColor = stringptr("#2b3c2d")
-	glamour.LightStyleConfig.Heading.StylePrimitive.Color = stringptr("#12731D")
-	glamour.LightStyleConfig.Code.StylePrimitive.Color = stringptr("#12731D")
-	glamour.LightStyleConfig.Code.StylePrimitive.BackgroundColor = stringptr("#cee3c4")
 }

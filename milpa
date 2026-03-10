@@ -4,7 +4,8 @@
 
 # MILPA ROOT points to this installation of the milpa kernel
 # lol, kernel. La gente bilingue seguro entiende el chiste.
-export MILPA_ROOT=${MILPA_ROOT:-/usr/local/lib/milpa}
+export MILPA_ROOT="${MILPA_ROOT:-/usr/local/lib/milpa}"
+export MILPA_HELP_STYLE="${MILPA_HELP_STYLE:-auto}"
 if [[ ! -d "$MILPA_ROOT" ]]; then
   >&2 echo "MILPA_ROOT is not a directory!: $MILPA_ROOT"
   exit 78
